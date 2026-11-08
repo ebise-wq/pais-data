@@ -13,3 +13,7 @@ Columns: `studies` = all registered studies (any type); `interventional` = trial
 
 Limits: ClinicalTrials.gov only (no EU CTR, ISRCTN, ChiCTR etc.). Regex filtering is
 imperfect in both directions. 35 studies are counted under both ME/CFS and long COVID.
+
+`trials_per_year_*.csv` (from `trials_per_year.py`): interventional studies per start year,
+1996–2026. Registration only became expected in 2005 (ICMJE) and required for many US trials
+from 2007 (FDAAA), so years before about 2005–2008 are badly undercounted. 2026 is a partial year.
