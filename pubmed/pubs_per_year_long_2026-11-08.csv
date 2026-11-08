@@ -1,0 +1,745 @@
+disease,year,title,title_dp,mesh
+ME/CFS,1996,133,133,159
+ME/CFS,1997,113,137,141
+ME/CFS,1998,144,133,163
+ME/CFS,1999,109,125,144
+ME/CFS,2000,128,116,167
+ME/CFS,2001,122,128,161
+ME/CFS,2002,134,135,176
+ME/CFS,2003,133,123,167
+ME/CFS,2004,125,118,165
+ME/CFS,2005,114,119,141
+ME/CFS,2006,128,126,169
+ME/CFS,2007,118,133,163
+ME/CFS,2008,117,133,160
+ME/CFS,2009,138,162,165
+ME/CFS,2010,173,195,216
+ME/CFS,2011,192,207,221
+ME/CFS,2012,127,150,141
+ME/CFS,2013,156,187,163
+ME/CFS,2014,128,156,142
+ME/CFS,2015,171,199,196
+ME/CFS,2016,168,191,172
+ME/CFS,2017,166,196,178
+ME/CFS,2018,184,203,161
+ME/CFS,2019,189,221,172
+ME/CFS,2020,176,194,179
+ME/CFS,2021,235,266,192
+ME/CFS,2022,186,209,180
+ME/CFS,2023,214,237,197
+ME/CFS,2024,191,208,166
+ME/CFS,2025,258,280,168
+ME/CFS,2026,207,220,145
+Long COVID,1996,0,0,0
+Long COVID,1997,0,0,0
+Long COVID,1998,0,0,0
+Long COVID,1999,0,0,0
+Long COVID,2000,0,0,0
+Long COVID,2001,0,1,0
+Long COVID,2002,0,0,0
+Long COVID,2003,0,0,0
+Long COVID,2004,1,1,0
+Long COVID,2005,0,0,0
+Long COVID,2006,0,0,0
+Long COVID,2007,0,0,0
+Long COVID,2008,0,0,0
+Long COVID,2009,0,0,0
+Long COVID,2010,0,0,0
+Long COVID,2011,0,0,0
+Long COVID,2012,2,2,0
+Long COVID,2013,1,2,0
+Long COVID,2014,1,1,0
+Long COVID,2015,0,0,0
+Long COVID,2016,0,0,0
+Long COVID,2017,4,3,0
+Long COVID,2018,2,3,0
+Long COVID,2019,2,2,0
+Long COVID,2020,56,59,0
+Long COVID,2021,562,577,2
+Long COVID,2022,1244,1379,67
+Long COVID,2023,1611,1731,340
+Long COVID,2024,1757,1927,343
+Long COVID,2025,1569,1756,79
+Long COVID,2026,1148,1252,127
+Celiac disease,1996,215,215,260
+Celiac disease,1997,168,189,197
+Celiac disease,1998,198,223,246
+Celiac disease,1999,230,231,267
+Celiac disease,2000,260,289,287
+Celiac disease,2001,324,301,371
+Celiac disease,2002,379,377,425
+Celiac disease,2003,337,347,398
+Celiac disease,2004,375,368,419
+Celiac disease,2005,427,432,472
+Celiac disease,2006,404,401,439
+Celiac disease,2007,405,434,458
+Celiac disease,2008,461,502,496
+Celiac disease,2009,448,492,482
+Celiac disease,2010,425,485,452
+Celiac disease,2011,512,567,518
+Celiac disease,2012,520,597,554
+Celiac disease,2013,483,564,513
+Celiac disease,2014,537,582,582
+Celiac disease,2015,579,629,611
+Celiac disease,2016,492,574,502
+Celiac disease,2017,511,567,512
+Celiac disease,2018,458,546,478
+Celiac disease,2019,513,582,497
+Celiac disease,2020,544,631,559
+Celiac disease,2021,549,649,529
+Celiac disease,2022,478,567,446
+Celiac disease,2023,490,531,465
+Celiac disease,2024,532,595,442
+Celiac disease,2025,585,640,427
+Celiac disease,2026,491,553,255
+Multiple sclerosis,1996,599,595,668
+Multiple sclerosis,1997,531,631,600
+Multiple sclerosis,1998,677,691,790
+Multiple sclerosis,1999,791,814,944
+Multiple sclerosis,2000,808,852,975
+Multiple sclerosis,2001,796,857,991
+Multiple sclerosis,2002,1001,876,1177
+Multiple sclerosis,2003,998,948,1166
+Multiple sclerosis,2004,1025,1056,1213
+Multiple sclerosis,2005,1144,1164,1312
+Multiple sclerosis,2006,1136,1227,1326
+Multiple sclerosis,2007,1406,1386,1602
+Multiple sclerosis,2008,1343,1507,1552
+Multiple sclerosis,2009,1468,1638,1686
+Multiple sclerosis,2010,1679,1841,1826
+Multiple sclerosis,2011,1774,2095,1910
+Multiple sclerosis,2012,1862,2233,1991
+Multiple sclerosis,2013,2090,2526,2167
+Multiple sclerosis,2014,2295,2716,2287
+Multiple sclerosis,2015,2366,2711,2317
+Multiple sclerosis,2016,2364,2813,2362
+Multiple sclerosis,2017,2497,2888,2419
+Multiple sclerosis,2018,2563,3065,2399
+Multiple sclerosis,2019,2598,3161,2497
+Multiple sclerosis,2020,3138,3715,2977
+Multiple sclerosis,2021,3368,4092,2929
+Multiple sclerosis,2022,3465,4045,3124
+Multiple sclerosis,2023,2990,3500,2696
+Multiple sclerosis,2024,3262,3684,2472
+Multiple sclerosis,2025,3350,3733,2573
+Multiple sclerosis,2026,3077,3403,1930
+Rheumatoid arthritis,1996,956,956,1177
+Rheumatoid arthritis,1997,776,886,963
+Rheumatoid arthritis,1998,875,880,1114
+Rheumatoid arthritis,1999,889,984,1208
+Rheumatoid arthritis,2000,981,1003,1242
+Rheumatoid arthritis,2001,1004,1034,1311
+Rheumatoid arthritis,2002,1160,1114,1541
+Rheumatoid arthritis,2003,1207,1200,1529
+Rheumatoid arthritis,2004,1341,1366,1700
+Rheumatoid arthritis,2005,1560,1686,1920
+Rheumatoid arthritis,2006,1516,1554,1780
+Rheumatoid arthritis,2007,1573,1732,1953
+Rheumatoid arthritis,2008,1619,1724,1929
+Rheumatoid arthritis,2009,1729,1945,2025
+Rheumatoid arthritis,2010,1817,2023,2271
+Rheumatoid arthritis,2011,1945,2251,2355
+Rheumatoid arthritis,2012,1940,2365,2299
+Rheumatoid arthritis,2013,1960,2384,2299
+Rheumatoid arthritis,2014,2249,2569,2543
+Rheumatoid arthritis,2015,2269,2650,2541
+Rheumatoid arthritis,2016,2351,2756,2529
+Rheumatoid arthritis,2017,2392,2879,2460
+Rheumatoid arthritis,2018,2324,2767,2406
+Rheumatoid arthritis,2019,2573,2950,2617
+Rheumatoid arthritis,2020,2787,3170,2722
+Rheumatoid arthritis,2021,2964,3505,2797
+Rheumatoid arthritis,2022,2831,3329,2902
+Rheumatoid arthritis,2023,2763,3183,2956
+Rheumatoid arthritis,2024,2988,3304,2528
+Rheumatoid arthritis,2025,3342,3714,2617
+Rheumatoid arthritis,2026,3046,3365,1932
+Crohn's disease,1996,339,339,429
+Crohn's disease,1997,327,367,389
+Crohn's disease,1998,390,410,534
+Crohn's disease,1999,388,390,499
+Crohn's disease,2000,424,455,535
+Crohn's disease,2001,513,505,648
+Crohn's disease,2002,493,472,652
+Crohn's disease,2003,516,522,673
+Crohn's disease,2004,541,548,712
+Crohn's disease,2005,716,699,878
+Crohn's disease,2006,612,651,741
+Crohn's disease,2007,792,767,911
+Crohn's disease,2008,734,790,888
+Crohn's disease,2009,811,873,943
+Crohn's disease,2010,837,947,959
+Crohn's disease,2011,849,1016,1055
+Crohn's disease,2012,868,1005,1115
+Crohn's disease,2013,939,1165,1237
+Crohn's disease,2014,1002,1107,1313
+Crohn's disease,2015,982,1120,1245
+Crohn's disease,2016,1033,1180,1247
+Crohn's disease,2017,1032,1163,1189
+Crohn's disease,2018,1018,1119,1188
+Crohn's disease,2019,1075,1194,1279
+Crohn's disease,2020,1301,1464,1463
+Crohn's disease,2021,1239,1497,1378
+Crohn's disease,2022,1253,1489,1529
+Crohn's disease,2023,1261,1445,1507
+Crohn's disease,2024,1425,1611,1262
+Crohn's disease,2025,1596,1800,1307
+Crohn's disease,2026,1447,1641,909
+Ulcerative colitis,1996,250,250,378
+Ulcerative colitis,1997,250,278,345
+Ulcerative colitis,1998,263,290,432
+Ulcerative colitis,1999,304,301,434
+Ulcerative colitis,2000,248,255,372
+Ulcerative colitis,2001,308,318,461
+Ulcerative colitis,2002,315,291,496
+Ulcerative colitis,2003,322,325,486
+Ulcerative colitis,2004,351,358,524
+Ulcerative colitis,2005,381,361,576
+Ulcerative colitis,2006,411,427,563
+Ulcerative colitis,2007,470,489,637
+Ulcerative colitis,2008,477,488,685
+Ulcerative colitis,2009,468,494,645
+Ulcerative colitis,2010,473,551,670
+Ulcerative colitis,2011,575,648,794
+Ulcerative colitis,2012,524,603,809
+Ulcerative colitis,2013,605,712,957
+Ulcerative colitis,2014,638,737,991
+Ulcerative colitis,2015,711,792,1027
+Ulcerative colitis,2016,770,843,1063
+Ulcerative colitis,2017,684,797,994
+Ulcerative colitis,2018,815,865,1072
+Ulcerative colitis,2019,848,979,1141
+Ulcerative colitis,2020,1161,1264,1559
+Ulcerative colitis,2021,1175,1427,1531
+Ulcerative colitis,2022,1372,1594,1900
+Ulcerative colitis,2023,1478,1615,1934
+Ulcerative colitis,2024,1694,1909,1585
+Ulcerative colitis,2025,2025,2252,1896
+Ulcerative colitis,2026,1843,2058,1309
+Psoriasis,1996,374,374,423
+Psoriasis,1997,298,354,332
+Psoriasis,1998,345,352,390
+Psoriasis,1999,387,374,424
+Psoriasis,2000,338,389,380
+Psoriasis,2001,362,356,398
+Psoriasis,2002,424,397,486
+Psoriasis,2003,510,530,561
+Psoriasis,2004,575,592,631
+Psoriasis,2005,641,650,711
+Psoriasis,2006,730,725,789
+Psoriasis,2007,764,798,801
+Psoriasis,2008,826,889,887
+Psoriasis,2009,911,1021,965
+Psoriasis,2010,979,1074,1028
+Psoriasis,2011,1031,1154,1100
+Psoriasis,2012,1194,1405,1218
+Psoriasis,2013,1234,1478,1255
+Psoriasis,2014,1436,1636,1397
+Psoriasis,2015,1429,1732,1362
+Psoriasis,2016,1642,1859,1520
+Psoriasis,2017,1746,2115,1655
+Psoriasis,2018,1889,2181,1741
+Psoriasis,2019,1947,2269,1835
+Psoriasis,2020,2383,2814,2217
+Psoriasis,2021,2470,3010,2035
+Psoriasis,2022,2504,3060,2039
+Psoriasis,2023,2516,2860,2133
+Psoriasis,2024,2838,3116,2030
+Psoriasis,2025,3024,3344,1781
+Psoriasis,2026,2553,2959,1208
+Systemic lupus,1996,574,573,763
+Systemic lupus,1997,524,592,728
+Systemic lupus,1998,591,618,813
+Systemic lupus,1999,617,625,843
+Systemic lupus,2000,592,629,800
+Systemic lupus,2001,681,695,892
+Systemic lupus,2002,785,747,1049
+Systemic lupus,2003,721,700,959
+Systemic lupus,2004,811,842,1088
+Systemic lupus,2005,857,906,1123
+Systemic lupus,2006,924,957,1149
+Systemic lupus,2007,984,1043,1277
+Systemic lupus,2008,999,1081,1265
+Systemic lupus,2009,1107,1217,1421
+Systemic lupus,2010,1131,1312,1418
+Systemic lupus,2011,1218,1424,1484
+Systemic lupus,2012,1225,1508,1467
+Systemic lupus,2013,1223,1475,1430
+Systemic lupus,2014,1419,1581,1604
+Systemic lupus,2015,1297,1585,1507
+Systemic lupus,2016,1410,1610,1532
+Systemic lupus,2017,1399,1698,1522
+Systemic lupus,2018,1553,1815,1620
+Systemic lupus,2019,1651,1856,1740
+Systemic lupus,2020,1864,2085,1977
+Systemic lupus,2021,1920,2329,1934
+Systemic lupus,2022,2066,2367,2148
+Systemic lupus,2023,1948,2241,1974
+Systemic lupus,2024,2139,2316,1869
+Systemic lupus,2025,2435,2647,1848
+Systemic lupus,2026,2283,2506,1495
+Type 1 diabetes,1996,501,501,1399
+Type 1 diabetes,1997,404,478,1365
+Type 1 diabetes,1998,504,503,1448
+Type 1 diabetes,1999,565,607,1348
+Type 1 diabetes,2000,608,630,1339
+Type 1 diabetes,2001,662,676,1418
+Type 1 diabetes,2002,753,721,1582
+Type 1 diabetes,2003,769,759,1537
+Type 1 diabetes,2004,850,852,1659
+Type 1 diabetes,2005,865,868,1729
+Type 1 diabetes,2006,895,907,1681
+Type 1 diabetes,2007,897,936,1650
+Type 1 diabetes,2008,980,1131,1730
+Type 1 diabetes,2009,1066,1174,1862
+Type 1 diabetes,2010,1092,1199,1913
+Type 1 diabetes,2011,1136,1297,1960
+Type 1 diabetes,2012,1234,1393,2157
+Type 1 diabetes,2013,1340,1586,2312
+Type 1 diabetes,2014,1370,1569,2235
+Type 1 diabetes,2015,1517,1837,2275
+Type 1 diabetes,2016,1585,1870,2270
+Type 1 diabetes,2017,1570,1881,2179
+Type 1 diabetes,2018,1695,2001,2267
+Type 1 diabetes,2019,1843,2090,2428
+Type 1 diabetes,2020,2031,2405,2599
+Type 1 diabetes,2021,2165,2572,2765
+Type 1 diabetes,2022,2214,2606,2800
+Type 1 diabetes,2023,2171,2484,2685
+Type 1 diabetes,2024,2251,2538,2295
+Type 1 diabetes,2025,2504,2804,2489
+Type 1 diabetes,2026,2273,2592,1800
+Epilepsy,1996,1494,1494,1435
+Epilepsy,1997,1429,1687,1353
+Epilepsy,1998,1779,1733,1672
+Epilepsy,1999,1899,2007,1871
+Epilepsy,2000,2169,2232,2177
+Epilepsy,2001,1906,2054,1937
+Epilepsy,2002,2318,2267,2322
+Epilepsy,2003,2388,2244,2013
+Epilepsy,2004,2469,2382,2179
+Epilepsy,2005,2691,2642,2393
+Epilepsy,2006,2480,2763,2297
+Epilepsy,2007,2818,3001,2522
+Epilepsy,2008,2837,3094,2437
+Epilepsy,2009,2992,3344,2524
+Epilepsy,2010,2970,3425,2501
+Epilepsy,2011,3395,3908,2822
+Epilepsy,2012,3540,4079,2858
+Epilepsy,2013,3912,4505,2983
+Epilepsy,2014,3968,4667,3079
+Epilepsy,2015,4103,4788,3029
+Epilepsy,2016,4315,4887,3097
+Epilepsy,2017,4257,4891,3196
+Epilepsy,2018,4454,5126,3165
+Epilepsy,2019,4694,5437,3261
+Epilepsy,2020,5338,6151,3833
+Epilepsy,2021,5882,6732,4075
+Epilepsy,2022,5398,6266,3723
+Epilepsy,2023,5477,6204,3854
+Epilepsy,2024,5746,6547,3153
+Epilepsy,2025,6400,7082,3815
+Epilepsy,2026,5762,6460,2722
+Schizophrenia,1996,1169,1168,1402
+Schizophrenia,1997,1084,1226,1220
+Schizophrenia,1998,1290,1276,1481
+Schizophrenia,1999,1289,1428,1504
+Schizophrenia,2000,1442,1448,1694
+Schizophrenia,2001,1503,1492,1748
+Schizophrenia,2002,1600,1538,1885
+Schizophrenia,2003,1779,1749,2034
+Schizophrenia,2004,1895,1931,2226
+Schizophrenia,2005,2096,2147,2353
+Schizophrenia,2006,2317,2449,2547
+Schizophrenia,2007,2335,2609,2682
+Schizophrenia,2008,2292,2630,2634
+Schizophrenia,2009,2319,2610,2561
+Schizophrenia,2010,2494,2955,2683
+Schizophrenia,2011,2508,3118,2621
+Schizophrenia,2012,2737,3315,2852
+Schizophrenia,2013,2866,3482,2948
+Schizophrenia,2014,2827,3391,2763
+Schizophrenia,2015,2864,3432,2826
+Schizophrenia,2016,2780,3275,2752
+Schizophrenia,2017,2753,3213,2778
+Schizophrenia,2018,2655,3334,2682
+Schizophrenia,2019,2626,3152,2690
+Schizophrenia,2020,2812,3401,2739
+Schizophrenia,2021,2944,3512,2794
+Schizophrenia,2022,2911,3424,2518
+Schizophrenia,2023,2820,3252,2404
+Schizophrenia,2024,2881,3209,2253
+Schizophrenia,2025,3040,3401,2387
+Schizophrenia,2026,2656,3012,1686
+Bipolar disorder,1996,143,143,375
+Bipolar disorder,1997,191,209,390
+Bipolar disorder,1998,178,173,371
+Bipolar disorder,1999,213,278,468
+Bipolar disorder,2000,303,314,575
+Bipolar disorder,2001,350,343,589
+Bipolar disorder,2002,396,366,691
+Bipolar disorder,2003,477,467,798
+Bipolar disorder,2004,570,558,831
+Bipolar disorder,2005,716,724,968
+Bipolar disorder,2006,822,838,1115
+Bipolar disorder,2007,796,884,1097
+Bipolar disorder,2008,819,938,1133
+Bipolar disorder,2009,883,982,1170
+Bipolar disorder,2010,913,1039,1177
+Bipolar disorder,2011,902,1085,1143
+Bipolar disorder,2012,1007,1194,1344
+Bipolar disorder,2013,1033,1264,1339
+Bipolar disorder,2014,1142,1365,1422
+Bipolar disorder,2015,1088,1354,1385
+Bipolar disorder,2016,1105,1301,1360
+Bipolar disorder,2017,1104,1319,1327
+Bipolar disorder,2018,1008,1286,1221
+Bipolar disorder,2019,1055,1269,1255
+Bipolar disorder,2020,1118,1368,1304
+Bipolar disorder,2021,1205,1473,1296
+Bipolar disorder,2022,1170,1406,1187
+Bipolar disorder,2023,1075,1321,1118
+Bipolar disorder,2024,1121,1269,1004
+Bipolar disorder,2025,1282,1456,1204
+Bipolar disorder,2026,1162,1362,921
+Parkinson's disease,1996,812,811,773
+Parkinson's disease,1997,838,935,842
+Parkinson's disease,1998,861,925,875
+Parkinson's disease,1999,1044,1111,1027
+Parkinson's disease,2000,1099,1188,1023
+Parkinson's disease,2001,1200,1185,1049
+Parkinson's disease,2002,1373,1297,1319
+Parkinson's disease,2003,1516,1470,1394
+Parkinson's disease,2004,1468,1448,1335
+Parkinson's disease,2005,1574,1576,1436
+Parkinson's disease,2006,1763,1921,1639
+Parkinson's disease,2007,1808,2039,1624
+Parkinson's disease,2008,2115,2198,1817
+Parkinson's disease,2009,2125,2457,1912
+Parkinson's disease,2010,2371,2716,2157
+Parkinson's disease,2011,2682,3050,2254
+Parkinson's disease,2012,2626,3189,2305
+Parkinson's disease,2013,2912,3442,2526
+Parkinson's disease,2014,3057,3576,2566
+Parkinson's disease,2015,3320,3955,2709
+Parkinson's disease,2016,3610,4238,2949
+Parkinson's disease,2017,3755,4369,3043
+Parkinson's disease,2018,3842,4429,3051
+Parkinson's disease,2019,3997,4626,3159
+Parkinson's disease,2020,4832,5579,3805
+Parkinson's disease,2021,5216,5939,3938
+Parkinson's disease,2022,5076,5849,4333
+Parkinson's disease,2023,5119,5757,4338
+Parkinson's disease,2024,5486,6223,3836
+Parkinson's disease,2025,6596,7160,4145
+Parkinson's disease,2026,5860,6555,2959
+Fibromyalgia,1996,118,118,122
+Fibromyalgia,1997,109,126,115
+Fibromyalgia,1998,142,165,140
+Fibromyalgia,1999,145,137,156
+Fibromyalgia,2000,178,176,184
+Fibromyalgia,2001,140,149,160
+Fibromyalgia,2002,199,193,219
+Fibromyalgia,2003,187,178,202
+Fibromyalgia,2004,199,209,213
+Fibromyalgia,2005,182,184,200
+Fibromyalgia,2006,234,236,225
+Fibromyalgia,2007,224,255,235
+Fibromyalgia,2008,285,321,297
+Fibromyalgia,2009,331,358,346
+Fibromyalgia,2010,366,385,359
+Fibromyalgia,2011,381,443,375
+Fibromyalgia,2012,362,435,347
+Fibromyalgia,2013,359,440,355
+Fibromyalgia,2014,375,415,357
+Fibromyalgia,2015,365,444,347
+Fibromyalgia,2016,363,431,334
+Fibromyalgia,2017,365,447,320
+Fibromyalgia,2018,352,407,292
+Fibromyalgia,2019,390,454,336
+Fibromyalgia,2020,454,500,389
+Fibromyalgia,2021,474,562,394
+Fibromyalgia,2022,490,578,402
+Fibromyalgia,2023,516,596,456
+Fibromyalgia,2024,552,627,380
+Fibromyalgia,2025,604,656,408
+Fibromyalgia,2026,564,633,285
+POTS,1996,3,3,0
+POTS,1997,1,1,0
+POTS,1998,2,2,0
+POTS,1999,5,5,0
+POTS,2000,10,15,0
+POTS,2001,12,7,0
+POTS,2002,5,6,0
+POTS,2003,10,9,0
+POTS,2004,6,7,0
+POTS,2005,19,19,1
+POTS,2006,13,14,0
+POTS,2007,21,23,0
+POTS,2008,18,21,13
+POTS,2009,17,20,14
+POTS,2010,26,27,28
+POTS,2011,32,33,35
+POTS,2012,31,38,30
+POTS,2013,39,47,39
+POTS,2014,55,61,50
+POTS,2015,41,51,46
+POTS,2016,38,43,41
+POTS,2017,33,43,37
+POTS,2018,60,64,59
+POTS,2019,44,47,38
+POTS,2020,74,81,67
+POTS,2021,90,101,81
+POTS,2022,88,97,68
+POTS,2023,71,89,59
+POTS,2024,85,93,54
+POTS,2025,105,125,61
+POTS,2026,109,111,43
+Endometriosis,1996,265,264,298
+Endometriosis,1997,207,236,245
+Endometriosis,1998,221,239,279
+Endometriosis,1999,244,232,287
+Endometriosis,2000,225,258,278
+Endometriosis,2001,322,323,395
+Endometriosis,2002,351,341,411
+Endometriosis,2003,369,363,430
+Endometriosis,2004,369,371,428
+Endometriosis,2005,425,407,511
+Endometriosis,2006,412,454,485
+Endometriosis,2007,493,524,570
+Endometriosis,2008,450,551,532
+Endometriosis,2009,569,652,655
+Endometriosis,2010,583,701,663
+Endometriosis,2011,553,678,628
+Endometriosis,2012,595,684,624
+Endometriosis,2013,660,762,667
+Endometriosis,2014,732,825,720
+Endometriosis,2015,729,964,705
+Endometriosis,2016,831,818,711
+Endometriosis,2017,781,947,722
+Endometriosis,2018,841,1021,750
+Endometriosis,2019,880,999,786
+Endometriosis,2020,1130,1328,992
+Endometriosis,2021,1155,1416,991
+Endometriosis,2022,1217,1385,1033
+Endometriosis,2023,1293,1490,1078
+Endometriosis,2024,1507,1691,1115
+Endometriosis,2025,1792,1991,1198
+Endometriosis,2026,1757,1930,934
+Irritable bowel syndrome,1996,69,69,0
+Irritable bowel syndrome,1997,67,80,0
+Irritable bowel syndrome,1998,83,89,0
+Irritable bowel syndrome,1999,123,120,0
+Irritable bowel syndrome,2000,103,120,0
+Irritable bowel syndrome,2001,160,177,1
+Irritable bowel syndrome,2002,215,198,4
+Irritable bowel syndrome,2003,222,215,80
+Irritable bowel syndrome,2004,256,263,267
+Irritable bowel syndrome,2005,276,254,309
+Irritable bowel syndrome,2006,297,318,325
+Irritable bowel syndrome,2007,267,274,299
+Irritable bowel syndrome,2008,314,327,352
+Irritable bowel syndrome,2009,345,366,364
+Irritable bowel syndrome,2010,326,386,321
+Irritable bowel syndrome,2011,384,406,380
+Irritable bowel syndrome,2012,391,441,354
+Irritable bowel syndrome,2013,355,408,386
+Irritable bowel syndrome,2014,496,532,486
+Irritable bowel syndrome,2015,448,490,440
+Irritable bowel syndrome,2016,444,483,418
+Irritable bowel syndrome,2017,460,535,433
+Irritable bowel syndrome,2018,481,534,435
+Irritable bowel syndrome,2019,487,563,466
+Irritable bowel syndrome,2020,507,595,508
+Irritable bowel syndrome,2021,567,643,563
+Irritable bowel syndrome,2022,583,695,588
+Irritable bowel syndrome,2023,581,641,569
+Irritable bowel syndrome,2024,604,669,463
+Irritable bowel syndrome,2025,622,689,443
+Irritable bowel syndrome,2026,657,712,328
+HIV,1996,6079,6066,7439
+HIV,1997,5400,6136,6119
+HIV,1998,5667,6328,5811
+HIV,1999,5476,6138,5325
+HIV,2000,5738,6161,5823
+HIV,2001,6769,6061,9235
+HIV,2002,6555,5864,7626
+HIV,2003,6270,6295,6629
+HIV,2004,6673,6657,6869
+HIV,2005,7293,7285,7387
+HIV,2006,7456,7663,7519
+HIV,2007,7934,8321,7764
+HIV,2008,8059,8368,7859
+HIV,2009,8097,8502,7849
+HIV,2010,8380,9088,8110
+HIV,2011,9113,9805,8507
+HIV,2012,9210,10259,8494
+HIV,2013,9387,10710,8623
+HIV,2014,9815,10895,8805
+HIV,2015,9367,10535,8429
+HIV,2016,9417,10542,8390
+HIV,2017,9019,10198,7813
+HIV,2018,8880,9928,7707
+HIV,2019,9392,10077,8436
+HIV,2020,9622,10757,8627
+HIV,2021,9391,10864,8660
+HIV,2022,8867,10316,8899
+HIV,2023,8472,9509,8001
+HIV,2024,8422,9351,6700
+HIV,2025,9404,10137,6916
+HIV,2026,8094,8951,4713
+Sjogren's,1996,216,216,231
+Sjogren's,1997,175,203,185
+Sjogren's,1998,209,232,213
+Sjogren's,1999,215,207,223
+Sjogren's,2000,202,211,214
+Sjogren's,2001,234,235,247
+Sjogren's,2002,273,264,280
+Sjogren's,2003,197,187,213
+Sjogren's,2004,240,241,247
+Sjogren's,2005,240,256,249
+Sjogren's,2006,233,249,228
+Sjogren's,2007,275,289,284
+Sjogren's,2008,239,257,248
+Sjogren's,2009,237,261,244
+Sjogren's,2010,256,296,271
+Sjogren's,2011,264,291,263
+Sjogren's,2012,293,350,302
+Sjogren's,2013,317,368,311
+Sjogren's,2014,366,417,368
+Sjogren's,2015,343,423,341
+Sjogren's,2016,407,459,384
+Sjogren's,2017,396,482,343
+Sjogren's,2018,459,521,414
+Sjogren's,2019,440,476,403
+Sjogren's,2020,524,616,482
+Sjogren's,2021,535,652,496
+Sjogren's,2022,585,652,511
+Sjogren's,2023,573,651,498
+Sjogren's,2024,614,678,470
+Sjogren's,2025,776,834,530
+Sjogren's,2026,696,756,418
+Gulf War illness,1996,40,39,23
+Gulf War illness,1997,49,50,34
+Gulf War illness,1998,48,53,38
+Gulf War illness,1999,58,60,49
+Gulf War illness,2000,54,62,47
+Gulf War illness,2001,64,64,54
+Gulf War illness,2002,69,61,60
+Gulf War illness,2003,54,49,39
+Gulf War illness,2004,63,64,48
+Gulf War illness,2005,41,46,29
+Gulf War illness,2006,56,52,36
+Gulf War illness,2007,26,23,9
+Gulf War illness,2008,31,36,16
+Gulf War illness,2009,22,22,10
+Gulf War illness,2010,18,18,12
+Gulf War illness,2011,18,25,10
+Gulf War illness,2012,20,21,12
+Gulf War illness,2013,26,33,18
+Gulf War illness,2014,19,23,5
+Gulf War illness,2015,31,36,17
+Gulf War illness,2016,30,40,15
+Gulf War illness,2017,39,40,22
+Gulf War illness,2018,51,51,22
+Gulf War illness,2019,53,65,27
+Gulf War illness,2020,60,65,31
+Gulf War illness,2021,93,99,65
+Gulf War illness,2022,41,50,21
+Gulf War illness,2023,44,50,31
+Gulf War illness,2024,57,63,33
+Gulf War illness,2025,45,50,27
+Gulf War illness,2026,17,26,12
+Post-treatment Lyme,1996,7,7,
+Post-treatment Lyme,1997,7,7,
+Post-treatment Lyme,1998,5,5,
+Post-treatment Lyme,1999,5,6,
+Post-treatment Lyme,2000,7,7,
+Post-treatment Lyme,2001,9,9,
+Post-treatment Lyme,2002,15,16,
+Post-treatment Lyme,2003,14,13,
+Post-treatment Lyme,2004,12,10,
+Post-treatment Lyme,2005,20,21,
+Post-treatment Lyme,2006,12,12,
+Post-treatment Lyme,2007,14,18,
+Post-treatment Lyme,2008,28,26,
+Post-treatment Lyme,2009,22,25,
+Post-treatment Lyme,2010,21,22,
+Post-treatment Lyme,2011,27,33,
+Post-treatment Lyme,2012,24,30,
+Post-treatment Lyme,2013,22,24,
+Post-treatment Lyme,2014,20,22,
+Post-treatment Lyme,2015,16,19,
+Post-treatment Lyme,2016,18,19,
+Post-treatment Lyme,2017,20,23,
+Post-treatment Lyme,2018,20,23,
+Post-treatment Lyme,2019,21,24,
+Post-treatment Lyme,2020,26,26,
+Post-treatment Lyme,2021,25,32,
+Post-treatment Lyme,2022,21,25,
+Post-treatment Lyme,2023,27,29,
+Post-treatment Lyme,2024,21,25,
+Post-treatment Lyme,2025,25,25,
+Post-treatment Lyme,2026,35,38,
+ALS (rare ref.),1996,294,293,268
+ALS (rare ref.),1997,199,244,167
+ALS (rare ref.),1998,283,266,265
+ALS (rare ref.),1999,295,321,259
+ALS (rare ref.),2000,279,337,233
+ALS (rare ref.),2001,384,350,307
+ALS (rare ref.),2002,332,313,337
+ALS (rare ref.),2003,359,334,338
+ALS (rare ref.),2004,348,370,344
+ALS (rare ref.),2005,409,403,393
+ALS (rare ref.),2006,522,546,480
+ALS (rare ref.),2007,541,577,490
+ALS (rare ref.),2008,557,570,538
+ALS (rare ref.),2009,611,643,601
+ALS (rare ref.),2010,666,801,634
+ALS (rare ref.),2011,743,882,682
+ALS (rare ref.),2012,828,964,772
+ALS (rare ref.),2013,854,1013,823
+ALS (rare ref.),2014,905,1070,836
+ALS (rare ref.),2015,955,1130,882
+ALS (rare ref.),2016,1030,1179,901
+ALS (rare ref.),2017,1061,1246,941
+ALS (rare ref.),2018,1103,1297,966
+ALS (rare ref.),2019,1090,1299,903
+ALS (rare ref.),2020,1318,1481,1162
+ALS (rare ref.),2021,1355,1581,1150
+ALS (rare ref.),2022,1312,1547,1214
+ALS (rare ref.),2023,1325,1506,1163
+ALS (rare ref.),2024,1448,1646,1095
+ALS (rare ref.),2025,1555,1745,1033
+ALS (rare ref.),2026,1370,1556,756
+Cystic fibrosis (rare ref.),1996,595,594,635
+Cystic fibrosis (rare ref.),1997,493,567,518
+Cystic fibrosis (rare ref.),1998,551,547,575
+Cystic fibrosis (rare ref.),1999,578,587,573
+Cystic fibrosis (rare ref.),2000,589,620,600
+Cystic fibrosis (rare ref.),2001,578,615,613
+Cystic fibrosis (rare ref.),2002,652,645,714
+Cystic fibrosis (rare ref.),2003,635,637,680
+Cystic fibrosis (rare ref.),2004,713,674,744
+Cystic fibrosis (rare ref.),2005,731,734,745
+Cystic fibrosis (rare ref.),2006,701,754,733
+Cystic fibrosis (rare ref.),2007,698,774,721
+Cystic fibrosis (rare ref.),2008,702,793,725
+Cystic fibrosis (rare ref.),2009,710,789,752
+Cystic fibrosis (rare ref.),2010,835,945,819
+Cystic fibrosis (rare ref.),2011,843,982,850
+Cystic fibrosis (rare ref.),2012,889,1020,884
+Cystic fibrosis (rare ref.),2013,900,1112,883
+Cystic fibrosis (rare ref.),2014,1024,1170,1011
+Cystic fibrosis (rare ref.),2015,1055,1269,1016
+Cystic fibrosis (rare ref.),2016,1061,1261,991
+Cystic fibrosis (rare ref.),2017,1024,1169,986
+Cystic fibrosis (rare ref.),2018,1079,1290,1000
+Cystic fibrosis (rare ref.),2019,1106,1319,1070
+Cystic fibrosis (rare ref.),2020,1299,1473,1243
+Cystic fibrosis (rare ref.),2021,1322,1571,1201
+Cystic fibrosis (rare ref.),2022,1201,1470,1184
+Cystic fibrosis (rare ref.),2023,1118,1302,1095
+Cystic fibrosis (rare ref.),2024,1096,1268,947
+Cystic fibrosis (rare ref.),2025,1215,1356,869
+Cystic fibrosis (rare ref.),2026,990,1126,635
