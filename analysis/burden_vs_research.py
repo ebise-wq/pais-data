@@ -8,16 +8,20 @@ matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 
 YEARS = [str(y) for y in range(2021, 2026)]
-GBD = "gbd/IHME-GBD_2023_DATA-08b3fc6f-1.csv"
+GBD = ["gbd/IHME-GBD_2023_DATA-08b3fc6f-1.csv",  # level 3
+       "gbd/IHME-GBD_2023_DATA-ff76c2f3-1.csv"]  # level 4
 PUBS = "pubmed/pubs_per_year_2026-11-08.csv"
 TRIALS = "clinicaltrials/trials_per_year_2026-11-08.csv"
 MECFS_DALYS = 25e6  # set by hand: includes post-COVID ME/CFS; not a GBD cause
 
-# repo disease name(s) -> GBD 2023 level-3 cause name
+# repo disease name(s) -> GBD 2023 cause name (level 3 or 4)
 MAP = {
     "Multiple sclerosis": (["Multiple sclerosis"], "Multiple sclerosis"),
     "Rheumatoid arthritis": (["Rheumatoid arthritis"], "Rheumatoid arthritis"),
-    "IBD (Crohn's + UC)": (["Crohn's disease", "Ulcerative colitis"], "Inflammatory bowel disease"),
+    "Crohn's disease": (["Crohn's disease"], "Crohn's disease"),
+    "Ulcerative colitis": (["Ulcerative colitis"], "Ulcerative colitis"),
+    "Endometriosis": (["Endometriosis"], "Endometriosis"),
+    "Type 1 diabetes": (["Type 1 diabetes"], "Diabetes mellitus type 1"),
     "Psoriasis": (["Psoriasis"], "Psoriasis"),
     "Epilepsy": (["Epilepsy"], "Idiopathic epilepsy"),
     "Schizophrenia": (["Schizophrenia"], "Schizophrenia"),
@@ -32,7 +36,8 @@ def avg_rows(path):
         return {r["disease"]: sum(int(r[y]) for y in YEARS) / len(YEARS) for r in csv.DictReader(f)}
 
 gbd = {}
-with open(GBD) as f:
+for path in GBD:
+  with open(path) as f:
     for r in csv.DictReader(f):
         if r["measure_id"] == "2" and r["metric_id"] == "1" and r["year"] == "2023":
             gbd[r["cause_name"]] = tuple(float(r[k]) for k in ("val", "lower", "upper"))
@@ -78,22 +83,27 @@ plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10, "text.color"
 OFFSETS = {
     ("pubs_per_year", "Epilepsy"): (0, 9, "center"),
     ("pubs_per_year", "Parkinson's disease"): (-8, 6, "right"),
-    ("pubs_per_year", "Rheumatoid arthritis"): (9, -2, "left"),
-    ("pubs_per_year", "IBD (Crohn's + UC)"): (-8, -12, "right"),
-    ("pubs_per_year", "Psoriasis"): (6, -12, "left"),
-    ("pubs_per_year", "Schizophrenia"): (0, 9, "center"),
-    ("pubs_per_year", "Bipolar disorder"): (0, 9, "center"),
+    ("pubs_per_year", "Rheumatoid arthritis"): (8, 6, "left"),
+    ("pubs_per_year", "Psoriasis"): (-9, -3, "right"),
+    ("pubs_per_year", "Type 1 diabetes"): (9, -4, "left"),
+    ("pubs_per_year", "Schizophrenia"): (0, -14, "center"),
+    ("pubs_per_year", "Bipolar disorder"): (0, -14, "center"),
+    ("pubs_per_year", "Crohn's disease"): (0, 9, "center"),
+    ("pubs_per_year", "Ulcerative colitis"): (-8, 6, "right"),
+    ("pubs_per_year", "ALS / motor neuron disease"): (-4, -14, "right"),
+    ("pubs_per_year", "Endometriosis"): (9, -4, "left"),
     ("trials_per_year", "Schizophrenia"): (-10, 6, "right"),
     ("trials_per_year", "Epilepsy"): (0, 9, "center"),
-    ("trials_per_year", "IBD (Crohn's + UC)"): (7, -12, "left"),
     ("trials_per_year", "Bipolar disorder"): (0, 9, "center"),
+    ("trials_per_year", "Multiple sclerosis"): (-9, -3, "right"),
+    ("trials_per_year", "Crohn's disease"): (-6, 9, "left"),
     ("pubs_per_year", "ME/CFS"): (-10, -4, "right"),
     ("trials_per_year", "ME/CFS"): (-10, -4, "right"),
 }
 
 def panel(ax, key, title, ylabel):
     a, b, r2 = fit(key)
-    xs = [5e5, 1e8]
+    xs = [2.5e5, 1e8]
     ax.plot(xs, [10 ** (a + b * math.log10(x)) for x in xs], color=MUTED, lw=1, ls="--", zorder=1)
     for r in rows:
         me = r["label"] == "ME/CFS"
@@ -111,7 +121,7 @@ def panel(ax, key, title, ylabel):
     ax.text(me["dalys"] * 1.08, (exp * me[key]) ** .5,
             f"{me[key]:.0f}/yr vs ~{exp:.0f}\nexpected from trend", color=SUNSET, fontsize=8.5, va="center")
     ax.set_xscale("log"); ax.set_yscale("log")
-    ax.set_xlim(5e5, 1e8)
+    ax.set_xlim(2.5e5, 1e8)
     lo, hi = ax.get_ylim(); ax.set_ylim(me[key] / 1.8, hi * 1.3)
     ax.set_xlabel("Global DALYs, 2023 (GBD 2023)")
     ax.set_ylabel(ylabel)
@@ -128,6 +138,6 @@ fig, axs = plt.subplots(1, 2, figsize=(13, 5.6), facecolor=BG)
 panel(axs[0], "pubs_per_year", "PubMed publications per year", "Papers per year, 2021–2025 average (title search)")
 panel(axs[1], "trials_per_year", "Interventional trials per year", "Trials started per year, 2021–2025 average")
 fig.text(0.01, 0.01, "ME/CFS DALYs set to 25M (incl. post-COVID ME/CFS). Whiskers: GBD 95% UI. "
-         "IBD = Crohn's + UC summed.  v1", color=MUTED, fontsize=7.5)
+         "Type 1 diabetes excludes CKD due to T1D (GBD counts that under CKD).  v2", color=MUTED, fontsize=7.5)
 fig.tight_layout(rect=(0, 0.03, 1, 1))
 fig.savefig("analysis/burden_vs_research_2021-2025.png", dpi=160, facecolor=BG)
