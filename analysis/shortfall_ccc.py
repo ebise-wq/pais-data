@@ -71,42 +71,78 @@ for r in out:
           f'{r["shortfall_median"]:5.1f}x ({r["shortfall_p5_burden"]}-{r["shortfall_p95_burden"]})  '
           f'[+fit: {r["shortfall_p5_burden_and_fit"]}-{r["shortfall_p95_burden_and_fit"]}]')
 
-# --- plots: one per metric ---
+# --- plots: scatter of the 13 comparison diseases plus the four CCC groups ---
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 BG, INK, MUTED, GRID = "#141a24", "#e6e9ef", "#9aa3b2", "#2a3342"
-OCEAN, SUNSET = "#7fb3d5", "#f4a582"
+OCEAN, SUNSET, ROSE = "#7fb3d5", "#f4a582", "#e8a0bf"
 plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10, "text.color": INK,
-                     "axes.labelcolor": MUTED, "xtick.color": MUTED, "ytick.color": INK})
-TITLES = {"papers": "Publication shortfall, 2021–2025", "trials": "Interventional trial shortfall, 2021–2025"}
+                     "axes.labelcolor": MUTED, "xtick.color": MUTED, "ytick.color": MUTED})
+SHORT = {"Non-COVID (classic) ME/CFS": "Classic ME/CFS", "All ME/CFS (classic + post-COVID)": "All ME/CFS",
+         "Long COVID, incl. post-COVID ME": "Long COVID", "Long COVID + non-COVID ME/CFS": "Long COVID +\nclassic ME/CFS"}
+# label offsets in points (dx, dy, ha) per metric
+GROUP_OFF = {
+    "papers": {"Classic ME/CFS": (-10, 0, "right"), "All ME/CFS": (10, 0, "left"),
+               "Long COVID": (-30, -60, "right"), "Long COVID +\nclassic ME/CFS": (12, 4, "left")},
+    "trials": {"Classic ME/CFS": (-10, 0, "right"), "All ME/CFS": (10, 0, "left"),
+               "Long COVID": (20, -75, "left"), "Long COVID +\nclassic ME/CFS": (12, 4, "left")},
+}
+COMP_OFF = {
+    "papers": {"Epilepsy": (0, 9, "center"), "Parkinson's disease": (-8, 6, "right"),
+               "Rheumatoid arthritis": (8, 6, "left"), "Psoriasis": (-9, -3, "right"),
+               "Type 1 diabetes": (9, -4, "left"), "Schizophrenia": (0, 9, "center"),
+               "Bipolar disorder": (0, -14, "center"), "Crohn's disease": (0, 9, "center"),
+               "Ulcerative colitis": (-8, 6, "right"), "ALS / motor neuron disease": (-4, -14, "right"),
+               "Endometriosis": (9, -4, "left")},
+    "trials": {"Schizophrenia": (0, 9, "center"), "Epilepsy": (-9, -3, "right"),
+               "Bipolar disorder": (0, 9, "center"), "Multiple sclerosis": (-9, -3, "right"),
+               "Crohn's disease": (-6, 9, "left")},
+}
+# small vertical shift of the range bars only, so overlapping ranges stay readable
+WHISKER_SHIFT = {"Classic ME/CFS": 0.93, "All ME/CFS": 1.07, "Long COVID": 0.96, "Long COVID +\nclassic ME/CFS": 1.04}
+TITLES = {"papers": ("PubMed publications per year", "Papers per year, 2021–2025 average (title search)"),
+          "trials": ("Interventional trials per year", "Trials started per year, 2021–2025 average")}
 for metric in ("papers", "trials"):
-    rows = [r for r in out if r["metric"] == metric][::-1]
-    fig, ax = plt.subplots(figsize=(8, 4.2), facecolor=BG)
-    ax.axvline(1, color=MUTED, lw=1, ls="--", zorder=1)
-    ax.text(1.04, len(rows) - 0.45, "on trend", color=MUTED, fontsize=8, va="center")
-    for i, r in enumerate(rows):
-        c = SUNSET if "ME/CFS" in r["group"] and "Long COVID" not in r["group"] else OCEAN
-        ax.plot([r["shortfall_p5_burden_and_fit"], r["shortfall_p95_burden_and_fit"]], [i, i], color=c, lw=1.2, alpha=.5)
-        ax.plot([r["shortfall_p5_burden"], r["shortfall_p95_burden"]], [i, i], color=c, lw=5, alpha=.8,
-                solid_capstyle="round")
-        ax.scatter(r["shortfall_median"], i, s=70, color=c, edgecolor=BG, linewidth=2, zorder=3)
-        ax.text(r["shortfall_p95_burden_and_fit"] * 1.08, i, f'{r["shortfall_median"]:g}×', va="center",
-                color=INK, fontsize=10, fontweight="bold")
-        ax.text(r["shortfall_p95_burden_and_fit"] * 1.08, i - 0.28,
-                f'{r["actual_per_year"]:{".0f" if metric == "papers" else ".1f"}} vs ~{r["expected_per_year"]:,} /yr', va="center", color=MUTED, fontsize=7.5)
-    ax.set_yticks(range(len(rows)))
-    ax.set_yticklabels([f'{r["group"]}\n{r["dalys_M"]:g}M DALYs' for r in rows], fontsize=9)
-    ax.set_xscale("log"); ax.set_xlim(0.5, 80)
-    ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}×"))
-    ax.set_xticks([0.5, 1, 2, 5, 10, 20, 50])
-    ax.set_xlabel("Expected ÷ actual per year (log scale)")
-    ax.set_ylim(-0.6, len(rows) - 0.3)
-    ax.set_title(TITLES[metric], loc="left", color=INK, fontsize=12, pad=10)
-    ax.set_facecolor(BG); ax.grid(True, axis="x", color=GRID, lw=.6)
-    for s in ax.spines.values(): s.set_color(GRID)
-    ax.tick_params(axis="y", length=0)
-    fig.text(0.01, 0.01, "CCC burden, ME/CFS Burden model v11.2. Thick bar: 90% range from burden; "
-             "thin: also trend-fit uncertainty.  v4", color=MUTED, fontsize=7.5)
-    fig.tight_layout(rect=(0, 0.04, 1, 1))
-    fig.savefig(f"analysis/shortfall_{metric}_ccc_2021-2025.png", dpi=160, facecolor=BG)
+    key = "pubs_per_year" if metric == "papers" else "trials_per_year"
+    pts = [(math.log10(float(r["dalys"])), math.log10(float(r[key]))) for r in comp]
+    a, b = fit(pts)
+    r2 = 1 - sum((y - a - b * x) ** 2 for x, y in pts) / sum((y - sum(q for _, q in pts) / len(pts)) ** 2 for _, y in pts)
+    fig, ax = plt.subplots(figsize=(8.5, 6.4), facecolor=BG)
+    xs = [2.5e5, 1e8]
+    ax.plot(xs, [10 ** (a + b * math.log10(x)) for x in xs], color=MUTED, lw=1, ls="--", zorder=1)
+    for r in comp:
+        x, y = float(r["dalys"]), float(r[key])
+        ax.plot([float(r["dalys_lower"]), float(r["dalys_upper"])], [y, y], color=OCEAN, lw=1, alpha=.4, zorder=2)
+        ax.scatter(x, y, s=50, color=OCEAN, edgecolor=BG, linewidth=2, zorder=3)
+        dx, dy, ha = COMP_OFF[metric].get(r["label"], (7, 5, "left"))
+        ax.annotate(r["label"], (x, y), xytext=(dx, dy), textcoords="offset points", ha=ha, fontsize=8, color=MUTED)
+    for (name, (med, lo, hi), _), r in zip(GROUPS, [o for o in out if o["metric"] == metric]):
+        c = ROSE if "Long COVID" in name else SUNSET
+        x, y, e = med * 1e6, r["actual_per_year"], r["expected_per_year"]
+        ax.plot([x, x], [y, e], color=c, lw=1, ls=":", alpha=.8, zorder=2)
+        wy = y * WHISKER_SHIFT[SHORT[name]]
+        ax.plot([lo * 1e6, hi * 1e6], [wy, wy], color=c, lw=2, alpha=.55, zorder=2, solid_capstyle="round")
+        ax.scatter(x, y, s=85, color=c, edgecolor=BG, linewidth=2, zorder=4)
+        lab = SHORT[name]
+        dx, dy, ha = GROUP_OFF[metric][lab]
+        ax.annotate(f'{lab}\n{r["shortfall_median"]:g}× short ({r["shortfall_p5_burden"]:g}–{r["shortfall_p95_burden"]:g})',
+                    (x, y), xytext=(dx, dy), textcoords="offset points", ha=ha, va="center",
+                    arrowprops=dict(arrowstyle="-", color=c, lw=.8, alpha=.7) if abs(dy) > 20 else None,
+                    fontsize=8.5, color=INK, fontweight="bold", linespacing=1.15)
+    lo_y = min(o["actual_per_year"] for o in out if o["metric"] == metric)
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(*xs)
+    _, hi_y = ax.get_ylim(); ax.set_ylim(lo_y / 2, hi_y * 1.3)
+    t, yl = TITLES[metric]
+    ax.set_title(t, loc="left", color=INK, fontsize=12, pad=10)
+    ax.set_xlabel("Global DALYs per year"); ax.set_ylabel(yl)
+    ax.text(0.01, 0.98, f"dashed: log-log fit to the 13 other diseases, R²={r2:.2f}", transform=ax.transAxes,
+            ha="left", va="top", fontsize=7.5, color=MUTED)
+    ax.set_facecolor(BG); ax.grid(True, which="major", color=GRID, lw=.6)
+    for sp in ax.spines.values(): sp.set_color(GRID)
+    ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v/1e6:g}M"))
+    ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}"))
+    fig.text(0.01, 0.01, "ME/CFS and long COVID: CCC burden, ME/CFS Burden model v11.2 (2026), median and 90% range.\n"
+             "Other diseases: GBD 2023, 95% UI. Shortfall = trend ÷ actual.  v5", color=MUTED, fontsize=7.5, va="bottom")
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    fig.savefig(f"analysis/{metric}_vs_dalys_ccc_2021-2025.png", dpi=160, facecolor=BG)
