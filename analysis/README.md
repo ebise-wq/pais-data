@@ -31,5 +31,5 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
 - The trend is shallow (slope 0.34 for papers, 0.23 for trials in log-log), so the expected count changes
   little with burden. Comparator DALYs are GBD 2023; the ME/CFS model is for 2026.
 - Plots: `papers_vs_dalys_ccc_2021-2025.png` and `trials_vs_dalys_ccc_2021-2025.png` show the four groups
-  on the scatter with the 13 GBD diseases. The range bars of groups with near-identical counts are shifted
-  up or down a little so they don't sit on top of each other; the dots are at the true values.
+  (median CCC burden) on the scatter with the 13 GBD diseases, sized for phone screens. The 90% ranges
+  are in the CSV, not on the plots.
