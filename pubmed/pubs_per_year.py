@@ -37,6 +37,10 @@ D = {
  "Rheumatoid arthritis": (ti("rheumatoid arthritis"), '"Arthritis, Rheumatoid"[Majr:noexp]'),
  "Crohn's disease": ("crohn*[ti]", '"Crohn Disease"[Majr]'),
  "Ulcerative colitis": (ti("ulcerative colitis"), '"Colitis, Ulcerative"[Majr]'),
+ "IBD": ("crohn*[ti] OR " + ti("ulcerative colitis", "ulcerative proctitis", "inflammatory bowel disease",
+                                             "inflammatory bowel diseases", "indeterminate colitis", "IBD-unclassified")
+                        + ' OR pouchitis[ti] OR (IBD[ti] NOT "identity by descent"[tiab])',
+                        '"Inflammatory Bowel Diseases"[Majr]'),  # MeSH tree includes Crohn and UC
  "Psoriasis": ("psoria*[ti]", '"Psoriasis"[Majr]'),
  "Systemic lupus": (ti("systemic lupus", "lupus nephritis") + " OR SLE[ti]", '"Lupus Erythematosus, Systemic"[Majr]'),
  "Type 1 diabetes": ("(" + ti("type 1 diabetes", "type I diabetes", "type 1 diabetic", "type I diabetic",
@@ -85,21 +89,34 @@ def count(term):
     raise err
 
 if __name__ == "__main__":
-    today = datetime.date.today().isoformat()
+    # Default: pull every disease into new files dated today.
+    # --only NAME [NAME ...] --date YYYY-MM-DD: pull only these diseases and merge them into the
+    # existing files of that date, leaving the other rows as they were.
+    import argparse
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--only", nargs="+"); ap.add_argument("--date")
+    args = ap.parse_args()
+    today = args.date or datetime.date.today().isoformat()
+    todo = args.only or list(D)
+    old = []
+    if args.only:
+        with open(f"pubs_per_year_long_{today}.csv") as f:
+            old = [r for r in csv.DictReader(f) if r["disease"] not in todo]
     with open(f"queries_{today}.csv", "w", newline="") as f:
         w = csv.writer(f); w.writerow(["disease", "title_query", "mesh_query"])
         for d, (t, m) in D.items():
             w.writerow([d, t, m or ""])
     rows = []
-    for d, (t, m) in D.items():
+    for d in todo:
+        t, m = D[d]
         for y in YEARS:
-            r = {"disease": d, "year": y, "title": count(f"({t}) AND {y}[edat]"),
-                 "title_dp": count(f"({t}) AND {y}[dp]"),
-                 "mesh": count(f"({m}) AND {y}[edat]") if m else ""}
-            rows.append(r)
+            rows.append({"disease": d, "year": y, "title": count(f"({t}) AND {y}[edat]"),
+                         "title_dp": count(f"({t}) AND {y}[dp]"),
+                         "mesh": count(f"({m}) AND {y}[edat]") if m else ""})
         print(d, sum(r["title"] for r in rows if r["disease"] == d and 2021 <= r["year"] <= 2025), flush=True)
+    rows = sorted(old + rows, key=lambda r: (list(D).index(r["disease"]), int(r["year"])))
     with open(f"pubs_per_year_long_{today}.csv", "w", newline="") as f:
-        w = csv.DictWriter(f, fieldnames=rows[0].keys()); w.writeheader(); w.writerows(rows)
+        w = csv.DictWriter(f, fieldnames=["disease", "year", "title", "title_dp", "mesh"]); w.writeheader(); w.writerows(rows)
     # wide format matching clinicaltrials/trials_per_year_*.csv (title counts)
     with open(f"pubs_per_year_{today}.csv", "w", newline="") as f:
         w = csv.writer(f); w.writerow(["disease"] + [str(y) for y in YEARS])

@@ -17,7 +17,7 @@ MECFS_DALYS = 25e6  # set by hand: includes post-COVID ME/CFS; not a GBD cause
 MAP = {
     "Multiple sclerosis": (["Multiple sclerosis"], "Multiple sclerosis"),
     "Rheumatoid arthritis": (["Rheumatoid arthritis"], "Rheumatoid arthritis"),
-    "IBD (Crohn's + UC)": (["Crohn's disease", "Ulcerative colitis"], "Inflammatory bowel disease"),
+    "IBD": (["IBD"], "Inflammatory bowel disease"),
     "Psoriasis": (["Psoriasis"], "Psoriasis"),
     "Epilepsy": (["Epilepsy"], "Idiopathic epilepsy"),
     "Schizophrenia": (["Schizophrenia"], "Schizophrenia"),
@@ -79,13 +79,13 @@ OFFSETS = {
     ("pubs_per_year", "Epilepsy"): (0, 9, "center"),
     ("pubs_per_year", "Parkinson's disease"): (-8, 6, "right"),
     ("pubs_per_year", "Rheumatoid arthritis"): (9, -2, "left"),
-    ("pubs_per_year", "IBD (Crohn's + UC)"): (-8, -12, "right"),
+    ("pubs_per_year", "IBD"): (-8, -12, "right"),
     ("pubs_per_year", "Psoriasis"): (6, -12, "left"),
     ("pubs_per_year", "Schizophrenia"): (0, 9, "center"),
     ("pubs_per_year", "Bipolar disorder"): (0, 9, "center"),
     ("trials_per_year", "Schizophrenia"): (-10, 6, "right"),
     ("trials_per_year", "Epilepsy"): (0, 9, "center"),
-    ("trials_per_year", "IBD (Crohn's + UC)"): (7, -12, "left"),
+    ("trials_per_year", "IBD"): (7, -12, "left"),
     ("trials_per_year", "Bipolar disorder"): (0, 9, "center"),
     ("pubs_per_year", "ME/CFS"): (-10, -4, "right"),
     ("trials_per_year", "ME/CFS"): (-10, -4, "right"),
@@ -128,6 +128,6 @@ fig, axs = plt.subplots(1, 2, figsize=(13, 5.6), facecolor=BG)
 panel(axs[0], "pubs_per_year", "PubMed publications per year", "Papers per year, 2021–2025 average (title search)")
 panel(axs[1], "trials_per_year", "Interventional trials per year", "Trials started per year, 2021–2025 average")
 fig.text(0.01, 0.01, "ME/CFS DALYs set to 25M (incl. post-COVID ME/CFS). Whiskers: GBD 95% UI. "
-         "IBD = Crohn's + UC summed.  v1", color=MUTED, fontsize=7.5)
+         "IBD = one category, each study or paper counted once.  v2", color=MUTED, fontsize=7.5)
 fig.tight_layout(rect=(0, 0.03, 1, 1))
 fig.savefig("analysis/burden_vs_research_2021-2025.png", dpi=160, facecolor=BG)

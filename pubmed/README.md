@@ -28,6 +28,13 @@ are indexed, the ME/CFS tag is almost always present. So MeSH is accurate but mi
 the share it misses differs by field. Title search catches unindexed papers and skips papers that
 mention a disease only in passing in the abstract.
 
+## IBD
+
+`IBD` is a separate row with one combined query (Crohn's OR ulcerative colitis OR inflammatory
+bowel disease OR IBD, ...), so a paper naming both counts once. It is not the sum of the Crohn's and
+UC rows. `IBD[ti]` excludes papers mentioning "identity by descent". Pulled on 2026-11-09 with
+`python3 pubs_per_year.py --only IBD --date 2026-11-08`, which leaves the other rows unchanged.
+
 ## Choices and known problems
 
 - **Long COVID** cannot use "post-COVID" alone: about half of those titles are about the

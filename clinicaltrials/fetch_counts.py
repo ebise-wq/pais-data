@@ -10,6 +10,7 @@ D={
  "Rheumatoid arthritis":("rheumatoid arthritis", r"rheumatoid arthritis",r"juvenile",False),
  "Crohn's disease":("crohn disease", r"crohn",None,False),
  "Ulcerative colitis":("ulcerative colitis", r"ulcerative colitis",None,False),
+ "IBD":("inflammatory bowel disease OR crohn disease OR ulcerative colitis", r"crohn|ulcerative colitis|ulcerative proctitis|inflammatory bowel|\bIBD\b|indeterminate colitis|pouchitis",None,False),
  "Psoriasis":("psoriasis", r"psoria",r"psoriatic arthritis$",False),
  "Systemic lupus":("systemic lupus erythematosus", r"lupus",r"cutaneous lupus$|discoid",False),
  "Type 1 diabetes":("type 1 diabetes", r"type ?(1|i)\b.{0,10}diabet|diabet.{0,25}type ?(1|i)\b|T1D|insulin.?dependent|juvenile diabet",r"type ?(2|ii)",False),

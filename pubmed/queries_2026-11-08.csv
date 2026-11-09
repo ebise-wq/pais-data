@@ -6,6 +6,7 @@ Multiple sclerosis,"""multiple sclerosis""[ti] OR ""clinically isolated syndrome
 Rheumatoid arthritis,"""rheumatoid arthritis""[ti]","""Arthritis, Rheumatoid""[Majr:noexp]"
 Crohn's disease,crohn*[ti],"""Crohn Disease""[Majr]"
 Ulcerative colitis,"""ulcerative colitis""[ti]","""Colitis, Ulcerative""[Majr]"
+IBD,"crohn*[ti] OR ""ulcerative colitis""[ti] OR ""ulcerative proctitis""[ti] OR ""inflammatory bowel disease""[ti] OR ""inflammatory bowel diseases""[ti] OR ""indeterminate colitis""[ti] OR ""IBD-unclassified""[ti] OR pouchitis[ti] OR (IBD[ti] NOT ""identity by descent""[tiab])","""Inflammatory Bowel Diseases""[Majr]"
 Psoriasis,psoria*[ti],"""Psoriasis""[Majr]"
 Systemic lupus,"""systemic lupus""[ti] OR ""lupus nephritis""[ti] OR SLE[ti]","""Lupus Erythematosus, Systemic""[Majr]"
 Type 1 diabetes,"(""type 1 diabetes""[ti] OR ""type I diabetes""[ti] OR ""type 1 diabetic""[ti] OR ""type I diabetic""[ti] OR ""insulin-dependent diabetes""[ti] OR ""juvenile diabetes""[ti] OR T1D[ti] OR T1DM[ti]) NOT ""non-insulin-dependent""[ti]","""Diabetes Mellitus, Type 1""[Majr]"
