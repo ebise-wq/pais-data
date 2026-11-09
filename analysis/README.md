@@ -32,3 +32,4 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
   little with burden. Comparator DALYs are GBD 2023; the ME/CFS model is for 2026.
 - Plots: `papers_vs_dalys_ccc_2021-2025.png` and `trials_vs_dalys_ccc_2021-2025.png` show All ME/CFS (CCC median
   and 90% range) on the scatter with the 13 GBD diseases (95% UI), square, sized for phone screens.
+  The shortfall range on the plots is the wider one (burden and trend-fit uncertainty).

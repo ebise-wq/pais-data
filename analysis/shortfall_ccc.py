@@ -112,8 +112,6 @@ for metric in ("papers", "trials"):
     fig, ax = plt.subplots(figsize=(7, 7), facecolor=BG)
     xs = [3e5, 6e7]
     ax.plot(xs, [10 ** (a + b * math.log10(x)) for x in xs], color=MUTED, lw=1.2, ls="--", zorder=1)
-    ax.text(xs[1] / 1.05, 10 ** (a + b * math.log10(xs[1] / 1.05)) / 1.12, "trend", color=MUTED, fontsize=10,
-            ha="right", va="top")
     for r in comp:
         x, y = float(r["dalys"]), float(r[key])
         ax.plot([float(r["dalys_lower"]), float(r["dalys_upper"])], [y, y], color=OCEAN, lw=1, alpha=.35, zorder=2)
@@ -129,7 +127,7 @@ for metric in ("papers", "trials"):
         ax.scatter(x, y, s=110, color=c, edgecolor=BG, linewidth=2, zorder=4)
         lab = SHORT[name]
         dx, dy, ha = GROUP_OFF[metric][lab]
-        ax.annotate(f'{lab}\n{r["shortfall_median"]:g}× shortfall\n({r["shortfall_p5_burden"]:g}–{r["shortfall_p95_burden"]:g}×)', (x, y), xytext=(dx, dy), textcoords="offset points",
+        ax.annotate(f'{lab}\n{r["shortfall_median"]:g}× shortfall\n({r["shortfall_p5_burden_and_fit"]:g}–{r["shortfall_p95_burden_and_fit"]:g}×)', (x, y), xytext=(dx, dy), textcoords="offset points",
                     ha=ha, va="center", fontsize=11.5, color=c, fontweight="bold", linespacing=1.1,
                     arrowprops=None)
     lo_y = min(o["actual_per_year"] for o in out if o["metric"] == metric)
@@ -143,7 +141,14 @@ for metric in ("papers", "trials"):
     ax.tick_params(length=0)
     ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v/1e6:g}M"))
     ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:,.0f}"))
-    fig.text(0.02, 0.012, "ME/CFS: CCC burden, median and 90% range (ME/CFS Burden model v11.2).\n"
-             "Others: GBD 2023, 95% UI. Shortfall = trend ÷ actual.  v7", color=MUTED, fontsize=8.5, va="bottom")
+    fig.text(0.02, 0.012, "ME/CFS: CCC burden, median and 90% range (ME/CFS Burden model v11.2). Shortfall range\n"
+             "includes trend-fit uncertainty. Others: GBD 2023, 95% UI. Shortfall = trend ÷ actual.  v8", color=MUTED, fontsize=8.5, va="bottom")
     fig.tight_layout(rect=(0, 0.05, 1, 1))
+    # "trend" label rotated to follow the dashed line (angle measured on screen, after layout)
+    tx = xs[1] / 1.6
+    (x1, y1), (x2, y2) = ax.transData.transform([(tx, 10 ** (a + b * math.log10(tx))),
+                                                 (tx * 2, 10 ** (a + b * math.log10(tx * 2)))])
+    ax.annotate("trend", (tx, 10 ** (a + b * math.log10(tx))), xytext=(0, 5), textcoords="offset points",
+                rotation=math.degrees(math.atan2(y2 - y1, x2 - x1)), rotation_mode="anchor",
+                ha="center", va="bottom", color=MUTED, fontsize=10)
     fig.savefig(f"analysis/{metric}_vs_dalys_ccc_2021-2025.png", dpi=200, facecolor=BG)
