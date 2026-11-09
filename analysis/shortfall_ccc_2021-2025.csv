@@ -1,0 +1,9 @@
+metric,group,dalys_M,actual_per_year,expected_per_year,shortfall_median,shortfall_p5_burden,shortfall_p95_burden,shortfall_p5_burden_and_fit,shortfall_p95_burden_and_fit
+papers,Non-COVID (classic) ME/CFS,7.7,216.8,3322,15.3,11.4,20.7,10.1,23.1
+papers,All ME/CFS (classic + post-COVID),17.5,216.8,4397,20.3,16.7,24.8,12.5,30.6
+papers,"Long COVID, incl. post-COVID ME",19.8,1348.6,4586,3.4,2.9,4.0,2.1,5.0
+papers,Long COVID + non-COVID ME/CFS,28.3,1535.4,5180,3.4,2.9,3.9,1.9,5.1
+trials,Non-COVID (classic) ME/CFS,7.7,10.2,113,11.1,9.0,13.6,7.9,15.5
+trials,All ME/CFS (classic + post-COVID),17.5,10.2,136,13.4,11.7,15.3,8.9,18.8
+trials,"Long COVID, incl. post-COVID ME",19.8,107.2,140,1.3,1.2,1.5,0.9,1.8
+trials,Long COVID + non-COVID ME/CFS,28.3,113.6,152,1.3,1.2,1.5,0.8,1.9
