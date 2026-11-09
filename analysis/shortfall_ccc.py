@@ -85,49 +85,56 @@ COMP_NAME = {"Multiple sclerosis": "MS", "Rheumatoid arthritis": "RA", "Type 1 d
              "ALS / motor neuron disease": "ALS", "Ulcerative colitis": "UC", "HIV/AIDS": "HIV",
              "Parkinson's disease": "Parkinson's", "Bipolar disorder": "Bipolar", "Crohn's disease": "Crohn's"}
 GROUP_OFF = {  # (dx, dy, ha) in points
-    "papers": {"Classic ME/CFS": (-12, 0, "right"), "All ME/CFS": (12, 0, "left"),
+    "papers": {"Classic ME/CFS": (-12, 0, "right"), "All ME/CFS": (0, -34, "center"),
                "Long COVID": (14, -60, "left"), "Long COVID\n+ classic ME/CFS": (12, 6, "left")},
-    "trials": {"Classic ME/CFS": (-12, 0, "right"), "All ME/CFS": (12, 0, "left"),
+    "trials": {"Classic ME/CFS": (-12, 0, "right"), "All ME/CFS": (0, -34, "center"),
                "Long COVID": (14, -60, "left"), "Long COVID\n+ classic ME/CFS": (12, 6, "left")},
 }
-COMP_OFF = {
-    "papers": {"Epilepsy": (0, 10, "center"), "Parkinson's": (-8, 0, "right"), "Schizophrenia": (8, -2, "left"),
-               "Psoriasis": (-8, 0, "right"), "RA": (6, 4, "left"), "T1D": (7, -6, "left"),
-               "UC": (-7, 5, "right"), "ALS": (2, -13, "center"), "Endometriosis": (7, -6, "left"),
-               "Crohn's": (0, 8, "center"), "Bipolar": (0, -15, "center"), "MS": (7, 3, "left")},
-    "trials": {"Schizophrenia": (-8, 6, "right"), "Epilepsy": (-8, -4, "right"), "MS": (7, 3, "left"),
-               "Crohn's": (0, 8, "center"), "Endometriosis": (7, -6, "left"), "Bipolar": (0, -15, "center")},
+COMP_OFF = {  # labels sit above or below the dot so they clear the range bar
+    "papers": {"Parkinson's": (0, 11, "center"), "Epilepsy": (0, 11, "center"), "Schizophrenia": (0, 11, "center"),
+               "HIV": (0, 11, "center"), "MS": (0, 11, "center"), "RA": (0, 11, "center"),
+               "Psoriasis": (-4, 11, "right"), "T1D": (0, -13, "center"), "UC": (0, 11, "center"),
+               "Crohn's": (0, 11, "center"), "ALS": (-6, -13, "center"), "Endometriosis": (8, -13, "center"),
+               "Bipolar": (0, -13, "center")},
+    "trials": {"Parkinson's": (0, 11, "center"), "HIV": (0, 11, "center"), "MS": (0, 11, "center"),
+               "T1D": (0, 11, "center"), "Schizophrenia": (0, 11, "center"), "Epilepsy": (0, -13, "center"),
+               "Psoriasis": (0, 11, "center"), "RA": (0, -13, "center"), "Crohn's": (0, 11, "center"),
+               "UC": (0, 11, "center"), "ALS": (-24, 0, "right"), "Endometriosis": (0, -13, "center"),
+               "Bipolar": (0, -13, "center")},
 }
+PLOT_GROUPS = ["All ME/CFS (classic + post-COVID)"]
 TITLES = {"papers": ("Papers per year vs disease burden", "Papers per year (2021–2025 avg)"),
           "trials": ("Trials per year vs disease burden", "Interventional trials per year (2021–2025 avg)")}
 for metric in ("papers", "trials"):
     key = "pubs_per_year" if metric == "papers" else "trials_per_year"
     pts = [(math.log10(float(r["dalys"])), math.log10(float(r[key]))) for r in comp]
     a, b = fit(pts)
-    fig, ax = plt.subplots(figsize=(6.4, 7.6), facecolor=BG)
+    fig, ax = plt.subplots(figsize=(7, 7), facecolor=BG)
     xs = [3e5, 6e7]
     ax.plot(xs, [10 ** (a + b * math.log10(x)) for x in xs], color=MUTED, lw=1.2, ls="--", zorder=1)
     ax.text(xs[1] / 1.05, 10 ** (a + b * math.log10(xs[1] / 1.05)) / 1.12, "trend", color=MUTED, fontsize=10,
             ha="right", va="top")
     for r in comp:
         x, y = float(r["dalys"]), float(r[key])
+        ax.plot([float(r["dalys_lower"]), float(r["dalys_upper"])], [y, y], color=OCEAN, lw=1, alpha=.35, zorder=2)
         ax.scatter(x, y, s=45, color=OCEAN, edgecolor=BG, linewidth=1.5, zorder=3)
         n = COMP_NAME.get(r["label"], r["label"])
         dx, dy, ha = COMP_OFF[metric].get(n, (7, 3, "left"))
         ax.annotate(n, (x, y), xytext=(dx, dy), textcoords="offset points", ha=ha, va="center", fontsize=10, color=MUTED)
     for (name, (med, lo, hi), _), r in zip(GROUPS, [o for o in out if o["metric"] == metric]):
+        if name not in PLOT_GROUPS: continue
         c = ROSE if "Long COVID" in name else SUNSET
-        x, y, e = med * 1e6, r["actual_per_year"], r["expected_per_year"]
-        ax.plot([x, x], [y * 1.08, e], color=c, lw=1.2, ls=":", zorder=2)
+        x, y = med * 1e6, r["actual_per_year"]
+        ax.plot([lo * 1e6, hi * 1e6], [y, y], color=c, lw=2.5, alpha=.6, zorder=3, solid_capstyle="round")
         ax.scatter(x, y, s=110, color=c, edgecolor=BG, linewidth=2, zorder=4)
         lab = SHORT[name]
         dx, dy, ha = GROUP_OFF[metric][lab]
-        ax.annotate(f'{lab}\n{r["shortfall_median"]:g}× short', (x, y), xytext=(dx, dy), textcoords="offset points",
+        ax.annotate(f'{lab}\n{r["shortfall_median"]:g}× shortfall\n({r["shortfall_p5_burden"]:g}–{r["shortfall_p95_burden"]:g}×)', (x, y), xytext=(dx, dy), textcoords="offset points",
                     ha=ha, va="center", fontsize=11.5, color=c, fontweight="bold", linespacing=1.1,
-                    arrowprops=dict(arrowstyle="-", color=c, lw=.8) if abs(dy) > 20 else None)
+                    arrowprops=None)
     lo_y = min(o["actual_per_year"] for o in out if o["metric"] == metric)
     ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(*xs)
-    _, hi_y = ax.get_ylim(); ax.set_ylim(lo_y / 2.2, hi_y * 1.15)
+    _, hi_y = ax.get_ylim(); ax.set_ylim(lo_y / 3, hi_y * 1.15)
     t, yl = TITLES[metric]
     ax.set_title(t, loc="left", color=INK, fontsize=15, pad=12)
     ax.set_xlabel("Global DALYs per year"); ax.set_ylabel(yl)
@@ -136,7 +143,7 @@ for metric in ("papers", "trials"):
     ax.tick_params(length=0)
     ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v/1e6:g}M"))
     ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:,.0f}"))
-    fig.text(0.02, 0.012, "ME/CFS & long COVID: CCC burden, median (ME/CFS Burden model v11.2).\n"
-             "Others: GBD 2023. Short = trend ÷ actual.  v6", color=MUTED, fontsize=8.5, va="bottom")
+    fig.text(0.02, 0.012, "ME/CFS: CCC burden, median and 90% range (ME/CFS Burden model v11.2).\n"
+             "Others: GBD 2023, 95% UI. Shortfall = trend ÷ actual.  v7", color=MUTED, fontsize=8.5, va="bottom")
     fig.tight_layout(rect=(0, 0.05, 1, 1))
     fig.savefig(f"analysis/{metric}_vs_dalys_ccc_2021-2025.png", dpi=200, facecolor=BG)
