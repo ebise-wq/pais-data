@@ -14,7 +14,7 @@ OVERLAP_TRIALS = [1, 4, 7, 3, 4]
 
 # CCC column: median, 5th, 95th percentile, millions of DALYs per year
 GROUPS = [
-    ("Non-COVID (classic) ME/CFS", (7.7, 3.2, 18.7), "ME/CFS"),
+    ("Non-COVID (classic) ME/CFS", (7.7, 3.2, 18.7), "classic"),
     ("All ME/CFS (classic + post-COVID)", (17.5, 9.9, 31.7), "ME/CFS"),
     ("Long COVID, incl. post-COVID ME", (19.8, 12.4, 31.7), "Long COVID"),
     ("Long COVID + non-COVID ME/CFS", (28.3, 18.3, 44.7), "union"),
@@ -25,6 +25,9 @@ def avg(path):
         return {r["disease"]: sum(int(r[y]) for y in YEARS) / len(YEARS) for r in csv.DictReader(f)}
 
 pubs, trials = avg("pubmed/pubs_per_year_2026-11-08.csv"), avg("clinicaltrials/trials_per_year_2026-11-08.csv")
+# classic ME/CFS = ME/CFS papers/trials that do not also name long COVID
+pubs["classic"] = pubs["ME/CFS"] - sum(OVERLAP_PAPERS) / 5
+trials["classic"] = trials["ME/CFS"] - sum(OVERLAP_TRIALS) / 5
 pubs["union"] = pubs["ME/CFS"] + pubs["Long COVID"] - sum(OVERLAP_PAPERS) / 5
 trials["union"] = trials["ME/CFS"] + trials["Long COVID"] - sum(OVERLAP_TRIALS) / 5
 

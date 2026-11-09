@@ -22,8 +22,9 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
 (Monte Carlo, 300,000 draws, year 2026). Output: `shortfall_ccc_2021-2025.csv`.
 
 - Expected = the log-log trend through the 13 GBD comparison diseases, read off at the group's DALYs.
-- Both ME/CFS rows use the same ME/CFS counts. Long COVID uses the long COVID counts. The combined row
-  uses ME/CFS + long COVID minus items counted under both (2021–2025: 150 papers, 19 trials).
+- All ME/CFS uses every ME/CFS paper or trial (including those that also name long COVID). Classic
+  ME/CFS leaves out the ones that also name long COVID (2021–2025: 150 papers, 19 trials). Long COVID
+  uses the long COVID counts. The combined row is long COVID + classic ME/CFS.
 - `p5/p95_burden`: 90% range from the burden estimate alone. The trend is monotonic, so the DALY
   percentiles map straight onto shortfall percentiles.
 - `p5/p95_burden_and_fit`: also includes uncertainty in the trend line (4,000 bootstrap resamples of the
