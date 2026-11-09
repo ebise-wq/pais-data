@@ -134,10 +134,21 @@ def panel(ax, key, title, ylabel):
         lambda v, _: f"{v/1e6:g}M"))
     ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}"))
 
+NOTE = ("ME/CFS DALYs set to 25M (incl. post-COVID ME/CFS). Whiskers: GBD 95% UI.\n"
+        "Type 1 diabetes excludes CKD due to T1D (GBD counts that under CKD).  v3")
+SPECS = [("pubs_per_year", "PubMed publications per year", "Papers per year, 2021–2025 average (title search)", "pubs"),
+         ("trials_per_year", "Interventional trials per year", "Trials started per year, 2021–2025 average", "trials")]
+
 fig, axs = plt.subplots(1, 2, figsize=(13, 5.6), facecolor=BG)
-panel(axs[0], "pubs_per_year", "PubMed publications per year", "Papers per year, 2021–2025 average (title search)")
-panel(axs[1], "trials_per_year", "Interventional trials per year", "Trials started per year, 2021–2025 average")
-fig.text(0.01, 0.01, "ME/CFS DALYs set to 25M (incl. post-COVID ME/CFS). Whiskers: GBD 95% UI. "
-         "Type 1 diabetes excludes CKD due to T1D (GBD counts that under CKD).  v2", color=MUTED, fontsize=7.5)
+for ax, (key, title, ylabel, _) in zip(axs, SPECS):
+    panel(ax, key, title, ylabel)
+fig.text(0.01, 0.01, NOTE.replace("\n", " "), color=MUTED, fontsize=7.5)
 fig.tight_layout(rect=(0, 0.03, 1, 1))
 fig.savefig("analysis/burden_vs_research_2021-2025.png", dpi=160, facecolor=BG)
+
+for key, title, ylabel, short in SPECS:
+    fig, ax = plt.subplots(figsize=(8, 6), facecolor=BG)
+    panel(ax, key, title, ylabel)
+    fig.text(0.01, 0.01, NOTE, color=MUTED, fontsize=7.5, va="bottom")
+    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    fig.savefig(f"analysis/{short}_vs_dalys_2021-2025.png", dpi=160, facecolor=BG)
