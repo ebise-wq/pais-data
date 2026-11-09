@@ -70,3 +70,43 @@ for r in out:
     print(f'{r["metric"]:7s} {r["group"]:36s} act {r["actual_per_year"]:7.1f} exp {r["expected_per_year"]:5d}  '
           f'{r["shortfall_median"]:5.1f}x ({r["shortfall_p5_burden"]}-{r["shortfall_p95_burden"]})  '
           f'[+fit: {r["shortfall_p5_burden_and_fit"]}-{r["shortfall_p95_burden_and_fit"]}]')
+
+# --- plots: one per metric ---
+import matplotlib
+matplotlib.use("Agg")
+import matplotlib.pyplot as plt
+BG, INK, MUTED, GRID = "#141a24", "#e6e9ef", "#9aa3b2", "#2a3342"
+OCEAN, SUNSET = "#7fb3d5", "#f4a582"
+plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 10, "text.color": INK,
+                     "axes.labelcolor": MUTED, "xtick.color": MUTED, "ytick.color": INK})
+TITLES = {"papers": "Publication shortfall, 2021–2025", "trials": "Interventional trial shortfall, 2021–2025"}
+for metric in ("papers", "trials"):
+    rows = [r for r in out if r["metric"] == metric][::-1]
+    fig, ax = plt.subplots(figsize=(8, 4.2), facecolor=BG)
+    ax.axvline(1, color=MUTED, lw=1, ls="--", zorder=1)
+    ax.text(1.04, len(rows) - 0.45, "on trend", color=MUTED, fontsize=8, va="center")
+    for i, r in enumerate(rows):
+        c = SUNSET if "ME/CFS" in r["group"] and "Long COVID" not in r["group"] else OCEAN
+        ax.plot([r["shortfall_p5_burden_and_fit"], r["shortfall_p95_burden_and_fit"]], [i, i], color=c, lw=1.2, alpha=.5)
+        ax.plot([r["shortfall_p5_burden"], r["shortfall_p95_burden"]], [i, i], color=c, lw=5, alpha=.8,
+                solid_capstyle="round")
+        ax.scatter(r["shortfall_median"], i, s=70, color=c, edgecolor=BG, linewidth=2, zorder=3)
+        ax.text(r["shortfall_p95_burden_and_fit"] * 1.08, i, f'{r["shortfall_median"]:g}×', va="center",
+                color=INK, fontsize=10, fontweight="bold")
+        ax.text(r["shortfall_p95_burden_and_fit"] * 1.08, i - 0.28,
+                f'{r["actual_per_year"]:{".0f" if metric == "papers" else ".1f"}} vs ~{r["expected_per_year"]:,} /yr', va="center", color=MUTED, fontsize=7.5)
+    ax.set_yticks(range(len(rows)))
+    ax.set_yticklabels([f'{r["group"]}\n{r["dalys_M"]:g}M DALYs' for r in rows], fontsize=9)
+    ax.set_xscale("log"); ax.set_xlim(0.5, 80)
+    ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:g}×"))
+    ax.set_xticks([0.5, 1, 2, 5, 10, 20, 50])
+    ax.set_xlabel("Expected ÷ actual per year (log scale)")
+    ax.set_ylim(-0.6, len(rows) - 0.3)
+    ax.set_title(TITLES[metric], loc="left", color=INK, fontsize=12, pad=10)
+    ax.set_facecolor(BG); ax.grid(True, axis="x", color=GRID, lw=.6)
+    for s in ax.spines.values(): s.set_color(GRID)
+    ax.tick_params(axis="y", length=0)
+    fig.text(0.01, 0.01, "CCC burden, ME/CFS Burden model v11.2. Thick bar: 90% range from burden; "
+             "thin: also trend-fit uncertainty.  v4", color=MUTED, fontsize=7.5)
+    fig.tight_layout(rect=(0, 0.04, 1, 1))
+    fig.savefig(f"analysis/shortfall_{metric}_ccc_2021-2025.png", dpi=160, facecolor=BG)
