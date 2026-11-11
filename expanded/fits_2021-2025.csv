@@ -1,0 +1,15 @@
+metric,set,n,intercept_a,slope_b,slope_se,r2,resid_sd_log10,mecfs_shortfall,mecfs_shortfall_p5,mecfs_shortfall_p95,mecfs_resid_percentile
+papers,Original 13,13,1.1716,0.3412,0.103,0.5,0.206,20.3,12.4,29.8,0.0
+papers,All,124,0.1258,0.4393,0.0552,0.341,0.476,9.4,6.9,13.1,2.4
+papers,All except cancers,104,0.3367,0.3953,0.0563,0.325,0.466,7.3,5.4,10.2,3.8
+papers,Non-cancer NCDs,65,0.9798,0.3186,0.0786,0.207,0.44,8.9,6.4,12.2,3.1
+papers,Cancers,20,-1.0506,0.673,0.0965,0.73,0.221,,,,
+papers,Infectious + NTD,34,-0.04,0.4251,0.0788,0.476,0.426,,,,
+papers,Maternal/neonatal,5,2.3925,0.0614,0.4155,0.007,0.546,,,,
+trials,Original 13,13,0.4624,0.2309,0.1065,0.299,0.213,13.4,8.9,18.9,0.0
+trials,All,124,-2.4909,0.6041,0.0689,0.386,0.594,7.5,4.9,11.4,10.5
+trials,All except cancers,104,-2.3006,0.5596,0.0706,0.381,0.583,5.5,3.7,8.2,12.5
+trials,Non-cancer NCDs,65,-0.8121,0.3823,0.0709,0.316,0.397,8.9,6.4,12.2,1.5
+trials,Cancers,20,-2.9096,0.7448,0.1066,0.731,0.244,,,,
+trials,Infectious + NTD,34,-2.7172,0.5458,0.0893,0.538,0.483,,,,
+trials,Maternal/neonatal,5,1.012,0.0486,0.4663,0.004,0.612,,,,

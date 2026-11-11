@@ -1,0 +1,112 @@
+disease,group,gbd_causes,papers_2021,papers_2022,papers_2023,papers_2024,papers_2025,trials_2021,trials_2022,trials_2023,trials_2024,trials_2025,ctg_raw_hits_2021_2025
+Ischemic heart disease,NCD,Ischemic heart disease,7144,6868,6325,6789,7576,320,293,271,293,314,1894
+Stroke,NCD,Stroke,11200,11596,11017,11991,13748,495,535,619,679,734,3418
+Atrial fibrillation,NCD,Atrial fibrillation and flutter,4090,3939,3780,4060,4519,145,159,159,167,172,861
+Rheumatic heart disease,NCD,Rheumatic heart disease,232,176,176,210,227,3,6,4,8,4,65
+Aortic aneurysm,NCD,Aortic aneurysm,1947,1920,1789,2011,2311,26,25,27,26,33,165
+Peripheral arterial disease,NCD,Lower extremity peripheral arterial disease,834,791,823,838,998,65,60,68,63,51,418
+Endocarditis,NCD,Endocarditis,914,990,960,1037,1136,4,6,4,10,8,34
+Pulmonary arterial hypertension,NCD,Pulmonary Arterial Hypertension,651,638,551,631,754,21,18,28,23,18,345
+Cardiomyopathy & myocarditis,NCD,Cardiomyopathy and myocarditis,3231,3489,3370,3516,4168,41,51,49,62,60,344
+Congenital heart disease,NCD,Congenital heart anomalies,2071,2060,2036,2167,2399,35,41,32,29,49,484
+COPD,NCD,Chronic obstructive pulmonary disease,3101,2908,2848,3150,3767,163,166,191,194,181,1147
+Asthma,NCD,Asthma,3902,3745,3580,3612,4109,146,132,152,173,135,778
+Interstitial lung disease & sarcoidosis,NCD,Interstitial lung disease and pulmonary sarcoidosis,2508,2506,2601,2782,3309,59,58,86,58,63,668
+Alzheimer's & other dementias,NCD,Alzheimer's disease and other dementias,9558,9908,10216,11491,13606,254,278,270,278,305,1854
+Migraine,NCD,Migraine,1335,1324,1418,1474,1668,81,80,89,78,96,444
+Tension-type headache,NCD,Tension-type headache,62,45,50,47,60,4,9,14,11,6,50
+Depressive disorders,NCD,Depressive disorders,10609,11049,11178,11994,14426,618,578,629,667,703,3906
+Anxiety disorders,NCD,Anxiety disorders,887,770,855,901,1034,103,92,146,128,137,4510
+Autism,NCD,Autism spectrum disorders,3775,3721,3714,3991,4558,115,136,169,169,135,771
+ADHD,NCD,Attention-deficit/hyperactivity disorder,1490,1555,1632,1643,2066,66,70,77,88,71,428
+Eating disorders,NCD,Eating disorders,1306,1274,1297,1378,1585,56,51,65,54,51,751
+Alcohol use disorders,NCD,Alcohol use disorders,722,701,704,830,863,77,75,89,85,79,526
+Opioid use disorders,NCD,Opioid use disorders,1028,954,1005,1013,1031,41,60,63,72,77,595
+Conduct disorder,NCD,Conduct disorder,82,65,63,64,65,5,10,6,8,9,10005
+Fatty liver disease (NAFLD/MASLD),NCD,Nonalcoholic fatty liver disease including cirrhosis,3417,3862,4224,4723,5683,125,101,130,102,86,580
+Pancreatitis,NCD,Pancreatitis,1547,1540,1546,1643,2076,24,30,23,27,39,166
+Peptic ulcer disease,NCD,Peptic ulcer disease,253,302,269,292,323,8,10,11,9,7,89
+GERD,NCD,Gastroesophageal reflux disease,418,408,437,514,572,35,39,37,32,46,234
+Appendicitis,NCD,Appendicitis,667,709,586,647,684,15,5,20,12,17,73
+Gallstones & biliary disease,NCD,Gallbladder and biliary diseases,574,656,640,749,868,30,19,24,30,37,171
+Abdominal hernia,NCD,"Inguinal, femoral, and abdominal hernia",716,738,742,831,906,29,38,34,48,39,289
+Chronic kidney disease,NCD,Chronic kidney disease,6941,7162,6942,7572,8823,217,225,221,264,298,1658
+Kidney stones,NCD,Urolithiasis,649,647,744,877,1048,36,44,45,57,74,319
+Benign prostatic hyperplasia,NCD,Benign prostatic hyperplasia,403,354,366,467,558,34,27,21,41,39,189
+Low back pain,NCD,Low back pain,1390,1399,1383,1495,1688,193,193,189,188,256,1154
+Neck pain,NCD,Neck pain,242,315,306,315,359,83,96,90,102,118,885
+Osteoarthritis,NCD,Osteoarthritis,3273,3482,3381,3876,4617,302,290,291,280,299,1618
+Gout,NCD,Gout,442,534,514,591,664,24,18,23,20,27,116
+Atopic dermatitis,NCD,Atopic dermatitis,1381,1444,1802,1855,2002,76,100,107,90,101,532
+Acne,NCD,Acne vulgaris,495,521,521,611,618,41,35,57,50,49,264
+Urticaria,NCD,Urticaria,348,355,340,382,444,12,19,17,16,22,142
+Alopecia areata,NCD,Alopecia areata,211,266,327,342,431,15,19,20,10,18,277
+Glaucoma,NCD,Glaucoma,1888,1936,1870,1891,2058,83,78,71,58,74,383
+Cataract,NCD,Cataract,1111,1141,1061,1038,1191,85,75,56,56,64,407
+Macular degeneration,NCD,Age-related macular degeneration,927,916,928,1104,1228,61,57,59,49,67,366
+Hearing loss,NCD,Age-related and other hearing loss,1555,1468,1498,1702,1827,82,88,80,68,76,455
+Type 2 diabetes,NCD,Diabetes mellitus type 2,6643,6805,6830,7331,8569,425,418,393,445,416,2506
+Polycystic ovary syndrome,NCD,Polycystic ovarian syndrome,1118,1197,1331,1396,1711,39,43,45,50,59,251
+Uterine fibroids,NCD,Uterine fibroids,303,347,333,359,399,10,14,14,14,23,80
+Sickle cell disease,NCD,Sickle cell disorders,1058,1072,1047,1165,1228,48,53,36,45,41,234
+Thalassemia,NCD,Thalassemias,639,608,614,607,718,14,19,20,31,10,108
+Down syndrome,NCD,Down syndrome,686,665,629,594,760,18,15,33,25,34,148
+Neural tube defects,NCD,Neural tube defects,333,244,288,310,335,6,10,10,7,8,57
+Lung cancer,Cancer,"Tracheal, bronchus, and lung cancer",11538,12072,11439,12234,14104,596,563,574,674,660,3600
+Breast cancer,Cancer,Breast cancer,14503,14378,14522,15120,17182,654,672,692,723,753,3899
+Colorectal cancer,Cancer,Colon and rectum cancer,9853,9981,9645,10167,11703,372,384,451,465,499,2633
+Stomach cancer,Cancer,Stomach cancer,4321,4351,4000,4332,4688,177,186,158,196,180,1131
+Liver cancer,Cancer,Liver cancer,7771,7988,7777,8189,8988,214,202,213,207,219,1401
+Pancreatic cancer,Cancer,Pancreatic cancer,3708,3796,3560,3663,4285,209,185,208,240,222,1243
+Prostate cancer,Cancer,Prostate cancer,6046,5752,5600,5882,6490,298,244,310,350,319,1635
+Cervical cancer,Cancer,Cervical cancer,2568,2765,2436,2842,3084,124,112,114,138,142,2854
+Esophageal cancer,Cancer,Esophageal cancer,2164,2267,2020,2151,2480,88,75,92,107,114,770
+Ovarian cancer,Cancer,Ovarian cancer,2959,2971,2782,2988,3360,178,149,153,156,164,1183
+Leukemia,Cancer,Leukemia,5981,5749,5583,5626,6086,360,334,297,368,378,1946
+Brain & CNS cancer,Cancer,Brain and central nervous system cancer,6577,6729,6425,6803,7397,161,178,169,177,199,1402
+Bladder cancer,Cancer,Bladder cancer,2728,2738,2613,2896,3119,133,107,136,122,152,748
+Kidney cancer,Cancer,Kidney cancer,2513,2545,2438,2420,2616,85,88,118,89,106,669
+Melanoma,Cancer,Malignant skin melanoma,3754,3506,3447,3595,3707,172,154,127,106,117,744
+Multiple myeloma,Cancer,Multiple myeloma,2200,2047,2106,2174,2447,174,165,158,147,158,834
+Non-Hodgkin lymphoma,Cancer,Non-Hodgkin lymphoma,5196,5017,4954,4909,5384,386,380,361,367,380,2588
+Thyroid cancer,Cancer,Thyroid cancer,2238,2283,2212,2310,2586,36,40,36,31,47,263
+Mesothelioma,Cancer,Mesothelioma,580,522,493,437,437,29,27,26,30,16,138
+Testicular cancer,Cancer,Testicular cancer,323,292,329,314,314,6,9,9,8,14,1708
+Malaria,Infectious,Malaria,2831,2830,2555,2649,2967,52,50,47,40,36,237
+Tuberculosis,Infectious,Tuberculosis,5593,5528,5501,5964,6762,65,57,60,51,40,287
+Lower respiratory infections,Infectious,Lower respiratory infections,2980,2905,2995,3432,4274,128,106,138,142,114,3601
+Diarrheal diseases,Infectious,Diarrheal diseases,2635,2467,2480,2473,2764,43,43,59,59,50,1335
+Meningitis,Infectious,Meningitis,813,807,749,841,901,9,5,10,11,8,50
+Measles,Infectious,Measles,327,302,274,414,500,3,1,5,3,1,22
+Pertussis,Infectious,Pertussis,277,200,194,257,356,5,3,7,7,11,46
+Typhoid & paratyphoid,Infectious,Typhoid and paratyphoid,198,183,178,215,212,2,4,5,1,4,20
+Dengue,Infectious,Dengue,1077,1003,1038,1275,1457,11,12,12,8,10,63
+Hepatitis B,Infectious,Chronic hepatitis B including cirrhosis; Acute hepatitis B,2496,2342,2219,2340,2566,59,58,46,57,47,299
+Hepatitis C,Infectious,Chronic hepatitis C including cirrhosis; Acute hepatitis C,2038,1726,1389,1298,1264,23,30,17,12,9,103
+Syphilis,Infectious,Syphilis,522,496,540,625,668,6,1,9,11,16,45
+Gonorrhea,Infectious,Gonococcal infection,365,310,335,341,367,7,9,7,7,9,44
+Genital herpes,Infectious,Genital herpes,83,84,75,78,97,0,1,4,2,1,18
+Rabies,Infectious,Rabies,331,290,309,295,382,3,5,5,3,6,27
+Encephalitis,Infectious,Encephalitis,717,790,732,771,844,6,7,6,9,8,60
+Otitis media,Infectious,Otitis media,274,287,307,289,331,8,7,3,7,16,48
+Varicella & herpes zoster,Infectious,Varicella and herpes zoster,607,658,620,688,784,10,17,22,24,30,121
+Schistosomiasis,NTD,Schistosomiasis,587,569,527,584,609,4,4,1,5,3,17
+Lymphatic filariasis,NTD,Lymphatic filariasis,96,93,89,109,119,2,1,0,0,0,20
+Onchocerciasis,NTD,Onchocerciasis,89,80,75,86,72,7,2,0,3,2,17
+Chagas disease,NTD,Chagas disease,585,533,491,474,554,4,1,0,1,2,9
+Leishmaniasis,NTD,Leishmaniasis,1249,1043,978,1095,1120,6,5,6,1,9,27
+African trypanosomiasis,NTD,African trypanosomiasis,163,146,121,106,87,1,2,0,2,0,38
+Cysticercosis,NTD,Cysticercosis,175,154,164,160,174,0,1,0,1,1,3
+Cystic echinococcosis,NTD,Cystic echinococcosis,432,368,394,441,490,0,1,0,1,0,4
+Trachoma,NTD,Trachoma,58,60,71,69,54,2,2,0,1,1,6
+Hookworm,NTD,Hookworm disease,86,100,103,94,113,3,1,1,3,3,16
+Ascariasis,NTD,Ascariasis,61,60,56,75,63,2,0,0,2,0,4
+Food-borne trematodiases,NTD,Food-borne trematodiases,217,181,191,228,246,0,1,0,1,1,3
+Scabies,NTD,Scabies,124,95,120,141,154,3,4,3,3,4,17
+Yellow fever,NTD,Yellow fever,106,137,110,121,177,4,5,3,3,5,23
+Leprosy,NTD,Leprosy,317,300,275,344,332,2,2,1,2,4,13
+Preterm birth complications,Maternal/neonatal,Neonatal preterm birth,3204,3023,3001,3066,3448,133,130,119,137,119,897
+Neonatal encephalopathy,Maternal/neonatal,Neonatal encephalopathy due to birth asphyxia and trauma,309,262,271,332,349,8,14,8,14,16,104
+Neonatal sepsis,Maternal/neonatal,Neonatal sepsis and other neonatal infections,289,258,238,253,293,2,7,6,3,7,41
+Maternal hemorrhage,Maternal/neonatal,Maternal hemorrhage,360,360,399,398,450,13,25,21,20,27,135
+Pre-eclampsia & hypertensive disorders of pregnancy,Maternal/neonatal,Maternal hypertensive disorders,1311,1459,1413,1444,1733,32,34,42,41,48,223

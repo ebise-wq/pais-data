@@ -12,7 +12,7 @@ from diseases import D
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 YEARS = range(2021, 2026)
-VERSION = "v1"
+VERSION = "v6"
 GBD_FILES = ["gbd/IHME-GBD_2023_DATA-08b3fc6f-1.csv", "gbd/IHME-GBD_2023_DATA-ff76c2f3-1.csv"]
 COUNTS = sorted(glob.glob(os.path.join(HERE, "counts_20??-??-??.csv")))[-1]
 MECFS = "All ME/CFS (classic + post-COVID)"
@@ -161,42 +161,50 @@ SHORT = {"Lower respiratory infections": "Pneumonia & LRI", "Diarrheal diseases"
          "Neonatal sepsis": "Newborn sepsis", "Maternal hemorrhage": "Postpartum bleed", "Hearing loss": "Hearing loss",
          "Peripheral arterial disease": "PAD", "Congenital heart disease": "Congenital heart"}
 SPEC = {
-    "papers": ("Papers vs disease burden", "Papers per year (2021–25 average)", [10, 100, 1000, 10000], (4, 60000)),
-    "trials": ("Trials vs disease burden", "Trials started per year (2021–25 average)", [1, 10, 100, 1000], (0.5, 3000)),
+    "papers": ("Papers vs disease burden", "Papers per year (2021–25 average)", [10, 100, 1000, 10000], (8, 40000)),
+    "trials": ("Trials vs disease burden", "Trials started per year (2021–25 average)", [1, 10, 100, 1000], (0.25, 2000)),
 }
 XS = (1e4, 3e8)
-N_LOW, N_HIGH = 8, 3   # how many of the most-below and most-above-trend diseases to label
-ALWAYS = {"Malaria", "Tuberculosis", "HIV/AIDS"}
+R, L, U, B = (8, 0, "left", "center"), (-8, 0, "right", "center"), (0, 8, "center", "bottom"), (0, -8, "center", "top")
+LABELS = {  # hand-placed labels: (dx, dy, ha, va) in points
+    "papers": {"Breast cancer": U, "Multiple sclerosis": L, "Fatty liver": L, "HIV/AIDS": R, "Tuberculosis": L,
+               "Malaria": B, "Tension-type headache": R, "Conduct disorder": U, "Neonatal encephalopathy": U,
+               "Neonatal sepsis": R, "Rheumatic heart disease": (-8, -4, "right", "top"), "Scabies": L,
+               },
+    "trials": {"Breast cancer": U, "Multiple sclerosis": L, "Crohn's disease": L, "HIV/AIDS": R, "Tuberculosis": L,
+               "Malaria": R, "Measles": R, "Typhoid & paratyphoid": L, "Neonatal sepsis": (8, 4, "left", "bottom"),
+               "Rheumatic heart disease": L, "Neonatal encephalopathy": U, "Lymphatic filariasis": L,
+               "Cystic echinococcosis": L},
+}
+ME_POS = {"papers": (1.25e8, 24), "trials": (1.25e8, 1.25)}  # label in an empty corner, arrow to the dot
 M = 0.055
 for metric, key in KEYS.items():
     a, b, r2, s = fits[(metric, "All")]
     a13, b13, r2_13, _ = fits[(metric, "Original 13")]
     title, desc, yticks, ylim = SPEC[metric]
-    fig = plt.figure(figsize=(6, 7), facecolor=BG)
+    fig = plt.figure(figsize=(6, 7.4), facecolor=BG)
     AX_L = 0.15; AX_W = 0.955 - AX_L
-    ax = fig.add_axes([AX_L, 0.215, AX_W, 0.635])
+    ax = fig.add_axes([AX_L, 0.28, AX_W, 0.59])
     ax.plot(XS, [10 ** (a13 + b13 * math.log10(x)) for x in XS], color=MUTED, lw=1.2, ls=(0, (1.5, 2.5)), zorder=1)
     ax.plot(XS, [10 ** (a + b * math.log10(x)) for x in XS], color=INK, lw=1.6, ls=(0, (5, 3)), zorder=1, alpha=.85)
     plot_rows = [r for r in rows if r[key] > 0]
     for r in plot_rows:
         ax.scatter(r["dalys"], r[key], s=34, color=COL[r["group"]], edgecolor=BG, linewidth=0.8, zorder=3, alpha=.95)
-    resid = {r["label"]: math.log10(r[key]) - (a + b * math.log10(r["dalys"])) for r in plot_rows}
-    srt = sorted(plot_rows, key=lambda r: resid[r["label"]])
-    lab = {r["label"] for r in srt[:N_LOW]} | {r["label"] for r in srt[-N_HIGH:]} | ALWAYS
-    for r in plot_rows:
-        if r["label"] not in lab: continue
-        below = resid[r["label"]] < 0
-        ax.annotate(SHORT.get(r["label"], r["label"]), (r["dalys"], r[key]), xytext=(0, -9 if below else 9),
-                    textcoords="offset points", ha="center", va="top" if below else "bottom", fontsize=10.5,
-                    color=COL[r["group"]])
+        lab = LABELS[metric].get(r["label"]) or LABELS[metric].get(SHORT.get(r["label"]))
+        if lab:
+            dx, dy, ha, va = lab
+            ax.annotate(SHORT.get(r["label"], r["label"]), (r["dalys"], r[key]), xytext=(dx, dy),
+                        textcoords="offset points", ha=ha, va=va, fontsize=11, color=COL[r["group"]], zorder=6)
     # ME/CFS
     ax.plot([me["lo"], me["hi"]], [me[key]] * 2, color=SUNSET, lw=3, alpha=.5, zorder=4, solid_capstyle="round")
     ax.scatter(me["dalys"], me[key], s=130, color=SUNSET, edgecolor=BG, linewidth=2, zorder=5)
     fr = next(f for f in fit_rows if f["metric"] == metric and f["set"] == "All")
-    ax.annotate("ME/CFS", (me["dalys"], me[key]), xytext=(0, -12), textcoords="offset points", ha="center",
-                va="top", fontsize=14, fontweight="bold", color=SUNSET, zorder=6)
-    ax.annotate(f'{fr["mecfs_shortfall"]:g}× below', (me["dalys"], me[key]), xytext=(0, -30),
-                textcoords="offset points", ha="center", va="top", fontsize=12, color=SUNSET, zorder=6)
+    tx, ty = ME_POS[metric]
+    ax.annotate("ME/CFS", (me["dalys"], me[key]), xytext=(tx, ty), textcoords="data", ha="center", va="bottom",
+                fontsize=14, fontweight="bold", color=SUNSET, zorder=7,
+                arrowprops=dict(arrowstyle="-", color=SUNSET, lw=1.2, shrinkA=2, shrinkB=7))
+    ax.annotate(f'{fr["mecfs_shortfall"]:g}× below', (tx, ty), xytext=(0, -3), textcoords="offset points",
+                ha="center", va="top", fontsize=12, color=SUNSET, zorder=7)
     ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(*XS); ax.set_ylim(*ylim)
     ax.xaxis.set_major_locator(FixedLocator([1e5, 1e6, 1e7, 1e8]))
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v/1e6:g}M"))
@@ -210,13 +218,15 @@ for metric, key in KEYS.items():
     for side in ("left", "bottom"): ax.spines[side].set_color(MUTED); ax.spines[side].set_linewidth(1.2)
     ax.tick_params(which="major", length=7, width=1.2, color=MUTED, pad=6)
     ax.tick_params(which="minor", length=4, width=1, color=MUTED)
-    fig.text(M, 0.945, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
-    fig.text(M, 0.905, desc, fontsize=13, color=MUTED, va="baseline")
-    fig.text(AX_L + AX_W / 2, 0.15, "Disease burden (DALYs per year)", fontsize=13, color=MUTED, ha="center", va="baseline")
+    fig.text(M, 0.95, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
+    fig.text(M, 0.913, desc, fontsize=13, color=MUTED, va="baseline")
+    fig.text(AX_L + AX_W / 2, 0.198, "Disease burden (DALYs per year)", fontsize=13, color=MUTED, ha="center", va="baseline")
     handles = [Line2D([], [], marker="o", ls="", color=COL[g], markersize=7, label=NAME[g]) for g in COL]
-    handles += [Line2D([], [], color=INK, ls=(0, (5, 3)), lw=1.6, label=f"Trend, n={len(plot_rows)} (R² {r2:.2f})"),
-                Line2D([], [], color=MUTED, ls=(0, (1.5, 2.5)), lw=1.2, label=f"Old trend, n=13 (R² {r2_13:.2f})")]
-    fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(M - 0.012, 0.035), ncol=2, frameon=False,
+    fig.legend(handles=handles, loc="lower left", bbox_to_anchor=(M - 0.012, 0.085), ncol=3, frameon=False,
+               fontsize=10.5, labelcolor=MUTED, handletextpad=0.3, columnspacing=0.9, borderaxespad=0)
+    lines_h = [Line2D([], [], color=INK, ls=(0, (5, 3)), lw=1.6, label=f"Trend, n={len(plot_rows)} (R² {r2:.2f})"),
+               Line2D([], [], color=MUTED, ls=(0, (1.5, 2.5)), lw=1.2, label=f"Old trend, n=13 (R² {r2_13:.2f})")]
+    fig.legend(handles=lines_h, loc="lower left", bbox_to_anchor=(M - 0.012, 0.03), ncol=2, frameon=False,
                fontsize=10.5, labelcolor=MUTED, handletextpad=0.4, columnspacing=1.0, borderaxespad=0)
-    fig.text(1 - M, 0.012, VERSION, fontsize=9, color=GRID, ha="right", va="baseline")
+    fig.text(1 - M, 0.008, VERSION, fontsize=9, color=GRID, ha="right", va="baseline")
     fig.savefig(os.path.join(HERE, f"{metric}_vs_dalys_expanded.png"), dpi=300, facecolor=BG)

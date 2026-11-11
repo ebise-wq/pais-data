@@ -34,3 +34,7 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
 - Plots: `papers_vs_dalys_ccc_2021-2025.png` and `trials_vs_dalys_ccc_2021-2025.png` show All ME/CFS (CCC median
   and 90% range) on the scatter with the 13 GBD diseases (GBD intervals left off to reduce clutter), square, sized for phone screens. The trend key gives R².
   The shortfall range on the plots is the wider one (burden and trend-fit uncertainty).
+
+## Expanded comparison
+
+See `../expanded/` for the same comparison with 124 GBD causes instead of 13.
