@@ -53,5 +53,5 @@ Least squares on log10 values, fitted to the 13 comparators:
 - ClinicalTrials.gov only; no other trial registries.
 - With 13 points and R² of 0.50 (papers) and 0.30 (trials), the trend is rough.
 
-Plot settings used (v14): both axes log10; x 3×10⁵ to 6×10⁷ DALYs; y 70 to 14,000 (papers),
+Plot settings used (v15): both axes log10; x 3×10⁵ to 6×10⁷ DALYs; y 70 to 14,000 (papers),
 5 to 420 (trials).

@@ -110,7 +110,9 @@ for metric in ("papers", "trials"):
     title, desc, yticks, ylim = SPEC[metric]
 
     fig = plt.figure(figsize=(6, 6), facecolor=BG)
-    ax = fig.add_axes([0.155, 0.20, 0.80, 0.65])
+    AX_L = 0.155 if metric == "papers" else 0.11   # trials tick labels are narrower
+    AX_W = 0.955 - AX_L
+    ax = fig.add_axes([AX_L, 0.20, AX_W, 0.65])
     ax.plot(XS, [trend(x) for x in XS], color=MUTED, lw=1.5, ls=(0, (4, 3)), zorder=1)
     for r in comp:
         x, y = float(r["dalys"]), float(r[key])
@@ -146,15 +148,14 @@ for metric in ("papers", "trials"):
 
     fig.text(M, 0.935, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
     fig.text(M, 0.885, desc, fontsize=13, color=MUTED, va="baseline")
-    fig.text(M, 0.105, "Disease burden (DALYs per year)", fontsize=13, color=MUTED, va="baseline")
+    fig.text(AX_L + AX_W / 2, 0.095, "Disease burden (DALYs per year)", fontsize=13, color=MUTED,
+             ha="center", va="baseline")
     fig.text(M, 0.040, "ME/CFS: CCC burden, 90% range (model v11.2). Others: GBD 2023.",
              fontsize=10.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.040, "v14", fontsize=9, color=GRID, ha="right", va="baseline")
-    # key for the trend line, in the empty lower-left corner of the plot
-    ky = 0.15 if metric == "papers" else 0.06   # between gridlines
-    ax.plot([0.03, 0.11], [ky, ky], transform=ax.transAxes, color=MUTED, lw=1.5, ls=(0, (4, 3)))
-    ax.text(0.135, ky, f"trend, 13 diseases (R² = {r2:.2f})", transform=ax.transAxes,
-            va="center", fontsize=12, color=MUTED)
+    fig.text(1 - M, 0.040, "v15", fontsize=9, color=GRID, ha="right", va="baseline")
+    # R² of the trend, just below the left end of the dashed line
+    ax.annotate(f"R² = {r2:.2f}", (3.6e5, trend(3.6e5)), xytext=(0, -12), textcoords="offset points",
+                ha="left", va="top", fontsize=12, color=MUTED)
     fig.savefig(f"analysis/{metric}_vs_dalys_ccc_2021-2025.png", dpi=300, facecolor=BG)
 
 # --- one self-contained dataset with everything the two scatterplots need ---
