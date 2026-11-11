@@ -41,3 +41,7 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
 ClinicalTrials.gov by start year, 2020–2026 (2026 to the 8 Nov 2026 pull), with ME/CFS as a second
 series (trials naming both count in both). Two long COVID studies with start
 years 2016 and 2018 are left out (older studies that later added long COVID).
+`long_covid_drug_trials_per_year.png`: the same, limited to drug or biologic trials (interventional with
+a DRUG, BIOLOGICAL or GENETIC intervention, as in `fetch_counts.py`). Counts from
+`clinicaltrials/drug_trials_per_year.py`, which re-fetched start dates and intervention types on
+11 Nov 2026 for the NCT IDs selected on 8 Nov. Totals match `counts_2026-11-08.csv` (49 and 166).
