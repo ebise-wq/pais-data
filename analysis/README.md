@@ -38,5 +38,6 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
 ## Long COVID trials over time
 
 `long_covid_trials.py` → `long_covid_trials_per_year.png`: interventional long COVID trials on
-ClinicalTrials.gov by start year, 2020–2026 (2026 to the 8 Nov 2026 pull). Two studies with start
+ClinicalTrials.gov by start year, 2020–2026 (2026 to the 8 Nov 2026 pull), with ME/CFS as a second
+series (trials naming both count in both). Two long COVID studies with start
 years 2016 and 2018 are left out (older studies that later added long COVID).
