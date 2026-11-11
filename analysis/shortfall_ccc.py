@@ -74,84 +74,84 @@ for r in out:
           f'{r["shortfall_median"]:5.1f}x ({r["shortfall_p5_burden"]}-{r["shortfall_p95_burden"]})  '
           f'[+fit: {r["shortfall_p5_burden_and_fit"]}-{r["shortfall_p95_burden_and_fit"]}]')
 
-# --- plots: scatter of the 13 comparison diseases plus the four CCC groups (sized for phones) ---
+# --- plots: All ME/CFS on a scatter with the 13 GBD comparison diseases, designed for phone screens ---
+# 6x6 in at 300 dpi = 1800 px. Shown ~380 px wide on a phone, so 1 pt is about 0.9 screen px: keep text >= 12 pt.
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-BG, INK, MUTED, GRID = "#141a24", "#e6e9ef", "#8b94a3", "#252d3a"
-OCEAN, SUNSET, ROSE = "#7fb3d5", "#f4a582", "#e8a0bf"
-plt.rcParams.update({"font.family": "DejaVu Sans", "font.size": 12, "text.color": INK,
-                     "axes.labelcolor": MUTED, "xtick.color": MUTED, "ytick.color": MUTED})
-SHORT = {"Non-COVID (classic) ME/CFS": "Classic ME/CFS", "All ME/CFS (classic + post-COVID)": "All ME/CFS",
-         "Long COVID, incl. post-COVID ME": "Long COVID", "Long COVID + non-COVID ME/CFS": "Long COVID\n+ classic ME/CFS"}
+from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
+BG, INK, MUTED, FAINT, GRID = "#141a24", "#eef1f6", "#a3acba", "#5c7a94", "#262f3d"
+OCEAN, SUNSET = "#7fb3d5", "#f4a582"
+plt.rcParams.update({"font.family": ["Inter", "DejaVu Sans"], "font.size": 13, "text.color": INK,
+                     "axes.labelcolor": MUTED, "xtick.color": MUTED, "ytick.color": MUTED,
+                     "xtick.labelsize": 13, "ytick.labelsize": 13, "axes.labelsize": 14})
 COMP_NAME = {"Multiple sclerosis": "MS", "Rheumatoid arthritis": "RA", "Type 1 diabetes": "T1D",
              "ALS / motor neuron disease": "ALS", "Ulcerative colitis": "UC", "HIV/AIDS": "HIV",
-             "Parkinson's disease": "Parkinson's", "Bipolar disorder": "Bipolar", "Crohn's disease": "Crohn's"}
-GROUP_OFF = {  # (dx, dy, ha) in points
-    "papers": {"Classic ME/CFS": (-12, 0, "right"), "All ME/CFS": (0, -34, "center"),
-               "Long COVID": (14, -60, "left"), "Long COVID\n+ classic ME/CFS": (12, 6, "left")},
-    "trials": {"Classic ME/CFS": (-12, 0, "right"), "All ME/CFS": (0, -34, "center"),
-               "Long COVID": (14, -60, "left"), "Long COVID\n+ classic ME/CFS": (12, 6, "left")},
-}
-COMP_OFF = {  # labels sit above or below the dot so they clear the range bar
-    "papers": {"Parkinson's": (0, 11, "center"), "Epilepsy": (0, 11, "center"), "Schizophrenia": (0, 11, "center"),
-               "HIV": (0, 11, "center"), "MS": (0, 11, "center"), "RA": (0, 11, "center"),
-               "Psoriasis": (-4, 11, "right"), "T1D": (0, -13, "center"), "UC": (0, 11, "center"),
-               "Crohn's": (0, 11, "center"), "ALS": (-6, -13, "center"), "Endometriosis": (8, -13, "center"),
-               "Bipolar": (0, -13, "center")},
-    "trials": {"Parkinson's": (0, 11, "center"), "HIV": (0, 11, "center"), "MS": (0, 11, "center"),
-               "T1D": (0, 11, "center"), "Schizophrenia": (0, 11, "center"), "Epilepsy": (0, -13, "center"),
-               "Psoriasis": (0, 11, "center"), "RA": (0, -13, "center"), "Crohn's": (0, 11, "center"),
-               "UC": (0, 11, "center"), "ALS": (-24, 0, "right"), "Endometriosis": (0, -13, "center"),
-               "Bipolar": (0, -13, "center")},
+             "Parkinson's disease": "Parkinson's", "Bipolar disorder": "Bipolar", "Crohn's disease": "Crohn's",
+             "Endometriosis": "Endometr.", "Schizophrenia": "Schizophr."}
+UP, DOWN = (0, 12, "center"), (0, -14, "center")
+COMP_OFF = {  # (dx, dy, ha) in points; labels above or below so they clear the range bars
+    "papers": {"Parkinson's": (-12, 0, "right"), "Epilepsy": UP, "Schizophr.": UP, "HIV": UP, "MS": UP, "RA": UP,
+               "Psoriasis": (-12, -4, "right"), "T1D": DOWN, "UC": UP, "Crohn's": UP, "ALS": (-10, -14, "right"),
+               "Endometr.": (8, -14, "left"), "Bipolar": DOWN},
+    "trials": {"Parkinson's": UP, "HIV": UP, "MS": UP, "T1D": UP, "Schizophr.": UP, "Epilepsy": DOWN,
+               "Psoriasis": UP, "RA": DOWN, "Crohn's": UP, "UC": UP, "ALS": (-14, 0, "right"),
+               "Endometr.": DOWN, "Bipolar": DOWN},
 }
 PLOT_GROUPS = ["All ME/CFS (classic + post-COVID)"]
-TITLES = {"papers": ("Papers per year vs disease burden", "Papers per year (2021–2025 avg)"),
-          "trials": ("Trials per year vs disease burden", "Interventional trials per year (2021–2025 avg)")}
+SPEC = {  # title, y label, y ticks
+    "papers": ("Papers vs disease burden", "Papers per year", [100, 300, 1000, 3000, 10000]),
+    "trials": ("Trials vs disease burden", "Trials per year", [3, 10, 30, 100, 300]),
+}
+XS = [3e5, 6e7]
 for metric in ("papers", "trials"):
     key = "pubs_per_year" if metric == "papers" else "trials_per_year"
     pts = [(math.log10(float(r["dalys"])), math.log10(float(r[key]))) for r in comp]
     a, b = fit(pts)
-    fig, ax = plt.subplots(figsize=(7, 7), facecolor=BG)
-    xs = [3e5, 6e7]
-    ax.plot(xs, [10 ** (a + b * math.log10(x)) for x in xs], color=MUTED, lw=1.2, ls="--", zorder=1)
+    trend = lambda x: 10 ** (a + b * math.log10(x))
+    title, ylab, yticks = SPEC[metric]
+    fig, ax = plt.subplots(figsize=(6, 6), facecolor=BG)
+    ax.plot(XS, [trend(x) for x in XS], color=MUTED, lw=1.5, ls=(0, (4, 3)), zorder=1)
     for r in comp:
         x, y = float(r["dalys"]), float(r[key])
-        ax.plot([float(r["dalys_lower"]), float(r["dalys_upper"])], [y, y], color=OCEAN, lw=1, alpha=.35, zorder=2)
-        ax.scatter(x, y, s=45, color=OCEAN, edgecolor=BG, linewidth=1.5, zorder=3)
+        ax.plot([float(r["dalys_lower"]), float(r["dalys_upper"])], [y, y], color=FAINT, lw=1.3, alpha=.6, zorder=2)
+        ax.scatter(x, y, s=55, color=OCEAN, edgecolor=BG, linewidth=1.5, zorder=3)
         n = COMP_NAME.get(r["label"], r["label"])
-        dx, dy, ha = COMP_OFF[metric].get(n, (7, 3, "left"))
-        ax.annotate(n, (x, y), xytext=(dx, dy), textcoords="offset points", ha=ha, va="center", fontsize=10, color=MUTED)
+        dx, dy, ha = COMP_OFF[metric].get(n, UP)
+        ax.annotate(n, (x, y), xytext=(dx, dy), textcoords="offset points", ha=ha, va="center",
+                    fontsize=12, color=MUTED)
     for (name, (med, lo, hi), _), r in zip(GROUPS, [o for o in out if o["metric"] == metric]):
         if name not in PLOT_GROUPS: continue
-        c = ROSE if "Long COVID" in name else SUNSET
         x, y = med * 1e6, r["actual_per_year"]
-        ax.plot([lo * 1e6, hi * 1e6], [y, y], color=c, lw=2.5, alpha=.6, zorder=3, solid_capstyle="round")
-        ax.scatter(x, y, s=110, color=c, edgecolor=BG, linewidth=2, zorder=4)
-        lab = SHORT[name]
-        dx, dy, ha = GROUP_OFF[metric][lab]
-        ax.annotate(f'{lab}\n{r["shortfall_median"]:g}× shortfall\n({r["shortfall_p5_burden_and_fit"]:g}–{r["shortfall_p95_burden_and_fit"]:g}×)', (x, y), xytext=(dx, dy), textcoords="offset points",
-                    ha=ha, va="center", fontsize=11.5, color=c, fontweight="bold", linespacing=1.1,
-                    arrowprops=None)
+        ax.plot([lo * 1e6, hi * 1e6], [y, y], color=SUNSET, lw=3, alpha=.55, zorder=3, solid_capstyle="round")
+        ax.scatter(x, y, s=150, color=SUNSET, edgecolor=BG, linewidth=2, zorder=4)
+        ax.annotate("ME/CFS", (x, y), xytext=(0, 22), textcoords="offset points", ha="center", va="bottom",
+                    fontsize=16, fontweight="bold", color=SUNSET)
+        ax.annotate(f'{r["shortfall_median"]:g}× shortfall\n({r["shortfall_p5_burden_and_fit"]:g}–'
+                    f'{r["shortfall_p95_burden_and_fit"]:g}×)', (x, y), xytext=(0, -20), textcoords="offset points",
+                    ha="center", va="top", fontsize=14, fontweight="semibold", color=SUNSET, linespacing=1.25)
     lo_y = min(o["actual_per_year"] for o in out if o["metric"] == metric)
-    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(*xs)
-    _, hi_y = ax.get_ylim(); ax.set_ylim(lo_y / 3, hi_y * 1.15)
-    t, yl = TITLES[metric]
-    ax.set_title(t, loc="left", color=INK, fontsize=15, pad=12)
-    ax.set_xlabel("Global DALYs per year"); ax.set_ylabel(yl)
-    ax.set_facecolor(BG); ax.grid(True, which="major", color=GRID, lw=.8)
+    ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(*XS)
+    ax.set_ylim(yticks[0] * 0.75, yticks[-1] * 1.25) if metric == "papers" else ax.set_ylim(lo_y / 3.2, 400)
+    ax.xaxis.set_major_locator(FixedLocator([1e6, 3e6, 1e7, 3e7]))
+    ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v/1e6:g}M"))
+    ax.yaxis.set_major_locator(FixedLocator(yticks))
+    ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
+    for axis in (ax.xaxis, ax.yaxis): axis.set_minor_locator(NullLocator())
+    ax.set_xlabel("Disease burden (DALYs per year)", labelpad=8)
+    ax.set_ylabel(ylab, labelpad=8)
+    ax.set_title(title, loc="left", color=INK, fontsize=20, fontweight="bold", pad=14)
+    ax.set_facecolor(BG); ax.grid(True, color=GRID, lw=1)
     for sp in ax.spines.values(): sp.set_visible(False)
-    ax.tick_params(length=0)
-    ax.xaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v/1e6:g}M"))
-    ax.yaxis.set_major_formatter(matplotlib.ticker.FuncFormatter(lambda v, _: f"{v:,.0f}"))
-    fig.text(0.02, 0.012, "ME/CFS: CCC burden, median and 90% range (ME/CFS Burden model v11.2). Shortfall range\n"
-             "includes trend-fit uncertainty. Others: GBD 2023, 95% UI. Shortfall = trend ÷ actual.  v8", color=MUTED, fontsize=8.5, va="bottom")
-    fig.tight_layout(rect=(0, 0.05, 1, 1))
+    ax.tick_params(length=0, pad=6)
+    fig.text(0.03, 0.02, "2021–25 average. ME/CFS: CCC burden, 90% range (model v11.2).\nOthers: GBD 2023.",
+             color=MUTED, fontsize=10.5, va="bottom", linespacing=1.3)
+    fig.text(0.97, 0.02, "v9", color=GRID, fontsize=9, ha="right", va="bottom")
+    fig.tight_layout(rect=(0, 0.07, 1, 1))
     # "trend" label rotated to follow the dashed line (angle measured on screen, after layout)
-    tx = xs[1] / 1.6
-    (x1, y1), (x2, y2) = ax.transData.transform([(tx, 10 ** (a + b * math.log10(tx))),
-                                                 (tx * 2, 10 ** (a + b * math.log10(tx * 2)))])
-    ax.annotate("trend", (tx, 10 ** (a + b * math.log10(tx))), xytext=(0, 5), textcoords="offset points",
+    tx = XS[1] / 1.7
+    (x1, y1), (x2, y2) = ax.transData.transform([(tx, trend(tx)), (tx * 2, trend(tx * 2))])
+    ax.annotate("trend", (tx, trend(tx)), xytext=(0, 6), textcoords="offset points",
                 rotation=math.degrees(math.atan2(y2 - y1, x2 - x1)), rotation_mode="anchor",
-                ha="center", va="bottom", color=MUTED, fontsize=10)
-    fig.savefig(f"analysis/{metric}_vs_dalys_ccc_2021-2025.png", dpi=200, facecolor=BG)
+                ha="center", va="bottom", color=MUTED, fontsize=12)
+    fig.savefig(f"analysis/{metric}_vs_dalys_ccc_2021-2025.png", dpi=300, facecolor=BG)
