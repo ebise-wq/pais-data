@@ -1,0 +1,18 @@
+label,kind,burden_source,interval,dalys,dalys_low,dalys_high,papers_per_year,trials_per_year,papers_trend,papers_shortfall,papers_shortfall_p5,papers_shortfall_p95,trials_trend,trials_shortfall,trials_shortfall_p5,trials_shortfall_p95
+HIV/AIDS,comparator,GBD 2023: HIV/AIDS,95% UI,45100836,39831393,51045481,8911.2,248.8,6073.2,0.68,,,169.6,0.68,,
+Schizophrenia,comparator,GBD 2023: Schizophrenia,95% UI,16952603,12417026,21371834,2919.2,119.8,4349.2,1.49,,,135.3,1.13,,
+Epilepsy,comparator,GBD 2023: Idiopathic epilepsy,95% UI,15422825,12030231,20213140,5780.6,90.4,4211.1,0.73,,,132.4,1.46,,
+Parkinson's disease,comparator,GBD 2023: Parkinson's disease,95% UI,7974574,7292394,8810682,5498.6,234.8,3362.4,0.61,,,113.7,0.48,,
+Bipolar disorder,comparator,GBD 2023: Bipolar disorder,95% UI,7627278,4862681,10896651,1170.6,61.4,3311.7,2.83,,,112.5,1.83,,
+Rheumatoid arthritis,comparator,GBD 2023: Rheumatoid arthritis,95% UI,3337270,2500044,4210842,2977.6,78.6,2497.8,0.84,,,93.0,1.18,,
+Type 1 diabetes,comparator,GBD 2023: Diabetes mellitus type 1,95% UI,3140267,2503234,3871948,2261.0,141.6,2446.5,1.08,,,91.7,0.65,,
+Psoriasis,comparator,GBD 2023: Psoriasis,95% UI,2648548,1921881,3489329,2670.4,91.0,2308.4,0.86,,,88.1,0.97,,
+Endometriosis,comparator,GBD 2023: Endometriosis,95% UI,1907359,1144582,2991727,1392.8,41.4,2063.7,1.48,,,81.7,1.97,,
+ALS / motor neuron disease,comparator,GBD 2023: Motor neuron disease,95% UI,1218518,1104835,1407815,1399.0,47.8,1771.1,1.27,,,73.7,1.54,,
+Ulcerative colitis,comparator,GBD 2023: Ulcerative colitis,95% UI,1207116,998837,1412048,1548.8,66.0,1765.5,1.14,,,73.5,1.11,,
+Multiple sclerosis,comparator,GBD 2023: Multiple sclerosis,95% UI,1068346,917323,1238170,3287.0,146.8,1693.4,0.52,,,71.5,0.49,,
+Crohn's disease,comparator,GBD 2023: Crohn's disease,95% UI,413485,328231,514996,1354.8,70.2,1224.9,0.9,,,57.4,0.82,,
+Non-COVID (classic) ME/CFS,ME/CFS or long COVID group,"ME/CFS Burden model v11.2, CCC, year 2026",90% range,7700000,3200000,18700000,186.8,6.4,3322.4,17.79,11.7,26.8,112.8,17.62,12.7,24.7
+All ME/CFS (classic + post-COVID),ME/CFS or long COVID group,"ME/CFS Burden model v11.2, CCC, year 2026",90% range,17500000,9900000,31700000,216.8,10.2,4396.6,20.28,12.5,30.6,136.3,13.36,8.9,18.8
+"Long COVID, incl. post-COVID ME",ME/CFS or long COVID group,"ME/CFS Burden model v11.2, CCC, year 2026",90% range,19800000,12400000,31700000,1348.6,107.2,4585.9,3.4,2.1,5.0,140.2,1.31,0.9,1.8
+Long COVID + non-COVID ME/CFS,ME/CFS or long COVID group,"ME/CFS Burden model v11.2, CCC, year 2026",90% range,28300000,18300000,44700000,1535.4,113.6,5180.3,3.37,1.9,5.1,152.3,1.34,0.8,1.9

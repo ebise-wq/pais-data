@@ -80,7 +80,7 @@ for r in out:
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
-from matplotlib.ticker import FixedLocator, FuncFormatter, NullLocator
+from matplotlib.ticker import FixedLocator, FuncFormatter, LogLocator, NullFormatter
 BG, INK, MUTED, GRID = "#141a24", "#eef1f6", "#a3acba", "#262f3d"
 OCEAN, SUNSET = "#7fb3d5", "#f4a582"
 plt.rcParams.update({"font.family": ["Inter", "DejaVu Sans"], "font.size": 13, "text.color": INK,
@@ -90,13 +90,13 @@ COMP_NAME = {"Multiple sclerosis": "MS", "Rheumatoid arthritis": "RA", "Type 1 d
              "Parkinson's disease": "Parkinson's", "Bipolar disorder": "Bipolar", "Crohn's disease": "Crohn's"}
 LEFT, ABOVE = (-9, 0, "right"), (0, 13, "center")   # default: right of the dot, (9, 0, "left")
 COMP_OFF = {
-    "papers": {"Parkinson's": LEFT, "Epilepsy": ABOVE, "Psoriasis": LEFT, "HIV": LEFT, "ALS": (0, -14, "center"), "Crohn's": ABOVE},
-    "trials": {"Psoriasis": ABOVE, "HIV": LEFT, "Crohn's": ABOVE, "Schizophrenia": (9, 3, "left")},
+    "papers": {"Parkinson's": LEFT, "Epilepsy": ABOVE, "Psoriasis": LEFT, "HIV": LEFT, "ALS": (0, -14, "center"), "Crohn's": (-6, 13, "left")},
+    "trials": {"Psoriasis": ABOVE, "HIV": LEFT, "Crohn's": (-6, 13, "left"), "Schizophrenia": (9, 3, "left")},
 }
 PLOT_GROUPS = ["All ME/CFS (classic + post-COVID)"]
 SPEC = {  # title, axis description, y ticks, y limits
-    "papers": ("Papers vs disease burden", "Papers per year (2021–25 average)", [100, 300, 1000, 3000, 10000], (70, 11500)),
-    "trials": ("Trials vs disease burden", "Trials started per year (2021–25 average)", [3, 10, 30, 100, 300], (2.5, 340)),
+    "papers": ("Papers vs disease burden", "Papers per year (2021–25 average)", [100, 1000, 10000], (70, 14000)),
+    "trials": ("Trials vs disease burden", "Trials started per year (2021–25 average)", [10, 100], (5, 420)),
 }
 XS = [3e5, 6e7]
 M = 0.055  # shared left margin, figure fraction
@@ -110,7 +110,7 @@ for metric in ("papers", "trials"):
     title, desc, yticks, ylim = SPEC[metric]
 
     fig = plt.figure(figsize=(6, 6), facecolor=BG)
-    ax = fig.add_axes([0.155, 0.215, 0.80, 0.635])
+    ax = fig.add_axes([0.155, 0.20, 0.80, 0.65])
     ax.plot(XS, [trend(x) for x in XS], color=MUTED, lw=1.5, ls=(0, (4, 3)), zorder=1)
     for r in comp:
         x, y = float(r["dalys"]), float(r[key])
@@ -131,23 +131,60 @@ for metric in ("papers", "trials"):
             ax.annotate(txt, (x, y), xytext=(0, dy), textcoords="offset points", ha="center", va="bottom",
                         fontsize=fs, fontweight=fw, color=SUNSET)
     ax.set_xscale("log"); ax.set_yscale("log"); ax.set_xlim(*XS); ax.set_ylim(*ylim)
-    ax.xaxis.set_major_locator(FixedLocator([1e6, 3e6, 1e7, 3e7]))
+    ax.xaxis.set_major_locator(FixedLocator([1e6, 1e7]))
     ax.xaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v/1e6:g}M"))
     ax.yaxis.set_major_locator(FixedLocator(yticks))
     ax.yaxis.set_major_formatter(FuncFormatter(lambda v, _: f"{v:,.0f}"))
-    for axis in (ax.xaxis, ax.yaxis): axis.set_minor_locator(NullLocator())
-    ax.set_facecolor(BG); ax.grid(True, axis="y", color=GRID, lw=1)
-    for sp in ax.spines.values(): sp.set_visible(False)
-    ax.tick_params(length=0, pad=7)
+    for axis in (ax.xaxis, ax.yaxis):
+        axis.set_minor_locator(LogLocator(base=10, subs=range(2, 10)))
+        axis.set_minor_formatter(NullFormatter())
+    ax.set_facecolor(BG); ax.grid(True, which="major", color=GRID, lw=1)
+    for side in ("top", "right"): ax.spines[side].set_visible(False)
+    for side in ("left", "bottom"): ax.spines[side].set_color(MUTED); ax.spines[side].set_linewidth(1.2)
+    ax.tick_params(which="major", length=7, width=1.2, color=MUTED, pad=6)
+    ax.tick_params(which="minor", length=4, width=1, color=MUTED)
 
     fig.text(M, 0.935, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
     fig.text(M, 0.885, desc, fontsize=13, color=MUTED, va="baseline")
-    fig.text(M, 0.125, "Disease burden (DALYs per year)", fontsize=13, color=MUTED, va="baseline")
-    fig.text(M, 0.030, "ME/CFS: CCC burden with 90% range (ME/CFS Burden model v11.2).\nOthers: GBD 2023.",
-             fontsize=10.5, color=MUTED, va="baseline", linespacing=1.35)
-    fig.text(1 - M, 0.030, "v13", fontsize=9, color=GRID, ha="right", va="baseline")
+    fig.text(M, 0.105, "Disease burden (DALYs per year)", fontsize=13, color=MUTED, va="baseline")
+    fig.text(M, 0.040, "ME/CFS: CCC burden, 90% range (model v11.2). Others: GBD 2023.",
+             fontsize=10.5, color=MUTED, va="baseline")
+    fig.text(1 - M, 0.040, "v14", fontsize=9, color=GRID, ha="right", va="baseline")
     # key for the trend line, in the empty lower-left corner of the plot
-    ax.plot([0.03, 0.11], [0.15, 0.15], transform=ax.transAxes, color=MUTED, lw=1.5, ls=(0, (4, 3)))
-    ax.text(0.135, 0.15, f"trend, 13 diseases (R² = {r2:.2f})", transform=ax.transAxes,
+    ky = 0.15 if metric == "papers" else 0.06   # between gridlines
+    ax.plot([0.03, 0.11], [ky, ky], transform=ax.transAxes, color=MUTED, lw=1.5, ls=(0, (4, 3)))
+    ax.text(0.135, ky, f"trend, 13 diseases (R² = {r2:.2f})", transform=ax.transAxes,
             va="center", fontsize=12, color=MUTED)
     fig.savefig(f"analysis/{metric}_vs_dalys_ccc_2021-2025.png", dpi=300, facecolor=BG)
+
+# --- one self-contained dataset with everything the two scatterplots need ---
+fits = {}
+for key in ("pubs_per_year", "trials_per_year"):
+    pts = [(math.log10(float(r["dalys"])), math.log10(float(r[key]))) for r in comp]
+    a_, b_ = fit(pts)
+    my_ = sum(y for _, y in pts) / len(pts)
+    fits[key] = (a_, b_, 1 - sum((y - a_ - b_ * x) ** 2 for x, y in pts) / sum((y - my_) ** 2 for _, y in pts))
+rows_out = []
+for r in comp:
+    d = float(r["dalys"]); row = {"label": r["label"], "kind": "comparator", "burden_source": f'GBD 2023: {r["gbd_cause"]}',
+        "interval": "95% UI", "dalys": round(d), "dalys_low": round(float(r["dalys_lower"])), "dalys_high": round(float(r["dalys_upper"])),
+        "papers_per_year": float(r["pubs_per_year"]), "trials_per_year": float(r["trials_per_year"])}
+    rows_out.append(row)
+for (name, (med, lo, hi), src) in GROUPS:
+    rows_out.append({"label": name, "kind": "ME/CFS or long COVID group",
+                     "burden_source": "ME/CFS Burden model v11.2, CCC, year 2026", "interval": "90% range",
+                     "dalys": round(med * 1e6), "dalys_low": round(lo * 1e6), "dalys_high": round(hi * 1e6),
+                     "papers_per_year": round(pubs[src], 1), "trials_per_year": round(trials[src], 1)})
+for row in rows_out:
+    for key, short in (("pubs_per_year", "papers"), ("trials_per_year", "trials")):
+        a_, b_, _ = fits[key]
+        exp_ = 10 ** (a_ + b_ * math.log10(row["dalys"]))
+        row[f"{short}_trend"] = round(exp_, 1)
+        row[f"{short}_shortfall"] = round(exp_ / row[f"{short}_per_year"], 2)
+        o = next((o for o in out if o["group"] == row["label"] and o["metric"] == short), None)
+        row[f"{short}_shortfall_p5"] = o["shortfall_p5_burden_and_fit"] if o else ""
+        row[f"{short}_shortfall_p95"] = o["shortfall_p95_burden_and_fit"] if o else ""
+with open("analysis/plot_data_2021-2025.csv", "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=rows_out[0].keys()); w.writeheader(); w.writerows(rows_out)
+print("trend fits (log10 papers or trials = a + b * log10 DALYs), 13 comparators:")
+for k, (a_, b_, r2_) in fits.items(): print(f"  {k}: a={a_:.4f} b={b_:.4f} R2={r2_:.3f}")
