@@ -34,3 +34,9 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
 - Plots: `papers_vs_dalys_ccc_2021-2025.png` and `trials_vs_dalys_ccc_2021-2025.png` show All ME/CFS (CCC median
   and 90% range) on the scatter with the 13 GBD diseases (GBD intervals left off to reduce clutter), square, sized for phone screens. The trend key gives R².
   The shortfall range on the plots is the wider one (burden and trend-fit uncertainty).
+
+## Long COVID trials over time
+
+`long_covid_trials.py` → `long_covid_trials_per_year.png`: interventional long COVID trials on
+ClinicalTrials.gov by start year, 2020–2026 (2026 to the 8 Nov 2026 pull). Two studies with start
+years 2016 and 2018 are left out (older studies that later added long COVID).
