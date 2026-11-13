@@ -37,4 +37,4 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
 
 ## Expanded comparison
 
-See `../expanded/` for the same comparison with 124 GBD causes instead of 13.
+See `../expanded/` for the same comparison with 120 GBD causes instead of 13.

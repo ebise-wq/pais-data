@@ -12,7 +12,7 @@ from diseases import D
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 YEARS = range(2021, 2026)
-VERSION = "v6"
+VERSION = "v7"
 GBD_FILES = ["gbd/IHME-GBD_2023_DATA-08b3fc6f-1.csv", "gbd/IHME-GBD_2023_DATA-ff76c2f3-1.csv"]
 COUNTS = sorted(glob.glob(os.path.join(HERE, "counts_20??-??-??.csv")))[-1]
 MECFS = "All ME/CFS (classic + post-COVID)"
@@ -33,7 +33,12 @@ for r in csv.DictReader(open("analysis/plot_data_2021-2025.csv")):
     elif r["label"] == MECFS:
         me = {"dalys": float(r["dalys"]), "lo": float(r["dalys_low"]), "hi": float(r["dalys_high"]),
               "papers_per_year": float(r["papers_per_year"]), "trials_per_year": float(r["trials_per_year"])}
+# Fetched but left out of the comparison: loosely bounded diagnoses whose research is spread across
+# many labels, so a title search cannot find most of it (see README).
+EXCLUDE = {"Conduct disorder", "Tension-type headache", "Low back pain", "Neck pain"}
 for r in csv.DictReader(open(COUNTS)):
+    if r["disease"] in EXCLUDE:
+        continue
     causes = D[r["disease"]]["gbd"]
     # Several causes (hepatitis B and C: chronic + acute) are summed. Summing the UI bounds overstates the width a bit.
     v = [gbd[c] for c in causes]
@@ -168,7 +173,7 @@ XS = (1e4, 3e8)
 R, L, U, B = (8, 0, "left", "center"), (-8, 0, "right", "center"), (0, 8, "center", "bottom"), (0, -8, "center", "top")
 LABELS = {  # hand-placed labels: (dx, dy, ha, va) in points
     "papers": {"Breast cancer": U, "Multiple sclerosis": L, "Fatty liver": L, "HIV/AIDS": R, "Tuberculosis": L,
-               "Malaria": B, "Tension-type headache": R, "Conduct disorder": U, "Neonatal encephalopathy": U,
+               "Malaria": B, "Neonatal encephalopathy": U,
                "Neonatal sepsis": R, "Rheumatic heart disease": (-8, -4, "right", "top"), "Scabies": L,
                },
     "trials": {"Breast cancer": U, "Multiple sclerosis": L, "Crohn's disease": L, "HIV/AIDS": R, "Tuberculosis": L,
