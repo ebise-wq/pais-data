@@ -1,0 +1,5 @@
+chronic fatigue syndrome OR myalgic encephalomyelitis OR lymphatic filariasis OR cysticercosis OR neurocysticercosis OR measles OR clonorchiasis OR opisthorchiasis OR fascioliasis OR paragonimiasis OR neonatal sepsis OR ascariasis OR rheumatic heart disease OR rheumatic fever OR typhoid fever OR paratyphoid fever OR enteric fever OR hypoxic ischemic encephalopathy OR neonatal encephalopathy OR birth asphyxia OR meningitis OR cystic echinococcosis OR hydatid cyst OR pertussis OR scabies OR leprosy OR chagas disease OR dengue OR schistosomiasis OR malaria
+tuberculosis OR hepatitis C OR sickle cell disease OR gout OR polycystic ovary syndrome
+multiple sclerosis OR crohn disease OR amyotrophic lateral sclerosis
+rheumatoid arthritis OR bipolar disorder
+endometriosis OR glaucoma
