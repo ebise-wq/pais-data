@@ -87,3 +87,26 @@ POTS, tick-attributed illness, soldiers, football players). 8 Chinese-registry t
 ClinicalTrials.gov also required a traditional Chinese medicine syndrome diagnosis.
 
 The comparison diseases were not checked this way, so the off-target share elsewhere is unknown.
+
+### Comparison with MS and rheumatoid arthritis
+
+`ms_ra_trial_sample.csv`: a random sample of 60 ClinicalTrials.gov trials each for MS (of 734) and
+rheumatoid arthritis (of 393), interventional, start 2021–2025 (random seed 261455), read and
+classified by hand. The 51 ME/CFS trials were sorted into the same three groups (the mixed
+group includes ME/CFS + fibromyalgia trials and long COVID trials that also take ME/CFS patients).
+
+| | ME/CFS (all 51) | MS (sample of 60) | RA (sample of 60) |
+|---|---|---|---|
+| Mainly patients with the disease | 36 (71%) | 50 (83%) | 37 (62%) |
+| Mixed population, disease one of several | 6 | 9 | 18 |
+| Not the disease (healthy volunteers, other fatigue, etc.) | 9 | 1 | 5 |
+| Not mainly the disease, % (95% CI) | 29% (19–43) | 17% (9–28) | 38% (27–51) |
+| Named diagnostic criteria, among trials mainly in the disease | 27 of 36 (75%)¹ | 18 of 50 (36%) | 27 of 37 (73%) |
+
+¹ 23 used criteria that require PEM; the rest Fukuda or Oxford.
+
+ME/CFS sits between MS and RA. Off-target trials inflate the comparison diseases' counts about as
+much as ME/CFS's, so removing them would not change the ME/CFS shortfall much. MS trials name their
+diagnostic criteria (McDonald) less often than ME/CFS trials do; many say only "diagnosed by a
+neurologist". The Chinese-registry ME/CFS trials (1 of 27 requiring PEM, 20 naming no criteria)
+are the outlier, not ME/CFS trials in general.
