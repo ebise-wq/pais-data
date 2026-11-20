@@ -63,3 +63,27 @@ traditional-medicine trials labelled "chronic fatigue syndrome". So the trial sh
   moxibustion, tai chi, herbal formulas) labelled "chronic fatigue syndrome". Diagnostic criteria
   in these trials are often unclear.
 - Duplicates filed in two registries with different titles and no cross-reference are still counted twice.
+
+## Diagnostic criteria in ME/CFS trials
+
+`mecfs_trial_criteria.csv`: every interventional "ME/CFS" trial (start 2021–2025) counted above,
+classified by the inclusion criteria (automatic tagging, then corrected by hand after reading each
+entry). Unique trials (duplicates across registries removed):
+
+| Criteria | ClinicalTrials.gov | Other registries | Chinese registries |
+|---|---|---|---|
+| PEM required (CCC, ICC, IOM 2015, NICE 2021) | 23 | 10 | 1 |
+| Fukuda / CDC (PEM optional) | 3 | 0 | 6 |
+| Oxford (fatigue only) | 1 | 0 | 0 |
+| Other definition (questionnaire, bodily distress) | 2 | 1 | 0 |
+| ME/CFS diagnosis, criteria not named | 9 | 6 | 20 |
+| Not public yet | 0 | 1 | 0 |
+| Not an ME/CFS population | 13 | 11 | 0 |
+| Total | 51 | 29 | 27 |
+
+"Not an ME/CFS population": the condition list names chronic fatigue syndrome, but the trial
+enrols someone else (cancer or ICU fatigue, fibromyalgia, long COVID by WHO or NICE definitions,
+POTS, tick-attributed illness, soldiers, football players). 8 Chinese-registry trials and 2 on
+ClinicalTrials.gov also required a traditional Chinese medicine syndrome diagnosis.
+
+The comparison diseases were not checked this way, so the off-target share elsewhere is unknown.
