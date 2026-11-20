@@ -14,7 +14,8 @@ For each disease whose search terms were in an export:
 - a non-ClinicalTrials.gov record whose secondary IDs include an NCT number is dropped as a
   duplicate of that ClinicalTrials.gov record, and records with the same public title are counted
   once (ClinicalTrials.gov first), which merges trials filed in two registries without a link
-Output: ictrp_vs_ctgov_2021-2025.csv
+Output: ictrp_vs_ctgov_2021-2025.csv and mecfs_shortfall_adjusted.csv (ME/CFS trial shortfall
+from ../fits_2021-2025.csv, scaled by comparator ratio / ME/CFS ratio)
 Data: WHO International Clinical Trials Registry Platform (ICTRP), exported 2026-11-19.
 """
 import collections, csv, glob, gzip, os, re, sys
@@ -121,15 +122,36 @@ for name in covered:
         ctgov_api = ctg[CTG_NAME[name]]
     else:
         ctgov_api = sum(int(exp_rows[name][f"trials_{y}"]) for y in YEARS) / 5
+    no_cn = n_all - by_reg["ChiCTR"] - by_reg["ITMCTR"]
     others = ", ".join(f"{k} {v}" for k, v in by_reg.most_common() if k != "ClinicalTrials.gov")
     out.append({"disease": name, "ictrp_ctgov_records": n_ct, "ictrp_other_registries": n_all - n_ct, "ictrp_all": n_all,
                 "ratio_all_to_ctgov": round(n_all / n_ct, 2) if n_ct else "",
+                "ratio_excl_chictr_itmctr": round(no_cn / n_ct, 2) if n_ct else "",
                 "ctgov_api_per_year": ctgov_api, "ictrp_all_per_year": round(n_all / 5, 1),
                 "other_registries": others})
 
 out.sort(key=lambda r: -(r["ratio_all_to_ctgov"] or 99))
 with open(os.path.join(HERE, "ictrp_vs_ctgov_2021-2025.csv"), "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=out[0].keys()); w.writeheader(); w.writerows(out)
+# ---- effect on the ME/CFS trial shortfall ----
+import statistics
+base = float(next(r for r in csv.DictReader(open(os.path.join(HERE, "..", "fits_2021-2025.csv")))
+                  if r["metric"] == "trials" and r["set"] == "All")["mecfs_shortfall"])
+me = next(r for r in out if r["disease"] == "ME/CFS")
+ref = [r for r in out if r["disease"] != "ME/CFS" and r["ictrp_ctgov_records"] >= 20]
+orig = [r for r in out if r["disease"] in CT_INC and r["disease"] != "ME/CFS"]
+summary = []
+for col, label in (("ratio_all_to_ctgov", "all registries"), ("ratio_excl_chictr_itmctr", "excluding ChiCTR and ITMCTR")):
+    for name, grp in ((f"median of {len(ref)} diseases with >=20 ClinicalTrials.gov trials", ref),
+                      (f"median of the {len(orig)} original comparators covered", orig)):
+        m = statistics.median(r[col] for r in grp)
+        summary.append({"registries": label, "comparison": name, "comparator_ratio": round(m, 2),
+                        "mecfs_ratio": me[col], "mecfs_trials_shortfall_ctgov": base,
+                        "mecfs_trials_shortfall_adjusted": round(base * m / me[col], 1)})
+with open(os.path.join(HERE, "mecfs_shortfall_adjusted.csv"), "w", newline="") as f:
+    w = csv.DictWriter(f, fieldnames=summary[0].keys()); w.writeheader(); w.writerows(summary)
+for r in summary:
+    print(r)
 for r in out:
     print(f'{r["disease"]:28s} ctgov(ictrp) {r["ictrp_ctgov_records"]:4d}  other {r["ictrp_other_registries"]:4d}  '
           f'ratio {r["ratio_all_to_ctgov"]!s:5s}  ctgov API/yr {r["ctgov_api_per_year"]:6.1f}  all/yr {r["ictrp_all_per_year"]:6.1f}  | {r["other_registries"][:70]}')
