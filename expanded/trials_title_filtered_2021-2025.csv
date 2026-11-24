@@ -1,0 +1,126 @@
+disease,source,trials_raw_per_year,trials_title_per_year,trials_weighted_per_year,title_share,weighted_share
+ME/CFS,original,10.2,6.6,8.53,0.65,0.84
+Multiple sclerosis,original,146.8,116.6,133.26,0.79,0.91
+Rheumatoid arthritis,original,78.6,48.8,64.81,0.62,0.82
+Crohn's disease,original,70.2,44.6,55.82,0.64,0.8
+Ulcerative colitis,original,66.0,43.0,53.78,0.65,0.81
+Psoriasis,original,90.8,69.4,86.41,0.76,0.95
+Type 1 diabetes,original,141.6,91.0,126.46,0.64,0.89
+Epilepsy,original,90.4,59.0,80.7,0.65,0.89
+Schizophrenia,original,119.6,75.0,100.23,0.63,0.84
+Bipolar disorder,original,61.0,36.4,44.87,0.6,0.74
+Parkinson's disease,original,234.2,175.4,213.14,0.75,0.91
+Endometriosis,original,41.4,35.4,38.45,0.86,0.93
+HIV/AIDS,original,248.8,154.4,216.21,0.62,0.87
+ALS / motor neuron disease,original,47.8,38.0,43.05,0.79,0.9
+Ischemic heart disease,expanded,298.2,182.8,257.73,0.61,0.86
+Stroke,expanded,612.4,451.2,548.01,0.74,0.89
+Atrial fibrillation,expanded,160.4,108.2,142.66,0.67,0.89
+Rheumatic heart disease,expanded,5.0,2.0,4.1,0.4,0.82
+Aortic aneurysm,expanded,27.4,14.0,22.96,0.51,0.84
+Peripheral arterial disease,expanded,61.4,29.2,52.43,0.48,0.85
+Endocarditis,expanded,6.4,4.2,5.16,0.66,0.81
+Pulmonary arterial hypertension,expanded,21.6,15.6,19.55,0.72,0.91
+Cardiomyopathy & myocarditis,expanded,52.6,25.2,40.01,0.48,0.76
+Congenital heart disease,expanded,37.2,19.4,29.67,0.52,0.8
+COPD,expanded,179.0,130.4,158.98,0.73,0.89
+Asthma,expanded,147.6,104.6,129.86,0.71,0.88
+Interstitial lung disease & sarcoidosis,expanded,64.8,44.4,56.24,0.69,0.87
+Alzheimer's & other dementias,expanded,277.0,175.4,235.1,0.63,0.85
+Migraine,expanded,84.8,72.8,80.56,0.86,0.95
+Tension-type headache,expanded,8.8,6.6,7.41,0.75,0.84
+Depressive disorders,expanded,639.0,301.4,451.31,0.47,0.71
+Anxiety disorders,expanded,121.2,40.8,77.55,0.34,0.64
+Autism,expanded,144.8,96.4,129.87,0.67,0.9
+ADHD,expanded,74.4,55.0,66.07,0.74,0.89
+Eating disorders,expanded,55.4,37.0,47.37,0.67,0.86
+Alcohol use disorders,expanded,81.0,38.6,64.3,0.48,0.79
+Opioid use disorders,expanded,62.6,25.0,48.85,0.4,0.78
+Conduct disorder,expanded,7.6,0.8,3.26,0.11,0.43
+Fatty liver disease (NAFLD/MASLD),expanded,108.8,84.8,100.71,0.78,0.93
+Pancreatitis,expanded,28.6,21.4,24.79,0.75,0.87
+Peptic ulcer disease,expanded,9.0,4.0,6.7,0.44,0.74
+GERD,expanded,37.8,22.6,31.55,0.6,0.83
+Appendicitis,expanded,13.8,6.2,10.75,0.45,0.78
+Gallstones & biliary disease,expanded,28.0,8.8,20.39,0.31,0.73
+Abdominal hernia,expanded,37.6,23.2,32.43,0.62,0.86
+Chronic kidney disease,expanded,245.0,159.0,213.47,0.65,0.87
+Kidney stones,expanded,51.2,18.6,42.39,0.36,0.83
+Benign prostatic hyperplasia,expanded,32.4,16.4,27.48,0.51,0.85
+Low back pain,expanded,203.8,145.6,182.76,0.71,0.9
+Neck pain,expanded,97.8,68.8,86.79,0.7,0.89
+Osteoarthritis,expanded,292.4,162.6,249.36,0.56,0.85
+Gout,expanded,22.4,15.6,19.77,0.7,0.88
+Atopic dermatitis,expanded,94.8,76.4,90.02,0.81,0.95
+Acne,expanded,46.4,38.4,42.38,0.83,0.91
+Urticaria,expanded,17.2,13.4,16.53,0.78,0.96
+Alopecia areata,expanded,16.4,14.4,15.72,0.88,0.96
+Glaucoma,expanded,72.8,47.2,67.63,0.65,0.93
+Cataract,expanded,67.2,32.2,57.12,0.48,0.85
+Macular degeneration,expanded,58.6,42.8,52.67,0.73,0.9
+Hearing loss,expanded,78.8,17.8,67.45,0.23,0.86
+Type 2 diabetes,expanded,419.4,227.0,346.2,0.54,0.83
+Polycystic ovary syndrome,expanded,47.2,41.4,44.61,0.88,0.95
+Uterine fibroids,expanded,15.0,5.8,11.03,0.39,0.74
+Sickle cell disease,expanded,44.6,32.6,41.25,0.73,0.92
+Thalassemia,expanded,18.8,14.6,17.41,0.78,0.93
+Down syndrome,expanded,25.0,19.8,22.85,0.79,0.91
+Neural tube defects,expanded,8.2,4.4,5.7,0.54,0.7
+Lung cancer,expanded,613.4,419.6,498.84,0.68,0.81
+Breast cancer,expanded,698.8,441.0,586.7,0.63,0.84
+Colorectal cancer,expanded,434.2,251.8,333.27,0.58,0.77
+Stomach cancer,expanded,179.4,86.8,124.45,0.48,0.69
+Liver cancer,expanded,211.0,157.6,179.17,0.75,0.85
+Pancreatic cancer,expanded,212.8,117.6,150.49,0.55,0.71
+Prostate cancer,expanded,304.2,192.2,260.12,0.63,0.86
+Cervical cancer,expanded,126.0,66.4,87.76,0.53,0.7
+Esophageal cancer,expanded,95.2,37.2,59.81,0.39,0.63
+Ovarian cancer,expanded,160.0,74.2,102.0,0.46,0.64
+Leukemia,expanded,347.4,233.0,298.17,0.67,0.86
+Brain & CNS cancer,expanded,176.8,133.6,155.51,0.76,0.88
+Bladder cancer,expanded,130.0,68.8,95.5,0.53,0.73
+Kidney cancer,expanded,97.2,42.2,61.44,0.43,0.63
+Melanoma,expanded,135.2,69.0,94.75,0.51,0.7
+Multiple myeloma,expanded,160.4,115.2,140.41,0.72,0.88
+Non-Hodgkin lymphoma,expanded,374.8,221.0,318.2,0.59,0.85
+Thyroid cancer,expanded,38.0,18.2,25.96,0.48,0.68
+Mesothelioma,expanded,25.6,11.2,14.76,0.44,0.58
+Testicular cancer,expanded,9.2,3.4,4.88,0.37,0.53
+Malaria,expanded,45.0,29.8,42.69,0.66,0.95
+Tuberculosis,expanded,54.6,42.2,50.5,0.77,0.92
+Lower respiratory infections,expanded,125.6,64.8,100.29,0.52,0.8
+Diarrheal diseases,expanded,50.8,29.0,42.58,0.57,0.84
+Meningitis,expanded,8.6,2.8,6.54,0.33,0.76
+Measles,expanded,2.6,1.6,2.02,0.62,0.78
+Pertussis,expanded,6.6,3.4,4.7,0.52,0.71
+Typhoid & paratyphoid,expanded,3.2,2.6,2.9,0.81,0.91
+Dengue,expanded,10.6,8.4,9.51,0.79,0.9
+Hepatitis B,expanded,53.4,38.2,50.08,0.72,0.94
+Hepatitis C,expanded,18.2,14.0,15.65,0.77,0.86
+Syphilis,expanded,8.6,4.8,6.1,0.56,0.71
+Gonorrhea,expanded,7.8,3.2,4.64,0.41,0.59
+Genital herpes,expanded,1.6,1.4,1.6,0.87,1.0
+Rabies,expanded,4.4,4.0,4.4,0.91,1.0
+Encephalitis,expanded,7.2,1.8,5.57,0.25,0.77
+Otitis media,expanded,8.2,1.6,5.41,0.2,0.66
+Varicella & herpes zoster,expanded,20.6,17.4,19.35,0.84,0.94
+Schistosomiasis,expanded,3.4,1.8,2.69,0.53,0.79
+Lymphatic filariasis,expanded,0.6,0.0,0.33,0.0,0.55
+Onchocerciasis,expanded,2.8,1.6,2.24,0.57,0.8
+Chagas disease,expanded,1.6,1.4,1.42,0.87,0.89
+Leishmaniasis,expanded,5.4,4.2,4.94,0.78,0.91
+African trypanosomiasis,expanded,1.0,0.6,0.87,0.6,0.87
+Cysticercosis,expanded,0.6,0.4,0.6,0.67,1.0
+Cystic echinococcosis,expanded,0.4,0.4,0.4,1.0,1.0
+Trachoma,expanded,1.2,1.0,1.1,0.83,0.92
+Hookworm,expanded,2.2,0.6,1.06,0.27,0.48
+Ascariasis,expanded,0.8,0.0,0.25,0.0,0.31
+Food-borne trematodiases,expanded,0.6,0.4,0.47,0.67,0.78
+Scabies,expanded,3.4,2.6,3.07,0.76,0.9
+Yellow fever,expanded,4.0,2.8,3.72,0.7,0.93
+Leprosy,expanded,2.2,2.0,2.04,0.91,0.93
+Preterm birth complications,expanded,127.6,81.6,106.9,0.64,0.84
+Neonatal encephalopathy,expanded,12.0,6.0,8.95,0.5,0.75
+Neonatal sepsis,expanded,5.0,2.0,3.74,0.4,0.75
+Maternal hemorrhage,expanded,21.2,11.4,18.11,0.54,0.85
+Pre-eclampsia & hypertensive disorders of pregnancy,expanded,39.4,23.2,32.01,0.59,0.81

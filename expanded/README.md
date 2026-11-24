@@ -90,3 +90,36 @@ Crohn's, glaucoma and lymphomas.
   that mostly affect poor countries will sit low for reasons that have nothing to do with ME/CFS.
 - ME/CFS burden is from the ME/CFS model (2026, CCC), not GBD. ME/CFS papers and trials are the
   "All ME/CFS" counts from `../analysis/`.
+
+## Automatic clean-up (sensitivity check)
+
+Two automatic clean-ups, then the trend refitted (`sensitivity_cleaned.py` →
+`sensitivity_cleaned_2021-2025.csv`).
+
+**Trials** (`clean_trials.py` → `trials_title_filtered_2021-2025.csv`). Rules were tested on 171
+hand-labelled trials (51 ME/CFS, 60 MS, 60 RA; see `ictrp/`). Raw counts overstate trials that are
+mainly in the disease by 1.42× (ME/CFS), 1.20× (MS) and 1.62× (RA).
+- "Title names the disease" matched the hand labels best for these three, but dropped many genuine
+  surgical, device and vaccine trials elsewhere (hearing aids, kidney-stone surgery, cholecystectomy,
+  meningococcal vaccines), so it is not used.
+- Used: weighted count. Title names the disease = 1; otherwise the share of listed conditions that
+  match. Overstatement falls to 1.18× / 1.06× / 1.33×, keeping 89–99% of genuine trials.
+- The share kept does not depend on disease size (correlation with log trial count 0.13; median 0.90
+  for diseases with under 5 trials a year, 0.86 for over 80). ME/CFS keeps 0.84.
+
+**Papers** (`clean_papers.py` → `papers_cleaned_2021-2025.csv`).
+- Veterinary filter for all diseases (livestock and pet animal words in the title; lab mice and rats
+  kept). Largest effects: rabies 0.79, food-borne trematodes 0.81, diarrhoeal diseases 0.85,
+  hookworm, cysticercosis, ascariasis 0.88–0.89. Median 0.997; ME/CFS 1.00. Smaller diseases lose a
+  bit more (correlation with log size 0.30).
+- Abbreviation checks (15 sampled abbreviation-only titles each): ALS picks up "et al's" (fixed,
+  −2.4%); TB terbium and AMD "acid mine drainage" (~2% each, fixed); SLE, COPD, hepatitis C clean.
+
+**Result**
+
+| | Main | Cleaned |
+|---|---|---|
+| Papers: ME/CFS below trend | 10.3× (1 disease lower) | 10.2× (1 lower) |
+| Trials: ME/CFS below trend | 7.7× (13 lower) | 7.5× (11 lower) |
+
+The clean-ups shift individual small diseases a little but leave the ME/CFS result unchanged.

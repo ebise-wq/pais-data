@@ -1,0 +1,5 @@
+metric,version,n,slope,r2,mecfs_per_year,mecfs_shortfall,n_below_mecfs,below_mecfs
+papers,main,120,0.455,0.391,216.8,10.3,1,Neonatal encephalopathy
+papers,cleaned,120,0.459,0.391,216.8,10.2,1,Neonatal encephalopathy
+trials,main,120,0.603,0.384,10.2,7.7,13,Lymphatic filariasis; Cysticercosis; Measles; Food-borne trematodiases; Neonatal sepsis; Ascariasis; Rheumatic heart disease; Typhoid & paratyphoid; Neonatal encephalopathy; Meningitis; Cystic echinococcosis; Pertussis; Scabies
+trials,cleaned,120,0.604,0.372,8.53,7.5,11,Lymphatic filariasis; Ascariasis; Measles; Food-borne trematodiases; Cysticercosis; Neonatal sepsis; Neonatal encephalopathy; Rheumatic heart disease; Typhoid & paratyphoid; Pertussis; Meningitis

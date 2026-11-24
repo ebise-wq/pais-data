@@ -1,0 +1,126 @@
+disease,papers_per_year,papers_cleaned_per_year,kept_share
+ME/CFS,216.8,216.8,1.0
+Multiple sclerosis,3287.4,3285.0,0.999
+Rheumatoid arthritis,2977.8,2975.4,0.999
+Crohn's disease,1354.6,1351.6,0.998
+Ulcerative colitis,1548.8,1545.4,0.998
+Psoriasis,2670.2,2669.4,1.0
+Type 1 diabetes,2260.2,2255.2,0.998
+Epilepsy,5780.4,5726.6,0.991
+Schizophrenia,2926.0,2923.2,0.999
+Bipolar disorder,1174.2,1174.0,1.0
+Parkinson's disease,5499.4,5495.2,0.999
+Endometriosis,1393.0,1392.6,1.0
+HIV/AIDS,8911.4,8904.0,0.999
+ALS / motor neuron disease,1399.0,1366.0,0.976
+Ischemic heart disease,6940.4,6914.6,0.996
+Stroke,11910.0,11894.2,0.999
+Atrial fibrillation,4077.6,4059.0,0.995
+Rheumatic heart disease,204.2,204.0,0.999
+Aortic aneurysm,1995.6,1988.4,0.996
+Peripheral arterial disease,856.8,855.4,0.998
+Endocarditis,1007.2,996.0,0.989
+Pulmonary arterial hypertension,645.0,643.2,0.997
+Cardiomyopathy & myocarditis,3554.6,3511.4,0.988
+Congenital heart disease,2146.2,2134.8,0.995
+COPD,3154.8,3143.6,0.996
+Asthma,3789.8,3752.6,0.99
+Interstitial lung disease & sarcoidosis,2740.8,2733.2,0.997
+Alzheimer's & other dementias,10955.6,10941.2,0.999
+Migraine,1444.0,1443.8,1.0
+Tension-type headache,52.8,52.8,1.0
+Depressive disorders,11851.4,11839.0,0.999
+Anxiety disorders,889.4,886.6,0.997
+Autism,3957.8,3942.2,0.996
+ADHD,1677.4,1672.4,0.997
+Eating disorders,1368.0,1366.4,0.999
+Alcohol use disorders,764.2,764.0,1.0
+Opioid use disorders,1006.4,1006.0,1.0
+Conduct disorder,67.8,67.8,1.0
+Fatty liver disease (NAFLD/MASLD),4382.0,4359.0,0.995
+Pancreatitis,1670.4,1649.4,0.987
+Peptic ulcer disease,287.8,279.0,0.969
+GERD,469.8,465.4,0.991
+Appendicitis,659.0,658.2,0.999
+Gallstones & biliary disease,697.4,691.8,0.992
+Abdominal hernia,786.4,781.0,0.993
+Chronic kidney disease,7488.0,7436.2,0.993
+Kidney stones,793.0,782.0,0.986
+Benign prostatic hyperplasia,429.6,423.6,0.986
+Low back pain,1471.0,1466.8,0.997
+Neck pain,307.4,306.6,0.997
+Osteoarthritis,3725.8,3652.8,0.98
+Gout,549.0,547.6,0.997
+Atopic dermatitis,1696.8,1658.6,0.977
+Acne,553.2,551.8,0.997
+Urticaria,373.8,372.2,0.996
+Alopecia areata,315.4,315.0,0.999
+Glaucoma,1928.4,1915.0,0.993
+Cataract,1108.4,1097.6,0.99
+Macular degeneration,1020.8,1013.8,0.993
+Hearing loss,1609.6,1601.0,0.995
+Type 2 diabetes,7235.4,7227.6,0.999
+Polycystic ovary syndrome,1350.6,1347.8,0.998
+Uterine fibroids,348.2,347.8,0.999
+Sickle cell disease,1113.6,1112.8,0.999
+Thalassemia,637.0,637.0,1.0
+Down syndrome,666.8,666.0,0.999
+Neural tube defects,302.0,297.0,0.983
+Lung cancer,12277.4,12261.2,0.999
+Breast cancer,15141.0,15118.4,0.999
+Colorectal cancer,10269.6,10261.8,0.999
+Stomach cancer,4338.6,4335.4,0.999
+Liver cancer,8142.2,8127.6,0.998
+Pancreatic cancer,3802.4,3794.4,0.998
+Prostate cancer,5954.0,5942.6,0.998
+Cervical cancer,2739.0,2738.4,1.0
+Esophageal cancer,2216.4,2215.6,1.0
+Ovarian cancer,3012.0,3009.8,0.999
+Leukemia,5804.8,5735.2,0.988
+Brain & CNS cancer,6786.2,6762.6,0.997
+Bladder cancer,2818.8,2804.4,0.995
+Kidney cancer,2506.4,2502.2,0.998
+Melanoma,3601.4,3562.6,0.989
+Multiple myeloma,2194.8,2188.2,0.997
+Non-Hodgkin lymphoma,5092.0,4997.2,0.981
+Thyroid cancer,2325.8,2320.6,0.998
+Mesothelioma,493.8,488.6,0.989
+Testicular cancer,314.4,312.2,0.993
+Malaria,2766.2,2756.2,0.996
+Tuberculosis,5869.6,5707.6,0.972
+Lower respiratory infections,3316.0,3271.8,0.987
+Diarrheal diseases,2563.4,2172.4,0.847
+Meningitis,822.2,810.8,0.986
+Measles,363.2,360.4,0.992
+Pertussis,256.8,256.2,0.998
+Typhoid & paratyphoid,197.2,193.8,0.983
+Dengue,1170.0,1168.4,0.999
+Hepatitis B,2392.6,2387.6,0.998
+Hepatitis C,1543.0,1542.2,0.999
+Syphilis,570.2,569.8,0.999
+Gonorrhea,343.6,343.6,1.0
+Genital herpes,83.4,81.4,0.976
+Rabies,321.4,255.2,0.794
+Encephalitis,770.6,709.4,0.921
+Otitis media,297.6,294.0,0.988
+Varicella & herpes zoster,671.4,651.6,0.971
+Schistosomiasis,575.2,566.4,0.985
+Lymphatic filariasis,101.2,98.4,0.972
+Onchocerciasis,80.4,75.2,0.935
+Chagas disease,527.6,510.6,0.968
+Leishmaniasis,1097.0,1000.8,0.912
+African trypanosomiasis,124.6,120.2,0.965
+Cysticercosis,165.4,147.4,0.891
+Cystic echinococcosis,425.0,388.0,0.913
+Trachoma,62.4,62.2,0.997
+Hookworm,99.2,87.0,0.877
+Ascariasis,63.0,56.2,0.892
+Food-borne trematodiases,212.6,171.2,0.805
+Scabies,126.8,125.4,0.989
+Yellow fever,130.2,129.4,0.994
+Leprosy,313.6,313.2,0.999
+Preterm birth complications,3148.4,3135.6,0.996
+Neonatal encephalopathy,304.4,300.6,0.988
+Neonatal sepsis,266.2,265.4,0.997
+Maternal hemorrhage,393.2,392.8,0.999
+Pre-eclampsia & hypertensive disorders of pregnancy,1472.0,1471.8,1.0
