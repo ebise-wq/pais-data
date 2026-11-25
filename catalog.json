@@ -278,6 +278,20 @@
       "hidden": true
     },
     {
+      "id": "pais-burden",
+      "title": "PAIS burden and ME",
+      "folder": "pais/",
+      "readme": "pais/README.md",
+      "finding": "An illustrative model of post-acute infection syndromes (PAIS) built on Dutch prevalence estimates. With the default assumptions, ME is about half of PAIS patients (1.5% of 3.1% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.",
+      "charts": [],
+      "data": [],
+      "interactive": {
+        "html": "pais/burden_me.html",
+        "charts": 4,
+        "more": "Change the prevalence, ME shares and severity weights, with sources for each"
+      }
+    },
+    {
       "id": "sources",
       "title": "Source data",
       "folder": "clinicaltrials/, pubmed/, gbd/",
