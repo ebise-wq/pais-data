@@ -35,6 +35,17 @@ ways of grouping ME/CFS and long COVID, using the CCC column of the Global ME/CF
   and 90% range) on the scatter with the 13 GBD diseases (GBD intervals left off to reduce clutter), square, sized for phone screens. The trend key gives R².
   The shortfall range on the plots is the wider one (burden and trend-fit uncertainty).
 
+## Long COVID trials over time
+
+`long_covid_trials.py` → `long_covid_trials_per_year.png`: interventional long COVID trials on
+ClinicalTrials.gov by start year, 2020–2026 (2026 to the 8 Nov 2026 pull), with ME/CFS as a second
+series (trials naming both count in both). Two long COVID studies with start
+years 2016 and 2018 are left out (older studies that later added long COVID).
+`long_covid_drug_trials_per_year.png`: the same, limited to drug or biologic trials (interventional with
+a DRUG, BIOLOGICAL or GENETIC intervention, as in `fetch_counts.py`). Counts from
+`clinicaltrials/drug_trials_per_year.py`, which re-fetched start dates and intervention types on
+11 Nov 2026 for the NCT IDs selected on 8 Nov. Totals match `counts_2026-11-08.csv` (49 and 166).
+
 ## Expanded comparison
 
 See `../expanded/` for the same comparison with 120 GBD causes instead of 13.
