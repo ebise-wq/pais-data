@@ -26,6 +26,12 @@ FIELDS = ("NCTId,BriefTitle,Condition,StudyType,StartDate,InterventionType,Phase
 DRUG = {"DRUG", "BIOLOGICAL", "GENETIC"}
 YEARS = range(2020, 2027)
 CACHE = os.path.join(ROOT, "clinicaltrials", "cache_sponsor")
+# Manual corrections where the registry's lead sponsor hides the company that runs and funds the trial.
+OVERRIDES = {
+    # CT38 (Cortene Inc.). Registry lead sponsor is the site PI (Lucinda Bateman, class OTHER), no company
+    # listed. Cortene developed CT38 and funded the trial (Health Rising, 3 Sep 2021). Started 2018.
+    "NCT03613129": {"lead_sponsor": "Cortene Inc. (registry: Lucinda Bateman, MD)", "lead_class": "INDUSTRY"},
+}
 
 
 def get(params):
@@ -79,7 +85,10 @@ def keep(ps, spec):  # same rule as expanded/fetch.py
 
 def row(disease, group, dalys, ps):
     sp = ps.get("sponsorCollaboratorsModule", {})
-    lead = sp.get("leadSponsor", {})
+    lead = dict(sp.get("leadSponsor", {}))
+    nct = ps["identificationModule"]["nctId"]
+    if nct in OVERRIDES:
+        lead.update(name=OVERRIDES[nct]["lead_sponsor"], **{"class": OVERRIDES[nct]["lead_class"]})
     collab = sp.get("collaborators", [])
     return {"disease": disease, "group": group, "dalys": dalys,
             "nct_id": ps["identificationModule"]["nctId"],

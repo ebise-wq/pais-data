@@ -40,6 +40,9 @@ Files: `clinicaltrials/sponsor_trials_2026-11-25.csv`, `sponsor_by_disease_2021-
 
 - Lead sponsor only. 10 long COVID trials led by universities list a company as collaborator (often drug
   supply, e.g. Pfizer for Paxlovid). Counting those would raise the share to about 30%.
+- Lead sponsor can hide company funding. Cortene's CT38 ME/CFS trial (NCT03613129) lists the site PI as lead
+  sponsor and no company. It is corrected to commercial in `OVERRIDES` in `sponsor_class.py`. It started in
+  2018, so it falls outside 2020–2026 and changes no number here.
 - "Commercial" covers very different firms, from large pharma to supplement makers and stem-cell clinics.
 - Vaccine trials count as biologics. This pushes up pertussis, meningitis and hepatitis B.
 - Many cancer trials are led by Chinese hospitals (class OTHER), which lowers cancer commercial shares.
