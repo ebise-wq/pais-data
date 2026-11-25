@@ -75,6 +75,8 @@ for s in sections:
     for item in s["charts"] + s["data"]:
         expand(item)
         catalogued.update(item["files"])
+        if item.get("toggle"):
+            catalogued.update(expand(item["toggle"])["files"])
     for r in [s["readme"], *s.get("extra_readmes", [])]:
         if not os.path.exists(r):
             sys.exit(f"Missing README in catalog.json: {r}")
@@ -86,6 +88,8 @@ if missing:
 if "--check" in sys.argv:
     sys.exit(1 if missing else 0)
 
+# Sections with "hidden": true stay in catalog.json (so --check passes) but are left off the page.
+sections = [s for s in sections if not s.get("hidden")]
 n_charts = sum(1 for s in sections for c in s["charts"] if not c.get("old"))
 n_data = sum(len(d["files"]) for s in sections for d in s["data"])
 last = max(i["updated"] for s in sections for i in s["charts"] + s["data"])
@@ -113,8 +117,19 @@ IMG_BASE = ""  # prefix for <img src>; set per output below
 def chart_card(c):
     f = c["file"]
     script = link(BLOB + c["script"], "Script") if c.get("script") else ""
+    toggle, views = "", ""
+    t = c.get("toggle")
+    if t:
+        # Two images with the same layout; the buttons swap which one shows.
+        views = (f' data-views="{e(IMG_BASE + f)}|{e(IMG_BASE + t["file"])}"'
+                 f' data-paths="{e(f)}|{e(t["file"])}" data-raws="{e(RAW + f)}|{e(RAW + t["file"])}"')
+        toggle = f"""
+        <div class="toggle" role="group" aria-label="Chart view">
+          <button type="button" aria-pressed="true" data-view="0">{e(c.get("label", "All"))}</button>
+          <button type="button" aria-pressed="false" data-view="1">{e(t["label"])}</button>
+        </div>"""
     return f"""
-      <figure class="chart">
+      <figure class="chart"{views}>{toggle}
         <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}" data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
           <img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">
         </button>
@@ -124,7 +139,7 @@ def chart_card(c):
           <div class="links">
             <span class="path">{e(f)}</span>
             <span class="sep"></span>
-            {link(RAW + f, "Full size")}{script}
+            {link(RAW + f, "Full size", "full")}{script}
           </div>
         </figcaption>
       </figure>"""
@@ -173,7 +188,9 @@ def section_html(s):
     if charts:
         parts.append('    <div class="charts">' + "".join(chart_card(c) for c in charts) + "\n    </div>")
     if data:
-        parts.append('    <ul class="datalist">' + "".join(data_row(d) for d in data) + "\n    </ul>")
+        label = "Data behind these charts" if charts else "Data files"
+        parts.append(f'    <details class="datablock"><summary>{label} <span class="count">{len(data)}</span></summary>\n'
+                     '    <ul class="datalist">' + "".join(data_row(d) for d in data) + "\n    </ul></details>")
     if old_charts or old_data:
         n = len(old_charts) + len(old_data)
         inner = ""
@@ -197,7 +214,7 @@ HEAD = f"""<title>{e(CAT['title'])}</title>
 
 STYLE = """<style>
 /* Layout: one reading column. Header, topic chips, then one section per analysis:
-   key finding, chart grid, list of data files. Colours match the charts themselves. */
+   key finding, chart grid, then the data files in a collapsed block. Colours match the charts themselves. */
 :root {
   --bg: #141a24; --surface: #1a2230; --raise: #212a3a; --line: #2a3446;
   --ink: #eef1f6; --muted: #a3acba; --faint: #6f7a8c;
@@ -276,6 +293,22 @@ a.fname:hover { color: var(--sunset); }
   .actions { justify-content: flex-start; max-width: none; }
 }
 
+.datablock { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.datablock > summary { cursor: pointer; padding: 0.8rem 1rem; font-weight: 500; list-style: none;
+  display: flex; align-items: center; gap: 0.6rem; }
+.datablock > summary::-webkit-details-marker { display: none; }
+.datablock > summary::before { content: ""; width: 0.5rem; height: 0.5rem; border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted); transform: rotate(-45deg); transition: transform 0.15s; flex: none; }
+.datablock[open] > summary::before { transform: rotate(45deg); }
+.datablock .count { font: 500 0.8rem var(--f-mono); color: var(--bg); background: var(--muted); border-radius: 999px; padding: 0.05rem 0.5rem; }
+.datablock .datalist { border: 0; border-top: 1px solid var(--line); border-radius: 0 0 12px 12px; }
+.toggle { display: flex; gap: 0; margin: 0.75rem 1rem 0; align-self: flex-start; border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px; background: var(--bg); }
+.toggle button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0;
+  border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.chart[data-views] { background: var(--bg); }
+.chart[data-views] figcaption { background: var(--surface); }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
 .older[open] summary { margin-bottom: 1rem; }
@@ -296,6 +329,19 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 </style>"""
 
 SCRIPT = """<script>
+document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
+  var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
+  var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
+  var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
+  new Image().src = srcs[1];
+  fig.querySelectorAll(".toggle button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var i = +b.dataset.view;
+      img.src = srcs[i]; open.dataset.full = srcs[i]; path.textContent = paths[i]; full.href = raws[i];
+      fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+    });
+  });
+});
 (function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;
@@ -363,6 +409,9 @@ def md_section(s):
     if charts:
         lines.append(" ".join(f'<a href="{c["file"]}"><img src="{c["file"]}" width="260" alt="{c["title"]}"></a>'
                               for c in charts))
+        for c in charts:
+            if c.get("toggle"):
+                lines.append(f'\n{c["title"]}, {c["toggle"]["label"].lower()}: [`{c["toggle"]["file"]}`]({c["toggle"]["file"]})')
         lines.append("")
     data = [d for d in s["data"] if not d.get("old")]
     if data:

@@ -1,7 +1,7 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 2,
+  "page_version": 3,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "sections": [
@@ -110,16 +110,30 @@
       ]
     },
     {
-      "id": "sponsor",
-      "title": "Drug trials by sponsor type",
+      "id": "trials",
+      "title": "Long COVID and ME/CFS trials",
       "folder": "analysis/",
-      "readme": "analysis/sponsor_README.md",
-      "finding": "In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13). The median across 24 diseases with 10–30M DALYs was 35%. No long COVID drug trial was led by a large drug company.",
+      "readme": "analysis/README.md",
+      "extra_readmes": [
+        "analysis/sponsor_README.md"
+      ],
+      "finding": "Long COVID trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. Drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year. In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13), against a median of 35% for 24 diseases with 10–30M DALYs.",
       "charts": [
         {
-          "file": "analysis/sponsor_per_year.png",
-          "title": "Drug trials by sponsor type",
-          "caption": "Long COVID and ME/CFS, commercial vs other, by start year 2020–2026.",
+          "file": "analysis/long_covid_trials_per_year.png",
+          "title": "Long COVID and ME/CFS trials",
+          "caption": "Interventional trials on ClinicalTrials.gov, by start year 2020–2026.",
+          "script": "analysis/long_covid_trials.py"
+        },
+        {
+          "file": "analysis/drug_trials_per_year.png",
+          "label": "All sponsors",
+          "toggle": {
+            "file": "analysis/sponsor_per_year.png",
+            "label": "By sponsor type"
+          },
+          "title": "Long COVID and ME/CFS drug trials",
+          "caption": "Drug or biologic trials by start year, 2020–2026. Switch to see commercial vs other sponsors.",
           "script": "analysis/sponsor_charts.py"
         },
         {
@@ -127,9 +141,21 @@
           "title": "Commercial drug trials vs similar-burden diseases",
           "caption": "Commercial share and trials per year, 26 diseases with 10–30M DALYs.",
           "script": "analysis/sponsor_charts.py"
+        },
+        {
+          "file": "analysis/long_covid_drug_trials_per_year.png",
+          "title": "Long COVID and ME/CFS drug trials",
+          "caption": "Earlier layout, both diseases in one panel.",
+          "script": "analysis/long_covid_trials.py",
+          "old": true
         }
       ],
       "data": [
+        {
+          "file": "clinicaltrials/drug_trials_per_year_2026-11-11.csv",
+          "about": "Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS.",
+          "script": "clinicaltrials/drug_trials_per_year.py"
+        },
         {
           "file": "analysis/sponsor_by_disease_2021-2025.csv",
           "about": "Per disease: drug trials, commercial count and share, large-pharma-led trials.",
@@ -144,34 +170,6 @@
           "file": "clinicaltrials/sponsor_trials_2026-11-25.csv",
           "about": "One row per drug trial per disease: lead sponsor, sponsor class, phase, title.",
           "script": "clinicaltrials/sponsor_class.py"
-        }
-      ]
-    },
-    {
-      "id": "trials-over-time",
-      "title": "Long COVID and ME/CFS trials over time",
-      "folder": "analysis/",
-      "readme": "analysis/README.md",
-      "finding": "Long COVID interventional trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. For drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year.",
-      "charts": [
-        {
-          "file": "analysis/long_covid_trials_per_year.png",
-          "title": "Long COVID and ME/CFS trials",
-          "caption": "Interventional trials on ClinicalTrials.gov, by start year 2020–2026.",
-          "script": "analysis/long_covid_trials.py"
-        },
-        {
-          "file": "analysis/long_covid_drug_trials_per_year.png",
-          "title": "Long COVID and ME/CFS drug trials",
-          "caption": "Drug or biologic trials only, by start year 2020–2026.",
-          "script": "analysis/long_covid_trials.py"
-        }
-      ],
-      "data": [
-        {
-          "file": "clinicaltrials/drug_trials_per_year_2026-11-11.csv",
-          "about": "Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS.",
-          "script": "clinicaltrials/drug_trials_per_year.py"
         }
       ]
     },
@@ -281,7 +279,8 @@
           "script": "analysis/burden_vs_research.py",
           "old": true
         }
-      ]
+      ],
+      "hidden": true
     },
     {
       "id": "sources",

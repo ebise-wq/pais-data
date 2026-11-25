@@ -2,7 +2,9 @@
 
 Run from repo root: python3 -I analysis/sponsor_charts.py
 Needs analysis/sponsor_by_year_2020-2026.csv and analysis/sponsor_by_disease_2021-2025.csv
-(from sponsor_summary.py). Writes analysis/sponsor_per_year.png and analysis/sponsor_comparison.png.
+(from sponsor_summary.py). Writes analysis/drug_trials_per_year.png (all sponsors),
+analysis/sponsor_per_year.png (same chart split by sponsor type) and analysis/sponsor_comparison.png.
+The two per-year charts share one layout so the catalog page can toggle between them.
 """
 import csv
 import matplotlib
@@ -25,7 +27,7 @@ def style(ax):
     ax.tick_params(length=6, width=1.2, color=MUTED, pad=5)
 
 
-def per_year(version):
+def per_year(version, split):
     rows = list(csv.DictReader(open("analysis/sponsor_by_year_2020-2026.csv")))
     get = lambda d: [(int(r["year"]), int(r["commercial"]), int(r["drug_trials"]) - int(r["commercial"]))
                      for r in rows if r["disease"] == d]
@@ -38,10 +40,11 @@ def per_year(version):
         for y, c, o in data:
             part = y == 2026
             kw = dict(width=0.62, zorder=2, linewidth=0, alpha=0.5 if part else 1)
-            ax.bar(y, c, color=SUNSET, hatch="///" if part else None, edgecolor=SUNSET if part else BG, **kw)
+            low = SUNSET if split else OCEAN
+            ax.bar(y, c, color=low, hatch="///" if part else None, edgecolor=low if part else BG, **kw)
             ax.bar(y, o, bottom=c, color=OCEAN, hatch="///" if part else None, edgecolor=OCEAN if part else BG, **kw)
             if c + o:
-                ax.annotate(f"{c}/{c + o}", (y, c + o), xytext=(0, 4), textcoords="offset points", ha="center",
+                ax.annotate(f"{c}/{c + o}" if split else f"{c + o}", (y, c + o), xytext=(0, 4), textcoords="offset points", ha="center",
                             va="bottom", fontsize=11.5, color=MUTED if part else INK)
         ax.set_xlim(2019.4, 2026.6); ax.set_ylim(0, ymax)
         ax.yaxis.set_major_locator(MultipleLocator(10)); ax.grid(True, axis="y", color=GRID, lw=1, zorder=0)
@@ -49,13 +52,20 @@ def per_year(version):
         ax.set_xticklabels([str(y) for y in range(2020, 2027)] if name == "ME/CFS" else [])
         style(ax)
         ax.text(2019.55, ymax * 0.95, name, fontsize=15, fontweight="bold", color=INK, va="top")
-    fig.text(M, 0.945, "Drug trials by sponsor type", fontsize=20, fontweight="bold", color=INK, va="baseline")
-    fig.text(M, 0.905, "Drug or biologic trials by start year. Label: commercial / all", fontsize=12, color=MUTED, va="baseline")
-    fig.text(M, 0.865, "■ Commercial sponsor", fontsize=13, color=SUNSET, va="baseline")
-    fig.text(M + 0.45, 0.865, "■ Other sponsor", fontsize=13, color=OCEAN, va="baseline")
-    fig.text(M, 0.035, "ClinicalTrials.gov lead sponsor class. 2026 to 8 Nov.", fontsize=10.5, color=MUTED, va="baseline")
+    fig.text(M, 0.945, "Long COVID and ME/CFS drug trials", fontsize=20, fontweight="bold", color=INK, va="baseline")
+    if split:
+        fig.text(M, 0.905, "Drug or biologic trials by start year. Label: commercial / all", fontsize=12, color=MUTED, va="baseline")
+        fig.text(M, 0.865, "■ Commercial sponsor", fontsize=13, color=SUNSET, va="baseline")
+        fig.text(M + 0.45, 0.865, "■ Other sponsor", fontsize=13, color=OCEAN, va="baseline")
+    else:
+        fig.text(M, 0.905, "Drug or biologic trials by start year", fontsize=12, color=MUTED, va="baseline")
+        fig.text(M, 0.865, "■ All sponsors", fontsize=13, color=OCEAN, va="baseline")
+    foot = "ClinicalTrials.gov lead sponsor class. 2026 to 8 Nov." if split else "ClinicalTrials.gov. 2026 to 8 Nov."
+    fig.text(M, 0.035, foot, fontsize=10.5, color=MUTED, va="baseline")
     fig.text(1 - M, 0.035, version, fontsize=9, color=GRID, ha="right", va="baseline")
-    fig.savefig("analysis/sponsor_per_year.png", dpi=300, facecolor=BG)
+    out = "analysis/sponsor_per_year.png" if split else "analysis/drug_trials_per_year.png"
+    fig.savefig(out, dpi=300, facecolor=BG)
+    plt.close(fig)
 
 
 def comparison(version):
@@ -106,5 +116,6 @@ def comparison(version):
     fig.savefig("analysis/sponsor_comparison.png", dpi=300, facecolor=BG)
 
 
-per_year("v1")
+per_year("v2", split=False)
+per_year("v2", split=True)
 comparison("v1")

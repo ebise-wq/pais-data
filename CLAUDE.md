@@ -18,6 +18,11 @@
   the script that makes it). Mark superseded items with `"old": true` instead of deleting them.
 - After adding or changing outputs, run `python3 -I tools/build_catalog.py` and commit the result.
   `--check` exits non-zero if any chart or data file is missing from the catalog.
+- A section with `"hidden": true` stays in `catalog.json` (so `--check` passes) but is left off the
+  page and the README. The first 13-disease comparison is hidden this way at the user's request.
+- A chart can carry a `"toggle"` (another PNG with the same layout and a button label). The page
+  shows a two-way switch between the two images. Draw both views from one function so they line up.
+- Data files show in a collapsed block under each section's charts.
 - Bump `page_version` in `catalog.json` whenever the page changes, so the user can tell which
   version is showing.
 - The page is also published as a private claude.ai artifact:

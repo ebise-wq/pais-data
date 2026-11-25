@@ -11,7 +11,7 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: one reading column. Header, topic chips, then one section per analysis:
-   key finding, chart grid, list of data files. Colours match the charts themselves. */
+   key finding, chart grid, then the data files in a collapsed block. Colours match the charts themselves. */
 :root {
   --bg: #141a24; --surface: #1a2230; --raise: #212a3a; --line: #2a3446;
   --ink: #eef1f6; --muted: #a3acba; --faint: #6f7a8c;
@@ -90,6 +90,22 @@ a.fname:hover { color: var(--sunset); }
   .actions { justify-content: flex-start; max-width: none; }
 }
 
+.datablock { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); }
+.datablock > summary { cursor: pointer; padding: 0.8rem 1rem; font-weight: 500; list-style: none;
+  display: flex; align-items: center; gap: 0.6rem; }
+.datablock > summary::-webkit-details-marker { display: none; }
+.datablock > summary::before { content: ""; width: 0.5rem; height: 0.5rem; border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted); transform: rotate(-45deg); transition: transform 0.15s; flex: none; }
+.datablock[open] > summary::before { transform: rotate(45deg); }
+.datablock .count { font: 500 0.8rem var(--f-mono); color: var(--bg); background: var(--muted); border-radius: 999px; padding: 0.05rem 0.5rem; }
+.datablock .datalist { border: 0; border-top: 1px solid var(--line); border-radius: 0 0 12px 12px; }
+.toggle { display: flex; gap: 0; margin: 0.75rem 1rem 0; align-self: flex-start; border: 1px solid var(--line);
+  border-radius: 999px; padding: 3px; background: var(--bg); }
+.toggle button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0;
+  border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
+.toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.chart[data-views] { background: var(--bg); }
+.chart[data-views] figcaption { background: var(--surface); }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
 .older[open] summary { margin-bottom: 1rem; }
@@ -113,10 +129,10 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 <div class="wrap top">
   <h1><span>PAIS</span> Data Catalog</h1>
   <p class="tagline">Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.</p>
-  <div class="stats"><span><b>10</b> charts</span><span><b>38</b> data files</span>
+  <div class="stats"><span><b>7</b> charts</span><span><b>35</b> data files</span>
     <span>Last change <b>25 Nov 2026</b></span><span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code on GitHub</a></span></div>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="#burden-120">Research vs disease burden</a><a href="#ictrp">Trials in all registries</a><a href="#sponsor">Drug trials by sponsor type</a><a href="#trials-over-time">Long COVID and ME/CFS trials over time</a><a href="#sex">Research by which sex a disease mostly affects</a><a href="#burden-13">Research vs disease burden</a><a href="#sources">Source data</a></div></nav>
+<nav class="nav" aria-label="Topics"><div class="wrap"><a href="#burden-120">Research vs disease burden</a><a href="#ictrp">Trials in all registries</a><a href="#trials">Long COVID and ME/CFS trials</a><a href="#sex">Research by which sex a disease mostly affects</a><a href="#sources">Source data</a></div></nav>
 <main class="wrap">
 
   <section id="burden-120">
@@ -136,7 +152,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           <div class="links">
             <span class="path">expanded/papers_vs_dalys_expanded.png</span>
             <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/papers_vs_dalys_expanded.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/analyse.py" target="_blank" rel="noopener">Script</a>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/papers_vs_dalys_expanded.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/analyse.py" target="_blank" rel="noopener">Script</a>
           </div>
         </figcaption>
       </figure>
@@ -150,11 +166,12 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           <div class="links">
             <span class="path">expanded/trials_vs_dalys_expanded.png</span>
             <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/trials_vs_dalys_expanded.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/analyse.py" target="_blank" rel="noopener">Script</a>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/trials_vs_dalys_expanded.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/analyse.py" target="_blank" rel="noopener">Script</a>
           </div>
         </figcaption>
       </figure>
     </div>
+    <details class="datablock"><summary>Data behind these charts <span class="count">7</span></summary>
     <ul class="datalist">
         <li class="data">
           <div class="data-main">
@@ -212,7 +229,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/sensitivity_cleaned_2021-2025.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/sensitivity_cleaned_2021-2025.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
-    </ul>
+    </ul></details>
   </section>
   <section id="ictrp">
     <header class="sec-head">
@@ -220,6 +237,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/README.md" target="_blank" rel="noopener">expanded/ictrp/README.md</a></div>
     </header>
     <p class="finding">ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5× as many ME/CFS trials (1.8× without the two Chinese registries), against a median of 1.9× for 18 comparison diseases. Adjusted for this, the ME/CFS trial shortfall is about 6–8×. 29% of ME/CFS trials are not mainly in ME/CFS patients, between MS (17%) and RA (38%).</p>
+    <details class="datablock"><summary>Data files <span class="count">6</span></summary>
     <ul class="datalist">
         <li class="data">
           <div class="data-main">
@@ -269,7 +287,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           </div>
           <div class="actions"><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export1.xml.gz" target="_blank" rel="noopener">export1.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export2.xml.gz" target="_blank" rel="noopener">export2.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export3.xml.gz" target="_blank" rel="noopener">export3.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export4.xml.gz" target="_blank" rel="noopener">export4.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export5.xml.gz" target="_blank" rel="noopener">export5.xml.gz</a></div>
         </li>
-    </ul>
+    </ul></details>
     <details class="older"><summary>Earlier versions (1)</summary><ul class="datalist">
         <li class="data">
           <div class="data-main">
@@ -280,24 +298,42 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/search_strings_1_split.txt" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/search_strings_1_split.txt" target="_blank" rel="noopener">Download</a></div>
         </li></ul></details>
   </section>
-  <section id="sponsor">
+  <section id="trials">
     <header class="sec-head">
-      <h2>Drug trials by sponsor type</h2>
-      <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/sponsor_README.md" target="_blank" rel="noopener">analysis/sponsor_README.md</a></div>
+      <h2>Long COVID and ME/CFS trials</h2>
+      <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/README.md" target="_blank" rel="noopener">analysis/README.md</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/sponsor_README.md" target="_blank" rel="noopener">analysis/sponsor_README.md</a></div>
     </header>
-    <p class="finding">In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13). The median across 24 diseases with 10–30M DALYs was 35%. No long COVID drug trial was led by a large drug company.</p>
+    <p class="finding">Long COVID trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. Drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year. In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13), against a median of 35% for 24 diseases with 10–30M DALYs.</p>
     <div class="charts">
       <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png" data-title="Drug trials by sponsor type" aria-label="Open Drug trials by sponsor type full size">
-          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png" alt="Drug trials by sponsor type" loading="lazy" decoding="async">
+        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_trials_per_year.png" data-title="Long COVID and ME/CFS trials" aria-label="Open Long COVID and ME/CFS trials full size">
+          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_trials_per_year.png" alt="Long COVID and ME/CFS trials" loading="lazy" decoding="async">
         </button>
         <figcaption>
-          <h3>Drug trials by sponsor type</h3>
-          <p>Long COVID and ME/CFS, commercial vs other, by start year 2020–2026.</p>
+          <h3>Long COVID and ME/CFS trials</h3>
+          <p>Interventional trials on ClinicalTrials.gov, by start year 2020–2026.</p>
           <div class="links">
-            <span class="path">analysis/sponsor_per_year.png</span>
+            <span class="path">analysis/long_covid_trials_per_year.png</span>
             <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/sponsor_charts.py" target="_blank" rel="noopener">Script</a>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_trials_per_year.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/long_covid_trials.py" target="_blank" rel="noopener">Script</a>
+          </div>
+        </figcaption>
+      </figure>
+      <figure class="chart" data-views="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png" data-paths="analysis/drug_trials_per_year.png|analysis/sponsor_per_year.png" data-raws="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png">
+        <div class="toggle" role="group" aria-label="Chart view">
+          <button type="button" aria-pressed="true" data-view="0">All sponsors</button>
+          <button type="button" aria-pressed="false" data-view="1">By sponsor type</button>
+        </div>
+        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png" data-title="Long COVID and ME/CFS drug trials" aria-label="Open Long COVID and ME/CFS drug trials full size">
+          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png" alt="Long COVID and ME/CFS drug trials" loading="lazy" decoding="async">
+        </button>
+        <figcaption>
+          <h3>Long COVID and ME/CFS drug trials</h3>
+          <p>Drug or biologic trials by start year, 2020–2026. Switch to see commercial vs other sponsors.</p>
+          <div class="links">
+            <span class="path">analysis/drug_trials_per_year.png</span>
+            <span class="sep"></span>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/sponsor_charts.py" target="_blank" rel="noopener">Script</a>
           </div>
         </figcaption>
       </figure>
@@ -311,12 +347,21 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           <div class="links">
             <span class="path">analysis/sponsor_comparison.png</span>
             <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_comparison.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/sponsor_charts.py" target="_blank" rel="noopener">Script</a>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_comparison.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/sponsor_charts.py" target="_blank" rel="noopener">Script</a>
           </div>
         </figcaption>
       </figure>
     </div>
+    <details class="datablock"><summary>Data behind these charts <span class="count">4</span></summary>
     <ul class="datalist">
+        <li class="data">
+          <div class="data-main">
+            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/drug_trials_per_year_2026-11-11.csv" target="_blank" rel="noopener">drug_trials_per_year_2026-11-11.csv</a><span class="folder">clinicaltrials/</span></div>
+            <p>Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS.</p>
+            <div class="meta">2 rows · 173 B · updated 25 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/drug_trials_per_year.py" target="_blank" rel="noopener">clinicaltrials/drug_trials_per_year.py</a></div>
+          </div>
+          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/drug_trials_per_year_2026-11-11.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/clinicaltrials/drug_trials_per_year_2026-11-11.csv" target="_blank" rel="noopener">Download</a></div>
+        </li>
         <li class="data">
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/analysis/sponsor_by_disease_2021-2025.csv" target="_blank" rel="noopener">sponsor_by_disease_2021-2025.csv</a><span class="folder">analysis/</span></div>
@@ -341,54 +386,22 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/sponsor_trials_2026-11-25.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/clinicaltrials/sponsor_trials_2026-11-25.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
-    </ul>
-  </section>
-  <section id="trials-over-time">
-    <header class="sec-head">
-      <h2>Long COVID and ME/CFS trials over time</h2>
-      <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/README.md" target="_blank" rel="noopener">analysis/README.md</a></div>
-    </header>
-    <p class="finding">Long COVID interventional trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. For drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year.</p>
-    <div class="charts">
-      <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_trials_per_year.png" data-title="Long COVID and ME/CFS trials" aria-label="Open Long COVID and ME/CFS trials full size">
-          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_trials_per_year.png" alt="Long COVID and ME/CFS trials" loading="lazy" decoding="async">
-        </button>
-        <figcaption>
-          <h3>Long COVID and ME/CFS trials</h3>
-          <p>Interventional trials on ClinicalTrials.gov, by start year 2020–2026.</p>
-          <div class="links">
-            <span class="path">analysis/long_covid_trials_per_year.png</span>
-            <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_trials_per_year.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/long_covid_trials.py" target="_blank" rel="noopener">Script</a>
-          </div>
-        </figcaption>
-      </figure>
+    </ul></details>
+    <details class="older"><summary>Earlier versions (1)</summary><div class="charts old">
       <figure class="chart">
         <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_drug_trials_per_year.png" data-title="Long COVID and ME/CFS drug trials" aria-label="Open Long COVID and ME/CFS drug trials full size">
           <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_drug_trials_per_year.png" alt="Long COVID and ME/CFS drug trials" loading="lazy" decoding="async">
         </button>
         <figcaption>
           <h3>Long COVID and ME/CFS drug trials</h3>
-          <p>Drug or biologic trials only, by start year 2020–2026.</p>
+          <p>Earlier layout, both diseases in one panel.</p>
           <div class="links">
             <span class="path">analysis/long_covid_drug_trials_per_year.png</span>
             <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_drug_trials_per_year.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/long_covid_trials.py" target="_blank" rel="noopener">Script</a>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/long_covid_drug_trials_per_year.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/long_covid_trials.py" target="_blank" rel="noopener">Script</a>
           </div>
         </figcaption>
-      </figure>
-    </div>
-    <ul class="datalist">
-        <li class="data">
-          <div class="data-main">
-            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/drug_trials_per_year_2026-11-11.csv" target="_blank" rel="noopener">drug_trials_per_year_2026-11-11.csv</a><span class="folder">clinicaltrials/</span></div>
-            <p>Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS.</p>
-            <div class="meta">2 rows · 173 B · updated 25 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/drug_trials_per_year.py" target="_blank" rel="noopener">clinicaltrials/drug_trials_per_year.py</a></div>
-          </div>
-          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/drug_trials_per_year_2026-11-11.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/clinicaltrials/drug_trials_per_year_2026-11-11.csv" target="_blank" rel="noopener">Download</a></div>
-        </li>
-    </ul>
+      </figure></div></details>
   </section>
   <section id="sex">
     <header class="sec-head">
@@ -407,7 +420,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           <div class="links">
             <span class="path">sex/sex_scatter.png</span>
             <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_scatter.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/sex/plot_sex.py" target="_blank" rel="noopener">Script</a>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_scatter.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/sex/plot_sex.py" target="_blank" rel="noopener">Script</a>
           </div>
         </figcaption>
       </figure>
@@ -421,11 +434,12 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           <div class="links">
             <span class="path">sex/sex_groups.png</span>
             <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_groups.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/sex/plot_sex.py" target="_blank" rel="noopener">Script</a>
+            <a class="full" href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_groups.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/sex/plot_sex.py" target="_blank" rel="noopener">Script</a>
           </div>
         </figcaption>
       </figure>
     </div>
+    <details class="datablock"><summary>Data behind these charts <span class="count">5</span></summary>
     <ul class="datalist">
         <li class="data">
           <div class="data-main">
@@ -467,113 +481,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/sex/sex_class_summary_2021-2025.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_class_summary_2021-2025.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
-    </ul>
-  </section>
-  <section id="burden-13">
-    <header class="sec-head">
-      <h2>Research vs disease burden, first 13 diseases</h2>
-      <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/README.md" target="_blank" rel="noopener">analysis/README.md</a></div>
-    </header>
-    <p class="finding">The first comparison used 13 well-funded chronic diseases. Against them ME/CFS had 20.3× fewer papers (90% range 12.5–30.6) and 13.4× fewer trials (8.9–18.8). These 13 sit above the broader trend, so they set a high bar. The 120-disease version gives about half these multiples.</p>
-    <div class="charts">
-      <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/papers_vs_dalys_ccc_2021-2025.png" data-title="Papers vs disease burden (13 diseases)" aria-label="Open Papers vs disease burden (13 diseases) full size">
-          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/papers_vs_dalys_ccc_2021-2025.png" alt="Papers vs disease burden (13 diseases)" loading="lazy" decoding="async">
-        </button>
-        <figcaption>
-          <h3>Papers vs disease burden (13 diseases)</h3>
-          <p>ME/CFS burden from the ME/CFS model (CCC). 20.3× shortfall.</p>
-          <div class="links">
-            <span class="path">analysis/papers_vs_dalys_ccc_2021-2025.png</span>
-            <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/papers_vs_dalys_ccc_2021-2025.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/shortfall_ccc.py" target="_blank" rel="noopener">Script</a>
-          </div>
-        </figcaption>
-      </figure>
-      <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/trials_vs_dalys_ccc_2021-2025.png" data-title="Trials vs disease burden (13 diseases)" aria-label="Open Trials vs disease burden (13 diseases) full size">
-          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/trials_vs_dalys_ccc_2021-2025.png" alt="Trials vs disease burden (13 diseases)" loading="lazy" decoding="async">
-        </button>
-        <figcaption>
-          <h3>Trials vs disease burden (13 diseases)</h3>
-          <p>ME/CFS burden from the ME/CFS model (CCC). 13.4× shortfall.</p>
-          <div class="links">
-            <span class="path">analysis/trials_vs_dalys_ccc_2021-2025.png</span>
-            <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/trials_vs_dalys_ccc_2021-2025.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/shortfall_ccc.py" target="_blank" rel="noopener">Script</a>
-          </div>
-        </figcaption>
-      </figure>
-    </div>
-    <ul class="datalist">
-        <li class="data">
-          <div class="data-main">
-            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/analysis/plot_data_2021-2025.csv" target="_blank" rel="noopener">plot_data_2021-2025.csv</a><span class="folder">analysis/</span></div>
-            <p>Data behind the two scatterplots, with trend values and shortfalls. Data dictionary: analysis/plot_data_README.md.</p>
-            <div class="meta">17 rows · 3 KB · updated 11 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/shortfall_ccc.py" target="_blank" rel="noopener">analysis/shortfall_ccc.py</a></div>
-          </div>
-          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/plot_data_2021-2025.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/plot_data_2021-2025.csv" target="_blank" rel="noopener">Download</a></div>
-        </li>
-        <li class="data">
-          <div class="data-main">
-            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/analysis/shortfall_ccc_2021-2025.csv" target="_blank" rel="noopener">shortfall_ccc_2021-2025.csv</a><span class="folder">analysis/</span></div>
-            <p>Shortfall for four ways of grouping ME/CFS and long COVID, with 90% ranges.</p>
-            <div class="meta">8 rows · 785 B · updated 9 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/shortfall_ccc.py" target="_blank" rel="noopener">analysis/shortfall_ccc.py</a></div>
-          </div>
-          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/shortfall_ccc_2021-2025.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/shortfall_ccc_2021-2025.csv" target="_blank" rel="noopener">Download</a></div>
-        </li>
-    </ul>
-    <details class="older"><summary>Earlier versions (4)</summary><div class="charts old">
-      <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/burden_vs_research_2021-2025.png" data-title="Papers and trials vs burden (draft)" aria-label="Open Papers and trials vs burden (draft) full size">
-          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/burden_vs_research_2021-2025.png" alt="Papers and trials vs burden (draft)" loading="lazy" decoding="async">
-        </button>
-        <figcaption>
-          <h3>Papers and trials vs burden (draft)</h3>
-          <p>Early draft. ME/CFS set by hand to 25M DALYs.</p>
-          <div class="links">
-            <span class="path">analysis/burden_vs_research_2021-2025.png</span>
-            <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/burden_vs_research_2021-2025.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/burden_vs_research.py" target="_blank" rel="noopener">Script</a>
-          </div>
-        </figcaption>
-      </figure>
-      <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/pubs_vs_dalys_2021-2025.png" data-title="Papers vs burden (draft)" aria-label="Open Papers vs burden (draft) full size">
-          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/pubs_vs_dalys_2021-2025.png" alt="Papers vs burden (draft)" loading="lazy" decoding="async">
-        </button>
-        <figcaption>
-          <h3>Papers vs burden (draft)</h3>
-          <p>Early draft. ME/CFS set by hand to 25M DALYs.</p>
-          <div class="links">
-            <span class="path">analysis/pubs_vs_dalys_2021-2025.png</span>
-            <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/pubs_vs_dalys_2021-2025.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/burden_vs_research.py" target="_blank" rel="noopener">Script</a>
-          </div>
-        </figcaption>
-      </figure>
-      <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/trials_vs_dalys_2021-2025.png" data-title="Trials vs burden (draft)" aria-label="Open Trials vs burden (draft) full size">
-          <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/trials_vs_dalys_2021-2025.png" alt="Trials vs burden (draft)" loading="lazy" decoding="async">
-        </button>
-        <figcaption>
-          <h3>Trials vs burden (draft)</h3>
-          <p>Early draft. ME/CFS set by hand to 25M DALYs.</p>
-          <div class="links">
-            <span class="path">analysis/trials_vs_dalys_2021-2025.png</span>
-            <span class="sep"></span>
-            <a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/trials_vs_dalys_2021-2025.png" target="_blank" rel="noopener">Full size</a><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/burden_vs_research.py" target="_blank" rel="noopener">Script</a>
-          </div>
-        </figcaption>
-      </figure></div><ul class="datalist">
-        <li class="data">
-          <div class="data-main">
-            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/analysis/burden_vs_research_2021-2025.csv" target="_blank" rel="noopener">burden_vs_research_2021-2025.csv</a><span class="folder">analysis/</span></div>
-            <p>Data behind the early drafts (ME/CFS set to 25M DALYs).</p>
-            <div class="meta">14 rows · 2 KB · updated 9 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/burden_vs_research.py" target="_blank" rel="noopener">analysis/burden_vs_research.py</a></div>
-          </div>
-          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/analysis/burden_vs_research_2021-2025.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/burden_vs_research_2021-2025.csv" target="_blank" rel="noopener">Download</a></div>
-        </li></ul></details>
+    </ul></details>
   </section>
   <section id="sources">
     <header class="sec-head">
@@ -581,6 +489,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/README.md" target="_blank" rel="noopener">clinicaltrials/README.md</a><a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/README.md" target="_blank" rel="noopener">pubmed/README.md</a><a href="https://github.com/ebise-wq/pais-data/blob/main/gbd/citation.txt" target="_blank" rel="noopener">gbd/citation.txt</a></div>
     </header>
     <p class="finding">The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed paper counts per year, 1996–2026, plus the GBD 2023 burden files. The 120-disease work fetches its own counts (see above).</p>
+    <details class="datablock"><summary>Data files <span class="count">7</span></summary>
     <ul class="datalist">
         <li class="data">
           <div class="data-main">
@@ -638,18 +547,31 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
           </div>
           <div class="actions"><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/gbd/IHME-GBD_2023_DATA-08b3fc6f-1.csv" target="_blank" rel="noopener">IHME-GBD_2023_DATA-08b3fc6f-1.csv</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/gbd/IHME-GBD_2023_DATA-ff76c2f3-1.csv" target="_blank" rel="noopener">IHME-GBD_2023_DATA-ff76c2f3-1.csv</a></div>
         </li>
-    </ul>
+    </ul></details>
   </section>
 </main>
 <footer class="wrap">
   <span>To add a chart or dataset: add it to <code>catalog.json</code>, then run <code>python3 -I tools/build_catalog.py</code>.</span>
-  <span class="ver">v2 · built 2026-11-25</span>
+  <span class="ver">v3 · built 2026-11-25</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
 <script>
+document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
+  var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
+  var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
+  var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
+  new Image().src = srcs[1];
+  fig.querySelectorAll(".toggle button").forEach(function (b) {
+    b.addEventListener("click", function () {
+      var i = +b.dataset.view;
+      img.src = srcs[i]; open.dataset.full = srcs[i]; path.textContent = paths[i]; full.href = raws[i];
+      fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+    });
+  });
+});
 (function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;

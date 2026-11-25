@@ -82,31 +82,22 @@ ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5×
 
 Notes: [`expanded/ictrp/README.md`](expanded/ictrp/README.md)
 
-### Drug trials by sponsor type
+### Long COVID and ME/CFS trials
 
-In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13). The median across 24 diseases with 10–30M DALYs was 35%. No long COVID drug trial was led by a large drug company.
+Long COVID trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. Drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year. In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13), against a median of 35% for 24 diseases with 10–30M DALYs.
 
-<a href="analysis/sponsor_per_year.png"><img src="analysis/sponsor_per_year.png" width="260" alt="Drug trials by sponsor type"></a> <a href="analysis/sponsor_comparison.png"><img src="analysis/sponsor_comparison.png" width="260" alt="Commercial drug trials vs similar-burden diseases"></a>
+<a href="analysis/long_covid_trials_per_year.png"><img src="analysis/long_covid_trials_per_year.png" width="260" alt="Long COVID and ME/CFS trials"></a> <a href="analysis/drug_trials_per_year.png"><img src="analysis/drug_trials_per_year.png" width="260" alt="Long COVID and ME/CFS drug trials"></a> <a href="analysis/sponsor_comparison.png"><img src="analysis/sponsor_comparison.png" width="260" alt="Commercial drug trials vs similar-burden diseases"></a>
 
-| File | What it is | Rows |
-|---|---|---|
-| [`analysis/sponsor_by_disease_2021-2025.csv`](analysis/sponsor_by_disease_2021-2025.csv) | Per disease: drug trials, commercial count and share, large-pharma-led trials. | 26 |
-| [`analysis/sponsor_by_year_2020-2026.csv`](analysis/sponsor_by_year_2020-2026.csv) | Drug trials and commercial trials per disease per start year. | 182 |
-| [`clinicaltrials/sponsor_trials_2026-11-25.csv`](clinicaltrials/sponsor_trials_2026-11-25.csv) | One row per drug trial per disease: lead sponsor, sponsor class, phase, title. | 13,865 |
-
-Notes: [`analysis/sponsor_README.md`](analysis/sponsor_README.md)
-
-### Long COVID and ME/CFS trials over time
-
-Long COVID interventional trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. For drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year.
-
-<a href="analysis/long_covid_trials_per_year.png"><img src="analysis/long_covid_trials_per_year.png" width="260" alt="Long COVID and ME/CFS trials"></a> <a href="analysis/long_covid_drug_trials_per_year.png"><img src="analysis/long_covid_drug_trials_per_year.png" width="260" alt="Long COVID and ME/CFS drug trials"></a>
+Long COVID and ME/CFS drug trials, by sponsor type: [`analysis/sponsor_per_year.png`](analysis/sponsor_per_year.png)
 
 | File | What it is | Rows |
 |---|---|---|
 | [`clinicaltrials/drug_trials_per_year_2026-11-11.csv`](clinicaltrials/drug_trials_per_year_2026-11-11.csv) | Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS. | 2 |
+| [`analysis/sponsor_by_disease_2021-2025.csv`](analysis/sponsor_by_disease_2021-2025.csv) | Per disease: drug trials, commercial count and share, large-pharma-led trials. | 26 |
+| [`analysis/sponsor_by_year_2020-2026.csv`](analysis/sponsor_by_year_2020-2026.csv) | Drug trials and commercial trials per disease per start year. | 182 |
+| [`clinicaltrials/sponsor_trials_2026-11-25.csv`](clinicaltrials/sponsor_trials_2026-11-25.csv) | One row per drug trial per disease: lead sponsor, sponsor class, phase, title. | 13,865 |
 
-Notes: [`analysis/README.md`](analysis/README.md)
+Notes: [`analysis/README.md`](analysis/README.md), [`analysis/sponsor_README.md`](analysis/sponsor_README.md)
 
 ### Research by which sex a disease mostly affects
 
@@ -123,19 +114,6 @@ After adjusting for burden, the share of patients who are women shows no detecta
 | [`sex/sex_class_summary_2021-2025.csv`](sex/sex_class_summary_2021-2025.csv) | Average papers and trials vs trend for each of the five sex classes. | 5 |
 
 Notes: [`sex/README.md`](sex/README.md)
-
-### Research vs disease burden, first 13 diseases
-
-The first comparison used 13 well-funded chronic diseases. Against them ME/CFS had 20.3× fewer papers (90% range 12.5–30.6) and 13.4× fewer trials (8.9–18.8). These 13 sit above the broader trend, so they set a high bar. The 120-disease version gives about half these multiples.
-
-<a href="analysis/papers_vs_dalys_ccc_2021-2025.png"><img src="analysis/papers_vs_dalys_ccc_2021-2025.png" width="260" alt="Papers vs disease burden (13 diseases)"></a> <a href="analysis/trials_vs_dalys_ccc_2021-2025.png"><img src="analysis/trials_vs_dalys_ccc_2021-2025.png" width="260" alt="Trials vs disease burden (13 diseases)"></a>
-
-| File | What it is | Rows |
-|---|---|---|
-| [`analysis/plot_data_2021-2025.csv`](analysis/plot_data_2021-2025.csv) | Data behind the two scatterplots, with trend values and shortfalls. Data dictionary: analysis/plot_data_README.md. | 17 |
-| [`analysis/shortfall_ccc_2021-2025.csv`](analysis/shortfall_ccc_2021-2025.csv) | Shortfall for four ways of grouping ME/CFS and long COVID, with 90% ranges. | 8 |
-
-Notes: [`analysis/README.md`](analysis/README.md)
 
 ### Source data
 
