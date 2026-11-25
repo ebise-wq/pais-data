@@ -115,6 +115,18 @@ Page: https://ebise-wq.github.io/pais-data/sex.html
 
 Notes: [`sex/README.md`](sex/README.md)
 
+### Public biomedical R&D funding and output, 2024
+
+Government biomedical R&D budgets set against medical papers and citations, 19 countries. The US spends 32 bn PPS; China's budget is a guess (about 14 bn). Papers grow more slowly than budgets (log-log slope 0.76). Portugal publishes most per unit of budget, Japan and the US least. Seven budgets are estimates, so this is a rough signal, not an efficiency ranking.
+
+Page: https://ebise-wq.github.io/pais-data/funding.html
+
+| File | What it is | Rows |
+|---|---|---|
+| [`funding/biomedical_rnd_2024.csv`](funding/biomedical_rnd_2024.csv) | One row per country or funder: 2024 budget (reported, estimated or guessed, with range and % of GDP), its split by funding type, medicine papers 1999–2024 and 2024 citations, and how each estimate was built. Compiled in a separate session; that code is not in the repo. | 24 |
+
+Notes: [`funding/README.md`](funding/README.md)
+
 ### Source data
 
 The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed paper counts per year, 1996–2026, plus the GBD 2023 burden files. The 120-disease work fetches its own counts (see above).
