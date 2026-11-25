@@ -1,7 +1,7 @@
 <!-- Interactive "research vs disease burden" charts for the catalog pages.
      tools/build_catalog.py inserts this into docs/index.html and docs/burden-120.html, replacing
-     __BVR_DATA__ with expanded/burden_interactive_2021-2025.json. The part between more:start and
-     more:end is shown on the topic page only. Colours and fonts come from the page's tokens. -->
+     __BVR_DATA__ with expanded/burden_interactive_2021-2025.json. The parts between more:start and
+     more:end, and between page-only:start and page-only:end, are shown on the topic page only. Colours and fonts come from the page's tokens. -->
 <style>
 .bvr { display: grid; gap: 1.25rem; min-width: 0; font-family: var(--f-body); }
 .bvr-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0.75rem; }
@@ -51,7 +51,7 @@
 .bvr-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 </style>
 <div class="bvr">
-  <div class="bvr-tiles" id="bvr-tiles"></div>
+  <!-- page-only:start --><div class="bvr-tiles" id="bvr-tiles"></div><!-- page-only:end -->
   <div class="bvr-grid">
     <div class="bvr-card">
       <h3>Papers per year vs burden</h3>
@@ -132,7 +132,7 @@ const ord=n=>n+(n%100>=11&&n%100<=13?'th':['th','st','nd','rd'][n%10]||'th');
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
 // ---------- tiles
-document.getElementById('bvr-tiles').innerHTML=['papers','trials'].map(m=>{
+if($('bvr-tiles'))$('bvr-tiles').innerHTML=['papers','trials'].map(m=>{
   const d=all[m];
   return `<div class="tile"><div class="k">All ME/CFS: ${m}</div>
   <div class="v" style="color:${C.coral}">${fmtX(d.sf).replace('×','')}×<span>shortfall</span></div>

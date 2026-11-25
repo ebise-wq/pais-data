@@ -3,7 +3,8 @@ catalog section of README.md from catalog.json.
 
 A section can carry "interactive": {"html": fragment, "data": json, "charts": n}. The fragment is
 inserted with its data; the part between <!-- more:start --> and <!-- more:end --> shows on the
-topic page only. A chart's "toggle" can be one alternative image or a list of them.
+topic page only, replaced on the overview by a link to it. Parts between <!-- page-only:start --> and
+<!-- page-only:end --> also show on the topic page only, with nothing in their place. A chart's "toggle" can be one alternative image or a list of them.
 
 GitHub Pages serves the docs/ folder only, so docs/index.html loads the chart images from
 raw.githubusercontent.com (the main branch). The --fragment copy uses relative image paths,
@@ -210,6 +211,7 @@ def interactive_html(s, full):
         more = (f'<p class="bvr-more">Rankings, comparator sets, the full data table and caveats: '
                 f'{page_link(s["id"], "open the topic page")}.</p>')
         frag = re.sub(r"<!-- more:start -->.*?<!-- more:end -->", more, frag, flags=re.S)
+        frag = re.sub(r"<!-- page-only:start -->.*?<!-- page-only:end -->", "", frag, flags=re.S)
     return frag
 
 

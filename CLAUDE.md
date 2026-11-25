@@ -26,8 +26,9 @@
   The overview links to each with "Open page".
 - A section can carry `"interactive"` (an HTML fragment plus its JSON data), e.g. the 120-disease
   burden charts in `expanded/burden_interactive.html`. Its CSS classes and ids start with `bvr-` so
-  they don't clash with the page. The part between `<!-- more:start -->` and `<!-- more:end -->`
-  shows on the topic page only.
+  they don't clash with the page. The parts between `<!-- more:start -->` and `<!-- more:end -->`
+  (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
+  show on the topic page only. The headline-number boxes are page-only at the user's request.
 - Data files show in a collapsed block under each section's charts.
 - A data entry with `"hidden": true` is catalogued but not shown: use it for pipeline inputs whose
   contents already appear in another table (e.g. `sex/sex_labels.csv`, `expanded/cleaned_counts_*.csv`).
