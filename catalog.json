@@ -1,7 +1,7 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 3,
+  "page_version": 4,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "sections": [
@@ -28,12 +28,12 @@
       "data": [
         {
           "file": "expanded/burden_vs_research_expanded_2021-2025.csv",
-          "about": "One row per disease: DALYs, papers and trials per year, trend value and shortfall.",
+          "about": "One row per disease: DALYs, papers and trials per year (raw and cleaned), trend value and shortfall.",
           "script": "expanded/analyse.py"
         },
         {
           "file": "expanded/fits_2021-2025.csv",
-          "about": "Log-log trend fits for four disease subsets, with the ME/CFS shortfall under each.",
+          "about": "Log-log trend fits for several disease subsets and for the cleaned counts, with the ME/CFS shortfall under each.",
           "script": "expanded/analyse.py"
         },
         {
@@ -47,19 +47,10 @@
           "script": "expanded/fetch.py"
         },
         {
-          "file": "expanded/papers_cleaned_2021-2025.csv",
-          "about": "Paper counts after removing veterinary papers and false abbreviation matches.",
-          "script": "expanded/clean_papers.py"
-        },
-        {
-          "file": "expanded/trials_title_filtered_2021-2025.csv",
-          "about": "Trial counts weighted by how closely each trial matches the disease.",
-          "script": "expanded/clean_trials.py"
-        },
-        {
-          "file": "expanded/sensitivity_cleaned_2021-2025.csv",
-          "about": "Trend refitted on the cleaned counts. ME/CFS barely moves (10.2× papers, 7.5× trials).",
-          "script": "expanded/sensitivity_cleaned.py"
+          "file": "expanded/cleaned_counts_2021-2025.csv",
+          "about": "Cleaned paper and trial counts per disease, with share kept (input to analyse.py).",
+          "script": "expanded/clean_papers.py, expanded/clean_trials.py",
+          "hidden": true
         }
       ]
     },
@@ -77,11 +68,6 @@
           "script": "expanded/ictrp/analyse_ictrp.py"
         },
         {
-          "file": "expanded/ictrp/mecfs_shortfall_adjusted.csv",
-          "about": "ME/CFS trial shortfall rescaled for trials in other registries.",
-          "script": "expanded/ictrp/analyse_ictrp.py"
-        },
-        {
           "file": "expanded/ictrp/mecfs_trial_criteria.csv",
           "about": "Every ME/CFS trial started 2021–2025, classified by diagnostic criteria. Checked by hand.",
           "script": "expanded/ictrp/analyse_ictrp.py"
@@ -92,20 +78,9 @@
           "script": null
         },
         {
-          "file": "expanded/ictrp/search_strings.txt",
-          "about": "The five ICTRP condition searches.",
-          "script": null
-        },
-        {
           "file": "expanded/ictrp/raw/export*.xml.gz",
           "about": "Raw ICTRP XML exports (5 files), downloaded by hand on 19 Nov 2026. WHO ICTRP terms: no commercial use.",
           "script": null
-        },
-        {
-          "file": "expanded/ictrp/search_strings_1_split.txt",
-          "about": "ICTRP search 1 split into three smaller searches. Not needed in the end.",
-          "script": null,
-          "old": true
         }
       ]
     },
@@ -141,21 +116,9 @@
           "title": "Commercial drug trials vs similar-burden diseases",
           "caption": "Commercial share and trials per year, 26 diseases with 10–30M DALYs.",
           "script": "analysis/sponsor_charts.py"
-        },
-        {
-          "file": "analysis/long_covid_drug_trials_per_year.png",
-          "title": "Long COVID and ME/CFS drug trials",
-          "caption": "Earlier layout, both diseases in one panel.",
-          "script": "analysis/long_covid_trials.py",
-          "old": true
         }
       ],
       "data": [
-        {
-          "file": "clinicaltrials/drug_trials_per_year_2026-11-11.csv",
-          "about": "Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS.",
-          "script": "clinicaltrials/drug_trials_per_year.py"
-        },
         {
           "file": "analysis/sponsor_by_disease_2021-2025.csv",
           "about": "Per disease: drug trials, commercial count and share, large-pharma-led trials.",
@@ -196,8 +159,9 @@
       "data": [
         {
           "file": "sex/sex_labels.csv",
-          "about": "Female share of patients per disease, with confidence and basis. Coded by hand.",
-          "script": null
+          "about": "Hand-coded female share per disease (input to analyse_sex.py). Same columns appear in sex_by_disease.",
+          "script": null,
+          "hidden": true
         },
         {
           "file": "sex/sex_by_disease_2021-2025.csv",
@@ -205,18 +169,8 @@
           "script": "sex/analyse_sex.py"
         },
         {
-          "file": "sex/sex_models_2021-2025.csv",
-          "about": "All regression models: multiplier per +10 pp female, CI, p and permutation p.",
-          "script": "sex/analyse_sex.py"
-        },
-        {
-          "file": "sex/sex_robustness_2021-2025.csv",
-          "about": "Robustness checks: cleaned counts, dropped groups, label noise and more.",
-          "script": "sex/analyse_sex.py"
-        },
-        {
-          "file": "sex/sex_class_summary_2021-2025.csv",
-          "about": "Average papers and trials vs trend for each of the five sex classes.",
+          "file": "sex/sex_results_2021-2025.csv",
+          "about": "Every regression model, robustness check and sex-class average in one table (column `table` says which).",
           "script": "sex/analyse_sex.py"
         }
       ]
@@ -310,13 +264,8 @@
           "script": "clinicaltrials/fetch_counts.py"
         },
         {
-          "file": "pubmed/pubs_per_year_2026-11-08.csv",
-          "about": "Papers per year with the disease in the title, 1996–2026, for 24 diseases. One column per year.",
-          "script": "pubmed/pubs_per_year.py"
-        },
-        {
           "file": "pubmed/pubs_per_year_long_2026-11-08.csv",
-          "about": "The same papers per year in long format, plus publication-date and MeSH counts.",
+          "about": "Papers per year with the disease in the title, 1996–2026, for 24 diseases, plus publication-date and MeSH counts.",
           "script": "pubmed/pubs_per_year.py"
         },
         {

@@ -18,13 +18,13 @@ Two cleaned counts (both start from trials whose listed condition matches, as be
   the overcount from 1.20-1.62x (raw) to 1.06-1.33x, keeping 89-99% of genuine trials.
 Inputs: cache/ (ClinicalTrials.gov pages saved by fetch.py) for the 111 newer causes;
 the original comparators are re-fetched by NCT ID from ../clinicaltrials/nct_ids_2026-11-08.json.
-Output: trials_title_filtered_2021-2025.csv. Run from repo root: python3 -I expanded/clean_trials.py
+Output: the trials_* columns of cleaned_counts_2021-2025.csv. Run from repo root: python3 -I expanded/clean_trials.py
 """
 import csv, json, os, re, sys, time, urllib.parse, urllib.request
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from diseases import D
-from fetch import keep, YEARS
+from fetch import keep, YEARS, save_cleaned
 
 ORIG = {  # name in ../clinicaltrials -> (label used in analyse.py, regex, exclusion)
     "ME/CFS": ("ME/CFS", r"chronic fatigue syndrome|myalgic|ME/CFS|\bCFS\b|systemic exertion intolerance", None),
@@ -85,7 +85,7 @@ for src, (label, inc, exc) in ORIG.items():
         time.sleep(0.3)
     # ids were already filtered by condition (or title for ME/CFS), so accept them all at the condition step
     raw, clean, wt = by_year(studies, re.compile(inc, re.I), re.compile(exc, re.I) if exc else None, title_ok=True)
-    rows.append({"disease": label, "source": "original", "trials_raw_per_year": sum(raw.values()) / 5,
+    rows.append({"disease": label, "trials_source": "original", "trials_raw_per_year": sum(raw.values()) / 5,
                  "trials_title_per_year": sum(clean.values()) / 5, "trials_weighted_per_year": round(sum(wt.values()) / 5, 2)})
     print(label, rows[-1]["trials_raw_per_year"], rows[-1]["trials_title_per_year"], flush=True)
 
@@ -93,11 +93,10 @@ for name, spec in D.items():
     fn = os.path.join(HERE, "cache", re.sub(r"\W+", "_", name) + ".json")
     inc = re.compile(spec["inc"], re.I); exc = re.compile(spec["exc"], re.I) if spec["exc"] else None
     raw, clean, wt = by_year(json.load(open(fn)), inc, exc)
-    rows.append({"disease": name, "source": "expanded", "trials_raw_per_year": sum(raw.values()) / 5,
+    rows.append({"disease": name, "trials_source": "expanded", "trials_raw_per_year": sum(raw.values()) / 5,
                  "trials_title_per_year": sum(clean.values()) / 5, "trials_weighted_per_year": round(sum(wt.values()) / 5, 2)})
 
 for r in rows:
-    r["title_share"] = round(r["trials_title_per_year"] / r["trials_raw_per_year"], 2) if r["trials_raw_per_year"] else ""
-    r["weighted_share"] = round(r["trials_weighted_per_year"] / r["trials_raw_per_year"], 2) if r["trials_raw_per_year"] else ""
-with open(os.path.join(HERE, "trials_title_filtered_2021-2025.csv"), "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=rows[0].keys()); w.writeheader(); w.writerows(rows)
+    r["trials_title_share"] = round(r["trials_title_per_year"] / r["trials_raw_per_year"], 2) if r["trials_raw_per_year"] else ""
+    r["trials_weighted_share"] = round(r["trials_weighted_per_year"] / r["trials_raw_per_year"], 2) if r["trials_raw_per_year"] else ""
+save_cleaned(rows)  # trials_* columns of cleaned_counts_2021-2025.csv

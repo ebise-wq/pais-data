@@ -58,6 +58,4 @@ def draw(src, title, subtitle, out, ymax, ystep, version):
 
 draw("clinicaltrials/trials_per_year_2026-11-08.csv", "Long COVID and ME/CFS trials",
      "Interventional trials, by start year", "analysis/long_covid_trials_per_year.png", 180, 50, "v2")
-# drug list from the 8 Nov pull; start dates and intervention types re-fetched 11 Nov 2026
-draw("clinicaltrials/drug_trials_per_year_2026-11-11.csv", "Long COVID and ME/CFS drug trials",
-     "Drug or biologic trials, by start year", "analysis/long_covid_drug_trials_per_year.png", 55, 10, "v1")
+# The drug-trial version of this chart is now drawn by sponsor_charts.py (drug_trials_per_year.png).

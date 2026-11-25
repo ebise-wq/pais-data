@@ -8,8 +8,10 @@ papers or trials than diseases that mostly affect men? Uses the 120 diseases in 
 
 - `sex_labels.csv`: female share of cases for each disease, a confidence rating, and a one-line basis.
   **Coded by hand from standard epidemiology, not taken from a dataset.** See caveats.
-- `analyse_sex.py`: all models → `sex_models_2021-2025.csv`, `sex_robustness_2021-2025.csv`,
-  `sex_by_disease_2021-2025.csv`, `sex_class_summary_2021-2025.csv`.
+- `analyse_sex.py` → `sex_results_2021-2025.csv` and `sex_by_disease_2021-2025.csv`.
+  `sex_results` holds every model, robustness check and sex-class average in one table. Its `table`
+  column says which: `model`, `robustness` or `sex class`. `multiplier` is the effect per +10 pp
+  female (or, for `sex class`, the geometric mean of actual ÷ trend), with `ci_low`–`ci_high`.
 - `plot_sex.py` → `sex_scatter.png` (female share vs research, each dot a disease) and
   `sex_groups.png` (the five sex groups, with group averages).
 

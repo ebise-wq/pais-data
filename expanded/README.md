@@ -16,15 +16,21 @@ Including them made ME/CFS look closer to the bottom of the ranking than it is.
 - `fetch.py`: pulls papers per year (PubMed, title search, by `[edat]`) and interventional trials per
   start year (ClinicalTrials.gov), 2021–2025. Writes `counts_<date>.csv` and `queries_<date>.csv`.
   Raw API pages go to `cache/` (not committed).
+- `clean_papers.py`, `clean_trials.py`: the automatic clean-ups (see below). Both write into
+  `cleaned_counts_2021-2025.csv`, each its own columns (`papers_*`, `trials_*`). `clean_trials.py`
+  needs the `cache/` pages, so it can only be re-run after `fetch.py`.
 - `analyse.py`: joins counts to GBD DALYs, adds the 13 original comparators and ME/CFS from
   `../analysis/plot_data_2021-2025.csv`, fits trends and draws the plots.
 - `burden_vs_research_expanded_2021-2025.csv`: one row per disease. `*_trend` is the value of the
   120-disease trend at that disease's DALYs. `*_shortfall` = trend ÷ actual; above 1 means fewer
-  papers or trials than the trend predicts. Sorted by paper shortfall.
-- `fits_2021-2025.csv`: log-log fits for several subsets, with the ME/CFS shortfall under each.
+  papers or trials than the trend predicts. `papers_cleaned_per_year` and `trials_weighted_per_year`
+  are the cleaned counts. Sorted by paper shortfall.
+- `fits_2021-2025.csv`: log-log fits for several subsets, with the ME/CFS shortfall under each. The
+  `All, cleaned counts` rows refit the 120-disease trend on the cleaned counts.
 - `papers_vs_dalys_expanded.png`, `trials_vs_dalys_expanded.png`.
 
-Run from the repo root: `python3 -I expanded/fetch.py`, then `python3 -I expanded/analyse.py`.
+Run from the repo root: `python3 -I expanded/fetch.py`, then `clean_papers.py` and `clean_trials.py`,
+then `python3 -I expanded/analyse.py`.
 
 ## Check against the old pipeline
 
@@ -93,10 +99,10 @@ Crohn's, glaucoma and lymphomas.
 
 ## Automatic clean-up (sensitivity check)
 
-Two automatic clean-ups, then the trend refitted (`sensitivity_cleaned.py` →
-`sensitivity_cleaned_2021-2025.csv`).
+Two automatic clean-ups, then the trend refitted on the cleaned counts (`analyse.py`, rows
+`All, cleaned counts` in `fits_2021-2025.csv`).
 
-**Trials** (`clean_trials.py` → `trials_title_filtered_2021-2025.csv`). Rules were tested on 171
+**Trials** (`clean_trials.py` → `trials_*` columns of `cleaned_counts_2021-2025.csv`). Rules were tested on 171
 hand-labelled trials (51 ME/CFS, 60 MS, 60 RA; see `ictrp/`). Raw counts overstate trials that are
 mainly in the disease by 1.42× (ME/CFS), 1.20× (MS) and 1.62× (RA).
 - "Title names the disease" matched the hand labels best for these three, but dropped many genuine
@@ -107,7 +113,7 @@ mainly in the disease by 1.42× (ME/CFS), 1.20× (MS) and 1.62× (RA).
 - The share kept does not depend on disease size (correlation with log trial count 0.13; median 0.90
   for diseases with under 5 trials a year, 0.86 for over 80). ME/CFS keeps 0.84.
 
-**Papers** (`clean_papers.py` → `papers_cleaned_2021-2025.csv`).
+**Papers** (`clean_papers.py` → `papers_*` columns of `cleaned_counts_2021-2025.csv`).
 - Veterinary filter for all diseases (livestock and pet animal words in the title; lab mice and rats
   kept). Largest effects: rabies 0.79, food-borne trematodes 0.81, diarrhoeal diseases 0.85,
   hookworm, cysticercosis, ascariasis 0.88–0.89. Median 0.997; ME/CFS 1.00. Smaller diseases lose a
@@ -119,7 +125,7 @@ mainly in the disease by 1.42× (ME/CFS), 1.20× (MS) and 1.62× (RA).
 
 | | Main | Cleaned |
 |---|---|---|
-| Papers: ME/CFS below trend | 10.3× (1 disease lower) | 10.2× (1 lower) |
-| Trials: ME/CFS below trend | 7.7× (13 lower) | 7.5× (11 lower) |
+| Papers: ME/CFS below trend | 10.3× (7.5–14.5), 1 disease lower | 10.2× (7.4–14.2), 1 lower |
+| Trials: ME/CFS below trend | 7.7× (5.0–11.7), 13 lower | 7.5× (4.9–11.6), 11 lower |
 
 The clean-ups shift individual small diseases a little but leave the ME/CFS result unchanged.

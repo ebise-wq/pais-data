@@ -1,0 +1,126 @@
+disease,papers_per_year,papers_cleaned_per_year,papers_kept_share,trials_source,trials_raw_per_year,trials_title_per_year,trials_weighted_per_year,trials_title_share,trials_weighted_share
+ME/CFS,216.8,216.8,1.0,original,10.2,6.6,8.53,0.65,0.84
+Multiple sclerosis,3287.4,3285.0,0.999,original,146.8,116.6,133.26,0.79,0.91
+Rheumatoid arthritis,2977.8,2975.4,0.999,original,78.6,48.8,64.81,0.62,0.82
+Crohn's disease,1354.6,1351.6,0.998,original,70.2,44.6,55.82,0.64,0.8
+Ulcerative colitis,1548.8,1545.4,0.998,original,66.0,43.0,53.78,0.65,0.81
+Psoriasis,2670.2,2669.4,1.0,original,90.8,69.4,86.41,0.76,0.95
+Type 1 diabetes,2260.2,2255.2,0.998,original,141.6,91.0,126.46,0.64,0.89
+Epilepsy,5780.4,5726.6,0.991,original,90.4,59.0,80.7,0.65,0.89
+Schizophrenia,2926.0,2923.2,0.999,original,119.6,75.0,100.23,0.63,0.84
+Bipolar disorder,1174.2,1174.0,1.0,original,61.0,36.4,44.87,0.6,0.74
+Parkinson's disease,5499.4,5495.2,0.999,original,234.2,175.4,213.14,0.75,0.91
+Endometriosis,1393.0,1392.6,1.0,original,41.4,35.4,38.45,0.86,0.93
+HIV/AIDS,8911.4,8904.0,0.999,original,248.8,154.4,216.21,0.62,0.87
+ALS / motor neuron disease,1399.0,1366.0,0.976,original,47.8,38.0,43.05,0.79,0.9
+Ischemic heart disease,6940.4,6914.6,0.996,expanded,298.2,182.8,257.73,0.61,0.86
+Stroke,11910.0,11894.2,0.999,expanded,612.4,451.2,548.01,0.74,0.89
+Atrial fibrillation,4077.6,4059.0,0.995,expanded,160.4,108.2,142.66,0.67,0.89
+Rheumatic heart disease,204.2,204.0,0.999,expanded,5.0,2.0,4.1,0.4,0.82
+Aortic aneurysm,1995.6,1988.4,0.996,expanded,27.4,14.0,22.96,0.51,0.84
+Peripheral arterial disease,856.8,855.4,0.998,expanded,61.4,29.2,52.43,0.48,0.85
+Endocarditis,1007.2,996.0,0.989,expanded,6.4,4.2,5.16,0.66,0.81
+Pulmonary arterial hypertension,645.0,643.2,0.997,expanded,21.6,15.6,19.55,0.72,0.91
+Cardiomyopathy & myocarditis,3554.6,3511.4,0.988,expanded,52.6,25.2,40.01,0.48,0.76
+Congenital heart disease,2146.2,2134.8,0.995,expanded,37.2,19.4,29.67,0.52,0.8
+COPD,3154.8,3143.6,0.996,expanded,179.0,130.4,158.98,0.73,0.89
+Asthma,3789.8,3752.6,0.99,expanded,147.6,104.6,129.86,0.71,0.88
+Interstitial lung disease & sarcoidosis,2740.8,2733.2,0.997,expanded,64.8,44.4,56.24,0.69,0.87
+Alzheimer's & other dementias,10955.6,10941.2,0.999,expanded,277.0,175.4,235.1,0.63,0.85
+Migraine,1444.0,1443.8,1.0,expanded,84.8,72.8,80.56,0.86,0.95
+Tension-type headache,52.8,52.8,1.0,expanded,8.8,6.6,7.41,0.75,0.84
+Depressive disorders,11851.4,11839.0,0.999,expanded,639.0,301.4,451.31,0.47,0.71
+Anxiety disorders,889.4,886.6,0.997,expanded,121.2,40.8,77.55,0.34,0.64
+Autism,3957.8,3942.2,0.996,expanded,144.8,96.4,129.87,0.67,0.9
+ADHD,1677.4,1672.4,0.997,expanded,74.4,55.0,66.07,0.74,0.89
+Eating disorders,1368.0,1366.4,0.999,expanded,55.4,37.0,47.37,0.67,0.86
+Alcohol use disorders,764.2,764.0,1.0,expanded,81.0,38.6,64.3,0.48,0.79
+Opioid use disorders,1006.4,1006.0,1.0,expanded,62.6,25.0,48.85,0.4,0.78
+Conduct disorder,67.8,67.8,1.0,expanded,7.6,0.8,3.26,0.11,0.43
+Fatty liver disease (NAFLD/MASLD),4382.0,4359.0,0.995,expanded,108.8,84.8,100.71,0.78,0.93
+Pancreatitis,1670.4,1649.4,0.987,expanded,28.6,21.4,24.79,0.75,0.87
+Peptic ulcer disease,287.8,279.0,0.969,expanded,9.0,4.0,6.7,0.44,0.74
+GERD,469.8,465.4,0.991,expanded,37.8,22.6,31.55,0.6,0.83
+Appendicitis,659.0,658.2,0.999,expanded,13.8,6.2,10.75,0.45,0.78
+Gallstones & biliary disease,697.4,691.8,0.992,expanded,28.0,8.8,20.39,0.31,0.73
+Abdominal hernia,786.4,781.0,0.993,expanded,37.6,23.2,32.43,0.62,0.86
+Chronic kidney disease,7488.0,7436.2,0.993,expanded,245.0,159.0,213.47,0.65,0.87
+Kidney stones,793.0,782.0,0.986,expanded,51.2,18.6,42.39,0.36,0.83
+Benign prostatic hyperplasia,429.6,423.6,0.986,expanded,32.4,16.4,27.48,0.51,0.85
+Low back pain,1471.0,1466.8,0.997,expanded,203.8,145.6,182.76,0.71,0.9
+Neck pain,307.4,306.6,0.997,expanded,97.8,68.8,86.79,0.7,0.89
+Osteoarthritis,3725.8,3652.8,0.98,expanded,292.4,162.6,249.36,0.56,0.85
+Gout,549.0,547.6,0.997,expanded,22.4,15.6,19.77,0.7,0.88
+Atopic dermatitis,1696.8,1658.6,0.977,expanded,94.8,76.4,90.02,0.81,0.95
+Acne,553.2,551.8,0.997,expanded,46.4,38.4,42.38,0.83,0.91
+Urticaria,373.8,372.2,0.996,expanded,17.2,13.4,16.53,0.78,0.96
+Alopecia areata,315.4,315.0,0.999,expanded,16.4,14.4,15.72,0.88,0.96
+Glaucoma,1928.4,1915.0,0.993,expanded,72.8,47.2,67.63,0.65,0.93
+Cataract,1108.4,1097.6,0.99,expanded,67.2,32.2,57.12,0.48,0.85
+Macular degeneration,1020.8,1013.8,0.993,expanded,58.6,42.8,52.67,0.73,0.9
+Hearing loss,1609.6,1601.0,0.995,expanded,78.8,17.8,67.45,0.23,0.86
+Type 2 diabetes,7235.4,7227.6,0.999,expanded,419.4,227.0,346.2,0.54,0.83
+Polycystic ovary syndrome,1350.6,1347.8,0.998,expanded,47.2,41.4,44.61,0.88,0.95
+Uterine fibroids,348.2,347.8,0.999,expanded,15.0,5.8,11.03,0.39,0.74
+Sickle cell disease,1113.6,1112.8,0.999,expanded,44.6,32.6,41.25,0.73,0.92
+Thalassemia,637.0,637.0,1.0,expanded,18.8,14.6,17.41,0.78,0.93
+Down syndrome,666.8,666.0,0.999,expanded,25.0,19.8,22.85,0.79,0.91
+Neural tube defects,302.0,297.0,0.983,expanded,8.2,4.4,5.7,0.54,0.7
+Lung cancer,12277.4,12261.2,0.999,expanded,613.4,419.6,498.84,0.68,0.81
+Breast cancer,15141.0,15118.4,0.999,expanded,698.8,441.0,586.7,0.63,0.84
+Colorectal cancer,10269.6,10261.8,0.999,expanded,434.2,251.8,333.27,0.58,0.77
+Stomach cancer,4338.6,4335.4,0.999,expanded,179.4,86.8,124.45,0.48,0.69
+Liver cancer,8142.2,8127.6,0.998,expanded,211.0,157.6,179.17,0.75,0.85
+Pancreatic cancer,3802.4,3794.4,0.998,expanded,212.8,117.6,150.49,0.55,0.71
+Prostate cancer,5954.0,5942.6,0.998,expanded,304.2,192.2,260.12,0.63,0.86
+Cervical cancer,2739.0,2738.4,1.0,expanded,126.0,66.4,87.76,0.53,0.7
+Esophageal cancer,2216.4,2215.6,1.0,expanded,95.2,37.2,59.81,0.39,0.63
+Ovarian cancer,3012.0,3009.8,0.999,expanded,160.0,74.2,102.0,0.46,0.64
+Leukemia,5804.8,5735.2,0.988,expanded,347.4,233.0,298.17,0.67,0.86
+Brain & CNS cancer,6786.2,6762.6,0.997,expanded,176.8,133.6,155.51,0.76,0.88
+Bladder cancer,2818.8,2804.4,0.995,expanded,130.0,68.8,95.5,0.53,0.73
+Kidney cancer,2506.4,2502.2,0.998,expanded,97.2,42.2,61.44,0.43,0.63
+Melanoma,3601.4,3562.6,0.989,expanded,135.2,69.0,94.75,0.51,0.7
+Multiple myeloma,2194.8,2188.2,0.997,expanded,160.4,115.2,140.41,0.72,0.88
+Non-Hodgkin lymphoma,5092.0,4997.2,0.981,expanded,374.8,221.0,318.2,0.59,0.85
+Thyroid cancer,2325.8,2320.6,0.998,expanded,38.0,18.2,25.96,0.48,0.68
+Mesothelioma,493.8,488.6,0.989,expanded,25.6,11.2,14.76,0.44,0.58
+Testicular cancer,314.4,312.2,0.993,expanded,9.2,3.4,4.88,0.37,0.53
+Malaria,2766.2,2756.2,0.996,expanded,45.0,29.8,42.69,0.66,0.95
+Tuberculosis,5869.6,5707.6,0.972,expanded,54.6,42.2,50.5,0.77,0.92
+Lower respiratory infections,3316.0,3271.8,0.987,expanded,125.6,64.8,100.29,0.52,0.8
+Diarrheal diseases,2563.4,2172.4,0.847,expanded,50.8,29.0,42.58,0.57,0.84
+Meningitis,822.2,810.8,0.986,expanded,8.6,2.8,6.54,0.33,0.76
+Measles,363.2,360.4,0.992,expanded,2.6,1.6,2.02,0.62,0.78
+Pertussis,256.8,256.2,0.998,expanded,6.6,3.4,4.7,0.52,0.71
+Typhoid & paratyphoid,197.2,193.8,0.983,expanded,3.2,2.6,2.9,0.81,0.91
+Dengue,1170.0,1168.4,0.999,expanded,10.6,8.4,9.51,0.79,0.9
+Hepatitis B,2392.6,2387.6,0.998,expanded,53.4,38.2,50.08,0.72,0.94
+Hepatitis C,1543.0,1542.2,0.999,expanded,18.2,14.0,15.65,0.77,0.86
+Syphilis,570.2,569.8,0.999,expanded,8.6,4.8,6.1,0.56,0.71
+Gonorrhea,343.6,343.6,1.0,expanded,7.8,3.2,4.64,0.41,0.59
+Genital herpes,83.4,81.4,0.976,expanded,1.6,1.4,1.6,0.87,1.0
+Rabies,321.4,255.2,0.794,expanded,4.4,4.0,4.4,0.91,1.0
+Encephalitis,770.6,709.4,0.921,expanded,7.2,1.8,5.57,0.25,0.77
+Otitis media,297.6,294.0,0.988,expanded,8.2,1.6,5.41,0.2,0.66
+Varicella & herpes zoster,671.4,651.6,0.971,expanded,20.6,17.4,19.35,0.84,0.94
+Schistosomiasis,575.2,566.4,0.985,expanded,3.4,1.8,2.69,0.53,0.79
+Lymphatic filariasis,101.2,98.4,0.972,expanded,0.6,0.0,0.33,0.0,0.55
+Onchocerciasis,80.4,75.2,0.935,expanded,2.8,1.6,2.24,0.57,0.8
+Chagas disease,527.6,510.6,0.968,expanded,1.6,1.4,1.42,0.87,0.89
+Leishmaniasis,1097.0,1000.8,0.912,expanded,5.4,4.2,4.94,0.78,0.91
+African trypanosomiasis,124.6,120.2,0.965,expanded,1.0,0.6,0.87,0.6,0.87
+Cysticercosis,165.4,147.4,0.891,expanded,0.6,0.4,0.6,0.67,1.0
+Cystic echinococcosis,425.0,388.0,0.913,expanded,0.4,0.4,0.4,1.0,1.0
+Trachoma,62.4,62.2,0.997,expanded,1.2,1.0,1.1,0.83,0.92
+Hookworm,99.2,87.0,0.877,expanded,2.2,0.6,1.06,0.27,0.48
+Ascariasis,63.0,56.2,0.892,expanded,0.8,0.0,0.25,0.0,0.31
+Food-borne trematodiases,212.6,171.2,0.805,expanded,0.6,0.4,0.47,0.67,0.78
+Scabies,126.8,125.4,0.989,expanded,3.4,2.6,3.07,0.76,0.9
+Yellow fever,130.2,129.4,0.994,expanded,4.0,2.8,3.72,0.7,0.93
+Leprosy,313.6,313.2,0.999,expanded,2.2,2.0,2.04,0.91,0.93
+Preterm birth complications,3148.4,3135.6,0.996,expanded,127.6,81.6,106.9,0.64,0.84
+Neonatal encephalopathy,304.4,300.6,0.988,expanded,12.0,6.0,8.95,0.5,0.75
+Neonatal sepsis,266.2,265.4,0.997,expanded,5.0,2.0,3.74,0.4,0.75
+Maternal hemorrhage,393.2,392.8,0.999,expanded,21.2,11.4,18.11,0.54,0.85
+Pre-eclampsia & hypertensive disorders of pregnancy,1472.0,1471.8,1.0,expanded,39.4,23.2,32.01,0.59,0.81

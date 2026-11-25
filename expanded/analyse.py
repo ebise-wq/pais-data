@@ -1,8 +1,10 @@
 """Burden vs research with many more GBD causes: 13 original comparators + the causes in diseases.py.
 
 Run from the repo root: python3 -I expanded/analyse.py
-Inputs: expanded/counts_<date>.csv (fetch.py), analysis/plot_data_2021-2025.csv (13 comparators and
-ME/CFS), gbd/ (GBD 2023 level 3 and level 4 files).
+Inputs: expanded/counts_<date>.csv (fetch.py), expanded/cleaned_counts_2021-2025.csv (clean_papers.py,
+clean_trials.py), analysis/plot_data_2021-2025.csv (13 comparators and ME/CFS), gbd/ (GBD 2023 files).
+The per-disease table carries the cleaned counts as extra columns, and fits_2021-2025.csv has a row
+"All, cleaned counts" per metric: the 120-disease trend refitted on the cleaned counts (sensitivity check).
 Outputs (expanded/): burden_vs_research_expanded_2021-2025.csv, fits_2021-2025.csv,
 papers_vs_dalys_expanded.png, trials_vs_dalys_expanded.png.
 """
@@ -80,31 +82,47 @@ SETS = {
 }
 random.seed(20261111)
 fits, fit_rows = {}, []
+
+
+def add_fit(metric, sname, P, act, with_mecfs):
+    a, b, r2, s, se_b = fit(P)
+    fits[(metric, sname)] = (a, b, r2, s)
+    row = {"metric": metric, "set": sname, "n": len(P), "intercept_a": round(a, 4), "slope_b": round(b, 4),
+           "slope_se": round(se_b, 4), "r2": round(r2, 3), "resid_sd_log10": round(s, 3),
+           "mecfs_shortfall": "", "mecfs_shortfall_p5": "", "mecfs_shortfall_p95": "", "mecfs_resid_percentile": ""}
+    if with_mecfs:
+        # ME/CFS shortfall with burden uncertainty (lognormal from the 90% range) and trend uncertainty (bootstrap)
+        sig = math.log(me["hi"] / me["lo"]) / (2 * 1.6449)
+        sims = []
+        for _ in range(4000):
+            ab, bb, *_ = fit([random.choice(P) for _ in P])
+            d = me["dalys"] * math.exp(random.gauss(0, sig))
+            sims.append(10 ** (ab + bb * math.log10(d)) / act)
+        resid_me = math.log10(act) - (a + b * math.log10(me["dalys"]))
+        res = [y - a - b * x for x, y in P]
+        row.update(mecfs_shortfall=round(10 ** (a + b * math.log10(me["dalys"])) / act, 1),
+                   mecfs_shortfall_p5=round(pct(sims, .05), 1), mecfs_shortfall_p95=round(pct(sims, .95), 1),
+                   mecfs_resid_percentile=round(100 * sum(e < resid_me for e in res) / len(res), 1))
+    fit_rows.append(row)
+
+
 for metric, key in KEYS.items():
     for sname, sub in SETS.items():
         P = pts_for(sub, key)
         if len(P) < 4:
             continue
-        a, b, r2, s, se_b = fit(P)
-        fits[(metric, sname)] = (a, b, r2, s)
-        row = {"metric": metric, "set": sname, "n": len(P), "intercept_a": round(a, 4), "slope_b": round(b, 4),
-               "slope_se": round(se_b, 4), "r2": round(r2, 3), "resid_sd_log10": round(s, 3),
-               "mecfs_shortfall": "", "mecfs_shortfall_p5": "", "mecfs_shortfall_p95": "", "mecfs_resid_percentile": ""}
-        if sname in ("Original 13", "All", "All except cancers", "Non-cancer NCDs"):
-            # ME/CFS shortfall with burden uncertainty (lognormal from the 90% range) and trend uncertainty (bootstrap)
-            act = me[key]
-            sig = math.log(me["hi"] / me["lo"]) / (2 * 1.6449)
-            sims = []
-            for _ in range(4000):
-                ab, bb, *_ = fit([random.choice(P) for _ in P])
-                d = me["dalys"] * math.exp(random.gauss(0, sig))
-                sims.append(10 ** (ab + bb * math.log10(d)) / act)
-            resid_me = math.log10(act) - (a + b * math.log10(me["dalys"]))
-            res = [y - a - b * x for x, y in P]
-            row.update(mecfs_shortfall=round(10 ** (a + b * math.log10(me["dalys"])) / act, 1),
-                       mecfs_shortfall_p5=round(pct(sims, .05), 1), mecfs_shortfall_p95=round(pct(sims, .95), 1),
-                       mecfs_resid_percentile=round(100 * sum(e < resid_me for e in res) / len(res), 1))
-        fit_rows.append(row)
+        add_fit(metric, sname, P, me[key], sname in ("Original 13", "All", "All except cancers", "Non-cancer NCDs"))
+
+# Sensitivity check: the same 120-disease fit on cleaned counts (veterinary and abbreviation fixes for
+# papers; trials weighted by how closely they match the disease). Added after the main fits so the
+# random draws above are unchanged.
+cleaned = {r["disease"]: r for r in csv.DictReader(open(os.path.join(HERE, "cleaned_counts_2021-2025.csv")))}
+CLEAN_KEYS = {"papers": "papers_cleaned_per_year", "trials": "trials_weighted_per_year"}
+for r in rows:
+    for k in CLEAN_KEYS.values():
+        r[k] = float(cleaned[r["label"]][k])
+for metric, key in CLEAN_KEYS.items():
+    add_fit(metric, "All, cleaned counts", pts_for(rows, key), float(cleaned["ME/CFS"][key]), True)
 
 with open(os.path.join(HERE, "fits_2021-2025.csv"), "w", newline="") as f:
     w = csv.DictWriter(f, fieldnames=fit_rows[0].keys()); w.writeheader(); w.writerows(fit_rows)
@@ -120,6 +138,7 @@ for r in rows:
         t = 10 ** (a + b * math.log10(r["dalys"]))
         o[f"{metric}_trend"] = round(t, 1)
         o[f"{metric}_shortfall"] = round(t / r[key], 2) if r[key] > 0 else ""
+    o.update(papers_cleaned_per_year=r["papers_cleaned_per_year"], trials_weighted_per_year=r["trials_weighted_per_year"])
     out.append(o)
 out.sort(key=lambda o: -(o["papers_shortfall"] or 0))
 with open(os.path.join(HERE, "burden_vs_research_expanded_2021-2025.csv"), "w", newline="") as f:

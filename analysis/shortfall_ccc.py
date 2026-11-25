@@ -24,7 +24,17 @@ def avg(path):
     with open(path) as f:
         return {r["disease"]: sum(int(r[y]) for y in YEARS) / len(YEARS) for r in csv.DictReader(f)}
 
-pubs, trials = avg("pubmed/pubs_per_year_2026-11-08.csv"), avg("clinicaltrials/trials_per_year_2026-11-08.csv")
+
+def avg_long(path):
+    """2021-2025 average of the `title` count, from the long PubMed file (one row per disease and year)."""
+    tot = {}
+    with open(path) as f:
+        for r in csv.DictReader(f):
+            if r["year"] in YEARS:
+                tot[r["disease"]] = tot.get(r["disease"], 0) + int(r["title"])
+    return {d: v / len(YEARS) for d, v in tot.items()}
+
+pubs, trials = avg_long("pubmed/pubs_per_year_long_2026-11-08.csv"), avg("clinicaltrials/trials_per_year_2026-11-08.csv")
 # classic ME/CFS = ME/CFS papers/trials that do not also name long COVID
 pubs["classic"] = pubs["ME/CFS"] - sum(OVERLAP_PAPERS) / 5
 trials["classic"] = trials["ME/CFS"] - sum(OVERLAP_TRIALS) / 5

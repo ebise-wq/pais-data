@@ -5,8 +5,8 @@ Same 24 diseases as `../clinicaltrials/`.
 
 ## Files
 
-- `pubs_per_year_<date>.csv`: one row per disease, one column per year (1996–2026). Main measure (`title`).
-- `pubs_per_year_long_<date>.csv`: one row per disease and year, with all three counts.
+- `pubs_per_year_long_<date>.csv`: one row per disease and year (1996–2026), with all three counts.
+  (A wide copy of the `title` column, one column per year, was dropped on 25 Nov 2026 as a duplicate.)
 - `queries_<date>.csv`: the exact PubMed search string for each disease.
 
 ## Columns

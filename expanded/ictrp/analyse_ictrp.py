@@ -1,7 +1,7 @@
 """Trials in all WHO ICTRP registries vs ClinicalTrials.gov only, 2021-2025.
 
 Input: XML exports from the ICTRP search portal (trialsearch.who.int), one per search in
-search_strings.txt, saved gzipped in raw/. Run from the repo root:
+the five searches listed in README.md, saved gzipped in raw/. Run from the repo root:
     python3 -I expanded/ictrp/analyse_ictrp.py
 
 For each disease whose search terms were in an export:
@@ -14,8 +14,8 @@ For each disease whose search terms were in an export:
 - a non-ClinicalTrials.gov record whose secondary IDs include an NCT number is dropped as a
   duplicate of that ClinicalTrials.gov record, and records with the same public title are counted
   once (ClinicalTrials.gov first), which merges trials filed in two registries without a link
-Output: ictrp_vs_ctgov_2021-2025.csv and mecfs_shortfall_adjusted.csv (ME/CFS trial shortfall
-from ../fits_2021-2025.csv, scaled by comparator ratio / ME/CFS ratio)
+Output: ictrp_vs_ctgov_2021-2025.csv. Also prints the ME/CFS trial shortfall from
+../fits_2021-2025.csv scaled by comparator ratio / ME/CFS ratio (table in README.md).
 Data: WHO International Clinical Trials Registry Platform (ICTRP), exported 2026-11-19.
 """
 import collections, csv, glob, gzip, os, re, sys
@@ -148,8 +148,6 @@ for col, label in (("ratio_all_to_ctgov", "all registries"), ("ratio_excl_chictr
         summary.append({"registries": label, "comparison": name, "comparator_ratio": round(m, 2),
                         "mecfs_ratio": me[col], "mecfs_trials_shortfall_ctgov": base,
                         "mecfs_trials_shortfall_adjusted": round(base * m / me[col], 1)})
-with open(os.path.join(HERE, "mecfs_shortfall_adjusted.csv"), "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=summary[0].keys()); w.writeheader(); w.writerows(summary)
 for r in summary:
     print(r)
 for r in out:

@@ -16,8 +16,8 @@ Scripts: `clinicaltrials/sponsor_class.py` (fetch, one row per trial) → `analy
 Files: `clinicaltrials/sponsor_trials_2026-11-25.csv`, `sponsor_by_disease_2021-2025.csv`,
 `sponsor_by_year_2020-2026.csv`, `drug_trials_per_year.png`, `sponsor_per_year.png`, `sponsor_comparison.png`.
 `drug_trials_per_year.png` and `sponsor_per_year.png` are the same chart with the same layout, without and
-with the sponsor split, so the catalog page can toggle between them. Their totals match
-`clinicaltrials/drug_trials_per_year_2026-11-11.csv`.
+with the sponsor split, so the catalog page can toggle between them. Their long COVID and ME/CFS
+counts for 2020–2026 match the earlier separate pull of 11 Nov 2026 year by year.
 
 ## Results, 2021–2025
 

@@ -18,6 +18,20 @@ CACHE = os.path.join(HERE, "cache")
 EUTILS = "https://eutils.ncbi.nlm.nih.gov/entrez/eutils/esearch.fcgi"
 CTG = "https://clinicaltrials.gov/api/v2/studies"
 FIELDS = "NCTId,BriefTitle,Condition,StudyType,StartDate"
+# Cleaned counts (clean_papers.py, clean_trials.py) share one file. Each script writes its own columns.
+CLEANED = os.path.join(HERE, "cleaned_counts_2021-2025.csv")
+CLEANED_COLS = ["disease", "papers_per_year", "papers_cleaned_per_year", "papers_kept_share", "trials_source",
+                "trials_raw_per_year", "trials_title_per_year", "trials_weighted_per_year", "trials_title_share",
+                "trials_weighted_share"]
+
+
+def save_cleaned(rows):
+    """Merge per-disease columns into cleaned_counts_2021-2025.csv, keeping the other script's columns."""
+    table = {r["disease"]: r for r in csv.DictReader(open(CLEANED))} if os.path.exists(CLEANED) else {}
+    for r in rows:
+        table.setdefault(r["disease"], {"disease": r["disease"]}).update(r)
+    with open(CLEANED, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=CLEANED_COLS, restval=""); w.writeheader(); w.writerows(table.values())
 
 
 def get(url, parse_json=False):

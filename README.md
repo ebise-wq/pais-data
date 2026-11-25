@@ -57,13 +57,10 @@ Papers and trials per year (2021–2025) set against global DALYs (GBD 2023) for
 
 | File | What it is | Rows |
 |---|---|---|
-| [`expanded/burden_vs_research_expanded_2021-2025.csv`](expanded/burden_vs_research_expanded_2021-2025.csv) | One row per disease: DALYs, papers and trials per year, trend value and shortfall. | 120 |
-| [`expanded/fits_2021-2025.csv`](expanded/fits_2021-2025.csv) | Log-log trend fits for four disease subsets, with the ME/CFS shortfall under each. | 14 |
+| [`expanded/burden_vs_research_expanded_2021-2025.csv`](expanded/burden_vs_research_expanded_2021-2025.csv) | One row per disease: DALYs, papers and trials per year (raw and cleaned), trend value and shortfall. | 120 |
+| [`expanded/fits_2021-2025.csv`](expanded/fits_2021-2025.csv) | Log-log trend fits for several disease subsets and for the cleaned counts, with the ME/CFS shortfall under each. | 16 |
 | [`expanded/counts_2026-11-11.csv`](expanded/counts_2026-11-11.csv) | Raw papers and trials per year, 2021–2025, for the 111 fetched causes. | 111 |
 | [`expanded/queries_2026-11-11.csv`](expanded/queries_2026-11-11.csv) | The exact PubMed and ClinicalTrials.gov search for each cause. | 111 |
-| [`expanded/papers_cleaned_2021-2025.csv`](expanded/papers_cleaned_2021-2025.csv) | Paper counts after removing veterinary papers and false abbreviation matches. | 125 |
-| [`expanded/trials_title_filtered_2021-2025.csv`](expanded/trials_title_filtered_2021-2025.csv) | Trial counts weighted by how closely each trial matches the disease. | 125 |
-| [`expanded/sensitivity_cleaned_2021-2025.csv`](expanded/sensitivity_cleaned_2021-2025.csv) | Trend refitted on the cleaned counts. ME/CFS barely moves (10.2× papers, 7.5× trials). | 4 |
 
 Notes: [`expanded/README.md`](expanded/README.md)
 
@@ -74,10 +71,8 @@ ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5×
 | File | What it is | Rows |
 |---|---|---|
 | [`expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv`](expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv) | Trials per disease in all registries vs ClinicalTrials.gov, 31 diseases. | 31 |
-| [`expanded/ictrp/mecfs_shortfall_adjusted.csv`](expanded/ictrp/mecfs_shortfall_adjusted.csv) | ME/CFS trial shortfall rescaled for trials in other registries. | 4 |
 | [`expanded/ictrp/mecfs_trial_criteria.csv`](expanded/ictrp/mecfs_trial_criteria.csv) | Every ME/CFS trial started 2021–2025, classified by diagnostic criteria. Checked by hand. | 114 |
 | [`expanded/ictrp/ms_ra_trial_sample.csv`](expanded/ictrp/ms_ra_trial_sample.csv) | Random sample of 60 MS and 60 RA trials, classified by hand for comparison. | 120 |
-| [`expanded/ictrp/search_strings.txt`](expanded/ictrp/search_strings.txt) | The five ICTRP condition searches. |  |
 | [`expanded/ictrp/raw/export*.xml.gz`](expanded/ictrp/raw) | Raw ICTRP XML exports (5 files), downloaded by hand on 19 Nov 2026. WHO ICTRP terms: no commercial use. |  |
 
 Notes: [`expanded/ictrp/README.md`](expanded/ictrp/README.md)
@@ -92,7 +87,6 @@ Long COVID and ME/CFS drug trials, by sponsor type: [`analysis/sponsor_per_year.
 
 | File | What it is | Rows |
 |---|---|---|
-| [`clinicaltrials/drug_trials_per_year_2026-11-11.csv`](clinicaltrials/drug_trials_per_year_2026-11-11.csv) | Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS. | 2 |
 | [`analysis/sponsor_by_disease_2021-2025.csv`](analysis/sponsor_by_disease_2021-2025.csv) | Per disease: drug trials, commercial count and share, large-pharma-led trials. | 26 |
 | [`analysis/sponsor_by_year_2020-2026.csv`](analysis/sponsor_by_year_2020-2026.csv) | Drug trials and commercial trials per disease per start year. | 182 |
 | [`clinicaltrials/sponsor_trials_2026-11-25.csv`](clinicaltrials/sponsor_trials_2026-11-25.csv) | One row per drug trial per disease: lead sponsor, sponsor class, phase, title. | 13,865 |
@@ -107,11 +101,8 @@ After adjusting for burden, the share of patients who are women shows no detecta
 
 | File | What it is | Rows |
 |---|---|---|
-| [`sex/sex_labels.csv`](sex/sex_labels.csv) | Female share of patients per disease, with confidence and basis. Coded by hand. | 120 |
 | [`sex/sex_by_disease_2021-2025.csv`](sex/sex_by_disease_2021-2025.csv) | Per disease: sex class, female share, DALYs, papers and trials relative to trend. | 120 |
-| [`sex/sex_models_2021-2025.csv`](sex/sex_models_2021-2025.csv) | All regression models: multiplier per +10 pp female, CI, p and permutation p. | 28 |
-| [`sex/sex_robustness_2021-2025.csv`](sex/sex_robustness_2021-2025.csv) | Robustness checks: cleaned counts, dropped groups, label noise and more. | 32 |
-| [`sex/sex_class_summary_2021-2025.csv`](sex/sex_class_summary_2021-2025.csv) | Average papers and trials vs trend for each of the five sex classes. | 5 |
+| [`sex/sex_results_2021-2025.csv`](sex/sex_results_2021-2025.csv) | Every regression model, robustness check and sex-class average in one table (column `table` says which). | 70 |
 
 Notes: [`sex/README.md`](sex/README.md)
 
@@ -124,8 +115,7 @@ The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed pap
 | [`clinicaltrials/counts_2026-11-08.csv`](clinicaltrials/counts_2026-11-08.csv) | Study counts for 24 diseases: all studies, trials, randomised, drug, phase and industry-led. | 24 |
 | [`clinicaltrials/trials_per_year_2026-11-08.csv`](clinicaltrials/trials_per_year_2026-11-08.csv) | Interventional trials per start year, 1996–2026, for 24 diseases. | 24 |
 | [`clinicaltrials/nct_ids_2026-11-08.json`](clinicaltrials/nct_ids_2026-11-08.json) | The trial IDs (NCT numbers) selected for each of the 24 diseases. | 24 |
-| [`pubmed/pubs_per_year_2026-11-08.csv`](pubmed/pubs_per_year_2026-11-08.csv) | Papers per year with the disease in the title, 1996–2026, for 24 diseases. One column per year. | 24 |
-| [`pubmed/pubs_per_year_long_2026-11-08.csv`](pubmed/pubs_per_year_long_2026-11-08.csv) | The same papers per year in long format, plus publication-date and MeSH counts. | 744 |
+| [`pubmed/pubs_per_year_long_2026-11-08.csv`](pubmed/pubs_per_year_long_2026-11-08.csv) | Papers per year with the disease in the title, 1996–2026, for 24 diseases, plus publication-date and MeSH counts. | 744 |
 | [`pubmed/queries_2026-11-08.csv`](pubmed/queries_2026-11-08.csv) | The exact PubMed search string for each disease. | 24 |
 | [`gbd/IHME-GBD_2023_DATA-*.csv`](gbd) | GBD 2023 DALYs, global, both sexes, all ages, level-3 and level-4 causes (2 files). Cite as in gbd/citation.txt. | 5,553 |
 

@@ -1,11 +1,10 @@
 """Is research volume (papers, trials) linked to whether a disease mostly affects women or men?
 
 Run from the repo root: python3 -I sex/analyse_sex.py
-Inputs: expanded/burden_vs_research_expanded_2021-2025.csv (120 diseases: DALYs, papers, trials),
-expanded/papers_cleaned_2021-2025.csv, expanded/trials_title_filtered_2021-2025.csv,
-sex/sex_labels.csv (approximate female share of cases, coded by hand).
-Outputs (sex/): sex_models_2021-2025.csv, sex_robustness_2021-2025.csv, sex_by_disease_2021-2025.csv,
-sex_residuals.png.
+Inputs: expanded/burden_vs_research_expanded_2021-2025.csv (120 diseases: DALYs, papers, trials,
+cleaned counts), sex/sex_labels.csv (approximate female share of cases, coded by hand).
+Outputs (sex/): sex_results_2021-2025.csv (all models, robustness checks and sex-class averages, one
+table; the `table` column says which), sex_by_disease_2021-2025.csv.
 
 Research volume tracks burden, so every model adjusts for log10 DALYs. Main outcome: log10 papers or
 trials per year. Main exposure: female share of cases (0-1), reported per +10 percentage points.
@@ -27,10 +26,6 @@ d = pd.read_csv(os.path.join(EXP, "burden_vs_research_expanded_2021-2025.csv"))
 lab = pd.read_csv(os.path.join(HERE, "sex_labels.csv"))
 d = d.merge(lab, on="label", how="left", validate="1:1")
 assert d["female_share"].notna().all()
-pc = pd.read_csv(os.path.join(EXP, "papers_cleaned_2021-2025.csv")).rename(columns={"disease": "label"})
-tc = pd.read_csv(os.path.join(EXP, "trials_title_filtered_2021-2025.csv")).rename(columns={"disease": "label"})
-d = d.merge(pc[["label", "papers_cleaned_per_year"]], on="label", how="left")
-d = d.merge(tc[["label", "trials_weighted_per_year"]], on="label", how="left")
 
 
 def sex_class(f):
@@ -138,7 +133,6 @@ for metric, y in OUT.items():
 models = pd.DataFrame(rows)
 models["perm_p"] = [perms.get((r.metric, r.model), np.nan) if (r.term == "f10" and r.model in ("DALYs", "DALYs + group"))
                     else np.nan for r in models.itertuples()]
-models.to_csv(os.path.join(HERE, "sex_models_2021-2025.csv"), index=False)
 
 # Robustness: main model (DALYs + f10, non-sex-specific) under variations
 rob = []
@@ -183,7 +177,6 @@ for metric, y in OUT.items():
     rob.append({"metric": metric, "variant": "label noise (2,000 draws): median, 5-95% of estimates", "n": len(nonspec),
                 "multiplier": round(10 ** np.median(bs), 3), "ci_low": round(10 ** np.percentile(bs, 5), 3),
                 "ci_high": round(10 ** np.percentile(bs, 95), 3), "p": round(float(np.mean(np.array(ps) < 0.05)), 3)})
-pd.DataFrame(rob).to_csv(os.path.join(HERE, "sex_robustness_2021-2025.csv"), index=False)
 
 # Per disease: residual from the DALY trend (all 120), so the reader can see which diseases drive it
 for metric, y in OUT.items():
@@ -202,4 +195,16 @@ print()
 print(models[["metric", "sample", "model", "term", "n", "multiplier", "mult_ci_low", "mult_ci_high", "p", "perm_p"]].to_string())
 print()
 print(pd.DataFrame(rob).to_string())
-summ.to_csv(os.path.join(HERE, "sex_class_summary_2021-2025.csv"))
+
+# One results file: regression models, robustness checks, and sex-class averages (actual / trend).
+res_models = models.rename(columns={"mult_ci_low": "ci_low", "mult_ci_high": "ci_high"}).assign(table="model")
+res_rob = pd.DataFrame(rob).rename(columns={"variant": "model"}).assign(table="robustness", sample="non-sex-specific",
+                                                                       term="f10")
+res_rob.loc[res_rob["model"].str.startswith("label noise"), "note"] = "p = share of draws with p < 0.05"
+res_cls = pd.concat([pd.DataFrame({"table": "sex class", "metric": m, "sample": "all 120", "model": "DALYs trend",
+                                   "term": summ.index, "n": summ["n"].to_numpy(),
+                                   "multiplier": summ[f"{m}_vs_trend"].to_numpy(),
+                                   "note": "geometric mean of actual / trend"}) for m in ("papers", "trials")])
+COLS = ["table", "metric", "sample", "model", "term", "n", "coef", "se", "p", "perm_p", "multiplier", "ci_low",
+        "ci_high", "note"]
+pd.concat([res_models, res_rob, res_cls])[COLS].to_csv(os.path.join(HERE, "sex_results_2021-2025.csv"), index=False)

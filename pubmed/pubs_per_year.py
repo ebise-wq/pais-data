@@ -100,8 +100,3 @@ if __name__ == "__main__":
         print(d, sum(r["title"] for r in rows if r["disease"] == d and 2021 <= r["year"] <= 2025), flush=True)
     with open(f"pubs_per_year_long_{today}.csv", "w", newline="") as f:
         w = csv.DictWriter(f, fieldnames=rows[0].keys()); w.writeheader(); w.writerows(rows)
-    # wide format matching clinicaltrials/trials_per_year_*.csv (title counts)
-    with open(f"pubs_per_year_{today}.csv", "w", newline="") as f:
-        w = csv.writer(f); w.writerow(["disease"] + [str(y) for y in YEARS])
-        for d in D:
-            w.writerow([d] + [r["title"] for r in rows if r["disease"] == d])

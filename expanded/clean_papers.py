@@ -10,13 +10,13 @@
    AMD: acid mine drainage (2/15) -> NOT ("acid mine"[ti] OR drainage[ti])
    IBS: metallurgy symposium, a device name (2/15); IBS is not in the comparison (no GBD cause)
    SLE, COPD, HCV: 0/15 off-topic, unchanged.
-Output: papers_cleaned_2021-2025.csv. Run from repo root: python3 -I expanded/clean_papers.py
+Output: the papers_* columns of cleaned_counts_2021-2025.csv. Run from repo root: python3 -I expanded/clean_papers.py
 """
 import csv, os, sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
 from diseases import D
-from fetch import pubmed_count
+from fetch import pubmed_count, save_cleaned
 
 VET = ("cattle OR cow OR cows OR bovine OR calves OR sheep OR ovine OR lamb OR lambs OR goat OR goats OR caprine OR "
        "swine OR pig OR pigs OR piglets OR porcine OR boar OR dog OR dogs OR canine OR puppies OR cat OR cats OR feline OR "
@@ -45,7 +45,6 @@ for name, q in queries.items():
     before = pubmed_count(f"({q}) AND 2021:2025[edat]") / 5
     after = pubmed_count(f"({q2}) AND 2021:2025[edat]") / 5
     rows.append({"disease": name, "papers_per_year": before, "papers_cleaned_per_year": after,
-                 "kept_share": round(after / before, 3) if before else ""})
+                 "papers_kept_share": round(after / before, 3) if before else ""})
     print(f"{name:45s} {before:8.1f} -> {after:8.1f}", flush=True)
-with open(os.path.join(HERE, "papers_cleaned_2021-2025.csv"), "w", newline="") as f:
-    w = csv.DictWriter(f, fieldnames=rows[0].keys()); w.writeheader(); w.writerows(rows)
+save_cleaned(rows)  # papers_* columns of cleaned_counts_2021-2025.csv

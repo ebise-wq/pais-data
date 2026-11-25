@@ -91,7 +91,9 @@ if "--check" in sys.argv:
 # Sections with "hidden": true stay in catalog.json (so --check passes) but are left off the page.
 sections = [s for s in sections if not s.get("hidden")]
 n_charts = sum(1 for s in sections for c in s["charts"] if not c.get("old"))
-n_data = sum(len(d["files"]) for s in sections for d in s["data"])
+# Data entries with "hidden": true (pipeline inputs whose contents are in other tables) stay catalogued
+# but are not shown.
+n_data = sum(len(d["files"]) for s in sections for d in s["data"] if not d.get("hidden"))
 last = max(i["updated"] for s in sections for i in s["charts"] + s["data"])
 built = datetime.date.today().isoformat()
 version = CAT["page_version"]
@@ -174,8 +176,8 @@ def data_row(d):
 def section_html(s):
     charts = [c for c in s["charts"] if not c.get("old")]
     old_charts = [c for c in s["charts"] if c.get("old")]
-    data = [d for d in s["data"] if not d.get("old")]
-    old_data = [d for d in s["data"] if d.get("old")]
+    data = [d for d in s["data"] if not d.get("old") and not d.get("hidden")]
+    old_data = [d for d in s["data"] if d.get("old") and not d.get("hidden")]
     readmes = [s["readme"], *s.get("extra_readmes", [])]
     readme_links = "".join(link(BLOB + r, e(r)) for r in readmes)
     parts = [f"""
@@ -413,7 +415,7 @@ def md_section(s):
             if c.get("toggle"):
                 lines.append(f'\n{c["title"]}, {c["toggle"]["label"].lower()}: [`{c["toggle"]["file"]}`]({c["toggle"]["file"]})')
         lines.append("")
-    data = [d for d in s["data"] if not d.get("old")]
+    data = [d for d in s["data"] if not d.get("old") and not d.get("hidden")]
     if data:
         lines += ["| File | What it is | Rows |", "|---|---|---|"]
         for d in data:

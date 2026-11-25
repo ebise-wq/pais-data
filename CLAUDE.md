@@ -23,6 +23,10 @@
 - A chart can carry a `"toggle"` (another PNG with the same layout and a button label). The page
   shows a two-way switch between the two images. Draw both views from one function so they line up.
 - Data files show in a collapsed block under each section's charts.
+- A data entry with `"hidden": true` is catalogued but not shown: use it for pipeline inputs whose
+  contents already appear in another table (e.g. `sex/sex_labels.csv`, `expanded/cleaned_counts_*.csv`).
+- Keep the number of files low: add columns or rows to an existing table rather than a new small file,
+  put short tables and search strings in the folder README, and never save the same data in two shapes.
 - Bump `page_version` in `catalog.json` whenever the page changes, so the user can tell which
   version is showing.
 - The page is also published as a private claude.ai artifact:

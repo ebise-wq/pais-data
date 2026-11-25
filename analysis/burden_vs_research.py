@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 YEARS = [str(y) for y in range(2021, 2026)]
 GBD = ["gbd/IHME-GBD_2023_DATA-08b3fc6f-1.csv",  # level 3
        "gbd/IHME-GBD_2023_DATA-ff76c2f3-1.csv"]  # level 4
-PUBS = "pubmed/pubs_per_year_2026-11-08.csv"
+PUBS = "pubmed/pubs_per_year_long_2026-11-08.csv"
 TRIALS = "clinicaltrials/trials_per_year_2026-11-08.csv"
 MECFS_DALYS = 25e6  # set by hand: includes post-COVID ME/CFS; not a GBD cause
 
@@ -35,6 +35,16 @@ def avg_rows(path):
     with open(path) as f:
         return {r["disease"]: sum(int(r[y]) for y in YEARS) / len(YEARS) for r in csv.DictReader(f)}
 
+
+def avg_long(path):
+    """2021-2025 average of the `title` count, from the long PubMed file (one row per disease and year)."""
+    tot = {}
+    with open(path) as f:
+        for r in csv.DictReader(f):
+            if r["year"] in YEARS:
+                tot[r["disease"]] = tot.get(r["disease"], 0) + int(r["title"])
+    return {d: v / len(YEARS) for d, v in tot.items()}
+
 gbd = {}
 for path in GBD:
   with open(path) as f:
@@ -42,7 +52,7 @@ for path in GBD:
         if r["measure_id"] == "2" and r["metric_id"] == "1" and r["year"] == "2023":
             gbd[r["cause_name"]] = tuple(float(r[k]) for k in ("val", "lower", "upper"))
 
-pubs, trials = avg_rows(PUBS), avg_rows(TRIALS)
+pubs, trials = avg_long(PUBS), avg_rows(TRIALS)
 rows = [{"label": "ME/CFS", "gbd_cause": "(set by hand)", "dalys": MECFS_DALYS,
          "dalys_lower": "", "dalys_upper": "",
          "pubs_per_year": pubs["ME/CFS"], "trials_per_year": trials["ME/CFS"]}]
