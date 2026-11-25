@@ -1,8 +1,8 @@
 """Build the catalog site (docs/index.html plus one page per topic, docs/<section id>.html) and the
 catalog section of README.md from catalog.json.
 
-A section can carry "interactive": {"html": fragment, "data": json, "charts": n, "more": text}. The
-fragment is inserted with its data ("data" is optional, for fragments that hold their own numbers); the part between <!-- more:start --> and <!-- more:end --> shows on the
+A section can carry "interactive": {"html": fragment, "data": json or csv (optional), "charts": n, "more": text}. The
+fragment is inserted with its data (placeholder __DATA__ or __BVR_DATA__; a CSV becomes a list of row objects); the part between <!-- more:start --> and <!-- more:end --> shows on the
 topic page only, replaced on the overview by a link to it. Parts between <!-- page-only:start --> and
 <!-- page-only:end --> also show on the topic page only, with nothing in their place. A chart's "toggle" can be one alternative image or a list of them.
 
@@ -203,16 +203,31 @@ def data_row(d):
         </li>"""
 
 
+def load_data(path):
+    """JSON as is; CSV as a list of row objects, with numbers parsed and blanks as null."""
+    if not path.endswith(".csv"):
+        return json.load(open(path))
+
+    def cell(v):
+        if v == "":
+            return None
+        try:
+            return float(v) if any(c in v for c in ".eE") else int(v)
+        except ValueError:
+            return v
+    with open(path, newline="", encoding="utf-8") as f:
+        return [{k: cell(v) for k, v in r.items()} for r in csv.DictReader(f)]
+
+
 def interactive_html(s, full):
     spec = s["interactive"]
     frag = open(spec["html"]).read()
-    if spec.get("data"):
-        data = json.dumps(json.load(open(spec["data"])), separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
-        frag = frag.replace("__BVR_DATA__", data)
+    if spec.get("data"):  # optional: some fragments hold their own numbers
+        data = json.dumps(load_data(spec["data"]), separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+        frag = frag.replace("__BVR_DATA__", data).replace("__DATA__", data)
     if not full:
         lead = spec.get("more", "Rankings, comparator sets, the full data table and caveats")
-        more = (f'<p class="bvr-more">{e(lead)}: '
-                f'{page_link(s["id"], "open the topic page")}.</p>')
+        more = f'<p class="bvr-more">{e(lead)}: {page_link(s["id"], "open the topic page")}.</p>'
         frag = re.sub(r"<!-- more:start -->.*?<!-- more:end -->", more, frag, flags=re.S)
         frag = re.sub(r"<!-- page-only:start -->.*?<!-- page-only:end -->", "", frag, flags=re.S)
     return frag

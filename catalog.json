@@ -1,7 +1,7 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 7,
+  "page_version": 8,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
@@ -194,6 +194,27 @@
           "script": "sex/analyse_sex.py"
         }
       ]
+    },
+    {
+      "id": "funding",
+      "title": "Public biomedical R&D funding and output, 2024",
+      "folder": "funding/",
+      "readme": "funding/README.md",
+      "finding": "Government biomedical R&D budgets set against medical papers and citations, 19 countries. The US spends 32 bn PPS; China's budget is a guess (about 14 bn). Papers grow more slowly than budgets (log-log slope 0.76). Portugal publishes most per unit of budget, Japan and the US least. Seven budgets are estimates, so this is a rough signal, not an efficiency ranking.",
+      "charts": [],
+      "data": [
+        {
+          "file": "funding/biomedical_rnd_2024.csv",
+          "about": "One row per country or funder: 2024 budget (reported, estimated or guessed, with range and % of GDP), its split by funding type, medicine papers 1999–2024 and 2024 citations, and how each estimate was built. Compiled in a separate session; that code is not in the repo.",
+          "script": null
+        }
+      ],
+      "interactive": {
+        "html": "funding/funding_interactive.html",
+        "data": "funding/biomedical_rnd_2024.csv",
+        "charts": 3,
+        "more": "Notes on every budget, caveats and the full data table"
+      }
     },
     {
       "id": "burden-13",

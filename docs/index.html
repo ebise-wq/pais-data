@@ -139,10 +139,10 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 <div class="wrap top">
   <h1><span>PAIS</span> Data Catalog</h1>
   <p class="tagline">Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.</p>
-  <div class="stats"><span><b>12</b> charts</span><span><b>25</b> data files</span>
+  <div class="stats"><span><b>15</b> charts</span><span><b>26</b> data files</span>
     <span>Last change <b>25 Nov 2026</b></span><span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code on GitHub</a></span></div>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="#burden-120">Research vs disease burden</a><a href="#ictrp">Trials in all registries</a><a href="#trials">Long COVID and ME/CFS trials</a><a href="#sex">Research by which sex a disease mostly affects</a><a href="#pais-burden">PAIS burden and ME</a><a href="#sources">Source data</a></div></nav>
+<nav class="nav" aria-label="Topics"><div class="wrap"><a href="#burden-120">Research vs disease burden</a><a href="#ictrp">Trials in all registries</a><a href="#trials">Long COVID and ME/CFS trials</a><a href="#sex">Research by which sex a disease mostly affects</a><a href="#funding">Public biomedical R&amp;D funding and output</a><a href="#pais-burden">PAIS burden and ME</a><a href="#sources">Source data</a></div></nav>
 <main class="wrap">
 
   <section id="burden-120">
@@ -743,6 +743,464 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
         </li>
     </ul></details>
   </section>
+  <section id="funding">
+    <header class="sec-head">
+      <h2>Public biomedical R&amp;D funding and output, 2024</h2>
+      <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/funding/README.md" target="_blank" rel="noopener">funding/README.md</a></div>
+      <a class="open" href="funding.html">Open page →</a>
+    </header>
+    <p class="finding">Government biomedical R&amp;D budgets set against medical papers and citations, 19 countries. The US spends 32 bn PPS; China&#x27;s budget is a guess (about 14 bn). Papers grow more slowly than budgets (log-log slope 0.76). Portugal publishes most per unit of budget, Japan and the US least. Seven budgets are estimates, so this is a rough signal, not an efficiency ranking.</p>
+<!-- Interactive "public biomedical R&D funding vs research output" chart for the catalog pages.
+     tools/build_catalog.py inserts this into docs/index.html and docs/funding.html, replacing
+     [{"country":"United States","iso2":"US","budget_status":"reported","budget_mio_pps":31997.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.17,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":31997.4,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":"reported","gbard_flags":"p","med_docs_2024":267415,"med_citations_2024":1250351,"med_self_citations_2024":477472,"med_citations_excl_self_2024":772879,"med_docs_1999":131805,"med_docs_2004":155388,"med_docs_2009":187105,"med_docs_2014":219676,"med_docs_2019":250996,"budget_method":null,"note":"NABS07 only; comprehensive for the US (NIH grants include overhead; no GUF stream)."},{"country":"China","iso2":"CN","budget_status":"guess","budget_mio_pps":14000.0,"budget_lo_mio_pps":9400.0,"budget_hi_mio_pps":18700.0,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":251513,"med_citations_2024":1247457,"med_self_citations_2024":825327,"med_citations_excl_self_2024":422130,"med_docs_1999":7592,"med_docs_2004":21894,"med_docs_2009":47767,"med_docs_2014":84007,"med_docs_2019":143696,"budget_method":"Guess: government R&D all fields (~156 bn PPP) x assumed 6-12% health share. No comparable budget published.","note":null},{"country":"Japan","iso2":"JP","budget_status":"estimated","budget_mio_pps":6300.0,"budget_lo_mio_pps":5000.0,"budget_hi_mio_pps":7900.0,"budget_pct_gdp":0.14,"pct_gdp_lo":0.11,"pct_gdp_hi":0.18,"nabs07_directed_mio_pps":2625.0,"nabs123_univ_funds_mio_pps":3300.0,"nabs133_other_mio_pps":375.0,"components_basis":"reported NABS07, rest estimated","gbard_flags":"d","med_docs_2024":47766,"med_citations_2024":178864,"med_self_citations_2024":38327,"med_citations_excl_self_2024":140537,"med_docs_1999":37388,"med_docs_2004":38077,"med_docs_2009":38248,"med_docs_2014":40890,"med_docs_2019":44338,"budget_method":"Reported NABS07 (2,625) scaled for missing university block funds, x1.9-3.0 (structural comparators DE/NL).","note":null},{"country":"Germany","iso2":"DE","budget_status":"reported","budget_mio_pps":5593.2,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.14,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":2078.2,"nabs123_univ_funds_mio_pps":3113.2,"nabs133_other_mio_pps":401.8,"components_basis":"reported","gbard_flags":null,"med_docs_2024":59698,"med_citations_2024":320131,"med_self_citations_2024":62390,"med_citations_excl_self_2024":257741,"med_docs_1999":31492,"med_docs_2004":36554,"med_docs_2009":42586,"med_docs_2014":48932,"med_docs_2019":56089,"budget_method":null,"note":null},{"country":"United Kingdom","iso2":"GB","budget_status":"estimated","budget_mio_pps":3308.0,"budget_lo_mio_pps":2950.0,"budget_hi_mio_pps":3700.0,"budget_pct_gdp":0.11,"pct_gdp_lo":0.105,"pct_gdp_hi":0.115,"nabs07_directed_mio_pps":2242.0,"nabs123_univ_funds_mio_pps":1066.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":74978,"med_citations_2024":450012,"med_self_citations_2024":88616,"med_citations_excl_self_2024":361396,"med_docs_1999":37988,"med_docs_2004":44157,"med_docs_2009":53098,"med_docs_2014":60844,"med_docs_2019":70668,"budget_method":"Not in GBARD since Brexit. NIHR (GBP 1,638m) + MRC (GBP 604m) + ~28% (22-35%) medical share of Research England QR (GBP 2,006m), FY2024/25, x1.18 PPS/GBP.","note":null},{"country":"South Korea","iso2":"KR","budget_status":"estimated","budget_mio_pps":3250.0,"budget_lo_mio_pps":2600.0,"budget_hi_mio_pps":3900.0,"budget_pct_gdp":0.11,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":2300.0,"nabs123_univ_funds_mio_pps":950.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":28258,"med_citations_2024":150328,"med_self_citations_2024":24087,"med_citations_excl_self_2024":126241,"med_docs_1999":3391,"med_docs_2004":6534,"med_docs_2009":13409,"med_docs_2014":21954,"med_docs_2019":26784,"budget_method":"Multi-ministry government health/bio R&D ~KRW 2.8 tn (MOHW + MSIT + others), at ~KRW 860 per PPP$. Aggregation, not a single official line.","note":null},{"country":"Italy","iso2":"IT","budget_status":"estimated","budget_mio_pps":3051.0,"budget_lo_mio_pps":2739.0,"budget_hi_mio_pps":4544.0,"budget_pct_gdp":0.13,"pct_gdp_lo":0.117,"pct_gdp_hi":0.194,"nabs07_directed_mio_pps":1643.0,"nabs123_univ_funds_mio_pps":1200.0,"nabs133_other_mio_pps":208.0,"components_basis":"reported NABS07, rest estimated","gbard_flags":null,"med_docs_2024":53201,"med_citations_2024":321880,"med_self_citations_2024":74328,"med_citations_excl_self_2024":247552,"med_docs_1999":18454,"med_docs_2004":22472,"med_docs_2009":29248,"med_docs_2014":36078,"med_docs_2019":43738,"budget_method":"Reported NABS07 (1,643; GUF lines blank) x Spain/Portugal broad-sum ratio (1.67-2.05); high bound France-like (2.77).","note":null},{"country":"EU institutions","iso2":"EU","budget_status":"funder","budget_mio_pps":2650.0,"budget_lo_mio_pps":2400.0,"budget_hi_mio_pps":3100.0,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":null,"med_citations_2024":null,"med_self_citations_2024":null,"med_citations_excl_self_2024":null,"med_docs_1999":null,"med_docs_2004":null,"med_docs_2009":null,"med_docs_2014":null,"med_docs_2019":null,"budget_method":"EU budget, ~EUR 2.5 bn/yr 2021-27: Horizon Europe Cluster 1 Health, IHI (EU share), EDCTP3 (EU share), EU4Health R&D slice, plus health share of ERC (~22.6%, from 2025 StG panel counts) and MSCA. Additional to national GBARD.","note":null},{"country":"Turkey","iso2":"TR","budget_status":"reported","budget_mio_pps":2507.8,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.1,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":109.3,"nabs123_univ_funds_mio_pps":2387.8,"nabs133_other_mio_pps":10.7,"components_basis":"reported","gbard_flags":"e","med_docs_2024":26657,"med_citations_2024":94338,"med_self_citations_2024":17069,"med_citations_excl_self_2024":77269,"med_docs_1999":3787,"med_docs_2004":9324,"med_docs_2009":12813,"med_docs_2014":18251,"med_docs_2019":17822,"budget_method":null,"note":"Reported, but ~95% is NABS123 (apportioned university block funds, Eurostat-estimated); NABS123/133 first reported in 2024."},{"country":"France","iso2":"FR","budget_status":"reported","budget_mio_pps":2325.1,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.08,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":840.7,"nabs123_univ_funds_mio_pps":1180.1,"nabs133_other_mio_pps":304.3,"components_basis":"reported","gbard_flags":null,"med_docs_2024":36571,"med_citations_2024":230904,"med_self_citations_2024":31751,"med_citations_excl_self_2024":199153,"med_docs_1999":23255,"med_docs_2004":24827,"med_docs_2009":29533,"med_docs_2014":33370,"med_docs_2019":36310,"budget_method":null,"note":null},{"country":"Spain","iso2":"ES","budget_status":"reported","budget_mio_pps":2186.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.12,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":1311.4,"nabs123_univ_funds_mio_pps":663.1,"nabs133_other_mio_pps":211.8,"components_basis":"reported","gbard_flags":null,"med_docs_2024":36519,"med_citations_2024":212372,"med_self_citations_2024":32917,"med_citations_excl_self_2024":179455,"med_docs_1999":12628,"med_docs_2004":16332,"med_docs_2009":22072,"med_docs_2014":26808,"med_docs_2019":31391,"budget_method":null,"note":null},{"country":"Netherlands","iso2":"NL","budget_status":"reported","budget_mio_pps":1980.7,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.21,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":628.4,"nabs123_univ_funds_mio_pps":1190.4,"nabs133_other_mio_pps":161.9,"components_basis":"reported","gbard_flags":"b","med_docs_2024":27612,"med_citations_2024":190336,"med_self_citations_2024":25257,"med_citations_excl_self_2024":165079,"med_docs_1999":10419,"med_docs_2004":13323,"med_docs_2009":18593,"med_docs_2014":22420,"med_docs_2019":25816,"budget_method":null,"note":"Series break flag (b)."},{"country":"Canada","iso2":"CA","budget_status":"estimated","budget_mio_pps":1760.0,"budget_lo_mio_pps":1400.0,"budget_hi_mio_pps":2290.0,"budget_pct_gdp":0.07,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":1400.0,"nabs123_univ_funds_mio_pps":360.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":44758,"med_citations_2024":257181,"med_self_citations_2024":41350,"med_citations_excl_self_2024":215831,"med_docs_1999":15062,"med_docs_2004":19319,"med_docs_2009":27190,"med_docs_2014":33480,"med_docs_2019":41541,"budget_method":"Federal only: CIHR (~CAD 1.3 bn) + health share of other federal R&D ~CAD 2.2 bn, at ~CAD 1.25 per PPP$. Excludes provincial funding.","note":null},{"country":"Australia","iso2":"AU","budget_status":"estimated","budget_mio_pps":1241.0,"budget_lo_mio_pps":990.0,"budget_hi_mio_pps":1550.0,"budget_pct_gdp":0.07,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":1000.0,"nabs123_univ_funds_mio_pps":241.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":40327,"med_citations_2024":248793,"med_self_citations_2024":42156,"med_citations_excl_self_2024":206637,"med_docs_1999":10226,"med_docs_2004":13908,"med_docs_2009":20065,"med_docs_2014":29050,"med_docs_2019":37120,"budget_method":"NHMRC (~AUD 0.9 bn) + MRFF (~AUD 0.65 bn/yr) + other federal ~AUD 1.8 bn, at ~AUD 1.45 per PPP$.","note":null},{"country":"Poland","iso2":"PL","budget_status":"reported","budget_mio_pps":1191.3,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.1,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":131.5,"nabs123_univ_funds_mio_pps":518.3,"nabs133_other_mio_pps":541.6,"components_basis":"reported","gbard_flags":null,"med_docs_2024":15872,"med_citations_2024":93814,"med_self_citations_2024":13359,"med_citations_excl_self_2024":80455,"med_docs_1999":3847,"med_docs_2004":7653,"med_docs_2009":9133,"med_docs_2014":10424,"med_docs_2019":12974,"budget_method":null,"note":null},{"country":"Norway","iso2":"NO","budget_status":"estimated","budget_mio_pps":834.0,"budget_lo_mio_pps":705.0,"budget_hi_mio_pps":855.0,"budget_pct_gdp":0.16,"pct_gdp_lo":0.14,"pct_gdp_hi":0.17,"nabs07_directed_mio_pps":473.1,"nabs123_univ_funds_mio_pps":211.1,"nabs133_other_mio_pps":149.8,"components_basis":"reported NABS07+NABS123, NABS133 estimated","gbard_flags":null,"med_docs_2024":8671,"med_citations_2024":60098,"med_self_citations_2024":5949,"med_citations_excl_self_2024":54149,"med_docs_1999":2600,"med_docs_2004":3402,"med_docs_2009":5016,"med_docs_2014":6307,"med_docs_2019":7500,"budget_method":"Reported NABS07 + NABS123 (684); missing NABS133 added at median NABS133/(NABS07+NABS123) of full reporters (~22%).","note":null},{"country":"Sweden","iso2":"SE","budget_status":"reported","budget_mio_pps":797.6,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.16,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":245.4,"nabs123_univ_funds_mio_pps":340.2,"nabs133_other_mio_pps":212.0,"components_basis":"reported","gbard_flags":null,"med_docs_2024":16634,"med_citations_2024":115825,"med_self_citations_2024":13697,"med_citations_excl_self_2024":102128,"med_docs_1999":8198,"med_docs_2004":8763,"med_docs_2009":10542,"med_docs_2014":12875,"med_docs_2019":15195,"budget_method":null,"note":null},{"country":"Austria","iso2":"AT","budget_status":"reported","budget_mio_pps":767.0,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.18,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":200.9,"nabs123_univ_funds_mio_pps":557.4,"nabs133_other_mio_pps":8.7,"components_basis":"reported","gbard_flags":"d","med_docs_2024":10330,"med_citations_2024":75157,"med_self_citations_2024":6889,"med_citations_excl_self_2024":68268,"med_docs_1999":4025,"med_docs_2004":5121,"med_docs_2009":5848,"med_docs_2014":7225,"med_docs_2019":8554,"budget_method":null,"note":null},{"country":"Finland","iso2":"FI","budget_status":"reported","budget_mio_pps":316.9,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.14,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":120.7,"nabs123_univ_funds_mio_pps":138.5,"nabs133_other_mio_pps":57.8,"components_basis":"reported","gbard_flags":null,"med_docs_2024":6473,"med_citations_2024":49429,"med_self_citations_2024":4111,"med_citations_excl_self_2024":45318,"med_docs_1999":3683,"med_docs_2004":4121,"med_docs_2009":4365,"med_docs_2014":4818,"med_docs_2019":5787,"budget_method":null,"note":null},{"country":"Ireland","iso2":"IE","budget_status":"reported","budget_mio_pps":249.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.04,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":67.8,"nabs123_univ_funds_mio_pps":63.2,"nabs133_other_mio_pps":118.4,"components_basis":"reported","gbard_flags":null,"med_docs_2024":7348,"med_citations_2024":51836,"med_self_citations_2024":4299,"med_citations_excl_self_2024":47537,"med_docs_1999":1289,"med_docs_2004":1973,"med_docs_2009":3348,"med_docs_2014":4260,"med_docs_2019":5665,"budget_method":null,"note":"Not included in output-per-funding charts."},{"country":"Portugal","iso2":"PT","budget_status":"reported","budget_mio_pps":179.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.05,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":87.7,"nabs123_univ_funds_mio_pps":82.4,"nabs133_other_mio_pps":9.4,"components_basis":"reported","gbard_flags":null,"med_docs_2024":9751,"med_citations_2024":61242,"med_self_citations_2024":5934,"med_citations_excl_self_2024":55308,"med_docs_1999":1165,"med_docs_2004":1774,"med_docs_2009":3185,"med_docs_2014":5489,"med_docs_2019":7629,"budget_method":null,"note":null},{"country":"India","iso2":"IN","budget_status":"none","budget_mio_pps":null,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":68216,"med_citations_2024":240138,"med_self_citations_2024":78051,"med_citations_excl_self_2024":162087,"med_docs_1999":6207,"med_docs_2004":9428,"med_docs_2009":16606,"med_docs_2014":29982,"med_docs_2019":38516,"budget_method":null,"note":null},{"country":"Brazil","iso2":"BR","budget_status":"none","budget_mio_pps":null,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":27646,"med_citations_2024":111388,"med_self_citations_2024":20885,"med_citations_excl_self_2024":90503,"med_docs_1999":4534,"med_docs_2004":8033,"med_docs_2009":15197,"med_docs_2014":20370,"med_docs_2019":25222,"budget_method":null,"note":null},{"country":"All countries (sum of attributions)","iso2":null,"budget_status":"aggregate","budget_mio_pps":null,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":1533344,"med_citations_2024":null,"med_self_citations_2024":null,"med_citations_excl_self_2024":null,"med_docs_1999":441165,"med_docs_2004":557654,"med_docs_2009":740869,"med_docs_2014":959086,"med_docs_2019":1222386,"budget_method":null,"note":"Sum over every country SCImago lists. Counts co-authored papers once per country, so overstates unique papers."}] with the rows of funding/biomedical_rnd_2024.csv (numbers parsed, blanks as null).
+     One card with a view switch (budget / output per budget / output vs budget) instead of three charts.
+     The part between more:start and more:end shows on the topic page only. Colours and fonts come
+     from the page's tokens. Classes and ids start with fnd-. -->
+<style>
+.fnd { display: grid; gap: 1.25rem; min-width: 0; font-family: var(--f-body); }
+.fnd-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1rem 0.9rem; min-width: 0; }
+.fnd-card h3 { font: 600 1.15rem/1.3 var(--f-display); margin: 0.2rem 0 0.15rem; }
+.fnd-sub { font-size: 0.92rem; color: var(--muted); margin: 0 0 0.7rem; }
+.fnd-bar-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.7rem; }
+.fnd-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--bg); max-width: 100%; }
+.fnd-seg button, .fnd-chip { font: 500 0.88rem var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px;
+  padding: 0.3rem 0.8rem; cursor: pointer; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
+.fnd-seg button.on { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.fnd-view { margin-bottom: 0.9rem; }
+.fnd-view button { font-size: 0.95rem; padding: 0.38rem 0.9rem; }
+.fnd-chip { border: 1px solid var(--line); background: var(--bg); padding: 0.33rem 0.85rem; }
+.fnd-chip.on { background: var(--raise); color: var(--ink); border-color: var(--muted); }
+.fnd-chip.on::before { content: "✓ "; }
+.fnd button:focus-visible, .fnd summary:focus-visible { outline: 2px solid var(--sunset); outline-offset: 2px; }
+.fnd-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1.1rem; margin: 0 0 0.6rem; font-size: 0.88rem; color: var(--muted); }
+.fnd-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.fnd-legend i { flex: none; display: inline-block; width: 14px; height: 11px; border-radius: 2px; }
+.fnd-legend i.dot { width: 11px; border-radius: 50%; }
+.fnd-legend i.ln { width: 20px; height: 0; border-top: 2px dashed var(--muted); border-radius: 0; }
+.fnd-legend i.wh { width: 18px; height: 8px; border: 0; border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink);
+  background: linear-gradient(var(--ink), var(--ink)) center / 100% 1.5px no-repeat; opacity: 0.75; border-radius: 0; }
+.fnd-plot { position: relative; width: 100%; min-height: 200px; }
+/* bars */
+.fnd-bars { position: relative; --lab: 8.6rem; padding-bottom: 1.6rem; }
+.fnd-grid { position: absolute; left: var(--lab); right: 0; top: 0; bottom: 1.6rem; pointer-events: none; }
+.fnd-grid i { position: absolute; top: 0; bottom: 0; border-left: 1px solid var(--line); }
+.fnd-grid b { position: absolute; bottom: -1.45rem; transform: translateX(-50%); font: 400 0.8rem var(--f-body); color: var(--faint); font-variant-numeric: tabular-nums; }
+.fnd-row { display: flex; align-items: center; height: 1.85rem; position: relative; cursor: default; }
+.fnd-row:hover .fnd-lab, .fnd-row.hl .fnd-lab { color: var(--ink); }
+.fnd-lab { width: var(--lab); flex: none; padding-right: 0.6rem; text-align: right; font-size: 0.9rem; color: var(--muted);
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.fnd-lab.est, .fnd-lab.cn, .fnd-lab.eu { font-style: italic; }
+.fnd-track { position: relative; flex: 1; height: 100%; min-width: 0; }
+.fnd-b { position: absolute; left: 0; top: 50%; height: 0.95rem; transform: translateY(-50%); border-radius: 0 4px 4px 0; display: flex; gap: 2px; overflow: hidden; }
+.fnd-b.rep { background: var(--ocean); }
+.fnd-b.est { background: repeating-linear-gradient(135deg, var(--ocean) 0 3px, color-mix(in srgb, var(--ocean) 35%, var(--surface)) 3px 6px); }
+.fnd-b.eu { background: repeating-linear-gradient(135deg, #8a93a3 0 3px, color-mix(in srgb, #8a93a3 35%, var(--surface)) 3px 6px); }
+.fnd-b.cn { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--sunset) 55%, transparent) 0 3px, transparent 3px 6px);
+  outline: 1.5px dashed var(--sunset); outline-offset: -1.5px; }
+.fnd-b.split { background: none; }
+.fnd-b.split i { display: block; height: 100%; }
+.fnd-b.split.est i { opacity: 0.6; }
+.fnd-wh { position: absolute; top: 50%; height: 8px; transform: translateY(-50%); border-left: 1.5px solid var(--ink); border-right: 1.5px solid var(--ink);
+  background: linear-gradient(var(--ink), var(--ink)) center / 100% 1.5px no-repeat; opacity: 0.75; pointer-events: none; }
+.fnd-v { position: absolute; top: 50%; transform: translateY(-50%); margin-left: 0.4rem; font-size: 0.85rem; color: var(--ink);
+  font-variant-numeric: tabular-nums; white-space: nowrap; }
+.fnd-v.est, .fnd-v.cn { font-style: italic; color: var(--muted); }
+/* scatter */
+.fnd svg { display: block; max-width: 100%; overflow: visible; }
+.fnd svg text { font-family: var(--f-body); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.fnd svg text.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; fill: var(--ink); }
+.fnd-flags { position: absolute; left: 0; top: 0; pointer-events: none; }
+.fnd-flag { position: absolute; width: var(--fz); height: var(--fz); margin: calc(var(--fz) / -2) 0 0 calc(var(--fz) / -2); border-radius: 50%; overflow: hidden;
+  display: flex; align-items: center; justify-content: center; background: var(--raise); box-shadow: 0 0 0 2px var(--surface), 0 0 0 3.5px var(--fc, transparent); }
+.fnd-flag span { font: 400 var(--fz)/1 "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", sans-serif; transform: scale(1.8); }
+.fnd-flag.est { --fc: var(--ocean); }
+.fnd-flag.cn { --fc: var(--sunset); }
+.fnd-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.55rem 0.7rem; font-size: 0.88rem; line-height: 1.4; color: var(--ink); max-width: 280px; z-index: 5;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; }
+.fnd-tip b { display: block; font-size: 0.95rem; margin-bottom: 0.15rem; }
+.fnd-tip span { color: var(--muted); }
+.fnd-tip small { display: block; color: var(--faint); font-size: 0.8rem; margin-top: 0.3rem; }
+.fnd-note { font-size: 0.92rem; color: var(--muted); margin: 0.7rem 0 0; max-width: 72ch; }
+.fnd-det { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
+.fnd-det summary { cursor: pointer; font-weight: 500; }
+.fnd-notes { font-size: 0.92rem; color: var(--muted); margin: 0.6rem 0 0; padding-left: 1.1rem; max-width: 72ch; }
+.fnd-notes li { margin-bottom: 0.35rem; }
+.fnd-notes b { color: var(--ink); font-weight: 600; }
+.fnd-tw { overflow-x: auto; margin-top: 0.6rem; }
+.fnd table { border-collapse: collapse; font-size: 0.88rem; white-space: nowrap; width: 100%; font-variant-numeric: tabular-nums; }
+.fnd th, .fnd td { padding: 0.35rem 0.6rem; text-align: right; border-bottom: 1px solid var(--line); }
+.fnd th:first-child, .fnd td:first-child { text-align: left; position: sticky; left: 0; background: var(--surface); }
+.fnd th { color: var(--muted); font-weight: 500; }
+.fnd td.st { text-align: left; color: var(--muted); }
+.fnd-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+@media (max-width: 520px) { .fnd-bars { --lab: 6.6rem; } .fnd-card { padding-inline: 0.75rem; } .fnd-long { display: none; }
+  .fnd-view button::first-letter { text-transform: uppercase; } }
+</style>
+<div class="fnd" id="fnd">
+  <div class="fnd-card">
+    <div class="fnd-seg fnd-view" role="group" aria-label="View" id="fnd-view">
+      <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio"><span class="fnd-long">Output </span>per budget</button><button type="button" data-v="scatter"><span class="fnd-long">Output </span>vs budget</button>
+    </div>
+    <h3 id="fnd-title"></h3>
+    <p class="fnd-sub" id="fnd-sub"></p>
+    <div class="fnd-bar-row" id="fnd-opts"></div>
+    <div class="fnd-legend" id="fnd-lg"></div>
+    <div class="fnd-plot" id="fnd-plot"></div>
+    <p class="fnd-note" id="fnd-note"></p>
+  </div>
+  <p class="bvr-more">Notes on every budget, caveats and the full data table: <a href="funding.html">open the topic page</a>.</p>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v2</span></div>
+</div>
+<script>
+(function () {
+const RAW = [{"country":"United States","iso2":"US","budget_status":"reported","budget_mio_pps":31997.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.17,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":31997.4,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":"reported","gbard_flags":"p","med_docs_2024":267415,"med_citations_2024":1250351,"med_self_citations_2024":477472,"med_citations_excl_self_2024":772879,"med_docs_1999":131805,"med_docs_2004":155388,"med_docs_2009":187105,"med_docs_2014":219676,"med_docs_2019":250996,"budget_method":null,"note":"NABS07 only; comprehensive for the US (NIH grants include overhead; no GUF stream)."},{"country":"China","iso2":"CN","budget_status":"guess","budget_mio_pps":14000.0,"budget_lo_mio_pps":9400.0,"budget_hi_mio_pps":18700.0,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":251513,"med_citations_2024":1247457,"med_self_citations_2024":825327,"med_citations_excl_self_2024":422130,"med_docs_1999":7592,"med_docs_2004":21894,"med_docs_2009":47767,"med_docs_2014":84007,"med_docs_2019":143696,"budget_method":"Guess: government R&D all fields (~156 bn PPP) x assumed 6-12% health share. No comparable budget published.","note":null},{"country":"Japan","iso2":"JP","budget_status":"estimated","budget_mio_pps":6300.0,"budget_lo_mio_pps":5000.0,"budget_hi_mio_pps":7900.0,"budget_pct_gdp":0.14,"pct_gdp_lo":0.11,"pct_gdp_hi":0.18,"nabs07_directed_mio_pps":2625.0,"nabs123_univ_funds_mio_pps":3300.0,"nabs133_other_mio_pps":375.0,"components_basis":"reported NABS07, rest estimated","gbard_flags":"d","med_docs_2024":47766,"med_citations_2024":178864,"med_self_citations_2024":38327,"med_citations_excl_self_2024":140537,"med_docs_1999":37388,"med_docs_2004":38077,"med_docs_2009":38248,"med_docs_2014":40890,"med_docs_2019":44338,"budget_method":"Reported NABS07 (2,625) scaled for missing university block funds, x1.9-3.0 (structural comparators DE/NL).","note":null},{"country":"Germany","iso2":"DE","budget_status":"reported","budget_mio_pps":5593.2,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.14,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":2078.2,"nabs123_univ_funds_mio_pps":3113.2,"nabs133_other_mio_pps":401.8,"components_basis":"reported","gbard_flags":null,"med_docs_2024":59698,"med_citations_2024":320131,"med_self_citations_2024":62390,"med_citations_excl_self_2024":257741,"med_docs_1999":31492,"med_docs_2004":36554,"med_docs_2009":42586,"med_docs_2014":48932,"med_docs_2019":56089,"budget_method":null,"note":null},{"country":"United Kingdom","iso2":"GB","budget_status":"estimated","budget_mio_pps":3308.0,"budget_lo_mio_pps":2950.0,"budget_hi_mio_pps":3700.0,"budget_pct_gdp":0.11,"pct_gdp_lo":0.105,"pct_gdp_hi":0.115,"nabs07_directed_mio_pps":2242.0,"nabs123_univ_funds_mio_pps":1066.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":74978,"med_citations_2024":450012,"med_self_citations_2024":88616,"med_citations_excl_self_2024":361396,"med_docs_1999":37988,"med_docs_2004":44157,"med_docs_2009":53098,"med_docs_2014":60844,"med_docs_2019":70668,"budget_method":"Not in GBARD since Brexit. NIHR (GBP 1,638m) + MRC (GBP 604m) + ~28% (22-35%) medical share of Research England QR (GBP 2,006m), FY2024/25, x1.18 PPS/GBP.","note":null},{"country":"South Korea","iso2":"KR","budget_status":"estimated","budget_mio_pps":3250.0,"budget_lo_mio_pps":2600.0,"budget_hi_mio_pps":3900.0,"budget_pct_gdp":0.11,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":2300.0,"nabs123_univ_funds_mio_pps":950.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":28258,"med_citations_2024":150328,"med_self_citations_2024":24087,"med_citations_excl_self_2024":126241,"med_docs_1999":3391,"med_docs_2004":6534,"med_docs_2009":13409,"med_docs_2014":21954,"med_docs_2019":26784,"budget_method":"Multi-ministry government health/bio R&D ~KRW 2.8 tn (MOHW + MSIT + others), at ~KRW 860 per PPP$. Aggregation, not a single official line.","note":null},{"country":"Italy","iso2":"IT","budget_status":"estimated","budget_mio_pps":3051.0,"budget_lo_mio_pps":2739.0,"budget_hi_mio_pps":4544.0,"budget_pct_gdp":0.13,"pct_gdp_lo":0.117,"pct_gdp_hi":0.194,"nabs07_directed_mio_pps":1643.0,"nabs123_univ_funds_mio_pps":1200.0,"nabs133_other_mio_pps":208.0,"components_basis":"reported NABS07, rest estimated","gbard_flags":null,"med_docs_2024":53201,"med_citations_2024":321880,"med_self_citations_2024":74328,"med_citations_excl_self_2024":247552,"med_docs_1999":18454,"med_docs_2004":22472,"med_docs_2009":29248,"med_docs_2014":36078,"med_docs_2019":43738,"budget_method":"Reported NABS07 (1,643; GUF lines blank) x Spain/Portugal broad-sum ratio (1.67-2.05); high bound France-like (2.77).","note":null},{"country":"EU institutions","iso2":"EU","budget_status":"funder","budget_mio_pps":2650.0,"budget_lo_mio_pps":2400.0,"budget_hi_mio_pps":3100.0,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":null,"med_citations_2024":null,"med_self_citations_2024":null,"med_citations_excl_self_2024":null,"med_docs_1999":null,"med_docs_2004":null,"med_docs_2009":null,"med_docs_2014":null,"med_docs_2019":null,"budget_method":"EU budget, ~EUR 2.5 bn/yr 2021-27: Horizon Europe Cluster 1 Health, IHI (EU share), EDCTP3 (EU share), EU4Health R&D slice, plus health share of ERC (~22.6%, from 2025 StG panel counts) and MSCA. Additional to national GBARD.","note":null},{"country":"Turkey","iso2":"TR","budget_status":"reported","budget_mio_pps":2507.8,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.1,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":109.3,"nabs123_univ_funds_mio_pps":2387.8,"nabs133_other_mio_pps":10.7,"components_basis":"reported","gbard_flags":"e","med_docs_2024":26657,"med_citations_2024":94338,"med_self_citations_2024":17069,"med_citations_excl_self_2024":77269,"med_docs_1999":3787,"med_docs_2004":9324,"med_docs_2009":12813,"med_docs_2014":18251,"med_docs_2019":17822,"budget_method":null,"note":"Reported, but ~95% is NABS123 (apportioned university block funds, Eurostat-estimated); NABS123/133 first reported in 2024."},{"country":"France","iso2":"FR","budget_status":"reported","budget_mio_pps":2325.1,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.08,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":840.7,"nabs123_univ_funds_mio_pps":1180.1,"nabs133_other_mio_pps":304.3,"components_basis":"reported","gbard_flags":null,"med_docs_2024":36571,"med_citations_2024":230904,"med_self_citations_2024":31751,"med_citations_excl_self_2024":199153,"med_docs_1999":23255,"med_docs_2004":24827,"med_docs_2009":29533,"med_docs_2014":33370,"med_docs_2019":36310,"budget_method":null,"note":null},{"country":"Spain","iso2":"ES","budget_status":"reported","budget_mio_pps":2186.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.12,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":1311.4,"nabs123_univ_funds_mio_pps":663.1,"nabs133_other_mio_pps":211.8,"components_basis":"reported","gbard_flags":null,"med_docs_2024":36519,"med_citations_2024":212372,"med_self_citations_2024":32917,"med_citations_excl_self_2024":179455,"med_docs_1999":12628,"med_docs_2004":16332,"med_docs_2009":22072,"med_docs_2014":26808,"med_docs_2019":31391,"budget_method":null,"note":null},{"country":"Netherlands","iso2":"NL","budget_status":"reported","budget_mio_pps":1980.7,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.21,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":628.4,"nabs123_univ_funds_mio_pps":1190.4,"nabs133_other_mio_pps":161.9,"components_basis":"reported","gbard_flags":"b","med_docs_2024":27612,"med_citations_2024":190336,"med_self_citations_2024":25257,"med_citations_excl_self_2024":165079,"med_docs_1999":10419,"med_docs_2004":13323,"med_docs_2009":18593,"med_docs_2014":22420,"med_docs_2019":25816,"budget_method":null,"note":"Series break flag (b)."},{"country":"Canada","iso2":"CA","budget_status":"estimated","budget_mio_pps":1760.0,"budget_lo_mio_pps":1400.0,"budget_hi_mio_pps":2290.0,"budget_pct_gdp":0.07,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":1400.0,"nabs123_univ_funds_mio_pps":360.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":44758,"med_citations_2024":257181,"med_self_citations_2024":41350,"med_citations_excl_self_2024":215831,"med_docs_1999":15062,"med_docs_2004":19319,"med_docs_2009":27190,"med_docs_2014":33480,"med_docs_2019":41541,"budget_method":"Federal only: CIHR (~CAD 1.3 bn) + health share of other federal R&D ~CAD 2.2 bn, at ~CAD 1.25 per PPP$. Excludes provincial funding.","note":null},{"country":"Australia","iso2":"AU","budget_status":"estimated","budget_mio_pps":1241.0,"budget_lo_mio_pps":990.0,"budget_hi_mio_pps":1550.0,"budget_pct_gdp":0.07,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":1000.0,"nabs123_univ_funds_mio_pps":241.0,"nabs133_other_mio_pps":0.0,"components_basis":"approximate split","gbard_flags":null,"med_docs_2024":40327,"med_citations_2024":248793,"med_self_citations_2024":42156,"med_citations_excl_self_2024":206637,"med_docs_1999":10226,"med_docs_2004":13908,"med_docs_2009":20065,"med_docs_2014":29050,"med_docs_2019":37120,"budget_method":"NHMRC (~AUD 0.9 bn) + MRFF (~AUD 0.65 bn/yr) + other federal ~AUD 1.8 bn, at ~AUD 1.45 per PPP$.","note":null},{"country":"Poland","iso2":"PL","budget_status":"reported","budget_mio_pps":1191.3,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.1,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":131.5,"nabs123_univ_funds_mio_pps":518.3,"nabs133_other_mio_pps":541.6,"components_basis":"reported","gbard_flags":null,"med_docs_2024":15872,"med_citations_2024":93814,"med_self_citations_2024":13359,"med_citations_excl_self_2024":80455,"med_docs_1999":3847,"med_docs_2004":7653,"med_docs_2009":9133,"med_docs_2014":10424,"med_docs_2019":12974,"budget_method":null,"note":null},{"country":"Norway","iso2":"NO","budget_status":"estimated","budget_mio_pps":834.0,"budget_lo_mio_pps":705.0,"budget_hi_mio_pps":855.0,"budget_pct_gdp":0.16,"pct_gdp_lo":0.14,"pct_gdp_hi":0.17,"nabs07_directed_mio_pps":473.1,"nabs123_univ_funds_mio_pps":211.1,"nabs133_other_mio_pps":149.8,"components_basis":"reported NABS07+NABS123, NABS133 estimated","gbard_flags":null,"med_docs_2024":8671,"med_citations_2024":60098,"med_self_citations_2024":5949,"med_citations_excl_self_2024":54149,"med_docs_1999":2600,"med_docs_2004":3402,"med_docs_2009":5016,"med_docs_2014":6307,"med_docs_2019":7500,"budget_method":"Reported NABS07 + NABS123 (684); missing NABS133 added at median NABS133/(NABS07+NABS123) of full reporters (~22%).","note":null},{"country":"Sweden","iso2":"SE","budget_status":"reported","budget_mio_pps":797.6,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.16,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":245.4,"nabs123_univ_funds_mio_pps":340.2,"nabs133_other_mio_pps":212.0,"components_basis":"reported","gbard_flags":null,"med_docs_2024":16634,"med_citations_2024":115825,"med_self_citations_2024":13697,"med_citations_excl_self_2024":102128,"med_docs_1999":8198,"med_docs_2004":8763,"med_docs_2009":10542,"med_docs_2014":12875,"med_docs_2019":15195,"budget_method":null,"note":null},{"country":"Austria","iso2":"AT","budget_status":"reported","budget_mio_pps":767.0,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.18,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":200.9,"nabs123_univ_funds_mio_pps":557.4,"nabs133_other_mio_pps":8.7,"components_basis":"reported","gbard_flags":"d","med_docs_2024":10330,"med_citations_2024":75157,"med_self_citations_2024":6889,"med_citations_excl_self_2024":68268,"med_docs_1999":4025,"med_docs_2004":5121,"med_docs_2009":5848,"med_docs_2014":7225,"med_docs_2019":8554,"budget_method":null,"note":null},{"country":"Finland","iso2":"FI","budget_status":"reported","budget_mio_pps":316.9,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.14,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":120.7,"nabs123_univ_funds_mio_pps":138.5,"nabs133_other_mio_pps":57.8,"components_basis":"reported","gbard_flags":null,"med_docs_2024":6473,"med_citations_2024":49429,"med_self_citations_2024":4111,"med_citations_excl_self_2024":45318,"med_docs_1999":3683,"med_docs_2004":4121,"med_docs_2009":4365,"med_docs_2014":4818,"med_docs_2019":5787,"budget_method":null,"note":null},{"country":"Ireland","iso2":"IE","budget_status":"reported","budget_mio_pps":249.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.04,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":67.8,"nabs123_univ_funds_mio_pps":63.2,"nabs133_other_mio_pps":118.4,"components_basis":"reported","gbard_flags":null,"med_docs_2024":7348,"med_citations_2024":51836,"med_self_citations_2024":4299,"med_citations_excl_self_2024":47537,"med_docs_1999":1289,"med_docs_2004":1973,"med_docs_2009":3348,"med_docs_2014":4260,"med_docs_2019":5665,"budget_method":null,"note":"Not included in output-per-funding charts."},{"country":"Portugal","iso2":"PT","budget_status":"reported","budget_mio_pps":179.4,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":0.05,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":87.7,"nabs123_univ_funds_mio_pps":82.4,"nabs133_other_mio_pps":9.4,"components_basis":"reported","gbard_flags":null,"med_docs_2024":9751,"med_citations_2024":61242,"med_self_citations_2024":5934,"med_citations_excl_self_2024":55308,"med_docs_1999":1165,"med_docs_2004":1774,"med_docs_2009":3185,"med_docs_2014":5489,"med_docs_2019":7629,"budget_method":null,"note":null},{"country":"India","iso2":"IN","budget_status":"none","budget_mio_pps":null,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":68216,"med_citations_2024":240138,"med_self_citations_2024":78051,"med_citations_excl_self_2024":162087,"med_docs_1999":6207,"med_docs_2004":9428,"med_docs_2009":16606,"med_docs_2014":29982,"med_docs_2019":38516,"budget_method":null,"note":null},{"country":"Brazil","iso2":"BR","budget_status":"none","budget_mio_pps":null,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":27646,"med_citations_2024":111388,"med_self_citations_2024":20885,"med_citations_excl_self_2024":90503,"med_docs_1999":4534,"med_docs_2004":8033,"med_docs_2009":15197,"med_docs_2014":20370,"med_docs_2019":25222,"budget_method":null,"note":null},{"country":"All countries (sum of attributions)","iso2":null,"budget_status":"aggregate","budget_mio_pps":null,"budget_lo_mio_pps":null,"budget_hi_mio_pps":null,"budget_pct_gdp":null,"pct_gdp_lo":null,"pct_gdp_hi":null,"nabs07_directed_mio_pps":null,"nabs123_univ_funds_mio_pps":null,"nabs133_other_mio_pps":null,"components_basis":null,"gbard_flags":null,"med_docs_2024":1533344,"med_citations_2024":null,"med_self_citations_2024":null,"med_citations_excl_self_2024":null,"med_docs_1999":441165,"med_docs_2004":557654,"med_docs_2009":740869,"med_docs_2014":959086,"med_docs_2019":1222386,"budget_method":null,"note":"Sum over every country SCImago lists. Counts co-authored papers once per country, so overstates unique papers."}];
+const root = document.getElementById("fnd");
+if (!root) return;
+const q = (s) => root.querySelector(s);
+const SHORT = { "United States": "US", "United Kingdom": "UK" };
+const short = (n) => SHORT[n] || n;
+const GREY = "#8a93a3";
+const kind = (r) => r.iso2 === "CN" ? "cn" : r.iso2 === "EU" ? "eu" : r.budget_status === "estimated" ? "est" : "rep";
+const budgetRows = RAW.filter((r) => r.budget_mio_pps != null);
+const outRows = budgetRows.filter((r) => r.med_docs_2024 != null && r.iso2 !== "IE");
+const S = { view: "budget", unit: "abs", split: false, hideUS: false, hideCN: false, out: "docs", log: true };
+const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
+const bn = (v) => { const b = v / 1000; return b >= 10 ? b.toFixed(0) : b >= 1 ? b.toFixed(1) : b.toFixed(2); };
+const big = (v) => v >= 1e6 ? +(v / 1e6).toFixed(1) + "M" : v >= 1000 ? +(v / 1000).toFixed(v < 10000 ? 1 : 0) + "k" : String(Math.round(v));
+const outKey = () => S.out === "docs" ? "med_docs_2024" : "med_citations_excl_self_2024";
+const outWord = () => S.out === "docs" ? "papers" : "citations";
+const method = (r) => r.budget_method || r.note || "";
+// Emoji flag from an ISO code. Windows has no flag emoji, so load a Noto Color Emoji subset holding only these flags.
+const flag = (c) => String.fromCodePoint(...[...c.toUpperCase()].map((ch) => 0x1f1e6 + ch.charCodeAt(0) - 65));
+if (!document.getElementById("fnd-emoji")) {
+  const l = document.createElement("link");
+  l.id = "fnd-emoji"; l.rel = "stylesheet";
+  l.href = "https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap&text=" +
+    encodeURIComponent(RAW.filter((r) => r.med_docs_2024 != null && r.iso2 && r.iso2.length === 2).map((r) => flag(r.iso2)).join(""));
+  document.head.appendChild(l);
+  if (document.fonts) document.fonts.load('19px "Noto Color Emoji"', flag("US")).then(() => { if (S.view === "scatter") drawScatter(); }).catch(() => {});
+}
+
+function niceStep(max, n) {
+  const raw = max / n, mag = Math.pow(10, Math.floor(Math.log10(raw)));
+  const f = raw / mag;
+  return (f < 1.5 ? 1 : f < 3 ? 2 : f < 7 ? 5 : 10) * mag;
+}
+
+// ---------- controls ----------
+function seg(id, opts, cur) {
+  return `<div class="fnd-seg" role="group" data-k="${id}">` + opts.map(([v, l]) =>
+    `<button type="button" data-val="${v}" class="${String(cur) === String(v) ? "on" : ""}" aria-pressed="${String(cur) === String(v)}">${l}</button>`).join("") + "</div>";
+}
+const chip = (k, l) => `<button type="button" class="fnd-chip${S[k] ? " on" : ""}" data-chip="${k}" aria-pressed="${S[k]}">${l}</button>`;
+const sw = (c, l, cls) => `<span><i class="${cls || ""}" style="${c}"></i>${l}</span>`;
+const HATCH = (col) => `background:repeating-linear-gradient(135deg,${col} 0 3px,color-mix(in srgb,${col} 35%,var(--surface)) 3px 6px)`;
+
+function controls() {
+  let o = "";
+  if (S.view === "budget") {
+    o = seg("unit", [["abs", "Billion PPS"], ["gdp", "% of GDP"]], S.unit);
+    if (S.unit === "abs") o += chip("split", "By funding type") + chip("hideUS", "Hide US");
+  } else {
+    o = seg("out", [["docs", "Papers"], ["cit", "Citations"]], S.out);
+    if (S.view === "scatter") o += seg("log", [["true", "Log"], ["false", "Linear"]], S.log) + chip("hideUS", "Hide US");
+    o += chip("hideCN", "Hide China");
+  }
+  q("#fnd-opts").innerHTML = o;
+}
+
+// ---------- tooltip ----------
+let tip;
+function showTip(html, x, y) {
+  const plot = q("#fnd-plot");
+  tip.innerHTML = html; tip.style.display = "block";
+  const w = tip.offsetWidth, h = tip.offsetHeight, W = plot.clientWidth;
+  let left = Math.min(Math.max(4, x - w / 2), W - w - 4);
+  let top = y - h - 12; if (top < 0) top = y + 16;
+  tip.style.left = left + "px"; tip.style.top = top + "px";
+}
+const hideTip = () => { if (tip) tip.style.display = "none"; };
+
+// ---------- bars ----------
+function bars(items, fmt, axisTitle) {
+  const ends = items.map((d) => Math.max(d.v || 0, d.hi || 0));
+  const maxEnd = Math.max(...ends);
+  const dom = maxEnd * 1.17;
+  const step = niceStep(maxEnd, 4);
+  const pct = (v) => (v / dom) * 100;
+  let g = "";
+  for (let t = 0; t <= dom * 1.0001; t += step) g += `<i style="left:${pct(t)}%"></i><b style="left:${pct(t)}%">${t === 0 ? "0" : fmt(t, true)}</b>`;
+  const rows = items.map((d, i) => {
+    let bar;
+    if (d.k === "cn" && d.lo != null && !d.ratio) {
+      bar = `<span class="fnd-b cn" style="left:${pct(d.lo)}%;width:${pct(d.hi - d.lo)}%"></span>`;
+    } else if (d.segs) {
+      bar = `<span class="fnd-b split ${d.k}" style="width:${pct(d.v)}%${pct(d.v) < 6 ? ";gap:0" : ""}">` +
+        d.segs.filter((s) => s[0] > 0).map((s) => `<i style="flex:${s[0]} 0 0;background:${s[1]}"></i>`).join("") + "</span>";
+    } else {
+      bar = `<span class="fnd-b ${d.k}" style="width:${Math.max(pct(d.v), 0.6)}%"></span>`;
+    }
+    const wh = d.lo != null && !(d.k === "cn" && !d.ratio) ? `<span class="fnd-wh" style="left:${pct(d.lo)}%;width:${pct(d.hi - d.lo)}%"></span>` : "";
+    const end = pct(Math.max(d.v, d.hi || 0));
+    return `<div class="fnd-row" data-i="${i}"><span class="fnd-lab ${d.k}">${esc(short(d.name))}</span>` +
+      `<span class="fnd-track">${bar}${wh}<span class="fnd-v ${d.k}" style="left:${end}%">${d.label || fmt(d.v)}</span></span></div>`;
+  }).join("");
+  const plot = q("#fnd-plot");
+  plot.innerHTML = `<div class="fnd-bars"><div class="fnd-grid">${g}</div>${rows}</div>` +
+    `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div><div class="fnd-tip"></div>`;
+  tip = plot.querySelector(".fnd-tip");
+  plot.querySelectorAll(".fnd-row").forEach((row) => {
+    const d = items[+row.dataset.i];
+    const show = () => {
+      plot.querySelectorAll(".fnd-row.hl").forEach((r) => r.classList.remove("hl"));
+      row.classList.add("hl");
+      const pr = plot.getBoundingClientRect(), rr = row.getBoundingClientRect();
+      showTip(d.tip, pr.width * 0.6, rr.top - pr.top);
+    };
+    row.addEventListener("pointerenter", show);
+    row.addEventListener("click", show);
+  });
+  plot.addEventListener("pointerleave", () => { hideTip(); plot.querySelectorAll(".fnd-row.hl").forEach((r) => r.classList.remove("hl")); });
+}
+
+function budgetTip(r, extra) {
+  const k = kind(r);
+  const status = { rep: "Reported to Eurostat", est: "Estimated", cn: "Guess: no comparable figure", eu: "EU funder, on top of national budgets" }[k];
+  let s = `<b>${esc(r.country)}</b>${bn(r.budget_mio_pps)} bn PPS`;
+  if (r.budget_lo_mio_pps != null) s += ` <span>(${bn(r.budget_lo_mio_pps)}–${bn(r.budget_hi_mio_pps)})</span>`;
+  if (r.budget_pct_gdp != null) s += `<br>${r.budget_pct_gdp.toFixed(2)}% of GDP`;
+  if (extra) s += "<br>" + extra;
+  s += `<br><span>${status}</span>`;
+  const m = method(r);
+  if (m) s += `<small>${esc(m)}</small>`;
+  return s;
+}
+
+function drawBudget() {
+  if (S.unit === "gdp") {
+    const items = budgetRows.filter((r) => r.budget_pct_gdp != null).sort((a, b) => b.budget_pct_gdp - a.budget_pct_gdp)
+      .map((r) => ({ name: r.country, k: kind(r), v: r.budget_pct_gdp, lo: r.pct_gdp_lo, hi: r.pct_gdp_hi, tip: budgetTip(r) }));
+    bars(items, (v, ax) => ax ? v.toFixed(2) : v.toFixed(2) + "%", "% of GDP");
+    return;
+  }
+  const items = budgetRows.filter((r) => !(S.hideUS && r.iso2 === "US"))
+    .sort((a, b) => b.budget_mio_pps - a.budget_mio_pps)
+    .map((r) => {
+      const k = kind(r);
+      const d = { name: r.country, k, v: r.budget_mio_pps, lo: r.budget_lo_mio_pps, hi: r.budget_hi_mio_pps, tip: budgetTip(r) };
+      if (k === "cn") d.label = bn(r.budget_mio_pps) + "?";
+      if (S.split && r.nabs07_directed_mio_pps != null) {
+        d.segs = [[r.nabs07_directed_mio_pps, "var(--ocean)"], [r.nabs123_univ_funds_mio_pps || 0, "var(--sunset)"], [r.nabs133_other_mio_pps || 0, GREY]];
+        const sh = (x) => Math.round(100 * (x || 0) / r.budget_mio_pps) + "%";
+        d.tip = budgetTip(r, `<span>Directed ${sh(r.nabs07_directed_mio_pps)} · block funds ${sh(r.nabs123_univ_funds_mio_pps)} · other ${sh(r.nabs133_other_mio_pps)}${r.components_basis && r.components_basis !== "reported" ? " (" + esc(r.components_basis) + ")" : ""}</span>`);
+      }
+      return d;
+    });
+  bars(items, (v) => bn(v), "Billion PPS");
+}
+
+function drawRatio() {
+  const key = outKey();
+  const items = outRows.filter((r) => !(S.hideCN && r.iso2 === "CN"))
+    .map((r) => {
+      const v = r[key] / r.budget_mio_pps;
+      const d = { name: r.country, k: kind(r), v, ratio: true };
+      if (r.budget_lo_mio_pps != null) { d.lo = r[key] / r.budget_hi_mio_pps; d.hi = r[key] / r.budget_lo_mio_pps; }
+      d.tip = budgetTip(r, `${r[key].toLocaleString("en")} ${outWord()} → <b style="display:inline;font-size:inherit">${v.toFixed(v < 100 ? 1 : 0)}</b> per million PPS`);
+      return d;
+    }).sort((a, b) => b.v - a.v);
+  bars(items, (v, ax) => ax ? String(Math.round(v)) : v.toFixed(v < 100 ? 1 : 0), `${S.out === "docs" ? "Papers" : "Citations"} per million PPS`);
+}
+
+// ---------- scatter ----------
+function fit(rows, key) {
+  const lx = rows.map((r) => Math.log10(r.budget_mio_pps)), ly = rows.map((r) => Math.log10(r[key]));
+  const n = lx.length, mx = lx.reduce((a, b) => a + b) / n, my = ly.reduce((a, b) => a + b) / n;
+  const sl = lx.reduce((s, v, i) => s + (v - mx) * (ly[i] - my), 0) / lx.reduce((s, v) => s + (v - mx) ** 2, 0);
+  const ic = my - sl * mx;
+  const res = rows.map((r, i) => ({ r, e: ly[i] - (ic + sl * lx[i]) }));
+  const r2 = 1 - res.reduce((s, x) => s + x.e ** 2, 0) / ly.reduce((s, v) => s + (v - my) ** 2, 0);
+  return { sl, ic, r2, res: res.sort((a, b) => a.e - b.e) };
+}
+let lastFit = null;
+function drawScatter() {
+  const key = outKey();
+  const rows = outRows.filter((r) => !(S.hideUS && r.iso2 === "US") && !(S.hideCN && r.iso2 === "CN"));
+  const F = fit(rows, key); lastFit = F;
+  const plot = q("#fnd-plot");
+  const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72)));
+  const M = { l: 50, r: 14, t: 10, b: 42 };
+  const xs = rows.flatMap((r) => [r.budget_lo_mio_pps || r.budget_mio_pps, r.budget_hi_mio_pps || r.budget_mio_pps]);
+  const ys = rows.map((r) => r[key]);
+  let x0, x1, y0, y1;
+  if (S.log) { x0 = Math.min(...xs) * 0.75; x1 = Math.max(...xs) * 1.3; y0 = Math.min(...ys) * 0.75; y1 = Math.max(...ys) * 1.3; }
+  else { x0 = 0; x1 = Math.max(...xs) * 1.06; y0 = 0; y1 = Math.max(...ys) * 1.08; }
+  const L = Math.log10;
+  const X = (v) => M.l + (S.log ? (L(v) - L(x0)) / (L(x1) - L(x0)) : (v - x0) / (x1 - x0)) * (W - M.l - M.r);
+  const Y = (v) => H - M.b - (S.log ? (L(v) - L(y0)) / (L(y1) - L(y0)) : (v - y0) / (y1 - y0)) * (H - M.t - M.b);
+  const logTicks = (lo, hi) => { const o = []; for (let k = Math.floor(L(lo)); k <= Math.ceil(L(hi)); k++) for (const m of [1, 2, 5]) { const v = m * 10 ** k; if (v >= lo && v <= hi) o.push(v); } return o; };
+  const linTicks = (hi) => { const st = niceStep(hi, 4), o = []; for (let v = 0; v <= hi; v += st) o.push(v); return o; };
+  const xt = S.log ? logTicks(x0, x1) : linTicks(x1), yt = S.log ? logTicks(y0, y1) : linTicks(y1);
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${outWord()} against budget, one dot per country">`;
+  xt.forEach((t) => { s += `<line x1="${X(t)}" x2="${X(t)}" y1="${M.t}" y2="${H - M.b}" stroke="var(--line)"/><text x="${X(t)}" y="${H - M.b + 17}" text-anchor="middle" font-size="12">${bn(t)}</text>`; });
+  yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
+  s += `<text x="${(M.l + W - M.r) / 2}" y="${H - 6}" text-anchor="middle" font-size="12.5">Public biomedical R&amp;D, billion PPS${S.log ? " (log)" : ""}</text>`;
+  // fit line, sampled so it is right on linear axes too
+  const pts = [];
+  const a = S.log ? x0 * 1.02 : Math.max(x1 / 300, 1), b = x1 * 0.98;
+  for (let i = 0; i <= 60; i++) {
+    const xv = S.log ? 10 ** (L(a) + (L(b) - L(a)) * i / 60) : a + (b - a) * i / 60;
+    const yv = 10 ** (F.ic + F.sl * L(xv));
+    if (yv >= y0 && yv <= y1 * 1.02) pts.push(`${X(xv).toFixed(1)},${Y(yv).toFixed(1)}`);
+  }
+  s += `<polyline points="${pts.join(" ")}" fill="none" stroke="${GREY}" stroke-width="1.5" stroke-dasharray="5 4" opacity="0.8"/>`;
+  // ranges
+  rows.filter((r) => r.budget_lo_mio_pps != null).forEach((r) => {
+    const y = Y(r[key]), cn = r.iso2 === "CN", col = cn ? "var(--sunset)" : "var(--ocean)";
+    s += `<g stroke="${col}" stroke-width="1.5" opacity="0.75"${cn ? ' stroke-dasharray="3 2"' : ""}><line x1="${X(r.budget_lo_mio_pps)}" x2="${X(r.budget_hi_mio_pps)}" y1="${y}" y2="${y}"/></g>` +
+      `<g stroke="${col}" stroke-width="1.5" opacity="0.75"><line x1="${X(r.budget_lo_mio_pps)}" x2="${X(r.budget_lo_mio_pps)}" y1="${y - 4}" y2="${y + 4}"/><line x1="${X(r.budget_hi_mio_pps)}" x2="${X(r.budget_hi_mio_pps)}" y1="${y - 4}" y2="${y + 4}"/></g>`;
+  });
+  // dots
+  const P = rows.map((r) => ({ r, x: X(r.budget_mio_pps), y: Y(r[key]), k: kind(r) }));
+  // flags sit in an HTML layer over the svg (emoji render more reliably there)
+  const flags = P.map((p) => `<div class="fnd-flag ${p.k}" style="left:${p.x}px;top:${p.y}px"><span>${flag(p.r.iso2)}</span></div>`).join("");
+  // labels: try right, left, above, below, diagonals; skip if all collide
+  const FZ = W < 480 ? 16 : 20, R = FZ / 2 + 2;
+  const placed = P.map((p) => ({ x0: p.x - R, x1: p.x + R, y0: p.y - R, y1: p.y + R }));
+  const fs = W < 480 ? 11.5 : 12.5, cw = fs * 0.56;
+  yt.forEach((t) => placed.push({ x0: 0, x1: M.l - 4, y0: Y(t) - 8, y1: Y(t) + 8 }));  // tick labels
+  const hit = (b) => placed.some((o) => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0) || b.x0 < 2 || b.x1 > W - 2 || b.y0 < 0 || b.y1 > H - M.b;
+  let labels = "";
+  // points furthest from the fit get first pick of label spots
+  const resid = (p) => Math.abs(L(p.r[key]) - (F.ic + F.sl * L(p.r.budget_mio_pps)));
+  [...P].sort((a, b) => resid(b) - resid(a)).forEach((p) => {
+    const t = short(p.r.country), w = t.length * cw, h = fs;
+    const o = R + 2, d = R - 1;
+    const cands = [[p.x + o, p.y - h / 2, "start"], [p.x - o - w, p.y - h / 2, "end"], [p.x - w / 2, p.y - o - h, "middle"], [p.x - w / 2, p.y + o, "middle"],
+      [p.x + d, p.y - d - h, "start"], [p.x + d, p.y + d, "start"], [p.x - d - w, p.y - d - h, "end"], [p.x - d - w, p.y + d, "end"]];
+    for (const [bx, by, anc] of cands) {
+      const box = { x0: bx, x1: bx + w, y0: by, y1: by + h };
+      if (!hit(box)) {
+        placed.push(box);
+        const tx = anc === "start" ? bx : anc === "end" ? bx + w : bx + w / 2;
+        labels += `<text class="halo" x="${tx}" y="${by + h * 0.8}" text-anchor="${anc}" font-size="${fs}">${esc(t)}</text>`;
+        break;
+      }
+    }
+  });
+  s += labels + "</svg>";
+  plot.innerHTML = s + `<div class="fnd-flags" style="--fz:${FZ}px">${flags}</div><div class="fnd-tip"></div>`;
+  tip = plot.querySelector(".fnd-tip");
+  const svg = plot.querySelector("svg");
+  const near = (ev) => {
+    const bb = svg.getBoundingClientRect();
+    const mx = (ev.clientX - bb.left) * (W / bb.width), my = (ev.clientY - bb.top) * (H / bb.height);
+    let best = null, bd = 22 * 22;
+    P.forEach((p) => { const dd = (p.x - mx) ** 2 + (p.y - my) ** 2; if (dd < bd) { bd = dd; best = p; } });
+    return best;
+  };
+  const onMove = (ev) => {
+    const p = near(ev);
+    if (!p) return hideTip();
+    const r = p.r, fitv = 10 ** (F.ic + F.sl * L(r.budget_mio_pps));
+    showTip(budgetTip(r, `${r[key].toLocaleString("en")} ${outWord()} <span>(${(r[key] / fitv).toFixed(2)}× the fit)</span>`), p.x, p.y);
+  };
+  svg.addEventListener("pointermove", onMove);
+  svg.addEventListener("click", onMove);
+  svg.addEventListener("pointerleave", hideTip);
+}
+
+// ---------- titles, legend, note ----------
+function texts() {
+  const out = S.out === "docs" ? "Papers" : "Citations";
+  const sub = S.out === "docs" ? "2024 documents in Medicine (Scopus)" : "Citations to 2024 Medicine documents, excluding self-citations";
+  const LG = {
+    rep: sw("background:var(--ocean)", "Reported"), est: sw(HATCH("var(--ocean)"), "Estimated"),
+    eu: sw(HATCH(GREY), "EU funder"), cn: sw(`outline:1.5px dashed var(--sunset);outline-offset:-1.5px`, "China, guess"),
+    wh: sw("", "Range", "wh"),
+  };
+  const LGWH = LG.wh;
+  let t, st, lg, note;
+  if (S.view === "budget") {
+    t = "Public biomedical & health R&D budget, 2024";
+    if (S.unit === "gdp") {
+      st = "Share of GDP."; lg = [LG.rep, LG.est, LG.wh];
+      note = "China and EU institutions are left out: there is no comparable GDP share.";
+    } else if (S.split) {
+      st = "Billion PPS, split by how the money is given.";
+      lg = [sw("background:var(--ocean)", "Directed / project"), sw("background:var(--sunset)", "University block funds"), sw(`background:${GREY}`, "Other"), sw(`background:var(--ocean);opacity:0.6`, "Faded: estimated split")];
+      note = "The US has no block-fund stream: NIH grants carry the overhead that Europe pays from block funds. Same money, different column.";
+    } else {
+      st = "Billion PPS (purchasing power standards). Tap a bar for how it was built.";
+      lg = [LG.rep, LG.est, LG.eu, LG.cn, LG.wh];
+      note = "EU institutions fund on top of the national budgets, adding roughly 15%.";
+    }
+  } else if (S.view === "ratio") {
+    t = `${out} per million PPS of budget`; st = sub + ", per million PPS of public biomedical R&D.";
+    lg = [sw("background:var(--ocean)", "Budget reported"), sw(HATCH("var(--ocean)"), "Budget estimated"), sw(HATCH("var(--sunset)"), "Budget guessed"), LG.wh];
+    note = "A rough productivity signal, not an efficiency ranking. Research costs more per unit in rich systems than PPS implies.";
+  } else {
+    t = `${out} vs budget`; st = sub + ". Tap a flag for details.";
+    lg = [sw("background:var(--raise);box-shadow:0 0 0 1.5px var(--muted)", "Budget reported", "dot"), sw("background:var(--raise);box-shadow:0 0 0 2px var(--ocean)", "Budget estimated", "dot"),
+      sw("background:var(--raise);box-shadow:0 0 0 2px var(--sunset)", "China, guess", "dot"), LGWH, sw("", "Log-log fit", "ln")];
+    const F = lastFit, nm = (a) => a.map((x) => short(x.r.country)).join(", ");
+    note = F ? `Fit slope ${F.sl.toFixed(2)} (R² ${F.r2.toFixed(2)}): ${F.sl < 1 ? "output grows more slowly than budget" : "output grows at least as fast as budget"}. Furthest above the line: ${nm(F.res.slice(-3).reverse())}. Below: ${nm(F.res.slice(0, 3))}.` : "";
+  }
+  q("#fnd-title").textContent = t; q("#fnd-sub").textContent = st;
+  q("#fnd-lg").innerHTML = lg.join(""); q("#fnd-note").textContent = note;
+}
+
+function render() {
+  root.querySelectorAll("#fnd-view button").forEach((b) => { const on = b.dataset.v === S.view; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+  controls();
+  if (S.view === "budget") drawBudget(); else if (S.view === "ratio") drawRatio(); else drawScatter();
+  texts();
+}
+
+root.addEventListener("click", (ev) => {
+  const v = ev.target.closest("#fnd-view button");
+  if (v) { S.view = v.dataset.v; return render(); }
+  const sb = ev.target.closest(".fnd-seg[data-k] button");
+  if (sb) { const k = sb.parentNode.dataset.k; S[k] = k === "log" ? sb.dataset.val === "true" : sb.dataset.val; return render(); }
+  const c = ev.target.closest(".fnd-chip");
+  if (c) { S[c.dataset.chip] = !S[c.dataset.chip]; return render(); }
+});
+let lastW = 0;
+new ResizeObserver(() => { const w = q("#fnd-plot").clientWidth; if (S.view === "scatter" && Math.abs(w - lastW) > 4) { lastW = w; drawScatter(); } }).observe(q("#fnd-plot"));
+render();
+
+// data table (topic page only)
+const tb = q("#fnd-table");
+if (tb) {
+  const f1 = (v) => v == null ? "" : v.toFixed(1);
+  let h = "<tr><th>Country</th><th>Budget</th><th>Budget, bn PPS</th><th>Range</th><th>% GDP</th><th>Papers</th><th>Citations</th><th>Papers / M PPS</th><th>Citations / M PPS</th></tr>";
+  budgetRows.forEach((r) => {
+    const o = r.med_docs_2024 != null && r.iso2 !== "IE";
+    h += `<tr><td>${esc(r.country)}</td><td class="st">${esc(r.budget_status)}</td><td>${bn(r.budget_mio_pps)}</td>` +
+      `<td>${r.budget_lo_mio_pps != null ? bn(r.budget_lo_mio_pps) + "–" + bn(r.budget_hi_mio_pps) : ""}</td>` +
+      `<td>${r.budget_pct_gdp != null ? r.budget_pct_gdp.toFixed(2) : ""}</td>` +
+      `<td>${r.med_docs_2024 != null ? r.med_docs_2024.toLocaleString("en") : ""}</td>` +
+      `<td>${r.med_citations_excl_self_2024 != null ? r.med_citations_excl_self_2024.toLocaleString("en") : ""}</td>` +
+      `<td>${o ? f1(r.med_docs_2024 / r.budget_mio_pps) : ""}</td><td>${o ? Math.round(r.med_citations_excl_self_2024 / r.budget_mio_pps) : ""}</td></tr>`;
+  });
+  tb.innerHTML = h;
+}
+})();
+</script>
+
+    <details class="datablock"><summary>Data behind these charts <span class="count">1</span></summary>
+    <ul class="datalist">
+        <li class="data">
+          <div class="data-main">
+            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/funding/biomedical_rnd_2024.csv" target="_blank" rel="noopener">biomedical_rnd_2024.csv</a><span class="folder">funding/</span></div>
+            <p>One row per country or funder: 2024 budget (reported, estimated or guessed, with range and % of GDP), its split by funding type, medicine papers 1999–2024 and 2024 citations, and how each estimate was built. Compiled in a separate session; that code is not in the repo.</p>
+            <div class="meta">24 rows · 5 KB · updated 25 Nov 2026</div>
+          </div>
+          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/funding/biomedical_rnd_2024.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/funding/biomedical_rnd_2024.csv" target="_blank" rel="noopener">Download</a></div>
+        </li>
+    </ul></details>
+  </section>
   <section id="pais-burden">
     <header class="sec-head">
       <h2>PAIS burden and ME</h2>
@@ -1112,7 +1570,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
 </main>
 <footer class="wrap">
   <span>To add a chart or dataset: add it to <code>catalog.json</code>, then run <code>python3 -I tools/build_catalog.py</code>.</span>
-  <span class="ver">v7 · built 2026-11-25</span>
+  <span class="ver">v8 · built 2026-11-25</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
