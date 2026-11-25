@@ -76,6 +76,9 @@ many low balanced and male-dominant diseases.
   none is above 75%. Most of the variation is between 40% and 60%, which limits power.
 - **DALYs are the yardstick.** If disability weights undervalue conditions common in women (often
   non-fatal, chronic), the adjustment itself hides a bias. This analysis cannot test that.
-- ME/CFS (about 70–75% female) is not in the 120 and was not used. Adding one disease would not change the fit.
+- ME/CFS is not in the 120 and is not used in any model or group average. The charts show it as a
+  highlighted dot against the same 120-disease burden trend: about 10× fewer papers (0.097×) and 7.7×
+  fewer trials (0.13×) than its burden predicts (ME/CFS model v11.2, CCC, 17.5M DALYs). Its female share
+  is set at about 70%, an approximation.
 - Observational, 120 diseases chosen for searchability. Many other things differ between diseases.
 - Same count caveats as `../expanded/README.md` (title searches, ClinicalTrials.gov only).

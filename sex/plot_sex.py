@@ -24,6 +24,26 @@ SHORT = {"Rheumatic heart disease": "Rheumatic heart dis.", "Multiple sclerosis"
 d = pd.read_csv(os.path.join(HERE, "sex_by_disease_2021-2025.csv"))
 d["side"] = d["sex_class"].map(lambda c: "f" if c.startswith("female") else "m" if c.startswith("male") else "b")
 COL = {"f": SUNSET, "m": OCEAN, "b": NEUTRAL}
+# ME/CFS: not one of the 120, so not in the trend line or group averages. Shown against the same
+# 120-disease burden trend as the other dots. Burden: ME/CFS model v11.2 (CCC, central 17.5M DALYs);
+# papers and trials: "All ME/CFS" from analysis/plot_data_2021-2025.csv. Female share about 70% (approximate).
+ME_SHARE = 0.70
+_all = pd.read_csv(os.path.join(HERE, "..", "expanded", "burden_vs_research_expanded_2021-2025.csv"))
+_me = pd.read_csv(os.path.join(HERE, "..", "analysis", "plot_data_2021-2025.csv")).set_index("label").loc["All ME/CFS (classic + post-COVID)"]
+ME = {}
+for _m in ("papers", "trials"):
+    _b, _a = np.polyfit(np.log10(_all["dalys"]), np.log10(_all[f"{_m}_per_year"]), 1)
+    ME[_m] = float(_me[f"{_m}_per_year"]) / 10 ** (_a + _b * np.log10(float(_me["dalys"])))
+ME_FOOT = "ME/CFS (about 70% women): not in trend or averages. Burden from a model."
+
+
+def me_dot(ax, x, y, label_side="right"):
+    ax.scatter([x], [y], s=150, color=SUNSET, edgecolor=INK, lw=2.2, zorder=6)
+    dx, ha = (11, "left") if label_side == "right" else (-11, "right")
+    ax.annotate("ME/CFS", (x, y), xytext=(dx, 0), textcoords="offset points", ha=ha, va="center",
+                fontsize=12, fontweight="bold", color=INK, zorder=6)
+
+
 YT = [0.03, 0.1, 0.3, 1, 3, 10]
 YL = ["30× fewer", "10× fewer", "3× fewer", "As expected", "3× more", "10× more"]
 
@@ -46,7 +66,7 @@ def scatter(version):
     fig = plt.figure(figsize=(6, 9.2), facecolor=BG)
     header(fig, "Research vs burden, by sex", "Each dot is a disease. Compared with what its burden predicts.",
            [("Mostly women", SUNSET), ("Balanced", NEUTRAL), ("Mostly men", OCEAN)])
-    panels = [("Papers", "papers", 0.475), ("Trials", "trials", 0.10)]
+    panels = [("Papers", "papers", 0.48), ("Trials", "trials", 0.118)]
     labels = {"papers": ["Breast cancer", "Multiple sclerosis", "Rheumatic heart disease", "Prostate cancer"],
               "trials": ["Breast cancer", "Multiple sclerosis", "Rheumatic heart disease", "Prostate cancer"]}
     for name, m, bottom in panels:
@@ -60,6 +80,7 @@ def scatter(version):
         xs = np.array([d.loc[ns, "female_share"].min(), d.loc[ns, "female_share"].max()]) * 100
         ax.plot(xs, 10 ** (a + b * xs), color=INK, lw=2, zorder=4, solid_capstyle="round")
         ax.axhline(1, color=MUTED, lw=1.2, ls=(0, (3, 3)), zorder=1)
+        me_dot(ax, ME_SHARE * 100, ME[m], "right")
         ax.set_yscale("log"); ax.set_ylim(0.025, 16)
         ax.yaxis.set_major_locator(FixedLocator(YT)); ax.set_yticklabels(YL)
         ax.yaxis.set_minor_locator(NullLocator())
@@ -72,12 +93,17 @@ def scatter(version):
             r = d[d["label"] == lab].iloc[0]
             x, yy = r["female_share"] * 100, r[f"{m}_resid_fold"]
             ha, dx = ("right", -7) if (x > 80 or lab == "Multiple sclerosis") else ("left", 7)
+            if lab == "Rheumatic heart disease" and m == "papers":  # next to ME/CFS: label below the dot
+                ax.annotate(SHORT[lab], (x, yy), xytext=(0, -9), textcoords="offset points",
+                            ha="center", va="top", fontsize=10.5, color=MUTED)
+                continue
             ax.annotate(SHORT.get(lab, lab), (x, yy), xytext=(dx, 0), textcoords="offset points",
                         ha=ha, va="center", fontsize=10.5, color=MUTED)
-    fig.text(0.6, 0.045, "Share of patients who are women", fontsize=12.5, color=INK, ha="center", va="baseline")
+    fig.text(0.6, 0.062, "Share of patients who are women", fontsize=12.5, color=INK, ha="center", va="baseline")
     fig.text(M, 0.845, "White line: trend (one-sex diseases left out). It is flat.", fontsize=11.5, color=MUTED, va="baseline")
-    fig.text(M, 0.018, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.018, version, fontsize=9, color=GRID, ha="right", va="baseline")
+    fig.text(M, 0.034, ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
+    fig.text(M, 0.016, FOOT, fontsize=9.5, color=MUTED, va="baseline")
+    fig.text(1 - M, 0.016, version, fontsize=9, color=GRID, ha="right", va="baseline")
     fig.savefig(os.path.join(HERE, "sex_scatter.png"), dpi=300, facecolor=BG)
 
 
@@ -100,6 +126,8 @@ def groups(version):
             ax.scatter(v, yi + rng.uniform(-0.22, 0.22, len(v)), s=22, color=col, alpha=0.75, lw=0, zorder=2)
             g = float(np.exp(np.log(v).mean()))
             ax.plot([g, g], [yi - 0.36, yi + 0.36], color=INK, lw=3, zorder=3, solid_capstyle="round")
+            if cls == "female-dominant":
+                me_dot(ax, ME[m], yi - 0.3, "left")
             if ax is axes[0]:
                 fig.text(M, bot + (top - bot) * (yi + 0.5) / n, lab, fontsize=12.5, color=INK, va="center")
                 fig.text(M, bot + (top - bot) * (yi + 0.5) / n - 0.026, f"{len(v)} diseases", fontsize=10.5,
@@ -114,11 +142,12 @@ def groups(version):
         ax.grid(True, axis="x", color=GRID, lw=1, zorder=0)
         style(ax); ax.spines["left"].set_visible(False)
         fig.text(ax.get_position().x0, top + 0.015, title, fontsize=13, fontweight="bold", color=INK, va="bottom")
-    fig.text(M, 0.05, "Women-only and men-only groups include cancers, which get more research", fontsize=10.5, color=MUTED, va="baseline")
+    fig.text(M, 0.072, "Women-only and men-only groups include cancers, which get more research", fontsize=10.5, color=MUTED, va="baseline")
+    fig.text(M, 0.045, ME_FOOT, fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.018, FOOT, fontsize=9.5, color=MUTED, va="baseline")
     fig.text(1 - M, 0.018, version, fontsize=9, color=GRID, ha="right", va="baseline")
     fig.savefig(os.path.join(HERE, "sex_groups.png"), dpi=300, facecolor=BG)
 
 
-scatter("v3")
-groups("v2")
+scatter("v6")
+groups("v4")
