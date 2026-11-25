@@ -115,6 +115,14 @@ Page: https://ebise-wq.github.io/pais-data/sex.html
 
 Notes: [`sex/README.md`](sex/README.md)
 
+### PAIS burden and ME
+
+An illustrative model of post-acute infection syndromes (PAIS) built on Dutch prevalence estimates. With the default assumptions, ME is about half of PAIS patients (1.5% of 3.1% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.
+
+Page: https://ebise-wq.github.io/pais-data/pais-burden.html
+
+Notes: [`pais/README.md`](pais/README.md)
+
 ### Source data
 
 The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed paper counts per year, 1996–2026, plus the GBD 2023 burden files. The 120-disease work fetches its own counts (see above).

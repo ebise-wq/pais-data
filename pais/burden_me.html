@@ -1,0 +1,339 @@
+<!-- Interactive "PAIS disease burden and ME" model for the catalog pages.
+     tools/build_catalog.py inserts this into docs/index.html and docs/pais-burden.html. All numbers
+     are in the script below (no data file). The assumption cards between more:start and more:end show
+     on the topic page only; without them the script uses the default values. Classes and ids start
+     with pme- so they don't clash with the page or the other fragment. Fonts and colours come from the
+     page's tokens. -->
+<style>
+.pme { display: grid; gap: 1rem; min-width: 0; max-width: 900px; font: 400 15px/1.5 var(--f-body); color: var(--ink);
+  --me: #f4a582; --lc: #7fb3d5; }
+.pme [hidden] { display: none !important; }
+.pme-seg { display: inline-flex; justify-self: start; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--bg); }
+.pme-seg button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px;
+  padding: 0.35rem 0.9rem; cursor: pointer; }
+.pme-seg button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.pme button:focus-visible, .pme input:focus-visible { outline: 2px solid var(--sunset); outline-offset: 2px; }
+.pme-poster { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 20px 18px 12px; min-width: 0; }
+.pme-poster h3 { font: 600 clamp(1.35rem, 4.4vw, 1.85rem)/1.15 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.pme-poster h3 em { font-style: normal; color: var(--sunset); }
+.pme-lede { color: var(--muted); font-size: 0.95rem; margin: 6px 0 0; max-width: 60ch; }
+.pme-panels { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 14px; }
+@media (min-width: 640px) { .pme-panels { grid-template-columns: 1fr 1fr; gap: 18px; } }
+.pme-pn { min-width: 0; }
+.pme-hd { display: flex; flex-direction: column; align-items: flex-start; gap: 2px; border-top: 1px solid var(--line); padding-top: 10px; }
+.pme-hl { font: 600 clamp(15px, 3.8vw, 17px)/1.3 var(--f-display); }
+.pme-hl em { font-style: normal; font-weight: 600; color: var(--sunset); }
+.pme-t { font-size: 0.88rem; color: var(--muted); line-height: 1.35; font-variant-numeric: tabular-nums; }
+.pme-poster svg { display: block; width: 100%; height: auto; }
+.pme svg text { font-family: var(--f-body); }
+.pme-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 16px; font: 400 0.75rem/1.5 var(--f-mono);
+  color: var(--faint); border-top: 1px solid var(--line); padding-top: 8px; margin-top: 6px; }
+.pme-foot a { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px; }
+.pme-tog { display: inline-flex; justify-self: start; align-items: center; gap: 8px; font-size: 0.92rem; color: var(--muted); cursor: pointer; }
+.pme-tog input { width: 16px; height: 16px; accent-color: var(--sunset); }
+.pme-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; min-width: 0; }
+.pme-card h3 { font: 600 1.1rem/1.3 var(--f-display); margin: 0; }
+.pme-mew { display: flex; flex-wrap: wrap; gap: 6px 18px; font-size: 0.88rem; color: var(--muted); margin: 8px 0 10px; align-items: center; }
+.pme-tbl { overflow-x: auto; }
+.pme table { border-collapse: collapse; width: 100%; min-width: 540px; font-size: 0.88rem; }
+.pme th, .pme td { padding: 6px; border-bottom: 1px solid var(--line); text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+.pme th { color: var(--muted); font-weight: 500; font-size: 0.82rem; }
+.pme th:first-child, .pme td:first-child { text-align: left; white-space: normal; }
+.pme td.pme-o { font-family: var(--f-mono); }
+.pme td.pme-o small { color: var(--muted); font-family: var(--f-body); margin-left: 6px; }
+.pme tfoot td { border-bottom: 0; font-weight: 500; }
+.pme input[type=number] { width: 84px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; color: var(--ink);
+  font: 500 0.88rem var(--f-mono); padding: 4px 6px; text-align: right; }
+.pme input.pme-s { width: 62px; }
+.pme-na { color: var(--faint); }
+.pme tr.pme-off td { color: var(--faint); }
+.pme-sw { width: 10px; height: 10px; border-radius: 50%; display: inline-block; margin-right: 7px; vertical-align: -1px; }
+.pme-chk { display: inline-flex; align-items: center; gap: 5px; font-size: 0.82rem; color: var(--muted); margin-left: 6px; }
+.pme-notes { font-size: 0.88rem; color: var(--muted); margin: 12px 0 0; padding-left: 18px; line-height: 1.55; }
+.pme-notes li { margin-bottom: 5px; }
+.pme-notes b { color: var(--ink); font-weight: 500; }
+.pme-sgrid { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 6px 20px; margin-top: 8px; }
+.pme-sgrid label { display: flex; justify-content: space-between; align-items: center; gap: 10px; font-size: 0.88rem; color: var(--muted); }
+</style>
+
+<div class="pme" id="pme">
+  <div class="pme-seg" role="group" aria-label="Chart">
+    <button type="button" id="pme-tab1" aria-pressed="true">Disease burden</button>
+    <button type="button" id="pme-tab2" aria-pressed="false">Dysautonomia and MCAS</button>
+  </div>
+
+  <div class="pme-poster" id="pme-p1">
+    <h3 id="pme-ttl">ME is about half of PAIS patients, but most of the PAIS disease burden</h3>
+    <p class="pme-lede">Post-Acute Infection Syndromes</p>
+    <div class="pme-panels">
+      <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kN">–</em> of PAIS patients have ME</span><span class="pme-t" id="pme-tN"></span></div>
+        <svg id="pme-vN" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS patients by trigger and ME"></svg></div>
+      <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
+        <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
+    </div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v6</span></div>
+  </div>
+
+  <div class="pme-poster" id="pme-p2" hidden>
+    <h3>How Long COVID, ME, dysautonomia and MCAS may overlap</h3>
+    <p class="pme-lede">Rough estimate.</p>
+    <div class="pme-panels">
+      <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Patients</span></div>
+        <svg id="pme-vS" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of patients: Long COVID, ME, dysautonomia and MCAS"></svg></div>
+      <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
+        <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
+    </div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v6</span></div>
+  </div>
+
+  <label class="pme-tog"><input type="checkbox" id="pme-hide"> Hide numbers</label>
+
+  <!-- more:start -->
+  <div class="pme-card" id="pme-a2" hidden>
+    <h3>Assumptions: dysautonomia and MCAS</h3>
+    <div class="pme-sgrid">
+      <label>Dysautonomia in ME (%) <input class="pme-s" type="number" id="pme-dMe" min="0" max="100" step="5" value="50"></label>
+      <label>Dysautonomia in Long COVID without ME (%) <input class="pme-s" type="number" id="pme-dNo" min="0" max="100" step="5" value="15"></label>
+      <label>MCAS in ME (%) <input class="pme-s" type="number" id="pme-mMe" min="0" max="100" step="5" value="25"></label>
+      <label>MCAS in Long COVID without ME (%) <input class="pme-s" type="number" id="pme-mNo" min="0" max="100" step="5" value="5"></label>
+      <label>MCAS with dysautonomia too (%) <input class="pme-s" type="number" id="pme-mD" min="0" max="100" step="5" value="60"></label>
+      <label>Extra severity from dysautonomia <input class="pme-s" type="number" id="pme-wD" min="0" max="1" step="0.01" value="0.10"></label>
+      <label>Extra severity from MCAS <input class="pme-s" type="number" id="pme-wM" min="0" max="1" step="0.01" value="0.05"></label>
+    </div>
+    <ul class="pme-notes">
+      <li><b>Dysautonomia in ME.</b> At a Dutch clinic, 25% of 627 adults with ME and orthostatic symptoms met POTS criteria on tilt testing (<a href="https://www.frontiersin.org/journals/pediatrics/articles/10.3389/fped.2018.00349/full" target="_blank" rel="noopener">van Campen 2018</a>). Broader orthostatic intolerance is more common, so 50% is an assumption for OI and POTS combined.</li>
+      <li><b>Dysautonomia in Long COVID.</b> 31% of 467 Swedish people with Long COVID on at least half-time sick leave had POTS (<a href="https://www.cidrap.umn.edu/covid-19/nearly-1-3-adults-severe-long-covid-have-rare-heart-rhythm-disorder-data-suggest" target="_blank" rel="noopener">Karolinska 2025</a>). That is a severely affected group, part of which has ME. Small studies report 19% to 63%.</li>
+      <li><b>MCAS.</b> There are no prevalence figures based on diagnostic criteria. There is only an online symptom survey of 136 people recruited from Facebook groups (<a href="https://www.s4me.info/threads/mast-cell-activation-symptoms-are-prevalent-in-long-covid-2021-weinstock-et-al.22595" target="_blank" rel="noopener">Weinstock 2021</a>). The MCAS shares are guesses.</li>
+      <li><b>Disease burden.</b> Everyone gets the severity from the burden model (ME, or Long COVID without ME). Dysautonomia and MCAS are added on top, combined the way the GBD does it: 1 − (1−a)(1−b)(1−c). The extra severity is an assumption. For comparison, POTS patients score 0.56 on the EQ-5D against 0.87 in the general population, but that includes their ME and Long COVID (<a href="https://index.mirasmart.com/AAN2025/PDFfiles/AAN2025-004823.html" target="_blank" rel="noopener">AAN 2025</a>).</li>
+    </ul>
+  </div>
+
+  <div class="pme-card" id="pme-a1">
+    <h3>Assumptions: disease burden</h3>
+    <div class="pme-mew">
+      <span>Severity of ME:</span>
+      <label>house/bedbound <input class="pme-s" type="number" id="pme-wMeH" min="0" max="1" step="0.05" value="0.55"></label>
+      <label>not housebound <input class="pme-s" type="number" id="pme-wMeO" min="0" max="1" step="0.01" value="0.22"></label>
+    </div>
+    <div class="pme-tbl"><table>
+      <thead><tr><th>Group</th><th>Prevalence (%)</th><th>% ME</th><th>Severity without ME</th><th>Burden</th></tr></thead>
+      <tbody id="pme-tb"></tbody>
+      <tfoot><tr><td>Total</td><td class="pme-o" id="pme-totN"></td><td class="pme-o" id="pme-totMe"></td><td></td><td class="pme-o" id="pme-totB"></td></tr></tfoot>
+    </table></div>
+    <ul class="pme-notes">
+      <li><b>ME, not housebound: 0.22.</b> The GBD weight for "infectious disease, post-acute consequences" (fatigue, pain, low mood) is 0.219. An Australian study found an EQ-5D of 0.69 in mild ME against 0.89 in the population, a loss of 0.20 (<a href="https://www.ispor.org/heor-resources/presentations-database/presentation/euro2023-3788/130321" target="_blank" rel="noopener">abstract, later withdrawn</a>).</li>
+      <li><b>ME, house/bedbound: 0.55.</b> In the same study, moderate ME (ICC: mostly housebound) gave a loss of 0.45; severe ME scored much lower. For comparison: GBD moderate MS 0.46, severe MS 0.72. Mean ME utility in patient associations is 0.46–0.47 (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a>, <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a>), but those groups are sicker than average.</li>
+      <li><b>Long COVID without ME: 0.07 (other) and 0.40 (housebound).</b> GBD weights for Long COVID: mild cognitive symptoms 0.069, mild respiratory symptoms 0.019, severe 0.38–0.41 (<a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">JAMA 2022</a>). In a Japanese population study, Long COVID scored 0.94 against 0.97 (<a href="https://journals.sagepub.com/doi/reader/10.1177/00469580241246461" target="_blank" rel="noopener">INQUIRY 2024</a>).</li>
+      <li><b>Post-vax (0.011%) and post-Legionella (0.008%)</b> are assumptions. Post-vax has the same split as Long COVID. For post-Legionella, the Dutch PAIS Alliance cites 500 new cases a year in the Netherlands (0.003% of the population); with an illness duration of several years, prevalence is higher.</li>
+      <li><b>Post-Lyme, post-Q fever, post-Legionella and post-sepsis without ME: 0.07.</b> The same assumption as mild Long COVID. ME after these triggers gets the average ME severity. The share of ME after these triggers has never been measured.</li>
+      <li>Prevalence is the share of the population, converted from Dutch estimates (population 18.0 million). Burden is DALYs per person per year: prevalence × severity, so 1% means the population loses 1% of its healthy life-years. Starting point: the <a href="https://paisalliantie.nl/over-pais-aandoeningen/" target="_blank" rel="noopener">Dutch PAIS Alliance</a>. Post-Lyme is my own estimate, doubled to stay in proportion with the other figures, which are probably ~2× too high (<a href="https://radboudumc.nl/en/news-items/2021/long-term-symptoms-more-common-after-lyme-disease" target="_blank" rel="noopener">LymeProspect</a>, <a href="https://www.tekenbeetziekten.nl/site/assets/files/1579/the-burden-of-lyme-borreliosis-expressed-in-disability-adjusted-life-years.pdf" target="_blank" rel="noopener">RIVM</a>).</li>
+    </ul>
+  </div>
+  <!-- more:end -->
+</div>
+
+<script>
+(function(){
+const root=document.getElementById("pme");
+if(!root)return;
+const $=id=>document.getElementById("pme-"+id);
+// House colours: ocean for Long COVID and the other triggers, sunset for ME.
+const INK="#eef1f6",MUTED="#a3acba",HALO="#1a2230";
+const TR={LC:{n:"Long COVID",c:"#7fb3d5"},ME:{n:"ME",c:"#f4a582"},PV:{n:"Post-vax",c:"#c6e1f1"},LY:{n:"Post-Lyme",c:"#9fcbe6"},
+  Q:{n:"Post-Q fever",c:"#b3dbd6"},PL:{n:"Post-Legionella",c:"#dde9f3"},S:{n:"Post-sepsis",sub:"(excl. post-ICU)",c:"#6c9fc6"}};
+const SMALL=["PV","LY","Q","PL","S"];
+const R=[
+  {id:"lcH",t:"LC",l:"Long COVID, house/bedbound",n:0.5,me:90,w:0.40,mw:"H"},
+  {id:"lcO",t:"LC",l:"Long COVID, other",n:2.0,me:30,w:0.07,mw:"O"},
+  {id:"meH",t:"ME",l:"ME other trigger, house/bedbound",n:0.11,me:100,w:null,mw:"H",lockMe:1},
+  {id:"meO",t:"ME",l:"ME other trigger, other",n:0.33,me:100,w:null,mw:"O",lockMe:1},
+  {id:"pvH",t:"PV",l:"Post-vax, house/bedbound",n:0.002,me:90,w:0.40,mw:"H"},
+  {id:"pvO",t:"PV",l:"Post-vax, other",n:0.009,me:30,w:0.07,mw:"O"},
+  {id:"ly",t:"LY",l:"Post-Lyme (PTLDS)",n:0.089,me:20,w:0.07,mw:"X"},
+  {id:"q",t:"Q",l:"Post-Q fever (QFS)",n:0.008,me:80,w:0.07,mw:"X"},
+  {id:"pl",t:"PL",l:"Post-Legionella",n:0.008,me:20,w:0.07,mw:"X"},
+  {id:"s",t:"S",l:"Post-sepsis, excl. post-ICU",n:0.044,me:10,w:0.07,mw:"X"},
+  {id:"p",t:"S",l:"Post-intensive care syndrome after sepsis",n:0.056,me:0,w:0.20,mw:"X",pics:1,lockMe:1,inc:false}
+];
+const N=v=>(v>=1?v.toFixed(1):v>=0.1?v.toFixed(2):v>=0.01?v.toFixed(3):v.toFixed(4))+"%";
+const K=N;
+const P=v=>v>0&&v<1?"<1%":Math.round(v)+"%";
+let hide=false,tab=1;
+
+const tb=$("tb");
+if(tb)tb.innerHTML=R.map(r=>`<tr id="pme-r-${r.id}"><td><i class="pme-sw" style="background:${TR[r.t].c}"></i>${r.l}${r.pics?` <label class="pme-chk"><input type="checkbox" id="pme-inc">include</label>`:""}</td>
+<td><input type="number" id="pme-n-${r.id}" min="0" step="0.001" value="${r.n}" aria-label="Prevalence ${r.l}"></td>
+<td>${r.lockMe?`<span class="pme-na">${r.pics?"–":"100"}</span>`:`<input class="pme-s" type="number" id="pme-m-${r.id}" min="0" max="100" step="5" value="${r.me}" aria-label="% ME ${r.l}">`}</td>
+<td>${r.w===null?`<span class="pme-na">–</span>`:`<input class="pme-s" type="number" id="pme-w-${r.id}" min="0" max="1" step="0.01" value="${r.w.toFixed(2)}" aria-label="Severity without ME ${r.l}">`}</td>
+<td class="pme-o" id="pme-b-${r.id}"></td></tr>`).join("");
+
+// Read an input; on the overview page the assumption cards are left out, so fall back to the default.
+function num(id,lo,hi,def){const e=$(id);let v=e?parseFloat(e.value):def;if(isNaN(v))v=0;return Math.min(hi,Math.max(lo,v))}
+function model(){
+  R.forEach(r=>{r.n=num("n-"+r.id,0,1e7,r.n);if(!r.lockMe)r.me=num("m-"+r.id,0,100,r.me);if(r.w!==null)r.w=num("w-"+r.id,0,1,r.w)});
+  const inc=$("inc");R.find(r=>r.pics).inc=inc?inc.checked:false;
+  const wH=num("wMeH",0,1,0.55),wO=num("wMeO",0,1,0.22);
+  const mH=R.find(r=>r.id==="meH").n,mO=R.find(r=>r.id==="meO").n,f=mH+mO>0?mH/(mH+mO):0,mix=f*wH+(1-f)*wO;
+  const T={};Object.keys(TR).forEach(t=>T[t]={nMe:0,nNo:0,bMe:0,bNo:0});
+  R.forEach(r=>{r.on=!r.pics||r.inc;const mw=r.mw==="H"?wH:r.mw==="O"?wO:mix;
+    const nMe=r.n*r.me/100,nNo=r.n-nMe;r.daly=nMe*mw+nNo*(r.w||0);
+    if(!r.on)return;const g=T[r.t];g.nMe+=nMe;g.nNo+=nNo;g.bMe+=nMe*mw;g.bNo+=nNo*(r.w||0)});
+  return T;
+}
+function lens(r1,r2,d){
+  if(d>=r1+r2)return 0;if(d<=Math.abs(r1-r2))return Math.PI*Math.min(r1,r2)**2;
+  const a=r1*r1*Math.acos((d*d+r1*r1-r2*r2)/(2*d*r1)),b=r2*r2*Math.acos((d*d+r2*r2-r1*r1)/(2*d*r2));
+  return a+b-0.5*Math.sqrt((-d+r1+r2)*(d+r1-r2)*(d-r1+r2)*(d+r1+r2));
+}
+function dist(r1,r2,target){let lo=Math.abs(r1-r2),hi=r1+r2;if(target<=0)return hi;if(target>=Math.PI*Math.min(r1,r2)**2-1e-9)return lo;
+  for(let i=0;i<60;i++){const m=(lo+hi)/2;lens(r1,r2,m)>target?lo=m:hi=m}return (lo+hi)/2}
+const rad=a=>Math.sqrt(Math.max(a,0)/Math.PI);
+const FS=1;
+function texts(x,y,lines,anchor,col){
+  return lines.map((l,i)=>`<text x="${x}" y="${y+i*15*FS}" text-anchor="${anchor}" font-size="${(i===0?13:11.5)*FS}" font-weight="${i===0?500:400}" fill="${col}" fill-opacity="${i===0?1:.82}">${l}</text>`).join("");
+}
+function spread(items,top,bottom){
+  items.sort((a,b)=>a.want-b.want);
+  let y=top;items.forEach(it=>{it.y=Math.max(it.want,y);y=it.y+it.h});
+  const over=y-bottom;if(over>0){let yy=bottom;for(let i=items.length-1;i>=0;i--){items[i].y=Math.min(items[i].y,yy-items[i].h);yy=items[i].y}}
+}
+function euler(svgId,T,key){
+  const me=key==="n"?"nMe":"bMe",no=key==="n"?"nNo":"bNo";
+  const meTot=Object.values(T).reduce((a,g)=>a+g[me],0);
+  const all=Object.values(T).reduce((a,g)=>a+g[me]+g[no],0)||1;
+  const rME=rad(meTot),lcA=T.LC[me]+T.LC[no],rLC=rad(lcA),dLC=dist(rME,rLC,T.LC[me]);
+  const angs=[-34,-12,10,32,54];
+  const small=SMALL.map((t,i)=>{const A=T[t][me]+T[t][no];const r=rad(A);return{t,A,r,d:A>0?dist(rME,r,T[t][me]):0,ang:angs[i]*Math.PI/180}}).filter(s=>s.A>0);
+  small.forEach(s=>{s.x=s.d*Math.cos(s.ang);s.y=s.d*Math.sin(s.ang)});
+  const minX=Math.min(-dLC-rLC,-rME),maxX=Math.max(rME,...small.map(s=>s.x+s.r));
+  const minY=Math.min(-rLC,-rME,...small.map(s=>s.y-s.r)),maxY=Math.max(rLC,rME,...small.map(s=>s.y+s.r));
+  const W=380,H=304,padL=6,padR=120*FS,padT=44*FS,padB=8;
+  $(svgId).setAttribute("viewBox",`0 0 ${W} ${H}`);
+  const sc=Math.min((W-padL-padR)/(maxX-minX),(H-padT-padB)/(maxY-minY));
+  const ox=padL+(W-padL-padR-(maxX-minX)*sc)/2-minX*sc,oy=padT+(H-padT-padB-(maxY-minY)*sc)/2-minY*sc;
+  const X=x=>ox+x*sc,Y=y=>oy+y*sc;
+  let h=`<circle cx="${X(-dLC)}" cy="${Y(0)}" r="${rLC*sc}" fill="${TR.LC.c}" fill-opacity=".38" stroke="${TR.LC.c}" stroke-width="1.5"/>`;
+  h+=`<circle cx="${X(0)}" cy="${Y(0)}" r="${rME*sc}" fill="${TR.ME.c}" fill-opacity=".55" stroke="${TR.ME.c}" stroke-width="1.5"/>`;
+  h+=`<circle cx="${X(-dLC)}" cy="${Y(0)}" r="${rLC*sc}" fill="none" stroke="#a9cde6" stroke-width="1.5" stroke-opacity=".9"/>`;
+  small.forEach(s=>{const c=TR[s.t].c;h+=`<circle cx="${X(s.x)}" cy="${Y(s.y)}" r="${Math.max(2,s.r*sc)}" fill="${c}" fill-opacity=".6" stroke="${c}" stroke-width="1.3"/>`});
+  const lcL=X(-dLC-rLC),meL=X(-rME),lcR=X(-dLC+rLC),meR=X(rME);
+  const zones=[
+    {x:(lcL+meL)/2,w:meL-lcL,l:["Long COVID",hide?"no ME":"no ME · "+P(T.LC[no]/all*100)]},
+    {x:(meL+lcR)/2,w:lcR-meL,l:hide?["Post-COVID ME"]:["Post-COVID ME",P(T.LC[me]/all*100)]},
+    {x:lcR+(meR-lcR)*0.18,w:meR-lcR,l:["ME",hide?"other trigger":"other trigger · "+P(T.ME[me]/all*100)]}
+  ];
+  const topAt=(x,cx,r)=>Y(0)-Math.sqrt(Math.max(0,(r*sc)**2-(x-cx)**2));
+  zones.forEach((z,i)=>{
+    if(z.w>=92*FS)h+=texts(z.x,Y(0)-4-(z.l.length-1)*7*FS,z.l,"middle",INK);
+    else{const tx=Math.min(Math.max(z.x,52*FS),W-padR-30*FS);
+      const yE=i===0?topAt(z.x,X(-dLC),rLC):topAt(z.x,X(0),rME);
+      const ty=Math.max(14*FS,Y(minY)-12*FS-(z.l.length-1)*15*FS);
+      h+=`<line x1="${z.x}" y1="${ty+(z.l.length-1)*15*FS+6*FS}" x2="${z.x}" y2="${yE}" stroke="${MUTED}" stroke-width=".8"/>`;
+      h+=texts(tx,ty,z.l,"middle",INK)}
+  });
+  const lx=Math.max(meR,...small.map(s=>X(s.x)+Math.max(2,s.r*sc)))+16*FS;
+  const labs=small.map(s=>{const lines=[TR[s.t].n];if(TR[s.t].sub)lines.push(TR[s.t].sub);
+    if(!hide)lines.push(P(s.A/all*100)+" · "+Math.round(T[s.t][me]/(s.A||1)*100)+"% ME");
+    const cy=Y(s.y);return{s,lines,cy,want:cy-4*FS-(lines.length-1)*7*FS,h:(lines.length*15+5)*FS}});
+  spread(labs,padT-6,H-2);
+  labs.forEach(L=>{const s=L.s,cx=X(s.x),r=Math.max(2,s.r*sc),c=TR[s.t].c,ty=L.y+(L.lines.length-1)*7*FS;
+    h+=`<polyline points="${cx+r},${L.cy} ${lx-12},${L.cy} ${lx-4},${ty}" fill="none" stroke="${c}" stroke-width=".8"/>`;
+    h+=texts(lx,L.y+11*FS,L.lines,"start",c)});
+  $(svgId).innerHTML=h;
+  return{meTot,all};
+}
+function r5(v){return "~"+Math.round(v/5)*5+"%"}
+function render1(T){
+  const a=euler("vN",T,"n"),b=euler("vB",T,"b");
+  const pN=a.meTot/a.all*100,pB=b.meTot/b.all*100,half=Math.abs(pN-50)<=4;
+  $("kN").textContent=half?"~Half":r5(pN);$("kB").textContent=r5(pB);
+  $("tN").textContent=hide?"":`${K(a.meTot)} of ${K(a.all)} of the population`;$("tB").textContent=hide?"":`${(b.meTot).toFixed(2)} of ${(b.all).toFixed(2)} healthy life-years lost per 100 people, each year`;
+  $("ttl").innerHTML=`ME is <em>${half?"~half":r5(pN)}</em> of PAIS patients, but <em>${r5(pB)}</em> of the PAIS disease burden`;
+  if(tb){R.forEach(r=>{$("b-"+r.id).innerHTML=r.on?`${N(r.daly)}<small>${P(r.daly/b.all*100)}</small>`:`<span class="pme-na">${N(r.daly)}</span>`;$("r-"+r.id).classList.toggle("pme-off",!r.on)});
+    $("totN").textContent=N(a.all);$("totMe").textContent=Math.round(pN)+"%";$("totB").textContent=N(b.all)}
+}
+function euler4(svgId,S,tgt,unit){
+  const big=Math.max(...S.map(s=>s.A))||1;S.forEach(s=>{s.r=rad(s.A/big)});
+  const pairs=[];for(let i=0;i<4;i++)for(let j=i+1;j<4;j++){const t=tgt[S[i].k+"|"+S[j].k]/big;pairs.push([i,j,t,Math.max(1e-6,Math.min(S[i].r,S[j].r)**2*Math.PI)])}
+  const dPM=dist(S[0].r,S[1].r,pairs[0][2]);
+  let P2=[[0,0],[dPM,0],[dPM*0.55,-S[0].r*0.15],[dPM*0.75,S[0].r*0.2]];
+  const outside=p=>{let a=0;[2,3].forEach(i=>{for(let k=0;k<16;k++){const t=k/16*2*Math.PI,x=p[i][0]+S[i].r*Math.cos(t),y=p[i][1]+S[i].r*Math.sin(t);
+    const o=Math.min(Math.hypot(x-p[0][0],y-p[0][1])-S[0].r,Math.hypot(x-p[1][0],y-p[1][1])-S[1].r);if(o>0)a+=(o/S[i].r)**2}});return a*0.8};
+  const loss=p=>pairs.reduce((a,[i,j,t,n])=>{const d=Math.hypot(p[i][0]-p[j][0],p[i][1]-p[j][1]);return a+((lens(S[i].r,S[j].r,d)-t)/n)**2},0)+outside(p);
+  let lr=0.05;
+  for(let it=0;it<500;it++){
+    for(let i=1;i<4;i++)for(let c=0;c<2;c++){const e=1e-4;const a=P2.map(q=>q.slice()),b=P2.map(q=>q.slice());a[i][c]+=e;b[i][c]-=e;
+      const g=(loss(a)-loss(b))/(2*e);P2[i][c]-=lr*Math.max(-1,Math.min(1,g))}
+    lr*=0.993;
+  }
+  const minX=Math.min(...S.map((s,i)=>P2[i][0]-s.r)),maxX=Math.max(...S.map((s,i)=>P2[i][0]+s.r));
+  const minY=Math.min(...S.map((s,i)=>P2[i][1]-s.r)),maxY=Math.max(...S.map((s,i)=>P2[i][1]+s.r));
+  const W=380,H=300,pT=8,pB=8,pL=8,pR=8;
+  const sc=Math.min((W-pL-pR)/(maxX-minX),(H-pT-pB)/(maxY-minY));
+  const ox=pL+(W-pL-pR-(maxX-minX)*sc)/2-minX*sc,oy=pT+(H-pT-pB-(maxY-minY)*sc)/2-minY*sc;
+  const X=x=>ox+x*sc,Y=y=>oy+y*sc;
+  const C=S.map((s,i)=>({x:X(P2[i][0]),y:Y(P2[i][1]),r:s.r*sc}));
+  let h="";
+  S.forEach((s,i)=>{const c=C[i];h+=`<circle cx="${c.x}" cy="${c.y}" r="${c.r}" fill="${s.c}" fill-opacity="${[.24,.3,.2,.22][i]}" stroke="${s.c}" stroke-width="1.8"${s.dash?' stroke-dasharray="5 3"':""}/>`});
+  const sub=s=>hide?[]:[(unit?"":K(s.A))+(s.me==null?"":(unit?"":" · ")+Math.round(s.me*100)+"% ME")].filter(x=>x);
+  const inside=(i,x,y)=>Math.hypot(x-C[i].x,y-C[i].y)<C[i].r;
+  const mem=(x,y)=>C.map((_,i)=>inside(i,x,y));
+  const edge=(x,y)=>Math.min(...C.map(c=>Math.abs(Math.hypot(x-c.x,y-c.y)-c.r)));
+  const wants=[[m=>m[0]&&!m[1]&&!m[2]&&!m[3]],[m=>m[1]&&!m[0]&&!m[2]&&!m[3],m=>m[1]&&!m[0]],[m=>m[2]&&!m[3]],[m=>m[3]&&!m[2]]];
+  const tint=["#b9d7ec","#f8c9ae","#bfe6df","#f1c6d6"];
+  const placed=[];
+  S.forEach((s,i)=>{
+    const lines=[s.n,...sub(s)],tw=Math.max(...lines.map((l,k)=>l.length*(k?6.4:7.6)))+6,th=lines.length*15+2;
+    let best=null;
+    for(const wf of wants[i]){if(best)break;
+    for(let x=pL+tw/2;x<=W-pR-tw/2;x+=3)for(let y=pT+th/2;y<=H-pB-th/2;y+=3){
+      const pts=[[0,0],[-tw/2,-th/2],[tw/2,-th/2],[-tw/2,th/2],[tw/2,th/2],[0,-th/2],[0,th/2],[-tw/2,0],[tw/2,0]];
+      if(!pts.every(([dx,dy])=>wf(mem(x+dx,y+dy))))continue;
+      if(placed.some(q=>Math.abs(q.x-x)<(q.w+tw)/2+4&&Math.abs(q.y-y)<(q.h+th)/2+2))continue;
+      const sc2=Math.min(...pts.map(([dx,dy])=>edge(x+dx,y+dy)));
+      if(!best||sc2>best.s)best={x,y,s:sc2};
+    }}
+    if(!best){let b=null;for(let x=pL+tw/2;x<=W-pR-tw/2;x+=3)for(let y=pT+th/2;y<=H-pB-th/2;y+=3){if(!wants[i][0](mem(x,y)))continue;
+      if(placed.some(q=>Math.abs(q.x-x)<(q.w+tw)/2+4&&Math.abs(q.y-y)<(q.h+th)/2+2))continue;const e=edge(x,y);if(!b||e>b.s)b={x,y,s:e}}best=b||{x:C[i].x,y:C[i].y}}
+    placed.push({x:best.x,y:best.y,w:tw,h:th});
+    h+=texts(best.x,best.y-th/2+12,lines,"middle",tint[i]).replace(/<text /g,`<text paint-order="stroke" stroke="${HALO}" stroke-width="2.6" stroke-linejoin="round" stroke-opacity=".6" `);
+  });
+  $(svgId).innerHTML=h;
+}
+function render2(T){
+  const dMe=num("dMe",0,100,50)/100,dNo=num("dNo",0,100,15)/100,mMe=num("mMe",0,100,25)/100,mNo=num("mNo",0,100,5)/100,mD=num("mD",0,100,60)/100;
+  const wD=num("wD",0,1,0.10),wM=num("wM",0,1,0.05);
+  const lcMe=T.LC.nMe,lcNo=T.LC.nNo,meN=Object.values(T).reduce((a,g)=>a+g.nMe,0),meB=Object.values(T).reduce((a,g)=>a+g.bMe,0);
+  const G=[
+    {pc:1,me:1,n:lcMe,w:lcMe?T.LC.bMe/lcMe:0,d:dMe,m:mMe},
+    {pc:0,me:1,n:meN-lcMe,w:meN-lcMe>0?(meB-T.LC.bMe)/(meN-lcMe):0,d:dMe,m:mMe},
+    {pc:1,me:0,n:lcNo,w:lcNo?T.LC.bNo/lcNo:0,d:dNo,m:mNo}
+  ];
+  const cells=[];
+  G.forEach(g=>{const both=Math.min(g.m*mD,g.d),dOnly=g.d-both,mOnly=Math.max(0,g.m-both),none=Math.max(0,1-both-dOnly-mOnly);
+    [[1,1,both],[1,0,dOnly],[0,1,mOnly],[0,0,none]].forEach(([D,M,f])=>{
+      const w=1-(1-g.w)*(1-(D?wD:0))*(1-(M?wM:0));cells.push({pc:g.pc,me:g.me,D,M,n:g.n*f,b:g.n*f*w})})});
+  const build=key=>{
+    const sum=f=>cells.filter(f).reduce((a,c)=>a+c[key],0);
+    const A={PC:sum(c=>c.pc),ME:sum(c=>c.me),D:sum(c=>c.D),M:sum(c=>c.M)};
+    const S=[{k:"PC",n:"Long COVID",A:A.PC,c:TR.LC.c,me:sum(c=>c.pc&&c.me)/(A.PC||1)},{k:"ME",n:"ME",A:A.ME,c:TR.ME.c,me:null},
+      {k:"D",n:"Dysautonomia",A:A.D,c:"#8fd3c9",me:sum(c=>c.D&&c.me)/(A.D||1)},{k:"M",n:"MCAS",A:A.M,c:"#e6a6c0",dash:1,me:sum(c=>c.M&&c.me)/(A.M||1)}];
+    const tgt={"PC|ME":sum(c=>c.pc&&c.me),"PC|D":sum(c=>c.pc&&c.D),"ME|D":sum(c=>c.me&&c.D),"PC|M":sum(c=>c.pc&&c.M),"ME|M":sum(c=>c.me&&c.M),"D|M":sum(c=>c.D&&c.M)};
+    return{S,tgt};
+  };
+  const a=build("n"),b=build("b");
+  euler4("vS",a.S,a.tgt,"");euler4("vSb",b.S,b.tgt," DALY");
+}
+function render(){const T=model();if(tab===1)render1(T);else render2(T)}
+function show(id,on){const e=$(id);if(e)e.hidden=!on}
+function setTab(t,fromClick){tab=t;show("p1",t===1);show("a1",t===1);show("p2",t===2);show("a2",t===2);
+  $("tab1").setAttribute("aria-pressed",t===1);$("tab2").setAttribute("aria-pressed",t===2);
+  if(fromClick){try{if(t===2)history.replaceState(null,"","#pme-symptoms");else if(location.hash==="#pme-symptoms")history.replaceState(null,"","#pais-burden")}catch(e){}}
+  render()}
+$("tab1").onclick=()=>setTab(1,true);$("tab2").onclick=()=>setTab(2,true);
+$("hide").addEventListener("change",e=>{hide=e.target.checked;render()});
+root.addEventListener("input",e=>{if(e.target.matches("input[type=number]"))render()});
+root.addEventListener("change",e=>{if(e.target.id==="pme-inc")render()});
+setTab(location.hash==="#pme-symptoms"?2:1);
+})();
+</script>

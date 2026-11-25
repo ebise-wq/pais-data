@@ -1,8 +1,8 @@
 """Build the catalog site (docs/index.html plus one page per topic, docs/<section id>.html) and the
 catalog section of README.md from catalog.json.
 
-A section can carry "interactive": {"html": fragment, "data": json, "charts": n}. The fragment is
-inserted with its data; the part between <!-- more:start --> and <!-- more:end --> shows on the
+A section can carry "interactive": {"html": fragment, "data": json, "charts": n, "more": text}. The
+fragment is inserted with its data ("data" is optional, for fragments that hold their own numbers); the part between <!-- more:start --> and <!-- more:end --> shows on the
 topic page only, replaced on the overview by a link to it. Parts between <!-- page-only:start --> and
 <!-- page-only:end --> also show on the topic page only, with nothing in their place. A chart's "toggle" can be one alternative image or a list of them.
 
@@ -93,7 +93,7 @@ for s in sections:
             catalogued.update(expand(t)["files"])
     if s.get("interactive"):
         for k in ("html", "data"):
-            if not os.path.exists(s["interactive"][k]):
+            if k in s["interactive"] and not os.path.exists(s["interactive"][k]):
                 sys.exit(f"Missing interactive file in catalog.json: {s['interactive'][k]}")
     for r in [s["readme"], *s.get("extra_readmes", [])]:
         if not os.path.exists(r):
@@ -205,10 +205,13 @@ def data_row(d):
 
 def interactive_html(s, full):
     spec = s["interactive"]
-    data = json.dumps(json.load(open(spec["data"])), separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
-    frag = open(spec["html"]).read().replace("__BVR_DATA__", data)
+    frag = open(spec["html"]).read()
+    if spec.get("data"):
+        data = json.dumps(json.load(open(spec["data"])), separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+        frag = frag.replace("__BVR_DATA__", data)
     if not full:
-        more = (f'<p class="bvr-more">Rankings, comparator sets, the full data table and caveats: '
+        lead = spec.get("more", "Rankings, comparator sets, the full data table and caveats")
+        more = (f'<p class="bvr-more">{e(lead)}: '
                 f'{page_link(s["id"], "open the topic page")}.</p>')
         frag = re.sub(r"<!-- more:start -->.*?<!-- more:end -->", more, frag, flags=re.S)
         frag = re.sub(r"<!-- page-only:start -->.*?<!-- page-only:end -->", "", frag, flags=re.S)
@@ -319,6 +322,7 @@ section:first-child .sec-head { border-top: 0; padding-top: 0; }
 .top-sm .site { font: 600 1.35rem/1.2 var(--f-display); color: var(--ink); margin: 0.3rem 0 0; }
 .top-sm .site span { color: var(--sunset); }
 .nav a[aria-current="page"] { border-color: var(--sunset); color: var(--ink); background: var(--raise); }
+.bvr-more { font-size: 0.95rem; color: var(--muted); margin: 0; }
 .finding { margin: 0; max-width: 68ch; font-size: 1.08rem; color: var(--ink); }
 
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
