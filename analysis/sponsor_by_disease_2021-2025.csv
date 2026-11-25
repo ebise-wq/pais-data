@@ -1,0 +1,27 @@
+disease,group,dalys,drug_trials_2021_2025,commercial,non_commercial,commercial_share,non_commercial_with_industry_collaborator,large_pharma_led,commercial_per_year,non_commercial_per_year
+Long COVID,Long COVID,19800000,141,32,109,0.227,10,0,6.4,21.8
+ME/CFS,ME/CFS,17500000,13,1,12,0.077,1,0,0.2,2.4
+Rheumatic heart disease,NCD,14474876,10,0,10,0.0,0,0,0.0,2.0
+Neonatal sepsis,Maternal/neonatal,22682248,10,1,9,0.1,0,0,0.2,1.8
+Pertussis,Infectious,10130882,30,20,10,0.667,1,1,4.0,2.0
+Measles,Infectious,12478559,11,4,7,0.364,3,1,0.8,1.4
+Alcohol use disorders,NCD,18035984,142,20,122,0.141,6,5,4.0,24.4
+Meningitis,Infectious,17483150,30,14,16,0.467,0,3,2.8,3.2
+Opioid use disorders,NCD,12785780,111,21,90,0.189,6,5,4.2,18.0
+Congenital heart disease,NCD,26502676,40,3,37,0.075,5,0,0.6,7.4
+Hepatitis C,Infectious,11326662,34,8,26,0.235,3,1,1.6,5.2
+Atopic dermatitis,NCD,11063906,346,286,60,0.827,17,54,57.2,12.0
+Esophageal cancer,Cancer,14029973,297,104,193,0.35,37,22,20.8,38.6
+Hepatitis B,Infectious,15618747,234,139,95,0.594,12,23,27.8,19.0
+Schizophrenia,NCD,16952603,223,126,97,0.565,9,29,25.2,19.4
+Cervical cancer,Cancer,13261257,362,152,210,0.42,46,18,30.4,42.0
+Asthma,NCD,25846781,354,206,148,0.582,20,75,41.2,29.6
+Osteoarthritis,NCD,22357934,423,126,297,0.298,12,12,25.2,59.4
+Stomach cancer,Cancer,22493976,672,238,434,0.354,56,42,47.6,86.8
+Cardiomyopathy & myocarditis,NCD,11992296,141,63,78,0.447,6,17,12.6,15.6
+Pancreatic cancer,Cancer,12276311,802,317,485,0.395,108,53,63.4,97.0
+Epilepsy,NCD,15422825,151,69,82,0.457,11,1,13.8,16.4
+Leukemia,Cancer,12185735,1522,452,1070,0.297,259,102,90.4,214.0
+Colorectal cancer,Cancer,26154109,1324,414,910,0.313,112,85,82.8,182.0
+Liver cancer,Cancer,13923251,769,202,567,0.263,100,37,40.4,113.4
+Breast cancer,Cancer,24615156,1870,629,1241,0.336,272,140,125.8,248.2

@@ -1,0 +1,183 @@
+disease,year,drug_trials,commercial
+Long COVID,2020,7,3
+Long COVID,2021,24,9
+Long COVID,2022,22,8
+Long COVID,2023,47,8
+Long COVID,2024,25,3
+Long COVID,2025,23,4
+Long COVID,2026,17,4
+ME/CFS,2020,3,0
+ME/CFS,2021,2,0
+ME/CFS,2022,1,0
+ME/CFS,2023,6,0
+ME/CFS,2024,2,1
+ME/CFS,2025,2,0
+ME/CFS,2026,2,0
+Rheumatic heart disease,2020,0,0
+Rheumatic heart disease,2021,2,0
+Rheumatic heart disease,2022,3,0
+Rheumatic heart disease,2023,2,0
+Rheumatic heart disease,2024,1,0
+Rheumatic heart disease,2025,2,0
+Rheumatic heart disease,2026,2,0
+Neonatal sepsis,2020,6,0
+Neonatal sepsis,2021,0,0
+Neonatal sepsis,2022,1,0
+Neonatal sepsis,2023,2,1
+Neonatal sepsis,2024,1,0
+Neonatal sepsis,2025,6,0
+Neonatal sepsis,2026,3,0
+Pertussis,2020,6,4
+Pertussis,2021,4,4
+Pertussis,2022,3,1
+Pertussis,2023,7,5
+Pertussis,2024,5,3
+Pertussis,2025,11,7
+Pertussis,2026,10,7
+Measles,2020,2,1
+Measles,2021,3,1
+Measles,2022,1,1
+Measles,2023,4,0
+Measles,2024,2,2
+Measles,2025,1,0
+Measles,2026,2,2
+Alcohol use disorders,2020,13,1
+Alcohol use disorders,2021,30,2
+Alcohol use disorders,2022,22,1
+Alcohol use disorders,2023,27,4
+Alcohol use disorders,2024,30,4
+Alcohol use disorders,2025,33,9
+Alcohol use disorders,2026,32,2
+Meningitis,2020,6,1
+Meningitis,2021,6,2
+Meningitis,2022,2,0
+Meningitis,2023,7,4
+Meningitis,2024,9,6
+Meningitis,2025,6,2
+Meningitis,2026,14,7
+Opioid use disorders,2020,14,4
+Opioid use disorders,2021,19,4
+Opioid use disorders,2022,21,2
+Opioid use disorders,2023,24,6
+Opioid use disorders,2024,24,6
+Opioid use disorders,2025,23,3
+Opioid use disorders,2026,27,3
+Congenital heart disease,2020,7,0
+Congenital heart disease,2021,6,1
+Congenital heart disease,2022,10,1
+Congenital heart disease,2023,8,0
+Congenital heart disease,2024,6,1
+Congenital heart disease,2025,10,0
+Congenital heart disease,2026,6,0
+Hepatitis C,2020,14,4
+Hepatitis C,2021,11,4
+Hepatitis C,2022,12,1
+Hepatitis C,2023,5,1
+Hepatitis C,2024,2,0
+Hepatitis C,2025,4,2
+Hepatitis C,2026,3,0
+Atopic dermatitis,2020,53,38
+Atopic dermatitis,2021,57,49
+Atopic dermatitis,2022,71,54
+Atopic dermatitis,2023,81,64
+Atopic dermatitis,2024,62,54
+Atopic dermatitis,2025,75,65
+Atopic dermatitis,2026,80,60
+Esophageal cancer,2020,46,15
+Esophageal cancer,2021,56,22
+Esophageal cancer,2022,44,19
+Esophageal cancer,2023,54,23
+Esophageal cancer,2024,67,17
+Esophageal cancer,2025,76,23
+Esophageal cancer,2026,69,29
+Hepatitis B,2020,59,35
+Hepatitis B,2021,53,33
+Hepatitis B,2022,51,31
+Hepatitis B,2023,40,25
+Hepatitis B,2024,48,29
+Hepatitis B,2025,42,21
+Hepatitis B,2026,55,37
+Schizophrenia,2020,32,17
+Schizophrenia,2021,47,34
+Schizophrenia,2022,48,26
+Schizophrenia,2023,41,20
+Schizophrenia,2024,41,20
+Schizophrenia,2025,46,26
+Schizophrenia,2026,45,29
+Cervical cancer,2020,61,30
+Cervical cancer,2021,80,39
+Cervical cancer,2022,66,28
+Cervical cancer,2023,58,28
+Cervical cancer,2024,75,32
+Cervical cancer,2025,83,25
+Cervical cancer,2026,52,13
+Asthma,2020,48,23
+Asthma,2021,79,46
+Asthma,2022,66,43
+Asthma,2023,69,40
+Asthma,2024,74,41
+Asthma,2025,66,36
+Asthma,2026,63,38
+Osteoarthritis,2020,77,33
+Osteoarthritis,2021,92,38
+Osteoarthritis,2022,81,22
+Osteoarthritis,2023,72,20
+Osteoarthritis,2024,91,20
+Osteoarthritis,2025,87,26
+Osteoarthritis,2026,88,18
+Stomach cancer,2020,114,42
+Stomach cancer,2021,137,50
+Stomach cancer,2022,142,52
+Stomach cancer,2023,119,44
+Stomach cancer,2024,144,43
+Stomach cancer,2025,130,49
+Stomach cancer,2026,131,45
+Cardiomyopathy & myocarditis,2020,35,12
+Cardiomyopathy & myocarditis,2021,18,8
+Cardiomyopathy & myocarditis,2022,26,8
+Cardiomyopathy & myocarditis,2023,23,11
+Cardiomyopathy & myocarditis,2024,33,18
+Cardiomyopathy & myocarditis,2025,41,18
+Cardiomyopathy & myocarditis,2026,39,20
+Pancreatic cancer,2020,114,42
+Pancreatic cancer,2021,158,59
+Pancreatic cancer,2022,132,56
+Pancreatic cancer,2023,159,71
+Pancreatic cancer,2024,188,64
+Pancreatic cancer,2025,165,67
+Pancreatic cancer,2026,182,80
+Epilepsy,2020,18,8
+Epilepsy,2021,30,17
+Epilepsy,2022,39,17
+Epilepsy,2023,22,9
+Epilepsy,2024,37,15
+Epilepsy,2025,23,11
+Epilepsy,2026,24,10
+Leukemia,2020,285,107
+Leukemia,2021,321,114
+Leukemia,2022,291,102
+Leukemia,2023,254,77
+Leukemia,2024,331,78
+Leukemia,2025,325,81
+Leukemia,2026,334,64
+Colorectal cancer,2020,204,61
+Colorectal cancer,2021,221,77
+Colorectal cancer,2022,227,81
+Colorectal cancer,2023,265,80
+Colorectal cancer,2024,298,86
+Colorectal cancer,2025,313,90
+Colorectal cancer,2026,316,115
+Liver cancer,2020,118,27
+Liver cancer,2021,165,40
+Liver cancer,2022,143,44
+Liver cancer,2023,149,43
+Liver cancer,2024,146,36
+Liver cancer,2025,166,39
+Liver cancer,2026,147,34
+Breast cancer,2020,323,121
+Breast cancer,2021,353,111
+Breast cancer,2022,365,134
+Breast cancer,2023,369,124
+Breast cancer,2024,386,130
+Breast cancer,2025,397,130
+Breast cancer,2026,395,126
