@@ -1,4 +1,8 @@
-"""Build the catalog page (index.html) and the catalog section of README.md from catalog.json.
+"""Build the catalog page (docs/index.html) and the catalog section of README.md from catalog.json.
+
+GitHub Pages serves the docs/ folder only, so docs/index.html loads the chart images from
+raw.githubusercontent.com (the main branch). The --fragment copy uses relative image paths,
+for publishing as an artifact with the PNGs bundled.
 
 Run from the repo root:   python3 -I tools/build_catalog.py
 Check only (no writes):    python3 -I tools/build_catalog.py --check
@@ -20,7 +24,7 @@ TREE = f"https://github.com/{REPO}/tree/{BRANCH}/"
 # File types that count as outputs. Anything with these extensions must be in the catalog.
 OUTPUT_EXT = (".png", ".svg", ".csv", ".json", ".gz", ".txt")
 NOT_OUTPUTS = {"catalog.json", "LICENSE"}
-NOT_OUTPUT_DIRS = ("tools/", ".claude/", ".github/")
+NOT_OUTPUT_DIRS = ("tools/", "docs/", ".claude/", ".github/")
 
 
 def git_date(paths):
@@ -103,13 +107,16 @@ def link(href, text, cls=""):
     return f'<a{c} href="{e(href)}" target="_blank" rel="noopener">{text}</a>'
 
 
+IMG_BASE = ""  # prefix for <img src>; set per output below
+
+
 def chart_card(c):
     f = c["file"]
     script = link(BLOB + c["script"], "Script") if c.get("script") else ""
     return f"""
       <figure class="chart">
-        <button class="chart-img" type="button" data-full="{e(f)}" data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
-          <img src="{e(f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">
+        <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}" data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
+          <img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">
         </button>
         <figcaption>
           <h3>{e(c['title'])}</h3>
@@ -304,7 +311,8 @@ SCRIPT = """<script>
 </script>"""
 
 title_html = e(CAT["title"]).replace("PAIS", "<span>PAIS</span>", 1)
-BODY = f"""<div class="wrap top">
+def body():
+    return f"""<div class="wrap top">
   <h1>{title_html}</h1>
   <p class="tagline">{e(CAT['tagline'])}</p>
   <div class="stats"><span><b>{n_charts}</b> charts</span><span><b>{n_data}</b> data files</span>
@@ -324,6 +332,8 @@ BODY = f"""<div class="wrap top">
 </dialog>
 {SCRIPT}"""
 
+
+IMG_BASE = RAW
 standalone = f"""<!doctype html>
 <html lang="en">
 <head>
@@ -333,14 +343,17 @@ standalone = f"""<!doctype html>
 {STYLE}
 </head>
 <body>
-{BODY}
+{body()}
 </body>
 </html>
 """
-open("index.html", "w").write(standalone)
+os.makedirs("docs", exist_ok=True)
+open("docs/index.html", "w").write(standalone)
+open("docs/.nojekyll", "w").close()
 if "--fragment" in sys.argv:
+    IMG_BASE = ""
     out = sys.argv[sys.argv.index("--fragment") + 1]
-    open(out, "w").write(f"{HEAD}\n{STYLE}\n{BODY}\n")
+    open(out, "w").write(f"{HEAD}\n{STYLE}\n{body()}\n")
 
 
 # ---------- README section ----------
@@ -373,4 +386,4 @@ gen = (f"{START}\n<!-- Made by tools/build_catalog.py from catalog.json. Do not 
 head, rest = readme.split(START, 1)
 open("README.md", "w").write(head + gen + rest.split(END, 1)[1])
 
-print(f"Wrote index.html and README.md: {n_charts} charts, {n_data} data files, page v{version}.")
+print(f"Wrote docs/index.html and README.md: {n_charts} charts, {n_data} data files, page v{version}.")

@@ -4,10 +4,10 @@ How much research do ME/CFS and long COVID get, compared with other diseases of 
 This repo holds the data pulls, scripts and charts: papers (PubMed), trials (ClinicalTrials.gov and
 WHO ICTRP), trial sponsors, and disease burden (GBD 2023 DALYs) for up to 120 comparison diseases.
 
-**Browse everything on one page:** open [`index.html`](index.html) (every chart and data file, with
-short notes and download links). To get a public web address for it, turn on GitHub Pages:
-Settings → Pages → Deploy from a branch → `main`, folder `/ (root)`. The page will then be at
-`https://ebise-wq.github.io/pais-data/`.
+**Browse everything on one page:** https://ebise-wq.github.io/pais-data/ (every chart and data
+file, with short notes and download links). It is served by GitHub Pages from
+[`docs/index.html`](docs/index.html) on `main` (Settings → Pages → Deploy from a branch → `main`,
+folder `/docs`).
 
 ## Folders
 
@@ -20,7 +20,7 @@ Settings → Pages → Deploy from a branch → `main`, folder `/ (root)`. The p
 | [`clinicaltrials/`](clinicaltrials/) | ClinicalTrials.gov pulls for 24 diseases, and the sponsor pull |
 | [`pubmed/`](pubmed/) | PubMed papers per year for 24 diseases |
 | [`gbd/`](gbd/) | GBD 2023 burden files (IHME) |
-| [`tools/`](tools/) | `build_catalog.py`, which builds `index.html` and the catalog below |
+| [`tools/`](tools/) | `build_catalog.py`, which builds the page in `docs/` and the catalog below |
 
 Each folder has its own README with methods, choices and caveats.
 
@@ -35,7 +35,7 @@ committed. Data files carry the date they were pulled in their name.
 
 1. Put scripts, data and charts in the folder for that topic (or a new folder with a README).
 2. Add each new chart and data file to [`catalog.json`](catalog.json).
-3. Run `python3 -I tools/build_catalog.py`. It rebuilds `index.html` and the catalog below, and lists
+3. Run `python3 -I tools/build_catalog.py`. It rebuilds `docs/index.html` and the catalog below, and lists
    any chart or data file that is not in the catalog yet.
 4. Merge into `main`. `main` is the only long-lived branch.
 

@@ -10,7 +10,10 @@
   The other old `ccr-*` branches are fully contained in `main` and can be deleted.
 
 ## Catalog page
-- `index.html` and the catalog section of `README.md` are generated. Do not edit them by hand.
+- `docs/index.html` and the catalog section of `README.md` are generated. Do not edit them by hand.
+- GitHub Pages serves `docs/` from `main` at https://ebise-wq.github.io/pais-data/ . Pages sees only
+  `docs/`, so the page loads chart images from raw.githubusercontent.com on `main`. A new chart
+  shows on the page only after it is merged into `main`.
 - Every chart and data file must have an entry in `catalog.json` (title, one-line description,
   the script that makes it). Mark superseded items with `"old": true` instead of deleting them.
 - After adding or changing outputs, run `python3 -I tools/build_catalog.py` and commit the result.
