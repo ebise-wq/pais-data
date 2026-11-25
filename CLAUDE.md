@@ -20,8 +20,14 @@
   `--check` exits non-zero if any chart or data file is missing from the catalog.
 - A section with `"hidden": true` stays in `catalog.json` (so `--check` passes) but is left off the
   page and the README. The first 13-disease comparison is hidden this way at the user's request.
-- A chart can carry a `"toggle"` (another PNG with the same layout and a button label). The page
-  shows a two-way switch between the two images. Draw both views from one function so they line up.
+- A chart can carry a `"toggle"`: one or a list of other PNGs with the same layout, each with a button
+  label. The page shows a switch between them. Draw all views from one function so they line up.
+- The build writes `docs/index.html` (overview) and one page per section (`docs/<section id>.html`).
+  The overview links to each with "Open page".
+- A section can carry `"interactive"` (an HTML fragment plus its JSON data), e.g. the 120-disease
+  burden charts in `expanded/burden_interactive.html`. Its CSS classes and ids start with `bvr-` so
+  they don't clash with the page. The part between `<!-- more:start -->` and `<!-- more:end -->`
+  shows on the topic page only.
 - Data files show in a collapsed block under each section's charts.
 - A data entry with `"hidden": true` is catalogued but not shown: use it for pipeline inputs whose
   contents already appear in another table (e.g. `sex/sex_labels.csv`, `expanded/cleaned_counts_*.csv`).

@@ -27,7 +27,16 @@ Including them made ME/CFS look closer to the bottom of the ranking than it is.
   are the cleaned counts. Sorted by paper shortfall.
 - `fits_2021-2025.csv`: log-log fits for several subsets, with the ME/CFS shortfall under each. The
   `All, cleaned counts` rows refit the 120-disease trend on the cleaned counts.
-- `papers_vs_dalys_expanded.png`, `trials_vs_dalys_expanded.png`.
+- `papers_vs_dalys_expanded.png`, `trials_vs_dalys_expanded.png`: static charts, now replaced on the
+  catalog site by the interactive charts below.
+- `burden_interactive.html` + `burden_interactive_2021-2025.json`: interactive charts (scatterplots with
+  log/linear switch, shortfall rankings with 90% ranges, comparator-set table) shown on the catalog site
+  (https://ebise-wq.github.io/pais-data/burden-120.html). The JSON was computed in a separate claude.ai
+  session from this table and `../analysis/plot_data_2021-2025.csv`: per-disease shortfall ranges
+  (burden uncertainty plus 4,000 bootstrap resamples of the trend, seed 2558632273), ranks, a
+  "mainly low-income regions" flag, and fits for two extra comparator sets (non-communicable + cancer,
+  13.7× / 12.4×; common worldwide only, 13.6× / 11.4×). The code for that step is not in the repo. Its
+  headline numbers match `fits_2021-2025.csv` (10.3× and 7.7×; slopes and R² identical).
 
 Run from the repo root: `python3 -I expanded/fetch.py`, then `clean_papers.py` and `clean_trials.py`,
 then `python3 -I expanded/analyse.py`.

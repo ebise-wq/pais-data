@@ -2,9 +2,11 @@
 
 Run from repo root: python3 -I analysis/sponsor_charts.py
 Needs analysis/sponsor_by_year_2020-2026.csv and analysis/sponsor_by_disease_2021-2025.csv
-(from sponsor_summary.py). Writes analysis/drug_trials_per_year.png (all sponsors),
-analysis/sponsor_per_year.png (same chart split by sponsor type) and analysis/sponsor_comparison.png.
-The two per-year charts share one layout so the catalog page can toggle between them.
+(from sponsor_summary.py), and clinicaltrials/trials_per_year_2026-11-08.csv for all trial types.
+Writes three per-year charts in one layout, so the catalog page can switch between them:
+analysis/drug_trials_per_year.png (drug or biologic trials), analysis/sponsor_per_year.png (the same,
+split by sponsor type) and analysis/all_trials_per_year.png (all interventional trials). Also writes
+analysis/sponsor_comparison.png.
 """
 import csv
 import matplotlib
@@ -27,13 +29,22 @@ def style(ax):
     ax.tick_params(length=6, width=1.2, color=MUTED, pad=5)
 
 
-def per_year(version, split):
-    rows = list(csv.DictReader(open("analysis/sponsor_by_year_2020-2026.csv")))
-    get = lambda d: [(int(r["year"]), int(r["commercial"]), int(r["drug_trials"]) - int(r["commercial"]))
-                     for r in rows if r["disease"] == d]
+def per_year(version, mode):
+    """mode: "drug" (drug or biologic trials), "sponsor" (the same, split by sponsor type), "all" (all
+    interventional trials). Panels sit in the same place in every mode; only the y scale changes."""
+    split = mode == "sponsor"
+    if mode == "all":
+        tpy = {r["disease"]: r for r in csv.DictReader(open("clinicaltrials/trials_per_year_2026-11-08.csv"))}
+        get = lambda d: [(y, 0, int(tpy[d][str(y)])) for y in range(2020, 2027)]
+        lc_max, me_max, step = 170, 51, 50
+    else:
+        rows = list(csv.DictReader(open("analysis/sponsor_by_year_2020-2026.csv")))
+        get = lambda d: [(int(r["year"]), int(r["commercial"]), int(r["drug_trials"]) - int(r["commercial"]))
+                         for r in rows if r["disease"] == d]
+        lc_max, me_max, step = 50, 15, 10
     fig = plt.figure(figsize=(6, 7.2), facecolor=BG)
-    unit = 0.0105                  # figure height per trial, same in both panels
-    panels = [("Long COVID", 50, 0.30), ("ME/CFS", 15, 0.115)]
+    unit = 0.525 / lc_max          # figure height per trial, same in both panels
+    panels = [("Long COVID", lc_max, 0.30), ("ME/CFS", me_max, 0.115)]
     for name, ymax, bottom in panels:
         ax = fig.add_axes([0.11, bottom, 0.845, ymax * unit])
         data = get(name)
@@ -47,23 +58,30 @@ def per_year(version, split):
                 ax.annotate(f"{c}/{c + o}" if split else f"{c + o}", (y, c + o), xytext=(0, 4), textcoords="offset points", ha="center",
                             va="bottom", fontsize=11.5, color=MUTED if part else INK)
         ax.set_xlim(2019.4, 2026.6); ax.set_ylim(0, ymax)
-        ax.yaxis.set_major_locator(MultipleLocator(10)); ax.grid(True, axis="y", color=GRID, lw=1, zorder=0)
+        ax.yaxis.set_major_locator(MultipleLocator(step)); ax.grid(True, axis="y", color=GRID, lw=1, zorder=0)
         ax.set_xticks(range(2020, 2027))
         ax.set_xticklabels([str(y) for y in range(2020, 2027)] if name == "ME/CFS" else [])
         style(ax)
         ax.text(2019.55, ymax * 0.95, name, fontsize=15, fontweight="bold", color=INK, va="top")
-    fig.text(M, 0.945, "Long COVID and ME/CFS drug trials", fontsize=20, fontweight="bold", color=INK, va="baseline")
-    if split:
+    title = "Long COVID and ME/CFS trials" if mode == "all" else "Long COVID and ME/CFS drug trials"
+    fig.text(M, 0.945, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
+    if mode == "all":
+        fig.text(M, 0.905, "All interventional trials by start year", fontsize=12, color=MUTED, va="baseline")
+        fig.text(M, 0.865, "■ All trial types", fontsize=13, color=OCEAN, va="baseline")
+    elif split:
         fig.text(M, 0.905, "Drug or biologic trials by start year. Label: commercial / all", fontsize=12, color=MUTED, va="baseline")
         fig.text(M, 0.865, "■ Commercial sponsor", fontsize=13, color=SUNSET, va="baseline")
         fig.text(M + 0.45, 0.865, "■ Other sponsor", fontsize=13, color=OCEAN, va="baseline")
     else:
         fig.text(M, 0.905, "Drug or biologic trials by start year", fontsize=12, color=MUTED, va="baseline")
         fig.text(M, 0.865, "■ All sponsors", fontsize=13, color=OCEAN, va="baseline")
-    foot = "ClinicalTrials.gov lead sponsor class. 2026 to 8 Nov." if split else "ClinicalTrials.gov. 2026 to 8 Nov."
+    foot = {"sponsor": "ClinicalTrials.gov lead sponsor class. 2026 to 8 Nov.",
+            "drug": "ClinicalTrials.gov. 2026 to 8 Nov.",
+            "all": "ClinicalTrials.gov. 2026 to 8 Nov. Trials naming both count in both."}[mode]
     fig.text(M, 0.035, foot, fontsize=10.5, color=MUTED, va="baseline")
     fig.text(1 - M, 0.035, version, fontsize=9, color=GRID, ha="right", va="baseline")
-    out = "analysis/sponsor_per_year.png" if split else "analysis/drug_trials_per_year.png"
+    out = {"sponsor": "analysis/sponsor_per_year.png", "drug": "analysis/drug_trials_per_year.png",
+           "all": "analysis/all_trials_per_year.png"}[mode]
     fig.savefig(out, dpi=300, facecolor=BG)
     plt.close(fig)
 
@@ -116,6 +134,7 @@ def comparison(version):
     fig.savefig("analysis/sponsor_comparison.png", dpi=300, facecolor=BG)
 
 
-per_year("v2", split=False)
-per_year("v2", split=True)
+per_year("v2", "drug")
+per_year("v2", "sponsor")
+per_year("v1", "all")
 comparison("v1")

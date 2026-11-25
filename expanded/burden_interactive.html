@@ -1,0 +1,370 @@
+<!-- Interactive "research vs disease burden" charts for the catalog pages.
+     tools/build_catalog.py inserts this into docs/index.html and docs/burden-120.html, replacing
+     __BVR_DATA__ with expanded/burden_interactive_2021-2025.json. The part between more:start and
+     more:end is shown on the topic page only. Colours and fonts come from the page's tokens. -->
+<style>
+.bvr { display: grid; gap: 1.25rem; min-width: 0; font-family: var(--f-body); }
+.bvr-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0.75rem; }
+.bvr-tiles .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 0.8rem; }
+.bvr-tiles .k { font-size: 0.9rem; color: var(--muted); }
+.bvr-tiles .v { font: 600 2.7rem/1.05 var(--f-display); margin: 0.25rem 0 0.1rem; letter-spacing: -0.01em; }
+.bvr-tiles .v span { display: block; font: 500 1rem var(--f-body); color: var(--muted); margin-top: 0.15rem; }
+.bvr-tiles .d { font-size: 0.92rem; color: var(--ink); }
+.bvr-tiles .r { font-size: 0.85rem; color: var(--faint); margin-top: 0.2rem; font-variant-numeric: tabular-nums; }
+.bvr-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); align-items: start; }
+.bvr-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 0.75rem 0.75rem; position: relative; min-width: 0; }
+.bvr-card h3 { font: 600 1.15rem/1.3 var(--f-display); margin: 0 0.35rem 0.15rem; }
+.bvr-sub { font-size: 0.92rem; color: var(--muted); margin: 0 0.35rem 0.6rem; }
+.bvr-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; margin: 0 0.35rem 0.6rem; background: var(--bg); }
+.bvr-seg button { font: 500 0.88rem var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 0.25rem 0.85rem; cursor: pointer; }
+.bvr-seg button.on { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.bvr-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; margin: 0 0.35rem 0.4rem; font-size: 0.88rem; color: var(--muted); }
+.bvr-legend button { all: unset; cursor: pointer; display: inline-flex; align-items: center; padding: 0.15rem 0.1rem; border-radius: 6px; color: var(--muted); font-size: 0.88rem; -webkit-tap-highlight-color: transparent; }
+.bvr-legend button.off { opacity: 0.38; text-decoration: line-through; }
+.bvr-legend .hint { color: var(--faint); font-size: 0.82rem; padding: 0.15rem 0; }
+.bvr-legend i { flex: none; display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
+.bvr-legend .ln { width: 20px; height: 0; border-top: 2px solid #dfe5ee; border-radius: 0; vertical-align: 4px; }
+.bvr button:focus-visible, .bvr summary:focus-visible { outline: 2px solid var(--sunset); outline-offset: 2px; }
+.bvr-plot { position: relative; width: 100%; }
+.bvr svg { display: block; max-width: 100%; overflow: visible; }
+.bvr svg text { font-family: var(--f-body); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.bvr svg text.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
+.bvr-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.55rem 0.7rem; font-size: 0.88rem; line-height: 1.4; color: var(--ink); max-width: 260px; z-index: 5;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; }
+.bvr-tip b { display: block; font-size: 0.95rem; margin-bottom: 0.2rem; }
+.bvr-tip span { color: var(--muted); }
+.bvr-det { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
+.bvr-det summary { cursor: pointer; font-weight: 500; }
+.bvr-tw { overflow-x: auto; margin-top: 0.6rem; }
+.bvr table { border-collapse: collapse; font-size: 0.88rem; white-space: nowrap; width: 100%; font-variant-numeric: tabular-nums; }
+.bvr th, .bvr td { padding: 0.35rem 0.6rem; text-align: right; border-bottom: 1px solid var(--line); }
+.bvr th:first-child, .bvr td:first-child { text-align: left; position: sticky; left: 0; background: var(--surface); }
+.bvr th { color: var(--muted); font-weight: 500; }
+.bvr-sens { margin: 0.2rem 0.35rem; width: calc(100% - 0.7rem); }
+.bvr-sens td:first-child { white-space: normal; min-width: 120px; }
+.bvr-sens tr.hl td { color: var(--ink); font-weight: 600; }
+.bvr-sens td small { color: var(--faint); font-weight: 400; }
+.bvr-notes { font-size: 0.92rem; color: var(--muted); margin: 0.6rem 0 0; padding-left: 1.1rem; max-width: 72ch; }
+.bvr-notes li { margin-bottom: 0.3rem; }
+.bvr-more { font-size: 0.95rem; color: var(--muted); margin: 0; }
+.bvr-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
+</style>
+<div class="bvr">
+  <div class="bvr-tiles" id="bvr-tiles"></div>
+  <div class="bvr-grid">
+    <div class="bvr-card">
+      <h3>Papers per year vs burden</h3>
+      <p class="bvr-sub">2021–2025 averages. Burden in DALYs. <span class="bvr-scl">Log scales.</span> Tap a dot for details.</p>
+      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div>
+      <div class="bvr-legend" id="bvr-lg1"></div>
+      <div class="bvr-plot" id="bvr-sc-papers"></div>
+    </div>
+    <div class="bvr-card">
+      <h3>Trials per year vs burden</h3>
+      <p class="bvr-sub">Interventional trials on ClinicalTrials.gov. <span class="bvr-scl">Log scales.</span></p>
+      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div>
+      <div class="bvr-legend" id="bvr-lg2"></div>
+      <div class="bvr-plot" id="bvr-sc-trials"></div>
+    </div>
+  </div>
+  <!-- more:start -->
+  <div class="bvr-grid">
+    <div class="bvr-card">
+      <h3>Largest papers shortfalls</h3>
+      <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
+      <div class="bvr-legend" id="bvr-lg3"></div>
+      <div class="bvr-plot" id="bvr-rk-papers"></div>
+    </div>
+    <div class="bvr-card">
+      <h3>Largest trials shortfalls</h3>
+      <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
+      <div class="bvr-legend" id="bvr-lg4"></div>
+      <div class="bvr-plot" id="bvr-rk-trials"></div>
+    </div>
+  </div>
+  <div class="bvr-card">
+    <h3>Does the choice of diseases matter?</h3>
+    <p class="bvr-sub">All ME/CFS shortfall and rank, by comparator set.</p>
+    <table class="bvr-sens" id="bvr-sens"></table>
+  </div>
+  <details class="bvr-det">
+    <summary>Data table</summary>
+    <div class="bvr-tw"><table id="bvr-tbl"></table></div>
+  </details>
+  <details class="bvr-det">
+    <summary>Caveats</summary>
+    <ul class="bvr-notes">
+      <li>The trend is rough: R² 0.39 (papers) and 0.38 (trials). A typical disease sits a factor of 3 (papers) or 4 (trials) off the line.</li>
+      <li>Burden is global. Diseases mainly in low-income regions mostly fall below the trend (fewer papers and trials than their burden predicts), partly because their burden falls where little research is done. Cancers mostly sit above it.</li>
+      <li>“Mainly low-income regions” (teal) are diseases much less common in high-income countries: all neglected tropical diseases, plus malaria, tuberculosis, typhoid, measles, rabies, dengue, yellow fever, meningitis, pertussis, hepatitis B, rheumatic heart disease, neonatal sepsis, neonatal encephalopathy, maternal haemorrhage, sickle cell disease and thalassaemia. They stay in the trend fit; the table above shows the result without them.</li>
+      <li>Comparator burden is from GBD 2023 (95% interval). ME/CFS and long COVID burden is from the ME/CFS Burden model v11.2, CCC criteria, year 2026 (90% range). Groups are not used to fit the trend.</li>
+      <li>Papers titled only “long COVID” are not in the ME/CFS count, so the ME/CFS shortfall is slightly overstated.</li>
+      <li>Shortfall ranges combine burden uncertainty (lognormal fitted to each burden interval) and trend-fit uncertainty (4,000 bootstrap resamples of the 120 comparators). Random seed 2558632273.</li>
+      <li>The linear view shows the same trend (fitted on log values), so it curves. On linear axes a few diseases with very large burden stretch the chart, and most points crowd near zero.</li>
+      <li>Trends are refitted here from the rounded counts in the CSV. They match the file's trend columns exactly for papers and within 2% for trials.</li>
+      <li>ClinicalTrials.gov only.</li>
+    </ul>
+  </details>
+  <!-- more:end -->
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v17</span></div>
+</div>
+<script>
+(function(){
+const D=__BVR_DATA__;
+// House colours: ocean and sunset, with a soft teal and gold for the two extra groups.
+const C={blue:'#7fb3d5',teal:'#8fd0bf',coral:'#f4a582',gold:'#e9c983',ink:'#eef1f6',ink2:'#a3acba',muted:'#6f7a8c',grid:'#262f3d',bg:'#1a2230',trend:'#dfe5ee'};
+const ROOT=document.querySelector('.bvr');
+const $=id=>document.getElementById(id);
+const KIND={'Classic ME/CFS':'m','All ME/CFS':'m','Long COVID':'l','Long COVID + classic ME/CFS':'l'};
+const R=D.rows.map(r=>({label:r.label,short:r.short,kind:r.kind==='c'?(r.gh?'g':'c'):KIND[r.short],cat:r.cat,dalys:r.d,lo:r.lo,hi:r.hi,papers:r.papers,trials:r.trials}));
+R.forEach(r=>['papers','trials'].forEach(m=>{const d=r[m];d.trend=d.t;}));
+const comps=R.filter(r=>r.kind==='c'||r.kind==='g');
+const isComp=r=>r.kind==='c'||r.kind==='g';
+const all=R.find(r=>r.short==='All ME/CFS');
+const col=k=>k==='c'?C.blue:k==='g'?C.teal:k==='m'?C.coral:C.gold;
+const NS='http://www.w3.org/2000/svg';
+const el=(n,a,p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e;};
+const fmtD=v=>v>=1e6?String(+(v/1e6).toPrecision(v>=1e7?3:2))+'M':String(Math.round(v/1e3))+'k';
+const fmtN=v=>v>=100?Math.round(v).toLocaleString('en-US'):String(+v.toPrecision(2));
+const fmtX=v=>(v>=10?v.toFixed(0):String(+v.toPrecision(2)))+'×';
+const ord=n=>n+(n%100>=11&&n%100<=13?'th':['th','st','nd','rd'][n%10]||'th');
+const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
+
+// ---------- tiles
+document.getElementById('bvr-tiles').innerHTML=['papers','trials'].map(m=>{
+  const d=all[m];
+  return `<div class="tile"><div class="k">All ME/CFS: ${m}</div>
+  <div class="v" style="color:${C.coral}">${fmtX(d.sf).replace('×','')}×<span>shortfall</span></div>
+  <div class="d">${ord(d.rank)} largest of ${D.ncomp+1}</div>
+  <div class="r">90% range ${+d.p5.toPrecision(2)}–${+d.p95.toPrecision(2)}×</div></div>`;}).join('');
+
+const CATS=[['c',C.blue,'Common worldwide'],['g',C.teal,'Mainly low-income regions'],['m',C.coral,'ME/CFS'],['l',C.gold,'Long COVID (+ ME)']];
+const HIDE=new Set();
+let SCALE='log';
+const shown=r=>!HIDE.has(r.kind);
+function legend(id,r2){
+  const h=$(id);if(!h)return;
+  h.innerHTML=CATS.map(([k,c,t])=>`<button type="button" data-k="${k}" aria-pressed="true"><i style="background:${c}"></i>${t}</button>`).join('')+
+    (r2?`<span><i class="ln"></i>Trend, 90% band (R² ${r2})</span>`:'')+(id==='bvr-lg1'?'<span class="hint">Tap a category to hide it</span>':'');
+  h.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;HIDE.has(k)?HIDE.delete(k):HIDE.add(k);syncLegends();redrawAll();}));
+}
+function syncLegends(){ROOT.querySelectorAll('.bvr-legend button').forEach(b=>{const off=HIDE.has(b.dataset.k);b.classList.toggle('off',off);b.setAttribute('aria-pressed',String(!off));});}
+function syncScale(){ROOT.querySelectorAll('.bvr-seg button').forEach(b=>{const on=b.dataset.s===SCALE;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  ROOT.querySelectorAll('.bvr-scl').forEach(e=>e.textContent=SCALE==='log'?'Log scales.':'Linear scales.');}
+ROOT.querySelectorAll('.bvr-seg button').forEach(b=>b.addEventListener('click',()=>{SCALE=b.dataset.s;syncScale();redrawAll();}));
+syncScale();
+legend('bvr-lg1',D.fits.papers.r2.toFixed(2));legend('bvr-lg2',D.fits.trials.r2.toFixed(2));legend('bvr-lg3');legend('bvr-lg4');
+
+// ---------- tooltip
+function mkTip(host){const t=document.createElement('div');t.className='bvr-tip';host.appendChild(t);return t;}
+function showTip(t,host,x,y,html){
+  t.innerHTML=html;t.style.display='block';
+  const W=host.clientWidth,tw=t.offsetWidth,th=t.offsetHeight;
+  let l=x+14;if(l+tw>W-2)l=x-tw-14;if(l<2)l=Math.max(2,Math.min(W-tw-2,x-tw/2));
+  let tp=y-th-12;if(tp<0)tp=y+16;
+  t.style.left=l+'px';t.style.top=tp+'px';
+}
+function tipHtml(r,m){
+  const d=r[m];
+  return `<b>${esc(r.label)}</b>
+  <span>${esc(r.cat)}${r.kind==='g'?' · mainly low-income regions':''}</span><br>
+  <span>Burden:</span> ${fmtD(r.dalys)} DALYs <span>(${fmtD(r.lo)}–${fmtD(r.hi)})</span><br>
+  <span>${m==='papers'?'Papers':'Trials'} a year:</span> ${fmtN(d.n)} <span>(trend ${fmtN(d.trend)})</span><br>
+  <span>Shortfall:</span> ${fmtX(d.sf)} <span>(90% range ${+d.p5.toPrecision(2)}–${+d.p95.toPrecision(2)})</span><br>
+  <span>Rank:</span> ${ord(d.rank)} of ${D.ncomp+1}`;
+}
+document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-hit]'))ROOT.querySelectorAll('.bvr-tip').forEach(t=>t.style.display='none');});
+
+// ---------- scatter
+function scatter(id,m){
+  const host=$(id);host.innerHTML='';
+  const W=host.clientWidth,H=Math.round(Math.max(420,Math.min(560,W*1.1)));
+  const M={l:50,r:14,t:12,b:46},fs=W<520?13:14,narrow=W<520;
+  const svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${m} per year against disease burden`},host);
+  const LOG=SCALE==='log';
+  const vis=R.filter(shown),xmin=vis.length?Math.min(...vis.map(r=>r.dalys)):1e4;
+  const xd=LOG?[Math.max(1e4,xmin/1.6),3e8]:[0,2e8],yd=LOG?(m==='papers'?[30,40000]:[0.3,1500]):(m==='papers'?[0,16000]:[0,750]);
+  const fx=v=>LOG?Math.log10(v):v,fy=v=>LOG?Math.log10(Math.max(v,1e-9)):v;
+  const lx=v=>M.l+(fx(v)-fx(xd[0]))/(fx(xd[1])-fx(xd[0]))*(W-M.l-M.r);
+  const ly=v=>H-M.b-(fy(v)-fy(yd[0]))/(fy(yd[1])-fy(yd[0]))*(H-M.t-M.b);
+  // x positions to sample the trend and band: dense near zero, even across the range
+  const xs=[];for(let i=0;i<=80;i++)xs.push(Math.pow(10,4+i/80*(Math.log10(3e8)-4)));
+  if(!LOG)for(let i=1;i<=80;i++)xs.push(i/80*2e8);
+  xs.sort((a,b)=>a-b);
+  const clip=el('clipPath',{id:'cp-'+id},el('defs',{},svg));el('rect',{x:M.l,y:M.t,width:W-M.l-M.r,height:H-M.t-M.b},clip);
+  (LOG?[[1e4,'10k'],[1e5,'100k'],[1e6,'1M'],[1e7,'10M'],[1e8,'100M']].filter(([v])=>v>=xd[0]*0.999):[[0,'0'],[5e7,'50M'],[1e8,'100M'],[1.5e8,'150M'],[2e8,'200M']]).forEach(([v,t])=>{
+    el('line',{x1:lx(v),x2:lx(v),y1:M.t,y2:H-M.b,stroke:C.grid},svg);
+    el('text',{x:lx(v),y:H-M.b+18,'text-anchor':'middle','font-size':fs,fill:C.muted},svg).textContent=t;});
+  (LOG?(m==='papers'?[100,1000,10000]:[1,10,100,1000]):(m==='papers'?[0,5000,10000,15000]:[0,250,500,750])).forEach(v=>{
+    el('line',{x1:M.l,x2:W-M.r,y1:ly(v),y2:ly(v),stroke:C.grid},svg);
+    el('text',{x:M.l-7,y:ly(v)+4.5,'text-anchor':'end','font-size':fs,fill:C.muted},svg).textContent=v>=1000?(v/1000)+'k':v;});
+  el('text',{x:(M.l+W-M.r)/2,y:H-6,'text-anchor':'middle','font-size':fs,fill:C.ink2},svg).textContent='DALYs per year';
+  // fit, 90% confidence band and 90% prediction range
+  const X=comps.map(r=>Math.log10(r.dalys)),Y=comps.map(r=>Math.log10(r[m].n)),n=X.length;
+  const mx=X.reduce((a,b)=>a+b)/n,my=Y.reduce((a,b)=>a+b)/n;
+  const sxx=X.reduce((a,v)=>a+(v-mx)*(v-mx),0),b=X.reduce((a,v,i)=>a+(v-mx)*(Y[i]-my),0)/sxx,a0=my-b*mx;
+  const s2=X.reduce((a,v,i)=>a+Math.pow(Y[i]-a0-b*v,2),0)/(n-2),T=1.6576; // t(0.95, 122 df)
+  const tr=v=>Math.pow(10,a0+b*Math.log10(v));
+  const g=el('g',{'clip-path':`url(#cp-${id})`},svg);
+  const up=[],dn=[],pu=[],pd=[];
+  for(const xv of xs){const x0=Math.log10(xv);
+    const se=Math.sqrt(s2*(1/n+(x0-mx)*(x0-mx)/sxx)),sp=Math.sqrt(s2*(1+1/n+(x0-mx)*(x0-mx)/sxx)),f=a0+b*x0,px=lx(Math.pow(10,x0));
+    up.push(px+','+ly(Math.pow(10,f+T*se)));dn.unshift(px+','+ly(Math.pow(10,f-T*se)));
+    pu.push(px+','+ly(Math.pow(10,f+T*sp)));pd.push(px+','+ly(Math.pow(10,f-T*sp)));}
+  el('polygon',{points:up.concat(dn).join(' '),fill:C.trend,opacity:.16},g);
+  el('polyline',{points:xs.map(v=>lx(v)+','+ly(tr(v))).join(' '),fill:'none',stroke:C.trend,'stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'},g);
+  // highlight: drop line from All ME/CFS to trend
+  const hx=lx(all.dalys),hy=ly(all[m].n),hty=ly(all[m].trend);
+  const showAll=shown(all);
+  if(showAll)el('line',{x1:hx,x2:hx,y1:hy-9,y2:hty+3,stroke:C.coral,'stroke-width':1.5,'stroke-dasharray':'4 4'},svg);
+  // points
+  const pts=R.filter(shown).map(r=>({r,x:lx(r.dalys),y:ly(r[m].n),rad:r===all?7.5:(isComp(r)?4:5.5)}));
+  const boxes=[showAll?{x:hx-3,y:hty,w:6,h:hy-hty}:{x:-99,y:-99,w:0,h:0}];
+  pts.forEach(p=>boxes.push({x:p.x-p.rad-1,y:p.y-p.rad-1,w:2*p.rad+2,h:2*p.rad+2}));
+  const ptBoxes=boxes.slice(1);
+  const hit=(a,b)=>a.x<b.x+b.w&&a.x+a.w>b.x&&a.y<b.y+b.h&&a.y+a.h>b.y;
+  pts.slice().sort((a,b)=>(isComp(a.r)?0:1)-(isComp(b.r)?0:1)).forEach(p=>{
+    el('circle',{cx:p.x,cy:p.y,r:p.rad,fill:col(p.r.kind),'fill-opacity':isComp(p.r)?.8:1,stroke:C.bg,'stroke-width':1},svg);});
+  // annotation: two lines, right of the dashed line, clear of any dot
+  const compact=showAll&&(hy-hty)<(2*fs+30);
+  if(showAll&&!compact){
+  const at=el('text',{'font-size':fs+7,'font-weight':700,class:'halo'},svg);at.style.fill=C.ink;
+  const t1=el('tspan',{},at);t1.textContent=fmtX(all[m].sf);
+  const t2=el('tspan',{'font-size':fs+1,'font-weight':600},at);t2.textContent='shortfall';
+  {const w=Math.max(t1.getComputedTextLength(),t2.getComputedTextLength()),l1=fs+7,l2=fs+3,h=l1+l2+4;let best=null;
+   for(const side of ['start','end'])for(const f of [.5,.6,.4,.7,.3,.8,.2]){
+     const cyA=hty+(hy-hty)*f,tx=side==='start'?hx+10:hx-10,b={x:side==='start'?tx-3:tx-w-3,y:cyA-h/2-2,w:w+6,h:h+4};
+     if(b.x<M.l+2||b.x+b.w>W-2)continue;
+     const cost=ptBoxes.filter(o=>hit(b,o)).length*10+(side==='end'?3:0)+Math.abs(f-.5)*4;
+     if(!best||cost<best.cost)best={cost,tx,cyA,side,b};}
+   if(best){const y1=best.cyA-h/2+l1*.82;
+     at.setAttribute('x',best.tx);at.setAttribute('y',y1);at.setAttribute('text-anchor',best.side);t1.setAttribute('x',best.tx);
+     t2.setAttribute('x',best.tx);t2.setAttribute('dy',l2+4);boxes.push(best.b);}
+   else at.remove();
+   svg.appendChild(at);}
+  }
+  // labels: All ME/CFS, then the comparators furthest from the trend; capped so the chart stays readable
+  const trendBoxes=xs.map(v=>({x:lx(v)-4,y:ly(tr(v))-3,w:8,h:6}));
+  const cand=pts.filter(p=>isComp(p.r)).sort((p,q)=>Math.abs(Math.log(q.r[m].sf))-Math.abs(Math.log(p.r[m].sf)));
+  const order=(showAll?[pts.find(p=>p.r===all)]:[]).concat(cand);
+  let placed=0;const cap=narrow?6:12;
+  order.forEach(p=>{
+    if(p.r!==all&&placed>=cap)return;
+    const t=el('text',{'font-size':fs,'font-weight':isComp(p.r)?400:650},svg);if(p.r===all)t.setAttribute('class','halo');
+    t.textContent=(p.r===all&&compact)?`All ME/CFS: ${fmtX(all[m].sf)} shortfall`:p.r.short;t.style.fill=isComp(p.r)?C.ink2:C.ink;
+    const w=t.getComputedTextLength(),h=fs+2,g0=p.rad+5;
+    const ring=[[g0,h*.32,'start'],[-g0,h*.32,'end'],[0,-g0-2,'middle'],[0,g0+h*.8,'middle'],
+      [g0-2,-g0+3,'start'],[g0-2,g0+h*.55,'start'],[-g0+2,-g0+3,'end'],[-g0+2,g0+h*.55,'end']];
+    let ok=false;
+    for(const [dx,dy,an] of ring){
+      const tx=p.x+dx,ty=p.y+dy,bx=an==='start'?tx:an==='end'?tx-w:tx-w/2;
+      const b={x:bx-2,y:ty-h*.8,w:w+4,h:h};
+      if(b.x<M.l+1||b.x+b.w>W-2||b.y<M.t-4||b.y+b.h>H-M.b-1)continue;
+      if(boxes.some(o=>hit(b,o)))continue;
+      const fat={x:b.x-7,y:b.y-6,w:b.w+14,h:b.h+12};
+      if(pts.some(q=>q!==p&&hit(fat,{x:q.x-q.rad,y:q.y-q.rad,w:2*q.rad,h:2*q.rad})))continue;
+      if(p.r!==all&&trendBoxes.some(o=>hit(b,o)))continue;
+      t.setAttribute('x',tx);t.setAttribute('y',ty);t.setAttribute('text-anchor',an);
+      boxes.push(p.r===all?{x:b.x-8,y:b.y-8,w:b.w+16,h:b.h+16}:b);ok=true;break;
+    }
+    if(!ok&&p.r===all){ // always label All ME/CFS: take the first spot that stays inside the plot
+      for(const [dx,dy,an] of ring){const tx=p.x+dx,ty=p.y+dy,bx=an==='start'?tx:an==='end'?tx-w:tx-w/2;
+        const b={x:bx-2,y:ty-h*.8,w:w+4,h:h};
+        if(b.x<M.l+1||b.x+b.w>W-2||b.y<M.t-4||b.y+b.h>H-M.b-1||boxes.slice(-1).some(o=>hit(b,o)))continue;
+        t.setAttribute('x',tx);t.setAttribute('y',ty);t.setAttribute('text-anchor',an);boxes.push(b);ok=true;break;}}
+    if(!ok)t.remove();else if(p.r!==all)placed++;
+  });
+  // hit targets
+  const tip=mkTip(host);
+  pts.forEach(p=>{
+    const c=el('circle',{cx:p.x,cy:p.y,r:isComp(p.r)?10:16,fill:'transparent','data-hit':1,tabindex:0,'aria-label':p.r.label},svg);
+    c.style.cursor='pointer';
+    const on=()=>showTip(tip,host,p.x,p.y,tipHtml(p.r,m));
+    c.addEventListener('pointerenter',on);c.addEventListener('pointerdown',on);c.addEventListener('focus',on);
+    c.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')tip.style.display='none';});
+  });
+}
+
+// ---------- ranking: top 20 of comparators + All ME/CFS, then the other groups
+function rank(id,m){
+  const host=$(id);host.innerHTML='';
+  const W=host.clientWidth,narrow=W<520,fs=narrow?14:14.5;
+  const top=comps.concat([all]).filter(shown).sort((a,b)=>b[m].sf-a[m].sf).slice(0,20);
+  const others=R.filter(r=>!isComp(r)&&r!==all&&shown(r)).sort((a,b)=>b[m].sf-a[m].sf);
+  const list=top.map(r=>({r})).concat(others.length?[{sep:'Other groups'}]:[],others.map(r=>({r})));
+  if(!list.length){host.innerHTML='<p class="bvr-sub">All categories are hidden.</p>';return;}
+  const svg=el('svg',{width:W,height:10,viewBox:`0 0 ${W} 10`,role:'img','aria-label':`${m} shortfall, largest 20`},host);
+  const name=r=>r.short;
+  const meas=el('text',{'font-size':fs,'font-weight':650},svg);
+  const tw=t=>{meas.textContent=t;return meas.getComputedTextLength();};
+  const filtered=HIDE.size>0;
+  const colMax=Math.round(W*(narrow?(filtered?0.30:0.34):0.34)),rkW=filtered?(narrow?58:66):(narrow?24:28);
+  // rank among what is shown: comparators + All ME/CFS for the top list; comparators + itself for the other groups
+  const poolTop=comps.concat([all]).filter(shown),poolOther=comps.filter(shown);
+  const newRank=r=>1+(isComp(r)||r===all?poolTop:poolOther).filter(c=>c!==r&&c[m].sf>r[m].sf).length;
+  const lines=list.map(o=>{if(o.sep)return [o.sep];const t=name(o.r);if(tw(t)<=colMax)return [t];
+    const sp=[...t.matchAll(/ /g)].map(x=>x.index);let best=sp[0];
+    sp.forEach(k=>{if(Math.abs(k-t.length/2)<Math.abs(best-t.length/2))best=k;});
+    return [t.slice(0,best),t.slice(best+1)];});
+  const nameW=Math.max(60,...lines.flat().map(tw)); /* wrapped lines can exceed colMax: size to the longest */meas.remove();
+  const valW=narrow?44:52,gap=12;
+  const L=rkW+nameW+gap+6,Rr=W-valW-gap,top0=28;
+  const rh=list.map((o,i)=>o.sep?34:(lines[i].length>1?44:30));
+  const ys=[];let acc=top0;rh.forEach(h=>{ys.push(acc);acc+=h;});const H=acc+6;
+  svg.setAttribute('height',H);svg.setAttribute('viewBox',`0 0 ${W} ${H}`);
+  const d0=Math.log10(0.5),d1=Math.log10(60);
+  const x=v=>L+(Math.log10(Math.max(v,0.5))-d0)/(d1-d0)*(Rr-L);
+  const ticks=narrow?((Rr-L)<170?[[1,'1×'],[3,'3×'],[10,'10×']]:[[1,'1×'],[3,'3×'],[10,'10×'],[30,'30×']]):[[1,'1×'],[2,'2×'],[5,'5×'],[10,'10×'],[20,'20×'],[50,'50×']];
+  ticks.forEach(([v,t])=>{
+    el('line',{x1:x(v),x2:x(v),y1:top0-4,y2:H-4,stroke:v===1?C.trend:C.grid,'stroke-width':v===1?1.5:1,opacity:v===1?.6:1},svg);
+    el('text',{x:x(v),y:top0-10,'text-anchor':'middle','font-size':13,fill:v===1?C.ink2:C.muted},svg).textContent=t;});
+  if(filtered){
+    el('text',{x:narrow?22:26,y:top0-10,'text-anchor':'end','font-size':12.5,fill:C.ink2},svg).textContent='Now';
+    el('text',{x:rkW-4,y:top0-10,'text-anchor':'end','font-size':12.5,fill:C.muted},svg).textContent='(All)';
+  }
+  const tip=mkTip(host);
+  list.forEach((o,i)=>{
+    const y0=ys[i],cy=y0+rh[i]/2;
+    if(o.sep){el('line',{x1:0,x2:W,y1:y0+4,y2:y0+4,stroke:C.grid},svg);
+      const t=el('text',{x:4,y:cy+8,'font-size':13,fill:C.muted},svg);t.textContent=filtered?'Other groups (rank among shown diseases + itself)':`Other groups (rank among the ${D.ncomp} + itself)`;return;}
+    const r=o.r,d=r[m],c=col(r.kind),grp=!isComp(r);
+    const ls=lines[i],lh=fs+3,ty0=cy-(ls.length-1)*lh/2+fs*.35;
+    if(filtered){
+      const nr=el('text',{x:narrow?22:26,y:cy+fs*.35,'text-anchor':'end','font-size':14,'font-weight':grp?700:500},svg);nr.textContent=newRank(r);nr.style.fill=grp?C.ink:C.ink2;
+      const or=el('text',{x:rkW-4,y:cy+fs*.35,'text-anchor':'end','font-size':12.5,fill:C.muted},svg);or.textContent='('+d.rank+')';
+    }else{const rk=el('text',{x:rkW-2,y:cy+fs*.35,'text-anchor':'end','font-size':13,fill:C.muted},svg);rk.textContent=d.rank;}
+    ls.forEach((ln,k)=>{const t=el('text',{x:rkW+nameW+6,y:ty0+k*lh,'text-anchor':'end','font-size':fs,'font-weight':grp?650:400},svg);
+      t.textContent=ln;t.style.fill=grp?C.ink:C.ink2;});
+    el('line',{x1:x(d.p5),x2:x(Math.min(d.p95,60)),y1:cy,y2:cy,stroke:c,'stroke-width':grp?8:6,opacity:.38,'stroke-linecap':'round'},svg);
+    el('circle',{cx:x(d.sf),cy:cy,r:grp?6.5:5,fill:c,stroke:C.bg,'stroke-width':1},svg);
+    const v=el('text',{x:W-4,y:cy+fs*.35,'text-anchor':'end','font-size':fs,'font-weight':grp?700:400},svg);
+    v.textContent=fmtX(d.sf);v.style.fill=grp?C.ink:C.ink2;
+    const hr=el('rect',{x:0,y:y0,width:W,height:rh[i],fill:'transparent','data-hit':1},svg);hr.style.cursor='pointer';
+    const on=()=>showTip(tip,host,x(d.sf),cy,tipHtml(r,m));
+    hr.addEventListener('pointerenter',on);hr.addEventListener('pointerdown',on);
+    hr.addEventListener('pointerleave',e=>{if(e.pointerType==='mouse')tip.style.display='none';});
+  });
+}
+
+// ---------- sensitivity table
+if($('bvr-sens'))$('bvr-sens').innerHTML='<tr><th>Comparators</th><th>Papers</th><th>Trials</th></tr>'+
+  D.sens.map((s,i)=>`<tr${i===0?' class="hl"':''}><td>${esc(s[0])} <small>(${s[1]})</small></td><td>${s[2]}× <small>${ord(s[3])}</small></td><td>${s[4]}× <small>${ord(s[5])}</small></td></tr>`).join('');
+
+// ---------- data table
+if($('bvr-tbl'))$('bvr-tbl').innerHTML=
+ '<tr><th>Disease or group</th><th>Group</th><th>DALYs</th><th>Papers/yr</th><th>Shortfall</th><th>Rank</th><th>Trials/yr</th><th>Shortfall</th><th>Rank</th></tr>'+
+ R.slice().sort((a,b)=>b.papers.sf-a.papers.sf).map(r=>`<tr><td>${esc(r.label)}</td><td style="text-align:left">${esc(r.cat)}${r.kind==='g'?' (mainly low-income regions)':''}</td><td>${fmtD(r.dalys)}</td><td>${fmtN(r.papers.n)}</td><td>${fmtX(r.papers.sf)}</td><td>${r.papers.rank}</td><td>${fmtN(r.trials.n)}</td><td>${fmtX(r.trials.sf)}</td><td>${r.trials.rank}</td></tr>`).join('');
+
+const JOBS=[['bvr-sc-papers',()=>scatter('bvr-sc-papers','papers')],['bvr-sc-trials',()=>scatter('bvr-sc-trials','trials')],
+  ['bvr-rk-papers',()=>rank('bvr-rk-papers','papers')],['bvr-rk-trials',()=>rank('bvr-rk-trials','trials')]].filter(([id])=>$(id));
+const drawnW={};
+function redrawAll(){for(const k in drawnW)delete drawnW[k];draw();}
+function draw(){JOBS.forEach(([id,f])=>{const w=$(id).clientWidth;
+  if(w<240||drawnW[id]===w)return;drawnW[id]=w;f();});}
+draw();
+let to;const later=()=>{clearTimeout(to);to=setTimeout(draw,80);};
+if(window.ResizeObserver){const ro=new ResizeObserver(later);JOBS.forEach(([id])=>ro.observe($(id)));}
+window.addEventListener('resize',later);window.addEventListener('load',later);
+})();
+</script>

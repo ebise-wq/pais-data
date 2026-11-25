@@ -1,4 +1,9 @@
-"""Build the catalog page (docs/index.html) and the catalog section of README.md from catalog.json.
+"""Build the catalog site (docs/index.html plus one page per topic, docs/<section id>.html) and the
+catalog section of README.md from catalog.json.
+
+A section can carry "interactive": {"html": fragment, "data": json, "charts": n}. The fragment is
+inserted with its data; the part between <!-- more:start --> and <!-- more:end --> shows on the
+topic page only. A chart's "toggle" can be one alternative image or a list of them.
 
 GitHub Pages serves the docs/ folder only, so docs/index.html loads the chart images from
 raw.githubusercontent.com (the main branch). The --fragment copy uses relative image paths,
@@ -12,7 +17,7 @@ Sizes, row counts and "updated" dates are read from the files and from git, so t
 need editing by hand. The script fails if a catalogued file is missing, and lists any chart
 or data file in the repo that is not in catalog.json yet.
 """
-import csv, datetime, glob, html, json, os, subprocess, sys
+import csv, datetime, glob, html, json, os, re, subprocess, sys
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 os.chdir(ROOT)
@@ -21,6 +26,7 @@ REPO, BRANCH = CAT["repo"], CAT["branch"]
 BLOB = f"https://github.com/{REPO}/blob/{BRANCH}/"
 RAW = f"https://raw.githubusercontent.com/{REPO}/{BRANCH}/"
 TREE = f"https://github.com/{REPO}/tree/{BRANCH}/"
+SITE = CAT["site"]
 # File types that count as outputs. Anything with these extensions must be in the catalog.
 OUTPUT_EXT = (".png", ".svg", ".csv", ".json", ".gz", ".txt")
 NOT_OUTPUTS = {"catalog.json", "LICENSE"}
@@ -39,6 +45,8 @@ def rows_of(path):
             return max(sum(1 for _ in csv.reader(f)) - 1, 0)
     if path.endswith(".json"):
         d = json.load(open(path))
+        if isinstance(d, dict) and isinstance(d.get("rows"), list):
+            return len(d["rows"])
         return len(d) if isinstance(d, (list, dict)) else None
     return None
 
@@ -68,6 +76,11 @@ def tracked_outputs():
             and not f.startswith(NOT_OUTPUT_DIRS)}
 
 
+def toggles(c):
+    t = c.get("toggle")
+    return [] if not t else (t if isinstance(t, list) else [t])
+
+
 # ---------- gather ----------
 sections = CAT["sections"]
 catalogued = set()
@@ -75,8 +88,12 @@ for s in sections:
     for item in s["charts"] + s["data"]:
         expand(item)
         catalogued.update(item["files"])
-        if item.get("toggle"):
-            catalogued.update(expand(item["toggle"])["files"])
+        for t in toggles(item):
+            catalogued.update(expand(t)["files"])
+    if s.get("interactive"):
+        for k in ("html", "data"):
+            if not os.path.exists(s["interactive"][k]):
+                sys.exit(f"Missing interactive file in catalog.json: {s['interactive'][k]}")
     for r in [s["readme"], *s.get("extra_readmes", [])]:
         if not os.path.exists(r):
             sys.exit(f"Missing README in catalog.json: {r}")
@@ -90,7 +107,8 @@ if "--check" in sys.argv:
 
 # Sections with "hidden": true stay in catalog.json (so --check passes) but are left off the page.
 sections = [s for s in sections if not s.get("hidden")]
-n_charts = sum(1 for s in sections for c in s["charts"] if not c.get("old"))
+n_charts = (sum(1 for s in sections for c in s["charts"] if not c.get("old"))
+            + sum(s.get("interactive", {}).get("charts", 0) for s in sections))
 # Data entries with "hidden": true (pipeline inputs whose contents are in other tables) stay catalogued
 # but are not shown.
 n_data = sum(len(d["files"]) for s in sections for d in s["data"] if not d.get("hidden"))
@@ -113,22 +131,33 @@ def link(href, text, cls=""):
     return f'<a{c} href="{e(href)}" target="_blank" rel="noopener">{text}</a>'
 
 
-IMG_BASE = ""  # prefix for <img src>; set per output below
+IMG_BASE = ""   # prefix for <img src>; set per output below
+PAGE_BASE = ""  # prefix for links to topic pages; absolute in the artifact copy
+
+
+def page_href(sid):
+    return f"{PAGE_BASE}{sid}.html"
+
+
+def page_link(sid, text, cls=""):
+    c = f' class="{cls}"' if cls else ""
+    ext = ' target="_blank" rel="noopener"' if PAGE_BASE else ""
+    return f'<a{c} href="{e(page_href(sid))}"{ext}>{text}</a>'
 
 
 def chart_card(c):
     f = c["file"]
     script = link(BLOB + c["script"], "Script") if c.get("script") else ""
     toggle, views = "", ""
-    t = c.get("toggle")
-    if t:
-        # Two images with the same layout; the buttons swap which one shows.
-        views = (f' data-views="{e(IMG_BASE + f)}|{e(IMG_BASE + t["file"])}"'
-                 f' data-paths="{e(f)}|{e(t["file"])}" data-raws="{e(RAW + f)}|{e(RAW + t["file"])}"')
+    if toggles(c):
+        # Images with the same layout; the buttons swap which one shows.
+        opts = [(f, c.get("label", "All"))] + [(t["file"], t["label"]) for t in toggles(c)]
+        views = (f' data-views="{e("|".join(IMG_BASE + o for o, _ in opts))}"'
+                 f' data-paths="{e("|".join(o for o, _ in opts))}" data-raws="{e("|".join(RAW + o for o, _ in opts))}"')
+        buttons = "".join(f'\n          <button type="button" aria-pressed="{"true" if i == 0 else "false"}" data-view="{i}">{e(lab)}</button>'
+                          for i, (_, lab) in enumerate(opts))
         toggle = f"""
-        <div class="toggle" role="group" aria-label="Chart view">
-          <button type="button" aria-pressed="true" data-view="0">{e(c.get("label", "All"))}</button>
-          <button type="button" aria-pressed="false" data-view="1">{e(t["label"])}</button>
+        <div class="toggle" role="group" aria-label="Chart view">{buttons}
         </div>"""
     return f"""
       <figure class="chart"{views}>{toggle}
@@ -173,7 +202,18 @@ def data_row(d):
         </li>"""
 
 
-def section_html(s):
+def interactive_html(s, full):
+    spec = s["interactive"]
+    data = json.dumps(json.load(open(spec["data"])), separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+    frag = open(spec["html"]).read().replace("__BVR_DATA__", data)
+    if not full:
+        more = (f'<p class="bvr-more">Rankings, comparator sets, the full data table and caveats: '
+                f'{page_link(s["id"], "open the topic page")}.</p>')
+        frag = re.sub(r"<!-- more:start -->.*?<!-- more:end -->", more, frag, flags=re.S)
+    return frag
+
+
+def section_html(s, page=False):
     charts = [c for c in s["charts"] if not c.get("old")]
     old_charts = [c for c in s["charts"] if c.get("old")]
     data = [d for d in s["data"] if not d.get("old") and not d.get("hidden")]
@@ -185,12 +225,15 @@ def section_html(s):
     <header class="sec-head">
       <h2>{e(s['title'])}</h2>
       <div class="sec-links"><span>Notes:</span>{readme_links}</div>
+      {"" if page else page_link(s["id"], "Open page →", "open")}
     </header>
     <p class="finding">{e(s['finding'])}</p>"""]
+    if s.get("interactive"):
+        parts.append(interactive_html(s, full=page))
     if charts:
         parts.append('    <div class="charts">' + "".join(chart_card(c) for c in charts) + "\n    </div>")
     if data:
-        label = "Data behind these charts" if charts else "Data files"
+        label = "Data behind these charts" if charts or s.get("interactive") else "Data files"
         parts.append(f'    <details class="datablock"><summary>{label} <span class="count">{len(data)}</span></summary>\n'
                      '    <ul class="datalist">' + "".join(data_row(d) for d in data) + "\n    </ul></details>")
     if old_charts or old_data:
@@ -206,6 +249,10 @@ def section_html(s):
 
 
 nav = "".join(f'<a href="#{e(s["id"])}">{e(s["title"].split(",")[0].split(" (")[0])}</a>' for s in sections)
+
+def head(title):
+    return HEAD.replace(f"<title>{e(CAT['title'])}</title>", f"<title>{e(title)}</title>", 1)
+
 
 HEAD = f"""<title>{e(CAT['title'])}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
@@ -261,6 +308,15 @@ section { display: grid; gap: 1.25rem; min-width: 0; }
 .sec-head h2 { font: 600 clamp(1.45rem, 3.6vw, 1.85rem)/1.2 var(--f-display); margin: 0; text-wrap: balance; }
 .sec-links { display: flex; flex-wrap: wrap; gap: 0.2rem 0.9rem; font: 400 0.85rem/1.5 var(--f-mono); color: var(--faint); }
 section:first-child .sec-head { border-top: 0; padding-top: 0; }
+.sec-head { position: relative; }
+.sec-head .open { justify-self: start; font-size: 0.92rem; padding: 0.3rem 0.8rem; border: 1px solid var(--line);
+  border-radius: 999px; background: var(--surface); margin-top: 0.3rem; }
+.sec-head .open:hover { border-color: var(--ocean); text-decoration: none; }
+.back { font-size: 0.95rem; color: var(--muted); }
+.top-sm { padding-block: 1.4rem 0.6rem; }
+.top-sm .site { font: 600 1.35rem/1.2 var(--f-display); color: var(--ink); margin: 0.3rem 0 0; }
+.top-sm .site span { color: var(--sunset); }
+.nav a[aria-current="page"] { border-color: var(--sunset); color: var(--ink); background: var(--raise); }
 .finding { margin: 0; max-width: 68ch; font-size: 1.08rem; color: var(--ink); }
 
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
@@ -335,7 +391,7 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
   var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
   var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
-  new Image().src = srcs[1];
+  srcs.slice(1).forEach(function (u) { new Image().src = u; });
   fig.querySelectorAll(".toggle button").forEach(function (b) {
     b.addEventListener("click", function () {
       var i = +b.dataset.view;
@@ -381,39 +437,71 @@ def body():
 {SCRIPT}"""
 
 
-IMG_BASE = RAW
-standalone = f"""<!doctype html>
+def topic_body(s):
+    chips = "".join(f'<a href="{e(page_href(t["id"]))}"{" aria-current=\"page\"" if t is s else ""}>'
+                    f'{e(t["title"].split(",")[0].split(" (")[0])}</a>' for t in sections)
+    return f"""<div class="wrap top top-sm">
+  <a class="back" href="index.html">← All topics</a>
+  <p class="site">{title_html}</p>
+</div>
+<nav class="nav" aria-label="Topics"><div class="wrap">{chips}</div></nav>
+<main class="wrap">
+{section_html(s, page=True)}
+</main>
+<footer class="wrap">
+  <span>{link(TREE, "Code and data on GitHub")}</span>
+  <span class="ver">v{version} · built {built}</span>
+</footer>
+<dialog class="lb" id="lb" aria-label="Chart full size">
+  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <img alt="">
+</dialog>
+{SCRIPT}"""
+
+
+def document(title, inner):
+    return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-{HEAD}
+{head(title)}
 {STYLE}
 </head>
 <body>
-{body()}
+{inner}
 </body>
 </html>
 """
+
+
+IMG_BASE, PAGE_BASE = RAW, ""
 os.makedirs("docs", exist_ok=True)
-open("docs/index.html", "w").write(standalone)
+open("docs/index.html", "w").write(document(CAT["title"], body()))
+pages = {"index.html"}
+for s in sections:
+    open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {CAT['title']}", topic_body(s)))
+    pages.add(f"{s['id']}.html")
+for old in glob.glob("docs/*.html"):  # pages of removed or hidden sections
+    if os.path.basename(old) not in pages:
+        os.remove(old)
 open("docs/.nojekyll", "w").close()
 if "--fragment" in sys.argv:
-    IMG_BASE = ""
+    IMG_BASE, PAGE_BASE = "", SITE
     out = sys.argv[sys.argv.index("--fragment") + 1]
     open(out, "w").write(f"{HEAD}\n{STYLE}\n{body()}\n")
 
 
 # ---------- README section ----------
 def md_section(s):
-    lines = [f"### {s['title']}", "", s["finding"], ""]
+    lines = [f"### {s['title']}", "", s["finding"], "", f"Page: {SITE}{s['id']}.html", ""]
     charts = [c for c in s["charts"] if not c.get("old")]
     if charts:
         lines.append(" ".join(f'<a href="{c["file"]}"><img src="{c["file"]}" width="260" alt="{c["title"]}"></a>'
                               for c in charts))
         for c in charts:
-            if c.get("toggle"):
-                lines.append(f'\n{c["title"]}, {c["toggle"]["label"].lower()}: [`{c["toggle"]["file"]}`]({c["toggle"]["file"]})')
+            for t in toggles(c):
+                lines.append(f'\n{c["title"]}, {t["label"].lower()}: [`{t["file"]}`]({t["file"]})')
         lines.append("")
     data = [d for d in s["data"] if not d.get("old") and not d.get("hidden")]
     if data:
@@ -437,4 +525,4 @@ gen = (f"{START}\n<!-- Made by tools/build_catalog.py from catalog.json. Do not 
 head, rest = readme.split(START, 1)
 open("README.md", "w").write(head + gen + rest.split(END, 1)[1])
 
-print(f"Wrote docs/index.html and README.md: {n_charts} charts, {n_data} data files, page v{version}.")
+print(f"Wrote docs/index.html, {len(sections)} topic pages and README.md: {n_charts} charts, {n_data} data files, page v{version}.")

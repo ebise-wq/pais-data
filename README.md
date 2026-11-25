@@ -53,10 +53,11 @@ WHO ICTRP exports: attribute WHO ICTRP, no commercial use.
 
 Papers and trials per year (2021–2025) set against global DALYs (GBD 2023) for 120 diseases. ME/CFS has 10.3× fewer papers (90% range 7.5–14.5) and 7.7× fewer trials (5.0–11.7) than the trend predicts for its burden. On papers, only neonatal encephalopathy falls further below. The trend is loose (R² 0.39 for papers, 0.38 for trials).
 
-<a href="expanded/papers_vs_dalys_expanded.png"><img src="expanded/papers_vs_dalys_expanded.png" width="260" alt="Papers vs disease burden"></a> <a href="expanded/trials_vs_dalys_expanded.png"><img src="expanded/trials_vs_dalys_expanded.png" width="260" alt="Trials vs disease burden"></a>
+Page: https://ebise-wq.github.io/pais-data/burden-120.html
 
 | File | What it is | Rows |
 |---|---|---|
+| [`expanded/burden_interactive_2021-2025.json`](expanded/burden_interactive_2021-2025.json) | Data behind the interactive charts: each disease's shortfall with 90% range and rank, a low-income flag, and the comparator-set table. Computed in a separate session; that code is not in the repo. | 124 |
 | [`expanded/burden_vs_research_expanded_2021-2025.csv`](expanded/burden_vs_research_expanded_2021-2025.csv) | One row per disease: DALYs, papers and trials per year (raw and cleaned), trend value and shortfall. | 120 |
 | [`expanded/fits_2021-2025.csv`](expanded/fits_2021-2025.csv) | Log-log trend fits for several disease subsets and for the cleaned counts, with the ME/CFS shortfall under each. | 16 |
 | [`expanded/counts_2026-11-11.csv`](expanded/counts_2026-11-11.csv) | Raw papers and trials per year, 2021–2025, for the 111 fetched causes. | 111 |
@@ -67,6 +68,8 @@ Notes: [`expanded/README.md`](expanded/README.md)
 ### Trials in all registries (WHO ICTRP)
 
 ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5× as many ME/CFS trials (1.8× without the two Chinese registries), against a median of 1.9× for 18 comparison diseases. Adjusted for this, the ME/CFS trial shortfall is about 6–8×. 29% of ME/CFS trials are not mainly in ME/CFS patients, between MS (17%) and RA (38%).
+
+Page: https://ebise-wq.github.io/pais-data/ictrp.html
 
 | File | What it is | Rows |
 |---|---|---|
@@ -81,9 +84,13 @@ Notes: [`expanded/ictrp/README.md`](expanded/ictrp/README.md)
 
 Long COVID trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. Drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year. In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13), against a median of 35% for 24 diseases with 10–30M DALYs.
 
-<a href="analysis/long_covid_trials_per_year.png"><img src="analysis/long_covid_trials_per_year.png" width="260" alt="Long COVID and ME/CFS trials"></a> <a href="analysis/drug_trials_per_year.png"><img src="analysis/drug_trials_per_year.png" width="260" alt="Long COVID and ME/CFS drug trials"></a> <a href="analysis/sponsor_comparison.png"><img src="analysis/sponsor_comparison.png" width="260" alt="Commercial drug trials vs similar-burden diseases"></a>
+Page: https://ebise-wq.github.io/pais-data/trials.html
 
-Long COVID and ME/CFS drug trials, by sponsor type: [`analysis/sponsor_per_year.png`](analysis/sponsor_per_year.png)
+<a href="analysis/drug_trials_per_year.png"><img src="analysis/drug_trials_per_year.png" width="260" alt="Long COVID and ME/CFS trials per year"></a> <a href="analysis/sponsor_comparison.png"><img src="analysis/sponsor_comparison.png" width="260" alt="Commercial drug trials vs similar-burden diseases"></a>
+
+Long COVID and ME/CFS trials per year, by sponsor: [`analysis/sponsor_per_year.png`](analysis/sponsor_per_year.png)
+
+Long COVID and ME/CFS trials per year, all trial types: [`analysis/all_trials_per_year.png`](analysis/all_trials_per_year.png)
 
 | File | What it is | Rows |
 |---|---|---|
@@ -97,6 +104,8 @@ Notes: [`analysis/README.md`](analysis/README.md), [`analysis/sponsor_README.md`
 
 After adjusting for burden, the share of patients who are women shows no detectable link with research volume across 120 diseases: 0.94× papers per +10 percentage points female (95% CI 0.79–1.11) and 0.99× trials (0.81–1.21). The female shares are hand-coded approximations.
 
+Page: https://ebise-wq.github.io/pais-data/sex.html
+
 <a href="sex/sex_scatter.png"><img src="sex/sex_scatter.png" width="260" alt="Research vs burden, by sex"></a> <a href="sex/sex_groups.png"><img src="sex/sex_groups.png" width="260" alt="Research by sex group"></a>
 
 | File | What it is | Rows |
@@ -109,6 +118,8 @@ Notes: [`sex/README.md`](sex/README.md)
 ### Source data
 
 The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed paper counts per year, 1996–2026, plus the GBD 2023 burden files. The 120-disease work fetches its own counts (see above).
+
+Page: https://ebise-wq.github.io/pais-data/sources.html
 
 | File | What it is | Rows |
 |---|---|---|

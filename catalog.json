@@ -1,9 +1,10 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 4,
+  "page_version": 5,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
+  "site": "https://ebise-wq.github.io/pais-data/",
   "sections": [
     {
       "id": "burden-120",
@@ -15,17 +16,24 @@
         {
           "file": "expanded/papers_vs_dalys_expanded.png",
           "title": "Papers vs disease burden",
-          "caption": "120 diseases, coloured by disease group. ME/CFS 10.3× below trend.",
-          "script": "expanded/analyse.py"
+          "caption": "Static version, replaced by the interactive charts.",
+          "script": "expanded/analyse.py",
+          "old": true
         },
         {
           "file": "expanded/trials_vs_dalys_expanded.png",
           "title": "Trials vs disease burden",
-          "caption": "120 diseases, coloured by disease group. ME/CFS 7.7× below trend.",
-          "script": "expanded/analyse.py"
+          "caption": "Static version, replaced by the interactive charts.",
+          "script": "expanded/analyse.py",
+          "old": true
         }
       ],
       "data": [
+        {
+          "file": "expanded/burden_interactive_2021-2025.json",
+          "about": "Data behind the interactive charts: each disease's shortfall with 90% range and rank, a low-income flag, and the comparator-set table. Computed in a separate session; that code is not in the repo.",
+          "script": null
+        },
         {
           "file": "expanded/burden_vs_research_expanded_2021-2025.csv",
           "about": "One row per disease: DALYs, papers and trials per year (raw and cleaned), trend value and shortfall.",
@@ -52,7 +60,12 @@
           "script": "expanded/clean_papers.py, expanded/clean_trials.py",
           "hidden": true
         }
-      ]
+      ],
+      "interactive": {
+        "html": "expanded/burden_interactive.html",
+        "data": "expanded/burden_interactive_2021-2025.json",
+        "charts": 4
+      }
     },
     {
       "id": "ictrp",
@@ -95,20 +108,20 @@
       "finding": "Long COVID trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. Drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year. In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13), against a median of 35% for 24 diseases with 10–30M DALYs.",
       "charts": [
         {
-          "file": "analysis/long_covid_trials_per_year.png",
-          "title": "Long COVID and ME/CFS trials",
-          "caption": "Interventional trials on ClinicalTrials.gov, by start year 2020–2026.",
-          "script": "analysis/long_covid_trials.py"
-        },
-        {
           "file": "analysis/drug_trials_per_year.png",
-          "label": "All sponsors",
-          "toggle": {
-            "file": "analysis/sponsor_per_year.png",
-            "label": "By sponsor type"
-          },
-          "title": "Long COVID and ME/CFS drug trials",
-          "caption": "Drug or biologic trials by start year, 2020–2026. Switch to see commercial vs other sponsors.",
+          "label": "Drug trials",
+          "toggle": [
+            {
+              "file": "analysis/sponsor_per_year.png",
+              "label": "By sponsor"
+            },
+            {
+              "file": "analysis/all_trials_per_year.png",
+              "label": "All trial types"
+            }
+          ],
+          "title": "Long COVID and ME/CFS trials per year",
+          "caption": "By start year, 2020–2026. Switch between drug trials, drug trials by sponsor, and all trial types.",
           "script": "analysis/sponsor_charts.py"
         },
         {
@@ -116,6 +129,13 @@
           "title": "Commercial drug trials vs similar-burden diseases",
           "caption": "Commercial share and trials per year, 26 diseases with 10–30M DALYs.",
           "script": "analysis/sponsor_charts.py"
+        },
+        {
+          "file": "analysis/long_covid_trials_per_year.png",
+          "title": "Long COVID and ME/CFS trials",
+          "caption": "Earlier layout of all trial types, both diseases in one panel.",
+          "script": "analysis/long_covid_trials.py",
+          "old": true
         }
       ],
       "data": [
