@@ -1,0 +1,336 @@
+{
+  "title": "PAIS Data Catalog",
+  "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
+  "page_version": 1,
+  "repo": "ebise-wq/pais-data",
+  "branch": "main",
+  "sections": [
+    {
+      "id": "burden-120",
+      "title": "Research vs disease burden, 120 diseases",
+      "folder": "expanded/",
+      "readme": "expanded/README.md",
+      "finding": "Papers and trials per year (2021–2025) set against global DALYs (GBD 2023) for 120 diseases. ME/CFS has 10.3× fewer papers (90% range 7.5–14.5) and 7.7× fewer trials (5.0–11.7) than the trend predicts for its burden. On papers, only neonatal encephalopathy falls further below. The trend is loose (R² 0.39 for papers, 0.38 for trials).",
+      "charts": [
+        {
+          "file": "expanded/papers_vs_dalys_expanded.png",
+          "title": "Papers vs disease burden",
+          "caption": "120 diseases, coloured by disease group. ME/CFS 10.3× below trend.",
+          "script": "expanded/analyse.py"
+        },
+        {
+          "file": "expanded/trials_vs_dalys_expanded.png",
+          "title": "Trials vs disease burden",
+          "caption": "120 diseases, coloured by disease group. ME/CFS 7.7× below trend.",
+          "script": "expanded/analyse.py"
+        }
+      ],
+      "data": [
+        {
+          "file": "expanded/burden_vs_research_expanded_2021-2025.csv",
+          "about": "One row per disease: DALYs, papers and trials per year, trend value and shortfall.",
+          "script": "expanded/analyse.py"
+        },
+        {
+          "file": "expanded/fits_2021-2025.csv",
+          "about": "Log-log trend fits for four disease subsets, with the ME/CFS shortfall under each.",
+          "script": "expanded/analyse.py"
+        },
+        {
+          "file": "expanded/counts_2026-11-11.csv",
+          "about": "Raw papers and trials per year, 2021–2025, for the 111 fetched causes.",
+          "script": "expanded/fetch.py"
+        },
+        {
+          "file": "expanded/queries_2026-11-11.csv",
+          "about": "The exact PubMed and ClinicalTrials.gov search for each cause.",
+          "script": "expanded/fetch.py"
+        },
+        {
+          "file": "expanded/papers_cleaned_2021-2025.csv",
+          "about": "Paper counts after removing veterinary papers and false abbreviation matches.",
+          "script": "expanded/clean_papers.py"
+        },
+        {
+          "file": "expanded/trials_title_filtered_2021-2025.csv",
+          "about": "Trial counts weighted by how closely each trial matches the disease.",
+          "script": "expanded/clean_trials.py"
+        },
+        {
+          "file": "expanded/sensitivity_cleaned_2021-2025.csv",
+          "about": "Trend refitted on the cleaned counts. ME/CFS barely moves (10.2× papers, 7.5× trials).",
+          "script": "expanded/sensitivity_cleaned.py"
+        }
+      ]
+    },
+    {
+      "id": "ictrp",
+      "title": "Trials in all registries (WHO ICTRP)",
+      "folder": "expanded/ictrp/",
+      "readme": "expanded/ictrp/README.md",
+      "finding": "ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5× as many ME/CFS trials (1.8× without the two Chinese registries), against a median of 1.9× for 18 comparison diseases. Adjusted for this, the ME/CFS trial shortfall is about 6–8×. 29% of ME/CFS trials are not mainly in ME/CFS patients, between MS (17%) and RA (38%).",
+      "charts": [],
+      "data": [
+        {
+          "file": "expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv",
+          "about": "Trials per disease in all registries vs ClinicalTrials.gov, 31 diseases.",
+          "script": "expanded/ictrp/analyse_ictrp.py"
+        },
+        {
+          "file": "expanded/ictrp/mecfs_shortfall_adjusted.csv",
+          "about": "ME/CFS trial shortfall rescaled for trials in other registries.",
+          "script": "expanded/ictrp/analyse_ictrp.py"
+        },
+        {
+          "file": "expanded/ictrp/mecfs_trial_criteria.csv",
+          "about": "Every ME/CFS trial started 2021–2025, classified by diagnostic criteria. Checked by hand.",
+          "script": "expanded/ictrp/analyse_ictrp.py"
+        },
+        {
+          "file": "expanded/ictrp/ms_ra_trial_sample.csv",
+          "about": "Random sample of 60 MS and 60 RA trials, classified by hand for comparison.",
+          "script": null
+        },
+        {
+          "file": "expanded/ictrp/search_strings.txt",
+          "about": "The five ICTRP condition searches.",
+          "script": null
+        },
+        {
+          "file": "expanded/ictrp/raw/export*.xml.gz",
+          "about": "Raw ICTRP XML exports (5 files), downloaded by hand on 19 Nov 2026. WHO ICTRP terms: no commercial use.",
+          "script": null
+        },
+        {
+          "file": "expanded/ictrp/search_strings_1_split.txt",
+          "about": "ICTRP search 1 split into three smaller searches. Not needed in the end.",
+          "script": null,
+          "old": true
+        }
+      ]
+    },
+    {
+      "id": "sponsor",
+      "title": "Drug trials by sponsor type",
+      "folder": "analysis/",
+      "readme": "analysis/sponsor_README.md",
+      "finding": "In 2021–2025, 23% of long COVID drug trials had a commercial lead sponsor (32 of 141), and 8% of ME/CFS drug trials (1 of 13). The median across 24 diseases with 10–30M DALYs was 35%. No long COVID drug trial was led by a large drug company.",
+      "charts": [
+        {
+          "file": "analysis/sponsor_per_year.png",
+          "title": "Drug trials by sponsor type",
+          "caption": "Long COVID and ME/CFS, commercial vs other, by start year 2020–2026.",
+          "script": "analysis/sponsor_charts.py"
+        },
+        {
+          "file": "analysis/sponsor_comparison.png",
+          "title": "Commercial drug trials vs similar-burden diseases",
+          "caption": "Commercial share and trials per year, 26 diseases with 10–30M DALYs.",
+          "script": "analysis/sponsor_charts.py"
+        }
+      ],
+      "data": [
+        {
+          "file": "analysis/sponsor_by_disease_2021-2025.csv",
+          "about": "Per disease: drug trials, commercial count and share, large-pharma-led trials.",
+          "script": "analysis/sponsor_summary.py"
+        },
+        {
+          "file": "analysis/sponsor_by_year_2020-2026.csv",
+          "about": "Drug trials and commercial trials per disease per start year.",
+          "script": "analysis/sponsor_summary.py"
+        },
+        {
+          "file": "clinicaltrials/sponsor_trials_2026-11-25.csv",
+          "about": "One row per drug trial per disease: lead sponsor, sponsor class, phase, title.",
+          "script": "clinicaltrials/sponsor_class.py"
+        }
+      ]
+    },
+    {
+      "id": "trials-over-time",
+      "title": "Long COVID and ME/CFS trials over time",
+      "folder": "analysis/",
+      "readme": "analysis/README.md",
+      "finding": "Long COVID interventional trial starts peaked at 155 in 2023 and fell to 70 in 2025. ME/CFS stayed at 8–12 a year. For drug or biologic trials only: long COVID went from 47 in 2023 to 23 in 2025, and ME/CFS had 1–6 a year.",
+      "charts": [
+        {
+          "file": "analysis/long_covid_trials_per_year.png",
+          "title": "Long COVID and ME/CFS trials",
+          "caption": "Interventional trials on ClinicalTrials.gov, by start year 2020–2026.",
+          "script": "analysis/long_covid_trials.py"
+        },
+        {
+          "file": "analysis/long_covid_drug_trials_per_year.png",
+          "title": "Long COVID and ME/CFS drug trials",
+          "caption": "Drug or biologic trials only, by start year 2020–2026.",
+          "script": "analysis/long_covid_trials.py"
+        }
+      ],
+      "data": [
+        {
+          "file": "clinicaltrials/drug_trials_per_year_2026-11-11.csv",
+          "about": "Drug or biologic trials per start year, 2015–2026, for long COVID and ME/CFS.",
+          "script": "clinicaltrials/drug_trials_per_year.py"
+        }
+      ]
+    },
+    {
+      "id": "sex",
+      "title": "Research by which sex a disease mostly affects",
+      "folder": "sex/",
+      "readme": "sex/README.md",
+      "finding": "After adjusting for burden, the share of patients who are women shows no detectable link with research volume across 120 diseases: 0.94× papers per +10 percentage points female (95% CI 0.79–1.11) and 0.99× trials (0.81–1.21). The female shares are hand-coded approximations.",
+      "charts": [
+        {
+          "file": "sex/sex_scatter.png",
+          "title": "Research vs burden, by sex",
+          "caption": "Each dot a disease: share of patients who are women vs research relative to trend.",
+          "script": "sex/plot_sex.py"
+        },
+        {
+          "file": "sex/sex_groups.png",
+          "title": "Research by sex group",
+          "caption": "Five sex groups, each with its group average.",
+          "script": "sex/plot_sex.py"
+        }
+      ],
+      "data": [
+        {
+          "file": "sex/sex_labels.csv",
+          "about": "Female share of patients per disease, with confidence and basis. Coded by hand.",
+          "script": null
+        },
+        {
+          "file": "sex/sex_by_disease_2021-2025.csv",
+          "about": "Per disease: sex class, female share, DALYs, papers and trials relative to trend.",
+          "script": "sex/analyse_sex.py"
+        },
+        {
+          "file": "sex/sex_models_2021-2025.csv",
+          "about": "All regression models: multiplier per +10 pp female, CI, p and permutation p.",
+          "script": "sex/analyse_sex.py"
+        },
+        {
+          "file": "sex/sex_robustness_2021-2025.csv",
+          "about": "Robustness checks: cleaned counts, dropped groups, label noise and more.",
+          "script": "sex/analyse_sex.py"
+        },
+        {
+          "file": "sex/sex_class_summary_2021-2025.csv",
+          "about": "Average papers and trials vs trend for each of the five sex classes.",
+          "script": "sex/analyse_sex.py"
+        }
+      ]
+    },
+    {
+      "id": "burden-13",
+      "title": "Research vs disease burden, first 13 diseases",
+      "folder": "analysis/",
+      "readme": "analysis/README.md",
+      "finding": "The first comparison used 13 well-funded chronic diseases. Against them ME/CFS had 20.3× fewer papers (90% range 12.5–30.6) and 13.4× fewer trials (8.9–18.8). These 13 sit above the broader trend, so they set a high bar. The 120-disease version gives about half these multiples.",
+      "charts": [
+        {
+          "file": "analysis/papers_vs_dalys_ccc_2021-2025.png",
+          "title": "Papers vs disease burden (13 diseases)",
+          "caption": "ME/CFS burden from the ME/CFS model (CCC). 20.3× shortfall.",
+          "script": "analysis/shortfall_ccc.py"
+        },
+        {
+          "file": "analysis/trials_vs_dalys_ccc_2021-2025.png",
+          "title": "Trials vs disease burden (13 diseases)",
+          "caption": "ME/CFS burden from the ME/CFS model (CCC). 13.4× shortfall.",
+          "script": "analysis/shortfall_ccc.py"
+        },
+        {
+          "file": "analysis/burden_vs_research_2021-2025.png",
+          "title": "Papers and trials vs burden (draft)",
+          "caption": "Early draft. ME/CFS set by hand to 25M DALYs.",
+          "script": "analysis/burden_vs_research.py",
+          "old": true
+        },
+        {
+          "file": "analysis/pubs_vs_dalys_2021-2025.png",
+          "title": "Papers vs burden (draft)",
+          "caption": "Early draft. ME/CFS set by hand to 25M DALYs.",
+          "script": "analysis/burden_vs_research.py",
+          "old": true
+        },
+        {
+          "file": "analysis/trials_vs_dalys_2021-2025.png",
+          "title": "Trials vs burden (draft)",
+          "caption": "Early draft. ME/CFS set by hand to 25M DALYs.",
+          "script": "analysis/burden_vs_research.py",
+          "old": true
+        }
+      ],
+      "data": [
+        {
+          "file": "analysis/plot_data_2021-2025.csv",
+          "about": "Data behind the two scatterplots, with trend values and shortfalls. Data dictionary: analysis/plot_data_README.md.",
+          "script": "analysis/shortfall_ccc.py"
+        },
+        {
+          "file": "analysis/shortfall_ccc_2021-2025.csv",
+          "about": "Shortfall for four ways of grouping ME/CFS and long COVID, with 90% ranges.",
+          "script": "analysis/shortfall_ccc.py"
+        },
+        {
+          "file": "analysis/burden_vs_research_2021-2025.csv",
+          "about": "Data behind the early drafts (ME/CFS set to 25M DALYs).",
+          "script": "analysis/burden_vs_research.py",
+          "old": true
+        }
+      ]
+    },
+    {
+      "id": "sources",
+      "title": "Source data",
+      "folder": "clinicaltrials/, pubmed/, gbd/",
+      "readme": "clinicaltrials/README.md",
+      "extra_readmes": [
+        "pubmed/README.md",
+        "gbd/citation.txt"
+      ],
+      "finding": "The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed paper counts per year, 1996–2026, plus the GBD 2023 burden files. The 120-disease work fetches its own counts (see above).",
+      "charts": [],
+      "data": [
+        {
+          "file": "clinicaltrials/counts_2026-11-08.csv",
+          "about": "Study counts for 24 diseases: all studies, trials, randomised, drug, phase and industry-led.",
+          "script": "clinicaltrials/fetch_counts.py"
+        },
+        {
+          "file": "clinicaltrials/trials_per_year_2026-11-08.csv",
+          "about": "Interventional trials per start year, 1996–2026, for 24 diseases.",
+          "script": "clinicaltrials/trials_per_year.py"
+        },
+        {
+          "file": "clinicaltrials/nct_ids_2026-11-08.json",
+          "about": "The trial IDs (NCT numbers) selected for each of the 24 diseases.",
+          "script": "clinicaltrials/fetch_counts.py"
+        },
+        {
+          "file": "pubmed/pubs_per_year_2026-11-08.csv",
+          "about": "Papers per year with the disease in the title, 1996–2026, for 24 diseases. One column per year.",
+          "script": "pubmed/pubs_per_year.py"
+        },
+        {
+          "file": "pubmed/pubs_per_year_long_2026-11-08.csv",
+          "about": "The same papers per year in long format, plus publication-date and MeSH counts.",
+          "script": "pubmed/pubs_per_year.py"
+        },
+        {
+          "file": "pubmed/queries_2026-11-08.csv",
+          "about": "The exact PubMed search string for each disease.",
+          "script": "pubmed/pubs_per_year.py"
+        },
+        {
+          "file": "gbd/IHME-GBD_2023_DATA-*.csv",
+          "about": "GBD 2023 DALYs, global, both sexes, all ages, level-3 and level-4 causes (2 files). Cite as in gbd/citation.txt.",
+          "script": null
+        }
+      ]
+    }
+  ]
+}
