@@ -1,0 +1,121 @@
+label,group,sex_class,female_share,confidence,basis,dalys,papers_per_year,trials_per_year,papers_resid_fold,trials_resid_fold
+Benign prostatic hyperplasia,NCD,male-specific,0.0,high,Sex-specific (male),2371576,429.6,32.4,0.477,1.383
+Testicular cancer,Cancer,male-specific,0.0,high,Sex-specific (male),587946,314.4,9.2,0.659,0.91
+Prostate cancer,Cancer,male-specific,0.0,high,Sex-specific (male),8907360,5954.0,304.2,3.625,5.845
+Gout,NCD,male-dominant,0.22,high,About 3-4:1 male:female,1788635,549.0,22.4,0.694,1.133
+Bladder cancer,Cancer,male-dominant,0.23,high,About 3-4:1 male,4625901,2818.8,130.0,2.312,3.708
+Mesothelioma,Cancer,male-dominant,0.25,high,About 3:1 male (asbestos exposure),624396,493.8,25.6,1.007,2.443
+Abdominal hernia,NCD,male-dominant,0.25,medium,Inguinal hernia mostly male,2401675,786.6,37.6,0.869,1.592
+Alcohol use disorders,NCD,male-dominant,0.25,high,About 3:1 male:female,18035984,764.0,81.0,0.337,1.017
+Aortic aneurysm,NCD,male-dominant,0.25,high,About 3:1 male,3418214,1995.6,27.4,1.878,0.938
+Autism,NCD,male-dominant,0.25,high,About 3:1 male in diagnosed cases,9831262,3951.8,144.8,2.3,2.621
+Liver cancer,Cancer,male-dominant,0.28,high,About 2.5:1 male,13923251,8142.6,211.0,4.046,3.097
+ADHD,NCD,male-dominant,0.3,medium,About 2-3:1 male in diagnosed cases,3727550,1677.2,74.4,1.517,2.417
+Esophageal cancer,Cancer,male-dominant,0.3,high,About 2-3:1 male,14029973,2216.4,95.2,1.097,1.391
+Stomach cancer,Cancer,male-dominant,0.33,high,About 2:1 male,22493976,4338.4,179.4,1.733,1.972
+Lung cancer,Cancer,male-dominant,0.33,high,About 2:1 male globally,46642797,12277.4,613.4,3.52,4.343
+Opioid use disorders,NCD,male-dominant,0.33,high,About 2:1 male:female,12785780,1006.2,62.6,0.52,0.967
+Endocarditis,NCD,male-dominant,0.35,medium,About 2:1 male,2336792,1007.4,6.4,1.127,0.276
+Leprosy,NTD,male-dominant,0.35,medium,About 2:1 male in new cases,18572,313.6,2.2,3.164,1.748
+Kidney cancer,Cancer,male-dominant,0.35,high,About 2:1 male,4061416,2506.4,97.2,2.181,2.999
+Tuberculosis,Infectious,male-dominant,0.37,high,About 1.7:1 male in notifications,43613775,5869.6,54.6,1.735,0.403
+ALS / motor neuron disease,NCD,male-dominant,0.4,high,About 1.5:1 male,1218518,1399.0,47.8,2.105,3.048
+Cardiomyopathy & myocarditis,NCD,male-dominant,0.4,medium,More common in men,11992296,3554.8,52.6,1.89,0.845
+Pancreatitis,NCD,male-dominant,0.4,medium,More common in men (alcohol),4201484,1670.4,28.6,1.431,0.864
+Leishmaniasis,NTD,male-dominant,0.4,low,Visceral form more male,1086881,1097.0,5.4,1.739,0.369
+Kidney stones,NCD,male-dominant,0.4,medium,More common in men,989570,793.0,51.2,1.312,3.701
+Peptic ulcer disease,NCD,male-dominant,0.4,medium,More common in men,5982149,287.8,9.0,0.21,0.22
+Food-borne trematodiases,NTD,male-dominant,0.4,low,Men eat more raw fish and freshwater plants in endemic areas,1036240,212.6,0.6,0.344,0.042
+Lymphatic filariasis,NTD,male-dominant,0.4,low,Hydrocele is male-only; lymphoedema more female; infection more male,1494521,101.2,0.6,0.139,0.034
+Yellow fever,NTD,male-dominant,0.4,low,Men more exposed (outdoor work),310080,130.2,4.0,0.365,0.582
+COPD,NCD,balanced,0.42,medium,More common in men globally (smoking),74835520,3154.8,179.0,0.729,0.953
+Ischemic heart disease,NCD,balanced,0.42,medium,More common in men,192410103,6940.4,298.2,1.044,0.898
+Rabies,Infectious,balanced,0.42,low,More male deaths in most series,870910,321.4,4.4,0.563,0.344
+Hepatitis B,Infectious,balanced,0.42,medium,Chronic infection more common in men,15618747,2392.6,53.4,1.128,0.731
+Parkinson's disease,NCD,balanced,0.42,high,About 1.4:1 male,7974574,5498.6,234.8,3.52,4.822
+Fatty liver disease (NAFLD/MASLD),NCD,balanced,0.42,medium,More common in men,2527266,4381.8,108.8,4.731,4.468
+Neonatal encephalopathy,MatNeo,balanced,0.43,medium,Boys at higher risk of birth asphyxia injury,54951646,304.6,12.0,0.081,0.077
+Leukemia,Cancer,balanced,0.43,high,Slight male excess,12185735,5805.0,347.4,3.064,5.525
+Colorectal cancer,Cancer,balanced,0.44,high,Slight male excess,26154109,10269.8,434.2,3.83,4.357
+Preterm birth complications,MatNeo,balanced,0.45,medium,Boys born preterm do worse,70218511,3148.4,127.6,0.749,0.706
+Meningitis,Infectious,balanced,0.45,low,Slight male excess,17483150,822.2,8.6,0.368,0.11
+Non-Hodgkin lymphoma,Cancer,balanced,0.45,high,Slight male excess,8314845,5092.0,374.8,3.198,7.506
+Atrial fibrillation,NCD,balanced,0.45,medium,More common in men at the same age,9265726,4077.6,160.4,2.438,3.009
+Interstitial lung disease & sarcoidosis,NCD,balanced,0.45,low,IPF male; sarcoidosis slightly female,4460942,2741.2,64.8,2.286,1.889
+Multiple myeloma,Cancer,balanced,0.45,high,Slight male excess,2812822,2194.8,160.4,2.257,6.175
+African trypanosomiasis,NTD,balanced,0.45,low,Roughly equal; slight male excess,85101,124.6,1.0,0.629,0.317
+Schistosomiasis,NTD,balanced,0.45,low,Varies by exposure; slight male excess,2071442,575.2,3.4,0.68,0.157
+Appendicitis,NCD,balanced,0.45,medium,Slight male excess,1454967,658.6,13.8,0.914,0.791
+Schizophrenia,NCD,balanced,0.45,medium,Slight male excess,16952603,2919.2,119.8,1.326,1.561
+Neonatal sepsis,MatNeo,balanced,0.45,medium,Boys at higher risk in the newborn period,22682248,266.2,5.0,0.106,0.055
+Onchocerciasis,NTD,balanced,0.45,low,Men more exposed (farming near rivers),871957,80.4,2.8,0.141,0.218
+Hepatitis C,Infectious,balanced,0.45,medium,Somewhat more common in men,11326662,1543.0,18.2,0.842,0.303
+Down syndrome,NCD,balanced,0.46,medium,Slight male excess at birth,2432961,666.8,25.0,0.733,1.05
+Pancreatic cancer,Cancer,balanced,0.46,high,Slight male excess,12276311,3802.4,212.8,2.0,3.37
+Epilepsy,NCD,balanced,0.47,medium,Slight male excess,15422825,5780.6,90.4,2.741,1.247
+Hearing loss,NCD,balanced,0.47,medium,Age-related and noise-induced loss slightly more male,53097868,1610.0,78.8,0.435,0.516
+Encephalitis,Infectious,balanced,0.47,low,Roughly equal,4279514,770.8,7.2,0.655,0.215
+Lower respiratory infections,Infectious,balanced,0.47,low,Slight male excess,98711140,3317.2,125.6,0.676,0.566
+Typhoid & paratyphoid,Infectious,balanced,0.47,low,Roughly equal; slight male excess in some series,6218662,197.2,3.2,0.141,0.076
+Otitis media,Infectious,balanced,0.48,low,Slight male excess in children,2504500,297.6,8.2,0.323,0.339
+Brain & CNS cancer,Cancer,balanced,0.48,medium,Glioma male; meningioma female,9161085,6786.2,176.8,4.079,3.34
+Type 2 diabetes,NCD,balanced,0.48,medium,Roughly equal,87039754,7235.6,419.4,1.562,2.038
+Congenital heart disease,NCD,balanced,0.48,low,Roughly equal,26502676,2146.6,37.2,0.796,0.37
+Malaria,Infectious,balanced,0.48,low,Roughly equal,51578854,2766.4,45.0,0.758,0.3
+Hookworm,NTD,balanced,0.48,low,Roughly equal,455013,99.2,2.2,0.234,0.254
+Melanoma,Cancer,balanced,0.48,medium,Roughly equal globally,1824765,3601.8,135.2,4.51,6.757
+Type 1 diabetes,NCD,balanced,0.48,medium,Roughly equal,3140267,2261.0,141.6,2.212,5.101
+Ulcerative colitis,NCD,balanced,0.48,medium,Roughly equal,1207116,1548.8,66.0,2.34,4.232
+Gonorrhea,Infectious,balanced,0.48,low,Roughly equal,78223,343.6,7.8,1.803,2.604
+Measles,Infectious,balanced,0.49,low,No consistent sex difference,12478559,363.4,2.6,0.19,0.041
+Psoriasis,NCD,balanced,0.5,medium,Roughly equal,2648548,2670.4,91.0,2.822,3.633
+Stroke,NCD,balanced,0.5,medium,Roughly equal,156408612,11910.4,612.4,1.969,2.09
+Chagas disease,NTD,balanced,0.5,low,Roughly equal,285361,527.4,1.6,1.536,0.245
+Diarrheal diseases,Infectious,balanced,0.5,low,Roughly equal,56473749,2563.8,50.8,0.674,0.32
+Thalassemia,NCD,balanced,0.5,high,Autosomal; equal,1001789,637.2,18.8,1.048,1.349
+Dengue,Infectious,balanced,0.5,low,Roughly equal,3015760,1170.0,10.6,1.166,0.391
+Sickle cell disease,NCD,balanced,0.5,high,Autosomal; equal,4300997,1114.0,44.6,0.944,1.329
+Glaucoma,NCD,balanced,0.5,low,Open-angle slightly male; angle-closure female,684211,1928.6,72.8,3.773,6.574
+Syphilis,Infectious,balanced,0.5,low,Roughly equal (includes congenital),6832011,570.2,8.6,0.392,0.194
+Scabies,NTD,balanced,0.5,low,No consistent sex difference,3198462,126.8,3.4,0.123,0.121
+Ascariasis,NTD,balanced,0.5,low,No consistent sex difference,803122,63.0,0.8,0.115,0.066
+Cysticercosis,NTD,balanced,0.5,low,No consistent sex difference,1182776,165.4,0.6,0.252,0.039
+Asthma,NCD,balanced,0.52,low,Male in childhood; female in adulthood,25846781,3789.6,147.6,1.421,1.492
+Bipolar disorder,NCD,balanced,0.52,medium,Roughly equal,7627278,1170.6,61.4,0.765,1.295
+GERD,NCD,balanced,0.52,low,Roughly equal,6434959,469.8,37.8,0.332,0.884
+Crohn's disease,NCD,balanced,0.52,medium,Roughly equal,413485,1354.8,70.2,3.333,8.588
+Cystic echinococcosis,NTD,balanced,0.52,low,Roughly equal,97006,425.0,0.4,2.022,0.117
+Alopecia areata,NCD,balanced,0.52,low,Roughly equal,115808,315.4,16.4,1.384,4.322
+Varicella & herpes zoster,Infectious,balanced,0.53,low,Zoster more common in women; varicella equal,827469,671.4,20.6,1.205,1.659
+Pertussis,Infectious,balanced,0.53,low,Slight female excess in most surveillance,10130882,256.8,6.6,0.147,0.117
+HIV/AIDS,Infectious,balanced,0.53,high,Women are just over half of people with HIV,45100836,8911.2,248.8,2.594,1.798
+Chronic kidney disease,NCD,balanced,0.55,medium,Prevalence slightly higher in women,46150545,7488.0,245.0,2.157,1.746
+Neural tube defects,NCD,balanced,0.55,medium,Anencephaly and spina bifida slightly more common in girls,4016901,302.0,8.2,0.264,0.255
+Atopic dermatitis,NCD,balanced,0.55,low,Slight female excess in adults,11063906,1696.8,94.8,0.936,1.598
+Peripheral arterial disease,NCD,balanced,0.55,low,Global prevalence slightly higher in women,1861821,856.8,61.4,1.063,3.032
+Acne,NCD,balanced,0.55,low,Adult acne more common in women,1171717,553.2,46.4,0.847,3.029
+Cataract,NCD,balanced,0.57,medium,Higher prevalence in women,7119953,1108.4,67.2,0.747,1.478
+Macular degeneration,NCD,balanced,0.58,medium,Higher prevalence in women,517213,1020.6,58.6,2.268,6.264
+Osteoarthritis,NCD,female-dominant,0.6,high,More common in women,22357934,3725.8,292.4,1.492,3.225
+Rheumatic heart disease,NCD,female-dominant,0.6,medium,RHD about 1.5-2x more common in women and girls,14474876,204.2,5.0,0.1,0.072
+Urticaria,NCD,female-dominant,0.6,medium,Chronic urticaria about 2:1 female,5031381,373.8,17.2,0.295,0.466
+Genital herpes,Infectious,female-dominant,0.62,high,HSV-2 prevalence clearly higher in women,216872,83.4,1.6,0.275,0.289
+Depressive disorders,NCD,female-dominant,0.62,high,About 1.5-2:1 female,56027521,11851.2,639.0,3.126,4.051
+Gallstones & biliary disease,NCD,female-dominant,0.62,high,About 1.5-2:1 female,8162091,697.4,28.0,0.442,0.567
+Trachoma,NTD,female-dominant,0.62,medium,Trichiasis and blindness about 2x more common in women,145473,62.4,1.2,0.247,0.276
+Alzheimer's & other dementias,NCD,female-dominant,0.62,high,About 1.6:1 female (partly longer female lifespan),39743859,10955.8,277.0,3.378,2.16
+Anxiety disorders,NCD,female-dominant,0.63,high,About 1.7:1 female:male,55368911,889.4,121.2,0.236,0.774
+Multiple sclerosis,NCD,female-dominant,0.7,high,About 2.5:1 female,1068346,3287.0,146.8,5.251,10.132
+Pulmonary arterial hypertension,NCD,female-dominant,0.7,medium,Idiopathic PAH about 2-4:1 female,700657,645.0,21.6,1.248,1.923
+Migraine,NCD,female-dominant,0.7,high,About 2-3:1 female:male in adults,40880964,1443.8,84.8,0.439,0.65
+Rheumatoid arthritis,NCD,female-dominant,0.7,high,About 2-3:1 female,3337270,2977.6,78.6,2.833,2.73
+Eating disorders,NCD,female-dominant,0.75,high,Anorexia and bulimia mostly female,3827878,1368.0,55.4,1.223,1.771
+Thyroid cancer,Cancer,female-dominant,0.75,high,About 3:1 female,1560050,2325.8,38.0,3.127,2.087
+Breast cancer,Cancer,female-specific,0.99,high,About 99% female; treated as sex-specific,24615156,15141.0,698.8,5.805,7.274
+Maternal hemorrhage,MatNeo,female-specific,1.0,high,Sex-specific (female),3183698,393.4,21.2,0.382,0.757
+Uterine fibroids,NCD,female-specific,1.0,high,Sex-specific (female),224670,348.2,15.0,1.13,2.651
+Endometriosis,NCD,female-specific,1.0,high,Sex-specific (female),1907359,1392.8,41.4,1.709,2.015
+Ovarian cancer,Cancer,female-specific,1.0,high,Sex-specific (female),6477936,3012.0,160.0,2.119,3.725
+Cervical cancer,Cancer,female-specific,1.0,high,Sex-specific (female),13261257,2739.0,126.0,1.391,1.904
+Pre-eclampsia & hypertensive disorders of pregnancy,MatNeo,female-specific,1.0,high,Sex-specific (female),3084662,1472.0,39.4,1.452,1.435
+Polycystic ovary syndrome,NCD,female-specific,1.0,high,Sex-specific (female),652802,1350.6,47.2,2.699,4.384

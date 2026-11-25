@@ -1,0 +1,121 @@
+label,female_share,confidence,basis
+Neonatal encephalopathy,0.43,medium,Boys at higher risk of birth asphyxia injury
+Rheumatic heart disease,0.60,medium,RHD about 1.5-2x more common in women and girls
+Neonatal sepsis,0.45,medium,Boys at higher risk in the newborn period
+Ascariasis,0.50,low,No consistent sex difference
+Scabies,0.50,low,No consistent sex difference
+Lymphatic filariasis,0.40,low,Hydrocele is male-only; lymphoedema more female; infection more male
+Onchocerciasis,0.45,low,Men more exposed (farming near rivers)
+Typhoid & paratyphoid,0.47,low,Roughly equal; slight male excess in some series
+Pertussis,0.53,low,Slight female excess in most surveillance
+Measles,0.49,low,No consistent sex difference
+Peptic ulcer disease,0.40,medium,More common in men
+Hookworm,0.48,low,Roughly equal
+Anxiety disorders,0.63,high,About 1.7:1 female:male
+Trachoma,0.62,medium,Trichiasis and blindness about 2x more common in women
+Cysticercosis,0.50,low,No consistent sex difference
+Neural tube defects,0.55,medium,Anencephaly and spina bifida slightly more common in girls
+Genital herpes,0.62,high,HSV-2 prevalence clearly higher in women
+Urticaria,0.60,medium,Chronic urticaria about 2:1 female
+Otitis media,0.48,low,Slight male excess in children
+GERD,0.52,low,Roughly equal
+Alcohol use disorders,0.25,high,About 3:1 male:female
+Food-borne trematodiases,0.40,low,Men eat more raw fish and freshwater plants in endemic areas
+Yellow fever,0.40,low,Men more exposed (outdoor work)
+Meningitis,0.45,low,Slight male excess
+Maternal hemorrhage,1.00,high,Sex-specific (female)
+Syphilis,0.50,low,Roughly equal (includes congenital)
+Hearing loss,0.47,medium,Age-related and noise-induced loss slightly more male
+Migraine,0.70,high,About 2-3:1 female:male in adults
+Gallstones & biliary disease,0.62,high,About 1.5-2:1 female
+Benign prostatic hyperplasia,0.00,high,Sex-specific (male)
+Opioid use disorders,0.33,high,About 2:1 male:female
+Rabies,0.42,low,More male deaths in most series
+African trypanosomiasis,0.45,low,Roughly equal; slight male excess
+Encephalitis,0.47,low,Roughly equal
+Testicular cancer,0.00,high,Sex-specific (male)
+Lower respiratory infections,0.47,low,Slight male excess
+Diarrheal diseases,0.50,low,Roughly equal
+Schistosomiasis,0.45,low,Varies by exposure; slight male excess
+Gout,0.22,high,About 3-4:1 male:female
+COPD,0.42,medium,More common in men globally (smoking)
+Down syndrome,0.46,medium,Slight male excess at birth
+Cataract,0.57,medium,Higher prevalence in women
+Preterm birth complications,0.45,medium,Boys born preterm do worse
+Malaria,0.48,low,Roughly equal
+Bipolar disorder,0.52,medium,Roughly equal
+Congenital heart disease,0.48,low,Roughly equal
+Hepatitis C,0.45,medium,Somewhat more common in men
+Acne,0.55,low,Adult acne more common in women
+Abdominal hernia,0.25,medium,Inguinal hernia mostly male
+Appendicitis,0.45,medium,Slight male excess
+Atopic dermatitis,0.55,low,Slight female excess in adults
+Sickle cell disease,0.50,high,Autosomal; equal
+Mesothelioma,0.25,high,About 3:1 male (asbestos exposure)
+Ischemic heart disease,0.42,medium,More common in men
+Thalassemia,0.50,high,Autosomal; equal
+Peripheral arterial disease,0.55,low,Global prevalence slightly higher in women
+Esophageal cancer,0.30,high,About 2-3:1 male
+Endocarditis,0.35,medium,About 2:1 male
+Hepatitis B,0.42,medium,Chronic infection more common in men
+Uterine fibroids,1.00,high,Sex-specific (female)
+Dengue,0.50,low,Roughly equal
+Varicella & herpes zoster,0.53,low,Zoster more common in women; varicella equal
+Eating disorders,0.75,high,Anorexia and bulimia mostly female
+Pulmonary arterial hypertension,0.70,medium,Idiopathic PAH about 2-4:1 female
+Kidney stones,0.40,medium,More common in men
+Schizophrenia,0.45,medium,Slight male excess
+Alopecia areata,0.52,low,Roughly equal
+Cervical cancer,1.00,high,Sex-specific (female)
+Asthma,0.52,low,Male in childhood; female in adulthood
+Pancreatitis,0.40,medium,More common in men (alcohol)
+Pre-eclampsia & hypertensive disorders of pregnancy,1.00,high,Sex-specific (female)
+Osteoarthritis,0.60,high,More common in women
+ADHD,0.30,medium,About 2-3:1 male in diagnosed cases
+Chagas disease,0.50,low,Roughly equal
+Type 2 diabetes,0.48,medium,Roughly equal
+Endometriosis,1.00,high,Sex-specific (female)
+Stomach cancer,0.33,high,About 2:1 male
+Tuberculosis,0.37,high,About 1.7:1 male in notifications
+Leishmaniasis,0.40,low,Visceral form more male
+Gonorrhea,0.48,low,Roughly equal
+Aortic aneurysm,0.25,high,About 3:1 male
+Cardiomyopathy & myocarditis,0.40,medium,More common in men
+Stroke,0.50,medium,Roughly equal
+Pancreatic cancer,0.46,high,Slight male excess
+Cystic echinococcosis,0.52,low,Roughly equal
+ALS / motor neuron disease,0.40,high,About 1.5:1 male
+Ovarian cancer,1.00,high,Sex-specific (female)
+Chronic kidney disease,0.55,medium,Prevalence slightly higher in women
+Kidney cancer,0.35,high,About 2:1 male
+Type 1 diabetes,0.48,medium,Roughly equal
+Interstitial lung disease & sarcoidosis,0.45,low,IPF male; sarcoidosis slightly female
+Macular degeneration,0.58,medium,Higher prevalence in women
+Multiple myeloma,0.45,high,Slight male excess
+Ulcerative colitis,0.48,medium,Roughly equal
+Autism,0.25,high,About 3:1 male in diagnosed cases
+Bladder cancer,0.23,high,About 3-4:1 male
+Atrial fibrillation,0.45,medium,More common in men at the same age
+HIV/AIDS,0.53,high,Women are just over half of people with HIV
+Polycystic ovary syndrome,1.00,high,Sex-specific (female)
+Epilepsy,0.47,medium,Slight male excess
+Rheumatoid arthritis,0.70,high,About 2-3:1 female
+Psoriasis,0.50,medium,Roughly equal
+Leukemia,0.43,high,Slight male excess
+Depressive disorders,0.62,high,About 1.5-2:1 female
+Thyroid cancer,0.75,high,About 3:1 female
+Leprosy,0.35,medium,About 2:1 male in new cases
+Non-Hodgkin lymphoma,0.45,high,Slight male excess
+Crohn's disease,0.52,medium,Roughly equal
+Alzheimer's & other dementias,0.62,high,About 1.6:1 female (partly longer female lifespan)
+Parkinson's disease,0.42,high,About 1.4:1 male
+Lung cancer,0.33,high,About 2:1 male globally
+Prostate cancer,0.00,high,Sex-specific (male)
+Glaucoma,0.50,low,Open-angle slightly male; angle-closure female
+Colorectal cancer,0.44,high,Slight male excess
+Liver cancer,0.28,high,About 2.5:1 male
+Brain & CNS cancer,0.48,medium,Glioma male; meningioma female
+Melanoma,0.48,medium,Roughly equal globally
+Fatty liver disease (NAFLD/MASLD),0.42,medium,More common in men
+Multiple sclerosis,0.70,high,About 2.5:1 female
+Breast cancer,0.99,high,About 99% female; treated as sex-specific
