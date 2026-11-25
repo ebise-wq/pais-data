@@ -37,9 +37,9 @@ for _m in ("papers", "trials"):
 ME_FOOT = "ME/CFS (about 70% women): not in trend or averages. Burden from a model."
 
 
-def me_dot(ax, x, y, label_side="right"):
-    ax.scatter([x], [y], s=150, color=SUNSET, edgecolor=INK, lw=2.2, zorder=6)
-    dx, ha = (11, "left") if label_side == "right" else (-11, "right")
+def me_dot(ax, x, y, label_side="right", **dot):
+    ax.scatter([x], [y], color=SUNSET, zorder=6, **dot)  # same look as the other dots
+    dx, ha = (7, "left") if label_side == "right" else (-7, "right")
     ax.annotate("ME/CFS", (x, y), xytext=(dx, 0), textcoords="offset points", ha=ha, va="center",
                 fontsize=12, fontweight="bold", color=INK, zorder=6)
 
@@ -80,7 +80,7 @@ def scatter(version):
         xs = np.array([d.loc[ns, "female_share"].min(), d.loc[ns, "female_share"].max()]) * 100
         ax.plot(xs, 10 ** (a + b * xs), color=INK, lw=2, zorder=4, solid_capstyle="round")
         ax.axhline(1, color=MUTED, lw=1.2, ls=(0, (3, 3)), zorder=1)
-        me_dot(ax, ME_SHARE * 100, ME[m], "right")
+        me_dot(ax, ME_SHARE * 100, ME[m], "right", s=34, lw=0.8, edgecolor=BG)
         ax.set_yscale("log"); ax.set_ylim(0.025, 16)
         ax.yaxis.set_major_locator(FixedLocator(YT)); ax.set_yticklabels(YL)
         ax.yaxis.set_minor_locator(NullLocator())
@@ -127,7 +127,7 @@ def groups(version):
             g = float(np.exp(np.log(v).mean()))
             ax.plot([g, g], [yi - 0.36, yi + 0.36], color=INK, lw=3, zorder=3, solid_capstyle="round")
             if cls == "female-dominant":
-                me_dot(ax, ME[m], yi - 0.3, "left")
+                me_dot(ax, ME[m], yi - 0.3, "left", s=22, alpha=0.75, lw=0)
             if ax is axes[0]:
                 fig.text(M, bot + (top - bot) * (yi + 0.5) / n, lab, fontsize=12.5, color=INK, va="center")
                 fig.text(M, bot + (top - bot) * (yi + 0.5) / n - 0.026, f"{len(v)} diseases", fontsize=10.5,
@@ -149,5 +149,5 @@ def groups(version):
     fig.savefig(os.path.join(HERE, "sex_groups.png"), dpi=300, facecolor=BG)
 
 
-scatter("v6")
-groups("v4")
+scatter("v7")
+groups("v5")
