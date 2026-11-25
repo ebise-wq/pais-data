@@ -4,9 +4,10 @@
 - `main` is the only long-lived branch. Each session's work should end up merged into `main`.
 - Start new work from the latest `main`. When a session's work is finished and committed, merge it
   into `main` (ask first if the user hasn't said to).
-- Old session branches were removed on 2026-11-25. Their exact history is kept as tags named
-  `archive/<branch>`. One of them, `archive/ccr-12a2e595-h65a6a`, was not merged: it pooled
-  Crohn's and UC into one IBD query, which the later work replaced by plotting them separately.
+- On 2026-11-25 all session branches were merged into `main` except `ccr-12a2e595-h65a6a`.
+  That one holds a single commit (34f0494) that pooled Crohn's and UC into one IBD query. The
+  later work replaced it by plotting Crohn's and UC separately, so it was left out on purpose.
+  The other old `ccr-*` branches are fully contained in `main` and can be deleted.
 
 ## Catalog page
 - `index.html` and the catalog section of `README.md` are generated. Do not edit them by hand.
