@@ -10,7 +10,8 @@ papers or trials than diseases that mostly affect men? Uses the 120 diseases in 
   **Coded by hand from standard epidemiology, not taken from a dataset.** See caveats.
 - `analyse_sex.py`: all models → `sex_models_2021-2025.csv`, `sex_robustness_2021-2025.csv`,
   `sex_by_disease_2021-2025.csv`, `sex_class_summary_2021-2025.csv`.
-- `plot_sex.py` → `sex_residuals.png`.
+- `plot_sex.py` → `sex_scatter.png` (female share vs research, each dot a disease) and
+  `sex_groups.png` (the five sex groups, with group averages).
 
 Run from the repo root: `python3 -I sex/analyse_sex.py`, then `python3 -I sex/plot_sex.py`.
 Needs pandas, numpy, statsmodels, matplotlib.
