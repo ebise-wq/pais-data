@@ -135,9 +135,9 @@ Page: https://ebise-wq.github.io/pais-data/pais-burden.html
 
 Notes: [`pais/README.md`](pais/README.md)
 
-### Papers and trials per year, 24 diseases
+### Papers and trials per year, 131 diseases
 
-The first data pulls: ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for 24 diseases, set against their global burden (GBD 2023 DALYs). Pick diseases to compare; by default ME/CFS is shown with three diseases of similar burden. The 120-disease work fetches its own counts.
+ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for the 120 diseases of the burden comparison, plus ME/CFS, long COVID and nine conditions without a GBD burden estimate (such as fibromyalgia, POTS and lupus). Search and add diseases to compare. By default ME/CFS is shown with three long-term conditions of similar burden: schizophrenia, epilepsy and osteoarthritis.
 
 Page: https://ebise-wq.github.io/pais-data/sources.html
 
@@ -145,6 +145,7 @@ Page: https://ebise-wq.github.io/pais-data/sources.html
 |---|---|---|
 | [`clinicaltrials/counts_2026-11-08.csv`](clinicaltrials/counts_2026-11-08.csv) | Study counts for 24 diseases: all studies, trials, randomised, drug, phase and industry-led. | 24 |
 | [`clinicaltrials/trials_per_year_2026-11-08.csv`](clinicaltrials/trials_per_year_2026-11-08.csv) | Interventional trials per start year, 1996–2026, for 24 diseases. | 24 |
+| [`expanded/per_year_2026-11-26.csv`](expanded/per_year_2026-11-26.csv) | Papers and trials per year, 1996–2025, for the 111 causes in expanded/diseases.py, with the same searches as the 2021–2025 counts. The chart skips the 4 causes left out of the 120-disease comparison. | 3,330 |
 | [`clinicaltrials/nct_ids_2026-11-08.json`](clinicaltrials/nct_ids_2026-11-08.json) | The trial IDs (NCT numbers) selected for each of the 24 diseases. | 24 |
 | [`pubmed/pubs_per_year_long_2026-11-08.csv`](pubmed/pubs_per_year_long_2026-11-08.csv) | Papers per year with the disease in the title, 1996–2026, for 24 diseases, plus publication-date and MeSH counts. | 744 |
 | [`pubmed/queries_2026-11-08.csv`](pubmed/queries_2026-11-08.csv) | The exact PubMed search string for each disease. | 24 |

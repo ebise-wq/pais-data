@@ -15,9 +15,15 @@ Limits: ClinicalTrials.gov only (no EU CTR, ISRCTN, ChiCTR etc.). Regex filterin
 imperfect in both directions. 35 studies are counted under both ME/CFS and long COVID.
 
 `per_year_interactive.html`: the interactive chart on the catalog page ("Papers and trials per year,
-24 diseases"). It reads `trials_per_year_*.csv`, `../pubmed/pubs_per_year_long_*.csv` (the `title`
-column) and the DALYs in `../analysis/burden_vs_research_2021-2025.csv` (ME/CFS 25M, set by hand).
-It shows 1996–2025, since 2026 is a partial year.
+131 diseases"). It reads `trials_per_year_*.csv` and `../pubmed/pubs_per_year_long_*.csv` (the `title`
+column) for these 24 diseases, `../expanded/per_year_*.csv` for the other 107 of the 120 diseases
+(it skips the 4 causes left out of that comparison), and
+DALYs from `../expanded/burden_interactive_2021-2025.json` (GBD 2023; ME/CFS 17.5M and long COVID
+19.8M from the ME/CFS model, as in the 120-disease comparison). Fibromyalgia, POTS, Gulf War illness,
+Sjögren's, lupus, celiac disease, IBS, post-treatment Lyme and cystic fibrosis are not GBD causes, so
+they have no DALYs. It shows 1996–2025, since 2026 is a partial year. The two sources were pulled on
+different dates (8 and 26 Nov 2026) with their own searches, so the 24 and the 111 are comparable in
+method but not identical in query style.
 
 `trials_per_year_*.csv` (from `trials_per_year.py`): interventional studies per start year,
 1996–2026. Registration only became expected in 2005 (ICMJE) and required for many US trials

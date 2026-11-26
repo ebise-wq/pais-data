@@ -16,6 +16,10 @@ Including them made ME/CFS look closer to the bottom of the ranking than it is.
 - `fetch.py`: pulls papers per year (PubMed, title search, by `[edat]`) and interventional trials per
   start year (ClinicalTrials.gov), 2021–2025. Writes `counts_<date>.csv` and `queries_<date>.csv`.
   Raw API pages go to `cache/` (not committed).
+- `fetch_per_year.py` → `per_year_<date>.csv`: the same searches for every year 1996–2025 (one row per
+  cause and year), for the per-year chart on the catalog page. Its 2021–2025 counts match `counts_2026-11-11.csv`
+  within 4 papers and 62 trials in total (trials registered since). Trials before about 2005 are badly
+  undercounted, because registration was not yet expected.
 - `clean_papers.py`, `clean_trials.py`: the automatic clean-ups (see below). Both write into
   `cleaned_counts_2021-2025.csv`, each its own columns (`papers_*`, `trials_*`). `clean_trials.py`
   needs the `cache/` pages, so it can only be re-run after `fetch.py`.

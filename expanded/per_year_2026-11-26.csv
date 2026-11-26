@@ -1,0 +1,3331 @@
+disease,year,papers,trials
+Ischemic heart disease,1996,2523,8
+Ischemic heart disease,1997,2416,8
+Ischemic heart disease,1998,2650,14
+Ischemic heart disease,1999,2775,26
+Ischemic heart disease,2000,3098,26
+Ischemic heart disease,2001,3337,40
+Ischemic heart disease,2002,3646,68
+Ischemic heart disease,2003,3891,113
+Ischemic heart disease,2004,3919,126
+Ischemic heart disease,2005,4587,162
+Ischemic heart disease,2006,4363,218
+Ischemic heart disease,2007,4549,226
+Ischemic heart disease,2008,4532,250
+Ischemic heart disease,2009,4634,283
+Ischemic heart disease,2010,5081,278
+Ischemic heart disease,2011,4970,308
+Ischemic heart disease,2012,5297,288
+Ischemic heart disease,2013,5333,303
+Ischemic heart disease,2014,5856,301
+Ischemic heart disease,2015,5796,290
+Ischemic heart disease,2016,5811,292
+Ischemic heart disease,2017,5594,258
+Ischemic heart disease,2018,5753,278
+Ischemic heart disease,2019,5948,252
+Ischemic heart disease,2020,6671,243
+Ischemic heart disease,2021,7144,320
+Ischemic heart disease,2022,6868,293
+Ischemic heart disease,2023,6325,271
+Ischemic heart disease,2024,6789,293
+Ischemic heart disease,2025,7576,314
+Stroke,1996,1196,2
+Stroke,1997,1265,2
+Stroke,1998,1523,8
+Stroke,1999,1630,7
+Stroke,2000,1890,12
+Stroke,2001,2005,22
+Stroke,2002,2358,37
+Stroke,2003,2654,57
+Stroke,2004,2691,46
+Stroke,2005,3147,86
+Stroke,2006,3318,75
+Stroke,2007,3904,93
+Stroke,2008,4057,124
+Stroke,2009,4224,136
+Stroke,2010,4562,145
+Stroke,2011,5076,155
+Stroke,2012,5719,185
+Stroke,2013,6367,255
+Stroke,2014,6834,280
+Stroke,2015,7042,286
+Stroke,2016,7494,307
+Stroke,2017,7770,340
+Stroke,2018,7966,395
+Stroke,2019,8767,424
+Stroke,2020,10068,380
+Stroke,2021,11200,496
+Stroke,2022,11596,537
+Stroke,2023,11015,621
+Stroke,2024,11991,683
+Stroke,2025,13748,730
+Atrial fibrillation,1996,436,0
+Atrial fibrillation,1997,396,0
+Atrial fibrillation,1998,520,1
+Atrial fibrillation,1999,590,6
+Atrial fibrillation,2000,610,6
+Atrial fibrillation,2001,747,7
+Atrial fibrillation,2002,778,11
+Atrial fibrillation,2003,882,23
+Atrial fibrillation,2004,1023,25
+Atrial fibrillation,2005,1146,44
+Atrial fibrillation,2006,1088,42
+Atrial fibrillation,2007,1267,58
+Atrial fibrillation,2008,1354,61
+Atrial fibrillation,2009,1454,62
+Atrial fibrillation,2010,1583,71
+Atrial fibrillation,2011,1720,73
+Atrial fibrillation,2012,2084,103
+Atrial fibrillation,2013,2340,87
+Atrial fibrillation,2014,2543,100
+Atrial fibrillation,2015,2657,110
+Atrial fibrillation,2016,2805,120
+Atrial fibrillation,2017,2917,111
+Atrial fibrillation,2018,3250,132
+Atrial fibrillation,2019,3247,141
+Atrial fibrillation,2020,3782,123
+Atrial fibrillation,2021,4090,145
+Atrial fibrillation,2022,3939,159
+Atrial fibrillation,2023,3780,159
+Atrial fibrillation,2024,4060,167
+Atrial fibrillation,2025,4519,172
+Rheumatic heart disease,1996,70,0
+Rheumatic heart disease,1997,46,0
+Rheumatic heart disease,1998,50,0
+Rheumatic heart disease,1999,26,0
+Rheumatic heart disease,2000,77,0
+Rheumatic heart disease,2001,63,0
+Rheumatic heart disease,2002,61,0
+Rheumatic heart disease,2003,71,0
+Rheumatic heart disease,2004,70,2
+Rheumatic heart disease,2005,90,0
+Rheumatic heart disease,2006,96,0
+Rheumatic heart disease,2007,97,0
+Rheumatic heart disease,2008,79,1
+Rheumatic heart disease,2009,106,0
+Rheumatic heart disease,2010,92,1
+Rheumatic heart disease,2011,104,1
+Rheumatic heart disease,2012,117,1
+Rheumatic heart disease,2013,132,1
+Rheumatic heart disease,2014,141,1
+Rheumatic heart disease,2015,142,2
+Rheumatic heart disease,2016,182,1
+Rheumatic heart disease,2017,142,2
+Rheumatic heart disease,2018,155,1
+Rheumatic heart disease,2019,152,2
+Rheumatic heart disease,2020,204,0
+Rheumatic heart disease,2021,232,3
+Rheumatic heart disease,2022,176,6
+Rheumatic heart disease,2023,176,4
+Rheumatic heart disease,2024,210,8
+Rheumatic heart disease,2025,227,4
+Aortic aneurysm,1996,429,0
+Aortic aneurysm,1997,417,0
+Aortic aneurysm,1998,439,1
+Aortic aneurysm,1999,520,1
+Aortic aneurysm,2000,506,3
+Aortic aneurysm,2001,608,3
+Aortic aneurysm,2002,653,9
+Aortic aneurysm,2003,645,4
+Aortic aneurysm,2004,660,4
+Aortic aneurysm,2005,756,9
+Aortic aneurysm,2006,757,11
+Aortic aneurysm,2007,825,12
+Aortic aneurysm,2008,902,15
+Aortic aneurysm,2009,897,17
+Aortic aneurysm,2010,968,15
+Aortic aneurysm,2011,991,19
+Aortic aneurysm,2012,1081,14
+Aortic aneurysm,2013,1229,26
+Aortic aneurysm,2014,1236,27
+Aortic aneurysm,2015,1231,21
+Aortic aneurysm,2016,1343,19
+Aortic aneurysm,2017,1374,21
+Aortic aneurysm,2018,1402,19
+Aortic aneurysm,2019,1445,19
+Aortic aneurysm,2020,1810,23
+Aortic aneurysm,2021,1947,26
+Aortic aneurysm,2022,1920,25
+Aortic aneurysm,2023,1789,27
+Aortic aneurysm,2024,2011,26
+Aortic aneurysm,2025,2311,33
+Peripheral arterial disease,1996,123,2
+Peripheral arterial disease,1997,110,0
+Peripheral arterial disease,1998,108,1
+Peripheral arterial disease,1999,128,1
+Peripheral arterial disease,2000,148,6
+Peripheral arterial disease,2001,179,6
+Peripheral arterial disease,2002,234,7
+Peripheral arterial disease,2003,206,22
+Peripheral arterial disease,2004,266,18
+Peripheral arterial disease,2005,264,22
+Peripheral arterial disease,2006,324,40
+Peripheral arterial disease,2007,372,40
+Peripheral arterial disease,2008,385,36
+Peripheral arterial disease,2009,405,45
+Peripheral arterial disease,2010,367,46
+Peripheral arterial disease,2011,396,53
+Peripheral arterial disease,2012,460,51
+Peripheral arterial disease,2013,512,56
+Peripheral arterial disease,2014,529,71
+Peripheral arterial disease,2015,528,73
+Peripheral arterial disease,2016,591,75
+Peripheral arterial disease,2017,566,77
+Peripheral arterial disease,2018,641,75
+Peripheral arterial disease,2019,676,69
+Peripheral arterial disease,2020,765,65
+Peripheral arterial disease,2021,834,65
+Peripheral arterial disease,2022,791,60
+Peripheral arterial disease,2023,823,68
+Peripheral arterial disease,2024,838,63
+Peripheral arterial disease,2025,998,51
+Endocarditis,1996,333,0
+Endocarditis,1997,279,0
+Endocarditis,1998,374,1
+Endocarditis,1999,269,0
+Endocarditis,2000,308,0
+Endocarditis,2001,347,0
+Endocarditis,2002,386,1
+Endocarditis,2003,375,0
+Endocarditis,2004,376,0
+Endocarditis,2005,443,1
+Endocarditis,2006,394,2
+Endocarditis,2007,495,2
+Endocarditis,2008,485,3
+Endocarditis,2009,514,3
+Endocarditis,2010,481,0
+Endocarditis,2011,510,3
+Endocarditis,2012,523,0
+Endocarditis,2013,580,3
+Endocarditis,2014,601,2
+Endocarditis,2015,626,2
+Endocarditis,2016,626,5
+Endocarditis,2017,656,6
+Endocarditis,2018,689,5
+Endocarditis,2019,848,9
+Endocarditis,2020,952,1
+Endocarditis,2021,914,4
+Endocarditis,2022,990,6
+Endocarditis,2023,959,4
+Endocarditis,2024,1037,11
+Endocarditis,2025,1136,7
+Pulmonary arterial hypertension,1996,5,0
+Pulmonary arterial hypertension,1997,2,0
+Pulmonary arterial hypertension,1998,8,0
+Pulmonary arterial hypertension,1999,5,0
+Pulmonary arterial hypertension,2000,12,1
+Pulmonary arterial hypertension,2001,19,0
+Pulmonary arterial hypertension,2002,32,1
+Pulmonary arterial hypertension,2003,57,6
+Pulmonary arterial hypertension,2004,109,5
+Pulmonary arterial hypertension,2005,179,5
+Pulmonary arterial hypertension,2006,200,8
+Pulmonary arterial hypertension,2007,217,8
+Pulmonary arterial hypertension,2008,259,18
+Pulmonary arterial hypertension,2009,289,12
+Pulmonary arterial hypertension,2010,341,26
+Pulmonary arterial hypertension,2011,344,27
+Pulmonary arterial hypertension,2012,388,27
+Pulmonary arterial hypertension,2013,390,25
+Pulmonary arterial hypertension,2014,490,16
+Pulmonary arterial hypertension,2015,495,16
+Pulmonary arterial hypertension,2016,473,19
+Pulmonary arterial hypertension,2017,544,23
+Pulmonary arterial hypertension,2018,554,29
+Pulmonary arterial hypertension,2019,537,28
+Pulmonary arterial hypertension,2020,620,11
+Pulmonary arterial hypertension,2021,651,21
+Pulmonary arterial hypertension,2022,638,18
+Pulmonary arterial hypertension,2023,551,28
+Pulmonary arterial hypertension,2024,631,23
+Pulmonary arterial hypertension,2025,754,18
+Cardiomyopathy & myocarditis,1996,667,0
+Cardiomyopathy & myocarditis,1997,571,1
+Cardiomyopathy & myocarditis,1998,631,0
+Cardiomyopathy & myocarditis,1999,702,4
+Cardiomyopathy & myocarditis,2000,827,3
+Cardiomyopathy & myocarditis,2001,783,6
+Cardiomyopathy & myocarditis,2002,938,3
+Cardiomyopathy & myocarditis,2003,954,10
+Cardiomyopathy & myocarditis,2004,909,7
+Cardiomyopathy & myocarditis,2005,1132,9
+Cardiomyopathy & myocarditis,2006,1121,17
+Cardiomyopathy & myocarditis,2007,1252,21
+Cardiomyopathy & myocarditis,2008,1324,13
+Cardiomyopathy & myocarditis,2009,1459,13
+Cardiomyopathy & myocarditis,2010,1553,16
+Cardiomyopathy & myocarditis,2011,1517,23
+Cardiomyopathy & myocarditis,2012,1607,27
+Cardiomyopathy & myocarditis,2013,1718,25
+Cardiomyopathy & myocarditis,2014,1948,31
+Cardiomyopathy & myocarditis,2015,1972,30
+Cardiomyopathy & myocarditis,2016,2050,41
+Cardiomyopathy & myocarditis,2017,2126,21
+Cardiomyopathy & myocarditis,2018,2181,36
+Cardiomyopathy & myocarditis,2019,2166,36
+Cardiomyopathy & myocarditis,2020,2723,53
+Cardiomyopathy & myocarditis,2021,3231,41
+Cardiomyopathy & myocarditis,2022,3489,51
+Cardiomyopathy & myocarditis,2023,3369,49
+Cardiomyopathy & myocarditis,2024,3516,62
+Cardiomyopathy & myocarditis,2025,4168,59
+Congenital heart disease,1996,436,0
+Congenital heart disease,1997,358,1
+Congenital heart disease,1998,434,0
+Congenital heart disease,1999,497,0
+Congenital heart disease,2000,451,3
+Congenital heart disease,2001,591,1
+Congenital heart disease,2002,584,0
+Congenital heart disease,2003,574,2
+Congenital heart disease,2004,580,6
+Congenital heart disease,2005,822,5
+Congenital heart disease,2006,802,9
+Congenital heart disease,2007,865,12
+Congenital heart disease,2008,900,9
+Congenital heart disease,2009,925,14
+Congenital heart disease,2010,1019,15
+Congenital heart disease,2011,1150,21
+Congenital heart disease,2012,1304,26
+Congenital heart disease,2013,1420,23
+Congenital heart disease,2014,1512,16
+Congenital heart disease,2015,1470,27
+Congenital heart disease,2016,1513,33
+Congenital heart disease,2017,1640,31
+Congenital heart disease,2018,1672,30
+Congenital heart disease,2019,1725,33
+Congenital heart disease,2020,2054,22
+Congenital heart disease,2021,2071,35
+Congenital heart disease,2022,2059,41
+Congenital heart disease,2023,2035,32
+Congenital heart disease,2024,2167,29
+Congenital heart disease,2025,2399,49
+COPD,1996,536,1
+COPD,1997,460,2
+COPD,1998,521,11
+COPD,1999,643,8
+COPD,2000,682,19
+COPD,2001,775,21
+COPD,2002,868,43
+COPD,2003,1015,38
+COPD,2004,1068,62
+COPD,2005,1347,74
+COPD,2006,1331,89
+COPD,2007,1485,116
+COPD,2008,1567,143
+COPD,2009,1595,176
+COPD,2010,1717,153
+COPD,2011,1917,185
+COPD,2012,2062,186
+COPD,2013,2219,185
+COPD,2014,2587,201
+COPD,2015,2598,169
+COPD,2016,2755,201
+COPD,2017,2757,204
+COPD,2018,2908,164
+COPD,2019,2927,190
+COPD,2020,3108,130
+COPD,2021,3101,163
+COPD,2022,2908,166
+COPD,2023,2848,191
+COPD,2024,3150,194
+COPD,2025,3767,180
+Asthma,1996,1666,4
+Asthma,1997,1497,5
+Asthma,1998,1818,13
+Asthma,1999,2028,13
+Asthma,2000,2034,16
+Asthma,2001,2211,27
+Asthma,2002,2488,62
+Asthma,2003,2409,80
+Asthma,2004,2290,88
+Asthma,2005,2542,117
+Asthma,2006,2656,148
+Asthma,2007,2561,152
+Asthma,2008,2508,155
+Asthma,2009,2573,159
+Asthma,2010,2604,183
+Asthma,2011,2701,163
+Asthma,2012,2744,194
+Asthma,2013,2907,139
+Asthma,2014,3016,144
+Asthma,2015,2817,159
+Asthma,2016,3261,149
+Asthma,2017,3176,156
+Asthma,2018,3259,131
+Asthma,2019,3379,146
+Asthma,2020,3793,91
+Asthma,2021,3902,146
+Asthma,2022,3746,132
+Asthma,2023,3580,153
+Asthma,2024,3613,174
+Asthma,2025,4109,135
+Interstitial lung disease & sarcoidosis,1996,445,0
+Interstitial lung disease & sarcoidosis,1997,410,0
+Interstitial lung disease & sarcoidosis,1998,433,0
+Interstitial lung disease & sarcoidosis,1999,425,2
+Interstitial lung disease & sarcoidosis,2000,442,3
+Interstitial lung disease & sarcoidosis,2001,528,2
+Interstitial lung disease & sarcoidosis,2002,595,2
+Interstitial lung disease & sarcoidosis,2003,583,14
+Interstitial lung disease & sarcoidosis,2004,577,3
+Interstitial lung disease & sarcoidosis,2005,705,7
+Interstitial lung disease & sarcoidosis,2006,702,11
+Interstitial lung disease & sarcoidosis,2007,744,16
+Interstitial lung disease & sarcoidosis,2008,710,18
+Interstitial lung disease & sarcoidosis,2009,772,18
+Interstitial lung disease & sarcoidosis,2010,860,15
+Interstitial lung disease & sarcoidosis,2011,948,20
+Interstitial lung disease & sarcoidosis,2012,981,21
+Interstitial lung disease & sarcoidosis,2013,1117,32
+Interstitial lung disease & sarcoidosis,2014,1267,35
+Interstitial lung disease & sarcoidosis,2015,1339,33
+Interstitial lung disease & sarcoidosis,2016,1479,45
+Interstitial lung disease & sarcoidosis,2017,1552,39
+Interstitial lung disease & sarcoidosis,2018,1604,47
+Interstitial lung disease & sarcoidosis,2019,1818,45
+Interstitial lung disease & sarcoidosis,2020,2265,57
+Interstitial lung disease & sarcoidosis,2021,2508,59
+Interstitial lung disease & sarcoidosis,2022,2506,58
+Interstitial lung disease & sarcoidosis,2023,2600,86
+Interstitial lung disease & sarcoidosis,2024,2781,58
+Interstitial lung disease & sarcoidosis,2025,3309,63
+Alzheimer's & other dementias,1996,1935,3
+Alzheimer's & other dementias,1997,1882,4
+Alzheimer's & other dementias,1998,1980,4
+Alzheimer's & other dementias,1999,1981,11
+Alzheimer's & other dementias,2000,2243,16
+Alzheimer's & other dementias,2001,2193,23
+Alzheimer's & other dementias,2002,2842,22
+Alzheimer's & other dementias,2003,2614,40
+Alzheimer's & other dementias,2004,2815,44
+Alzheimer's & other dementias,2005,3156,53
+Alzheimer's & other dementias,2006,3245,65
+Alzheimer's & other dementias,2007,3179,111
+Alzheimer's & other dementias,2008,3478,116
+Alzheimer's & other dementias,2009,3706,131
+Alzheimer's & other dementias,2010,4117,109
+Alzheimer's & other dementias,2011,4381,105
+Alzheimer's & other dementias,2012,4716,115
+Alzheimer's & other dementias,2013,5096,114
+Alzheimer's & other dementias,2014,5644,131
+Alzheimer's & other dementias,2015,5544,148
+Alzheimer's & other dementias,2016,6194,175
+Alzheimer's & other dementias,2017,6344,168
+Alzheimer's & other dementias,2018,6857,204
+Alzheimer's & other dementias,2019,7431,231
+Alzheimer's & other dementias,2020,8582,194
+Alzheimer's & other dementias,2021,9558,254
+Alzheimer's & other dementias,2022,9908,278
+Alzheimer's & other dementias,2023,10215,270
+Alzheimer's & other dementias,2024,11490,279
+Alzheimer's & other dementias,2025,13606,306
+Migraine,1996,269,3
+Migraine,1997,269,0
+Migraine,1998,311,2
+Migraine,1999,278,4
+Migraine,2000,386,2
+Migraine,2001,477,7
+Migraine,2002,498,6
+Migraine,2003,484,17
+Migraine,2004,575,27
+Migraine,2005,640,25
+Migraine,2006,694,46
+Migraine,2007,685,38
+Migraine,2008,664,41
+Migraine,2009,772,38
+Migraine,2010,734,27
+Migraine,2011,616,32
+Migraine,2012,787,46
+Migraine,2013,840,35
+Migraine,2014,828,47
+Migraine,2015,794,60
+Migraine,2016,841,67
+Migraine,2017,942,76
+Migraine,2018,915,56
+Migraine,2019,1118,82
+Migraine,2020,1245,71
+Migraine,2021,1335,81
+Migraine,2022,1324,81
+Migraine,2023,1417,90
+Migraine,2024,1474,78
+Migraine,2025,1670,95
+Tension-type headache,1996,31,0
+Tension-type headache,1997,20,0
+Tension-type headache,1998,24,0
+Tension-type headache,1999,25,1
+Tension-type headache,2000,39,0
+Tension-type headache,2001,52,0
+Tension-type headache,2002,38,0
+Tension-type headache,2003,43,0
+Tension-type headache,2004,49,2
+Tension-type headache,2005,43,1
+Tension-type headache,2006,62,1
+Tension-type headache,2007,41,2
+Tension-type headache,2008,52,0
+Tension-type headache,2009,57,2
+Tension-type headache,2010,51,7
+Tension-type headache,2011,36,1
+Tension-type headache,2012,43,5
+Tension-type headache,2013,42,1
+Tension-type headache,2014,61,2
+Tension-type headache,2015,45,5
+Tension-type headache,2016,52,5
+Tension-type headache,2017,53,3
+Tension-type headache,2018,43,2
+Tension-type headache,2019,47,6
+Tension-type headache,2020,37,4
+Tension-type headache,2021,62,4
+Tension-type headache,2022,45,9
+Tension-type headache,2023,50,14
+Tension-type headache,2024,47,11
+Tension-type headache,2025,60,7
+Depressive disorders,1996,1354,9
+Depressive disorders,1997,1251,10
+Depressive disorders,1998,1497,12
+Depressive disorders,1999,1543,16
+Depressive disorders,2000,1862,25
+Depressive disorders,2001,2009,52
+Depressive disorders,2002,2334,74
+Depressive disorders,2003,2542,99
+Depressive disorders,2004,2707,138
+Depressive disorders,2005,3037,163
+Depressive disorders,2006,3447,176
+Depressive disorders,2007,3651,207
+Depressive disorders,2008,3854,213
+Depressive disorders,2009,4397,234
+Depressive disorders,2010,4648,265
+Depressive disorders,2011,4969,271
+Depressive disorders,2012,5280,272
+Depressive disorders,2013,5795,242
+Depressive disorders,2014,6057,302
+Depressive disorders,2015,6441,326
+Depressive disorders,2016,6776,369
+Depressive disorders,2017,6811,367
+Depressive disorders,2018,7402,410
+Depressive disorders,2019,8033,478
+Depressive disorders,2020,9244,440
+Depressive disorders,2021,10609,618
+Depressive disorders,2022,11050,578
+Depressive disorders,2023,11178,631
+Depressive disorders,2024,11995,670
+Depressive disorders,2025,14424,704
+Anxiety disorders,1996,308,4
+Anxiety disorders,1997,302,2
+Anxiety disorders,1998,348,5
+Anxiety disorders,1999,296,3
+Anxiety disorders,2000,352,9
+Anxiety disorders,2001,385,12
+Anxiety disorders,2002,414,23
+Anxiety disorders,2003,398,17
+Anxiety disorders,2004,473,39
+Anxiety disorders,2005,512,37
+Anxiety disorders,2006,546,51
+Anxiety disorders,2007,575,39
+Anxiety disorders,2008,559,69
+Anxiety disorders,2009,655,39
+Anxiety disorders,2010,644,43
+Anxiety disorders,2011,694,38
+Anxiety disorders,2012,722,49
+Anxiety disorders,2013,759,46
+Anxiety disorders,2014,773,57
+Anxiety disorders,2015,787,68
+Anxiety disorders,2016,769,59
+Anxiety disorders,2017,710,74
+Anxiety disorders,2018,719,81
+Anxiety disorders,2019,700,86
+Anxiety disorders,2020,817,66
+Anxiety disorders,2021,887,103
+Anxiety disorders,2022,770,92
+Anxiety disorders,2023,855,146
+Anxiety disorders,2024,901,129
+Anxiety disorders,2025,1034,139
+Autism,1996,174,0
+Autism,1997,156,1
+Autism,1998,199,2
+Autism,1999,222,3
+Autism,2000,256,1
+Autism,2001,343,3
+Autism,2002,443,6
+Autism,2003,440,4
+Autism,2004,502,9
+Autism,2005,589,16
+Autism,2006,848,24
+Autism,2007,801,21
+Autism,2008,908,27
+Autism,2009,1099,37
+Autism,2010,1249,31
+Autism,2011,1465,32
+Autism,2012,1692,44
+Autism,2013,1981,49
+Autism,2014,2010,52
+Autism,2015,2235,76
+Autism,2016,2273,79
+Autism,2017,2568,55
+Autism,2018,2556,88
+Autism,2019,2874,101
+Autism,2020,3285,87
+Autism,2021,3775,115
+Autism,2022,3721,136
+Autism,2023,3714,169
+Autism,2024,4005,170
+Autism,2025,4574,134
+ADHD,1996,185,0
+ADHD,1997,185,0
+ADHD,1998,219,5
+ADHD,1999,255,5
+ADHD,2000,332,5
+ADHD,2001,337,9
+ADHD,2002,438,8
+ADHD,2003,460,23
+ADHD,2004,570,38
+ADHD,2005,744,50
+ADHD,2006,776,46
+ADHD,2007,864,46
+ADHD,2008,940,60
+ADHD,2009,929,55
+ADHD,2010,993,48
+ADHD,2011,1040,41
+ADHD,2012,1169,56
+ADHD,2013,1223,58
+ADHD,2014,1339,65
+ADHD,2015,1259,62
+ADHD,2016,1414,70
+ADHD,2017,1322,52
+ADHD,2018,1288,70
+ADHD,2019,1263,64
+ADHD,2020,1453,48
+ADHD,2021,1490,66
+ADHD,2022,1555,70
+ADHD,2023,1632,77
+ADHD,2024,1644,88
+ADHD,2025,2066,72
+Eating disorders,1996,312,0
+Eating disorders,1997,315,1
+Eating disorders,1998,317,1
+Eating disorders,1999,308,0
+Eating disorders,2000,345,6
+Eating disorders,2001,428,5
+Eating disorders,2002,415,6
+Eating disorders,2003,515,8
+Eating disorders,2004,512,9
+Eating disorders,2005,582,10
+Eating disorders,2006,618,11
+Eating disorders,2007,596,13
+Eating disorders,2008,641,14
+Eating disorders,2009,549,18
+Eating disorders,2010,589,17
+Eating disorders,2011,727,14
+Eating disorders,2012,720,23
+Eating disorders,2013,867,20
+Eating disorders,2014,799,24
+Eating disorders,2015,914,34
+Eating disorders,2016,881,36
+Eating disorders,2017,918,40
+Eating disorders,2018,869,42
+Eating disorders,2019,995,40
+Eating disorders,2020,1108,42
+Eating disorders,2021,1306,56
+Eating disorders,2022,1274,51
+Eating disorders,2023,1297,65
+Eating disorders,2024,1378,54
+Eating disorders,2025,1585,51
+Alcohol use disorders,1996,335,0
+Alcohol use disorders,1997,310,5
+Alcohol use disorders,1998,314,4
+Alcohol use disorders,1999,345,8
+Alcohol use disorders,2000,339,7
+Alcohol use disorders,2001,329,13
+Alcohol use disorders,2002,347,15
+Alcohol use disorders,2003,385,24
+Alcohol use disorders,2004,354,28
+Alcohol use disorders,2005,461,24
+Alcohol use disorders,2006,498,38
+Alcohol use disorders,2007,412,40
+Alcohol use disorders,2008,455,39
+Alcohol use disorders,2009,393,39
+Alcohol use disorders,2010,468,47
+Alcohol use disorders,2011,505,41
+Alcohol use disorders,2012,484,35
+Alcohol use disorders,2013,506,41
+Alcohol use disorders,2014,588,53
+Alcohol use disorders,2015,618,56
+Alcohol use disorders,2016,579,62
+Alcohol use disorders,2017,615,53
+Alcohol use disorders,2018,605,61
+Alcohol use disorders,2019,652,81
+Alcohol use disorders,2020,697,60
+Alcohol use disorders,2021,722,77
+Alcohol use disorders,2022,701,75
+Alcohol use disorders,2023,704,89
+Alcohol use disorders,2024,831,85
+Alcohol use disorders,2025,863,79
+Opioid use disorders,1996,85,4
+Opioid use disorders,1997,108,4
+Opioid use disorders,1998,138,0
+Opioid use disorders,1999,130,6
+Opioid use disorders,2000,185,1
+Opioid use disorders,2001,192,4
+Opioid use disorders,2002,207,5
+Opioid use disorders,2003,214,9
+Opioid use disorders,2004,195,5
+Opioid use disorders,2005,234,20
+Opioid use disorders,2006,241,17
+Opioid use disorders,2007,237,15
+Opioid use disorders,2008,221,20
+Opioid use disorders,2009,201,12
+Opioid use disorders,2010,242,12
+Opioid use disorders,2011,245,16
+Opioid use disorders,2012,235,22
+Opioid use disorders,2013,294,26
+Opioid use disorders,2014,321,12
+Opioid use disorders,2015,355,24
+Opioid use disorders,2016,401,27
+Opioid use disorders,2017,494,22
+Opioid use disorders,2018,580,22
+Opioid use disorders,2019,787,40
+Opioid use disorders,2020,918,28
+Opioid use disorders,2021,1028,41
+Opioid use disorders,2022,954,60
+Opioid use disorders,2023,1005,63
+Opioid use disorders,2024,1013,72
+Opioid use disorders,2025,1032,77
+Conduct disorder,1996,21,0
+Conduct disorder,1997,31,3
+Conduct disorder,1998,23,0
+Conduct disorder,1999,39,1
+Conduct disorder,2000,43,2
+Conduct disorder,2001,51,1
+Conduct disorder,2002,51,2
+Conduct disorder,2003,45,6
+Conduct disorder,2004,53,2
+Conduct disorder,2005,58,3
+Conduct disorder,2006,77,6
+Conduct disorder,2007,79,2
+Conduct disorder,2008,74,4
+Conduct disorder,2009,50,2
+Conduct disorder,2010,62,2
+Conduct disorder,2011,79,6
+Conduct disorder,2012,70,6
+Conduct disorder,2013,73,3
+Conduct disorder,2014,92,8
+Conduct disorder,2015,88,5
+Conduct disorder,2016,105,10
+Conduct disorder,2017,80,8
+Conduct disorder,2018,87,10
+Conduct disorder,2019,74,4
+Conduct disorder,2020,56,5
+Conduct disorder,2021,82,5
+Conduct disorder,2022,65,10
+Conduct disorder,2023,63,6
+Conduct disorder,2024,64,8
+Conduct disorder,2025,65,9
+Fatty liver disease (NAFLD/MASLD),1996,40,0
+Fatty liver disease (NAFLD/MASLD),1997,63,0
+Fatty liver disease (NAFLD/MASLD),1998,54,0
+Fatty liver disease (NAFLD/MASLD),1999,78,0
+Fatty liver disease (NAFLD/MASLD),2000,84,0
+Fatty liver disease (NAFLD/MASLD),2001,126,1
+Fatty liver disease (NAFLD/MASLD),2002,159,2
+Fatty liver disease (NAFLD/MASLD),2003,215,4
+Fatty liver disease (NAFLD/MASLD),2004,282,7
+Fatty liver disease (NAFLD/MASLD),2005,404,12
+Fatty liver disease (NAFLD/MASLD),2006,420,8
+Fatty liver disease (NAFLD/MASLD),2007,525,15
+Fatty liver disease (NAFLD/MASLD),2008,574,20
+Fatty liver disease (NAFLD/MASLD),2009,631,23
+Fatty liver disease (NAFLD/MASLD),2010,735,20
+Fatty liver disease (NAFLD/MASLD),2011,856,22
+Fatty liver disease (NAFLD/MASLD),2012,913,33
+Fatty liver disease (NAFLD/MASLD),2013,1123,40
+Fatty liver disease (NAFLD/MASLD),2014,1288,36
+Fatty liver disease (NAFLD/MASLD),2015,1493,61
+Fatty liver disease (NAFLD/MASLD),2016,1638,58
+Fatty liver disease (NAFLD/MASLD),2017,1737,63
+Fatty liver disease (NAFLD/MASLD),2018,1899,66
+Fatty liver disease (NAFLD/MASLD),2019,2316,111
+Fatty liver disease (NAFLD/MASLD),2020,2972,93
+Fatty liver disease (NAFLD/MASLD),2021,3417,125
+Fatty liver disease (NAFLD/MASLD),2022,3862,102
+Fatty liver disease (NAFLD/MASLD),2023,4224,128
+Fatty liver disease (NAFLD/MASLD),2024,4723,102
+Fatty liver disease (NAFLD/MASLD),2025,5684,85
+Pancreatitis,1996,574,0
+Pancreatitis,1997,517,1
+Pancreatitis,1998,576,1
+Pancreatitis,1999,661,0
+Pancreatitis,2000,636,0
+Pancreatitis,2001,722,1
+Pancreatitis,2002,830,4
+Pancreatitis,2003,852,6
+Pancreatitis,2004,762,7
+Pancreatitis,2005,857,12
+Pancreatitis,2006,812,3
+Pancreatitis,2007,975,10
+Pancreatitis,2008,1047,15
+Pancreatitis,2009,1034,17
+Pancreatitis,2010,1018,22
+Pancreatitis,2011,924,18
+Pancreatitis,2012,1024,18
+Pancreatitis,2013,1008,20
+Pancreatitis,2014,1230,21
+Pancreatitis,2015,1184,17
+Pancreatitis,2016,1126,31
+Pancreatitis,2017,1182,26
+Pancreatitis,2018,1156,17
+Pancreatitis,2019,1315,21
+Pancreatitis,2020,1465,21
+Pancreatitis,2021,1547,24
+Pancreatitis,2022,1540,30
+Pancreatitis,2023,1546,23
+Pancreatitis,2024,1643,27
+Pancreatitis,2025,2076,39
+Peptic ulcer disease,1996,399,1
+Peptic ulcer disease,1997,347,0
+Peptic ulcer disease,1998,387,0
+Peptic ulcer disease,1999,348,1
+Peptic ulcer disease,2000,314,4
+Peptic ulcer disease,2001,314,10
+Peptic ulcer disease,2002,374,1
+Peptic ulcer disease,2003,288,5
+Peptic ulcer disease,2004,276,9
+Peptic ulcer disease,2005,282,5
+Peptic ulcer disease,2006,249,6
+Peptic ulcer disease,2007,234,15
+Peptic ulcer disease,2008,208,8
+Peptic ulcer disease,2009,285,9
+Peptic ulcer disease,2010,245,8
+Peptic ulcer disease,2011,232,13
+Peptic ulcer disease,2012,248,16
+Peptic ulcer disease,2013,223,8
+Peptic ulcer disease,2014,231,12
+Peptic ulcer disease,2015,235,6
+Peptic ulcer disease,2016,227,8
+Peptic ulcer disease,2017,196,6
+Peptic ulcer disease,2018,190,8
+Peptic ulcer disease,2019,197,3
+Peptic ulcer disease,2020,244,6
+Peptic ulcer disease,2021,253,8
+Peptic ulcer disease,2022,302,10
+Peptic ulcer disease,2023,269,11
+Peptic ulcer disease,2024,292,9
+Peptic ulcer disease,2025,323,7
+GERD,1996,225,1
+GERD,1997,229,1
+GERD,1998,291,2
+GERD,1999,338,1
+GERD,2000,400,2
+GERD,2001,381,9
+GERD,2002,439,11
+GERD,2003,435,17
+GERD,2004,516,21
+GERD,2005,512,38
+GERD,2006,454,47
+GERD,2007,523,28
+GERD,2008,490,34
+GERD,2009,448,28
+GERD,2010,433,32
+GERD,2011,449,20
+GERD,2012,378,27
+GERD,2013,443,43
+GERD,2014,490,31
+GERD,2015,381,24
+GERD,2016,391,38
+GERD,2017,373,34
+GERD,2018,371,27
+GERD,2019,375,33
+GERD,2020,435,29
+GERD,2021,418,35
+GERD,2022,408,39
+GERD,2023,437,38
+GERD,2024,514,32
+GERD,2025,572,49
+Appendicitis,1996,131,0
+Appendicitis,1997,106,0
+Appendicitis,1998,116,0
+Appendicitis,1999,158,0
+Appendicitis,2000,172,0
+Appendicitis,2001,149,0
+Appendicitis,2002,171,0
+Appendicitis,2003,183,2
+Appendicitis,2004,189,5
+Appendicitis,2005,187,2
+Appendicitis,2006,198,5
+Appendicitis,2007,232,4
+Appendicitis,2008,258,8
+Appendicitis,2009,268,13
+Appendicitis,2010,267,5
+Appendicitis,2011,302,6
+Appendicitis,2012,343,7
+Appendicitis,2013,333,8
+Appendicitis,2014,379,7
+Appendicitis,2015,412,12
+Appendicitis,2016,452,18
+Appendicitis,2017,450,19
+Appendicitis,2018,404,13
+Appendicitis,2019,437,18
+Appendicitis,2020,542,13
+Appendicitis,2021,667,15
+Appendicitis,2022,709,5
+Appendicitis,2023,586,20
+Appendicitis,2024,647,12
+Appendicitis,2025,686,17
+Gallstones & biliary disease,1996,324,0
+Gallstones & biliary disease,1997,288,0
+Gallstones & biliary disease,1998,312,0
+Gallstones & biliary disease,1999,273,0
+Gallstones & biliary disease,2000,279,1
+Gallstones & biliary disease,2001,277,1
+Gallstones & biliary disease,2002,308,1
+Gallstones & biliary disease,2003,325,2
+Gallstones & biliary disease,2004,247,4
+Gallstones & biliary disease,2005,342,4
+Gallstones & biliary disease,2006,325,9
+Gallstones & biliary disease,2007,349,7
+Gallstones & biliary disease,2008,366,6
+Gallstones & biliary disease,2009,318,17
+Gallstones & biliary disease,2010,345,14
+Gallstones & biliary disease,2011,315,17
+Gallstones & biliary disease,2012,370,5
+Gallstones & biliary disease,2013,386,17
+Gallstones & biliary disease,2014,453,16
+Gallstones & biliary disease,2015,449,16
+Gallstones & biliary disease,2016,451,19
+Gallstones & biliary disease,2017,414,16
+Gallstones & biliary disease,2018,432,9
+Gallstones & biliary disease,2019,458,26
+Gallstones & biliary disease,2020,509,21
+Gallstones & biliary disease,2021,574,30
+Gallstones & biliary disease,2022,656,19
+Gallstones & biliary disease,2023,640,24
+Gallstones & biliary disease,2024,749,30
+Gallstones & biliary disease,2025,868,37
+Abdominal hernia,1996,158,1
+Abdominal hernia,1997,167,1
+Abdominal hernia,1998,153,0
+Abdominal hernia,1999,189,3
+Abdominal hernia,2000,176,1
+Abdominal hernia,2001,192,2
+Abdominal hernia,2002,238,1
+Abdominal hernia,2003,269,2
+Abdominal hernia,2004,281,3
+Abdominal hernia,2005,286,5
+Abdominal hernia,2006,306,10
+Abdominal hernia,2007,349,13
+Abdominal hernia,2008,357,14
+Abdominal hernia,2009,341,15
+Abdominal hernia,2010,398,18
+Abdominal hernia,2011,430,14
+Abdominal hernia,2012,414,21
+Abdominal hernia,2013,490,24
+Abdominal hernia,2014,486,9
+Abdominal hernia,2015,537,19
+Abdominal hernia,2016,527,29
+Abdominal hernia,2017,537,28
+Abdominal hernia,2018,535,28
+Abdominal hernia,2019,600,28
+Abdominal hernia,2020,688,24
+Abdominal hernia,2021,716,29
+Abdominal hernia,2022,738,38
+Abdominal hernia,2023,742,35
+Abdominal hernia,2024,830,48
+Abdominal hernia,2025,906,39
+Chronic kidney disease,1996,1634,2
+Chronic kidney disease,1997,1306,5
+Chronic kidney disease,1998,1507,5
+Chronic kidney disease,1999,1609,7
+Chronic kidney disease,2000,1690,4
+Chronic kidney disease,2001,1702,19
+Chronic kidney disease,2002,2254,35
+Chronic kidney disease,2003,2115,41
+Chronic kidney disease,2004,2348,63
+Chronic kidney disease,2005,2564,90
+Chronic kidney disease,2006,2709,99
+Chronic kidney disease,2007,3100,115
+Chronic kidney disease,2008,3386,126
+Chronic kidney disease,2009,3279,136
+Chronic kidney disease,2010,3622,134
+Chronic kidney disease,2011,3932,156
+Chronic kidney disease,2012,4138,152
+Chronic kidney disease,2013,4424,187
+Chronic kidney disease,2014,4747,169
+Chronic kidney disease,2015,4809,180
+Chronic kidney disease,2016,5052,165
+Chronic kidney disease,2017,5023,179
+Chronic kidney disease,2018,5224,211
+Chronic kidney disease,2019,5389,223
+Chronic kidney disease,2020,6420,171
+Chronic kidney disease,2021,6941,217
+Chronic kidney disease,2022,7162,226
+Chronic kidney disease,2023,6942,221
+Chronic kidney disease,2024,7572,265
+Chronic kidney disease,2025,8823,298
+Kidney stones,1996,126,0
+Kidney stones,1997,122,1
+Kidney stones,1998,155,2
+Kidney stones,1999,157,0
+Kidney stones,2000,145,0
+Kidney stones,2001,141,0
+Kidney stones,2002,188,2
+Kidney stones,2003,186,3
+Kidney stones,2004,218,0
+Kidney stones,2005,204,8
+Kidney stones,2006,213,12
+Kidney stones,2007,221,10
+Kidney stones,2008,275,6
+Kidney stones,2009,285,13
+Kidney stones,2010,304,14
+Kidney stones,2011,362,11
+Kidney stones,2012,382,9
+Kidney stones,2013,420,11
+Kidney stones,2014,464,29
+Kidney stones,2015,466,26
+Kidney stones,2016,498,19
+Kidney stones,2017,523,33
+Kidney stones,2018,522,26
+Kidney stones,2019,580,34
+Kidney stones,2020,653,35
+Kidney stones,2021,649,36
+Kidney stones,2022,647,44
+Kidney stones,2023,744,45
+Kidney stones,2024,877,57
+Kidney stones,2025,1048,75
+Benign prostatic hyperplasia,1996,242,0
+Benign prostatic hyperplasia,1997,224,0
+Benign prostatic hyperplasia,1998,220,3
+Benign prostatic hyperplasia,1999,200,1
+Benign prostatic hyperplasia,2000,193,1
+Benign prostatic hyperplasia,2001,197,2
+Benign prostatic hyperplasia,2002,270,3
+Benign prostatic hyperplasia,2003,214,7
+Benign prostatic hyperplasia,2004,196,11
+Benign prostatic hyperplasia,2005,225,19
+Benign prostatic hyperplasia,2006,309,18
+Benign prostatic hyperplasia,2007,219,17
+Benign prostatic hyperplasia,2008,261,19
+Benign prostatic hyperplasia,2009,234,21
+Benign prostatic hyperplasia,2010,218,18
+Benign prostatic hyperplasia,2011,315,21
+Benign prostatic hyperplasia,2012,312,12
+Benign prostatic hyperplasia,2013,341,24
+Benign prostatic hyperplasia,2014,325,24
+Benign prostatic hyperplasia,2015,374,31
+Benign prostatic hyperplasia,2016,338,16
+Benign prostatic hyperplasia,2017,337,21
+Benign prostatic hyperplasia,2018,359,20
+Benign prostatic hyperplasia,2019,371,17
+Benign prostatic hyperplasia,2020,398,21
+Benign prostatic hyperplasia,2021,403,34
+Benign prostatic hyperplasia,2022,354,27
+Benign prostatic hyperplasia,2023,366,22
+Benign prostatic hyperplasia,2024,467,41
+Benign prostatic hyperplasia,2025,558,38
+Low back pain,1996,310,0
+Low back pain,1997,244,2
+Low back pain,1998,294,1
+Low back pain,1999,341,2
+Low back pain,2000,334,7
+Low back pain,2001,311,5
+Low back pain,2002,393,8
+Low back pain,2003,424,15
+Low back pain,2004,473,27
+Low back pain,2005,585,24
+Low back pain,2006,597,50
+Low back pain,2007,538,51
+Low back pain,2008,595,42
+Low back pain,2009,615,57
+Low back pain,2010,697,41
+Low back pain,2011,661,57
+Low back pain,2012,767,74
+Low back pain,2013,836,89
+Low back pain,2014,937,76
+Low back pain,2015,944,96
+Low back pain,2016,1014,98
+Low back pain,2017,1053,111
+Low back pain,2018,988,125
+Low back pain,2019,1174,134
+Low back pain,2020,1281,127
+Low back pain,2021,1390,193
+Low back pain,2022,1399,193
+Low back pain,2023,1383,189
+Low back pain,2024,1495,188
+Low back pain,2025,1688,257
+Neck pain,1996,32,0
+Neck pain,1997,18,0
+Neck pain,1998,18,0
+Neck pain,1999,19,0
+Neck pain,2000,31,3
+Neck pain,2001,33,5
+Neck pain,2002,45,0
+Neck pain,2003,60,3
+Neck pain,2004,74,2
+Neck pain,2005,66,6
+Neck pain,2006,95,2
+Neck pain,2007,113,9
+Neck pain,2008,118,9
+Neck pain,2009,118,16
+Neck pain,2010,143,13
+Neck pain,2011,124,12
+Neck pain,2012,139,16
+Neck pain,2013,150,30
+Neck pain,2014,170,14
+Neck pain,2015,152,29
+Neck pain,2016,190,37
+Neck pain,2017,178,26
+Neck pain,2018,223,41
+Neck pain,2019,223,48
+Neck pain,2020,231,46
+Neck pain,2021,242,83
+Neck pain,2022,315,96
+Neck pain,2023,306,90
+Neck pain,2024,315,102
+Neck pain,2025,359,120
+Osteoarthritis,1996,332,4
+Osteoarthritis,1997,312,7
+Osteoarthritis,1998,324,9
+Osteoarthritis,1999,440,11
+Osteoarthritis,2000,424,16
+Osteoarthritis,2001,530,23
+Osteoarthritis,2002,597,35
+Osteoarthritis,2003,665,61
+Osteoarthritis,2004,811,83
+Osteoarthritis,2005,837,70
+Osteoarthritis,2006,836,103
+Osteoarthritis,2007,938,110
+Osteoarthritis,2008,1050,104
+Osteoarthritis,2009,982,119
+Osteoarthritis,2010,1244,120
+Osteoarthritis,2011,1342,155
+Osteoarthritis,2012,1455,155
+Osteoarthritis,2013,1607,148
+Osteoarthritis,2014,1699,200
+Osteoarthritis,2015,1846,210
+Osteoarthritis,2016,2017,232
+Osteoarthritis,2017,2122,210
+Osteoarthritis,2018,2321,243
+Osteoarthritis,2019,2513,255
+Osteoarthritis,2020,3030,245
+Osteoarthritis,2021,3273,302
+Osteoarthritis,2022,3482,290
+Osteoarthritis,2023,3381,291
+Osteoarthritis,2024,3876,281
+Osteoarthritis,2025,4617,298
+Gout,1996,69,0
+Gout,1997,53,0
+Gout,1998,65,1
+Gout,1999,53,0
+Gout,2000,67,0
+Gout,2001,62,2
+Gout,2002,73,1
+Gout,2003,77,2
+Gout,2004,92,2
+Gout,2005,113,2
+Gout,2006,149,3
+Gout,2007,142,5
+Gout,2008,177,6
+Gout,2009,183,12
+Gout,2010,236,9
+Gout,2011,228,17
+Gout,2012,274,10
+Gout,2013,258,10
+Gout,2014,325,15
+Gout,2015,329,13
+Gout,2016,387,9
+Gout,2017,351,15
+Gout,2018,414,13
+Gout,2019,422,23
+Gout,2020,478,13
+Gout,2021,442,24
+Gout,2022,534,18
+Gout,2023,514,23
+Gout,2024,591,21
+Gout,2025,664,27
+Atopic dermatitis,1996,208,0
+Atopic dermatitis,1997,210,0
+Atopic dermatitis,1998,241,1
+Atopic dermatitis,1999,288,2
+Atopic dermatitis,2000,271,2
+Atopic dermatitis,2001,367,3
+Atopic dermatitis,2002,378,1
+Atopic dermatitis,2003,375,4
+Atopic dermatitis,2004,352,22
+Atopic dermatitis,2005,506,13
+Atopic dermatitis,2006,493,18
+Atopic dermatitis,2007,474,21
+Atopic dermatitis,2008,494,22
+Atopic dermatitis,2009,497,40
+Atopic dermatitis,2010,525,31
+Atopic dermatitis,2011,594,29
+Atopic dermatitis,2012,570,30
+Atopic dermatitis,2013,610,32
+Atopic dermatitis,2014,667,32
+Atopic dermatitis,2015,709,38
+Atopic dermatitis,2016,795,46
+Atopic dermatitis,2017,869,51
+Atopic dermatitis,2018,915,81
+Atopic dermatitis,2019,1057,75
+Atopic dermatitis,2020,1193,68
+Atopic dermatitis,2021,1381,76
+Atopic dermatitis,2022,1444,100
+Atopic dermatitis,2023,1802,107
+Atopic dermatitis,2024,1855,90
+Atopic dermatitis,2025,2002,100
+Acne,1996,84,0
+Acne,1997,82,1
+Acne,1998,124,0
+Acne,1999,119,0
+Acne,2000,101,1
+Acne,2001,109,1
+Acne,2002,148,4
+Acne,2003,147,4
+Acne,2004,143,9
+Acne,2005,173,11
+Acne,2006,202,16
+Acne,2007,194,20
+Acne,2008,245,34
+Acne,2009,227,44
+Acne,2010,264,33
+Acne,2011,278,33
+Acne,2012,245,30
+Acne,2013,277,35
+Acne,2014,290,37
+Acne,2015,298,44
+Acne,2016,351,47
+Acne,2017,309,34
+Acne,2018,324,34
+Acne,2019,384,31
+Acne,2020,446,41
+Acne,2021,495,41
+Acne,2022,521,35
+Acne,2023,521,57
+Acne,2024,611,50
+Acne,2025,618,50
+Urticaria,1996,110,0
+Urticaria,1997,72,0
+Urticaria,1998,104,0
+Urticaria,1999,108,1
+Urticaria,2000,122,1
+Urticaria,2001,121,0
+Urticaria,2002,151,3
+Urticaria,2003,149,5
+Urticaria,2004,131,4
+Urticaria,2005,129,5
+Urticaria,2006,152,4
+Urticaria,2007,143,4
+Urticaria,2008,172,4
+Urticaria,2009,162,3
+Urticaria,2010,188,6
+Urticaria,2011,198,12
+Urticaria,2012,185,8
+Urticaria,2013,206,7
+Urticaria,2014,240,9
+Urticaria,2015,218,8
+Urticaria,2016,264,6
+Urticaria,2017,256,7
+Urticaria,2018,292,9
+Urticaria,2019,262,11
+Urticaria,2020,366,10
+Urticaria,2021,348,12
+Urticaria,2022,355,19
+Urticaria,2023,340,17
+Urticaria,2024,382,16
+Urticaria,2025,444,22
+Alopecia areata,1996,43,0
+Alopecia areata,1997,25,1
+Alopecia areata,1998,31,0
+Alopecia areata,1999,36,0
+Alopecia areata,2000,34,2
+Alopecia areata,2001,30,0
+Alopecia areata,2002,57,2
+Alopecia areata,2003,53,1
+Alopecia areata,2004,44,0
+Alopecia areata,2005,48,2
+Alopecia areata,2006,60,0
+Alopecia areata,2007,49,2
+Alopecia areata,2008,62,0
+Alopecia areata,2009,55,4
+Alopecia areata,2010,67,2
+Alopecia areata,2011,85,2
+Alopecia areata,2012,85,4
+Alopecia areata,2013,128,4
+Alopecia areata,2014,104,4
+Alopecia areata,2015,100,5
+Alopecia areata,2016,128,7
+Alopecia areata,2017,143,6
+Alopecia areata,2018,152,7
+Alopecia areata,2019,190,16
+Alopecia areata,2020,229,9
+Alopecia areata,2021,211,15
+Alopecia areata,2022,266,19
+Alopecia areata,2023,327,20
+Alopecia areata,2024,342,10
+Alopecia areata,2025,431,18
+Glaucoma,1996,415,1
+Glaucoma,1997,460,4
+Glaucoma,1998,475,2
+Glaucoma,1999,512,8
+Glaucoma,2000,566,6
+Glaucoma,2001,603,8
+Glaucoma,2002,702,9
+Glaucoma,2003,700,19
+Glaucoma,2004,699,14
+Glaucoma,2005,762,44
+Glaucoma,2006,817,47
+Glaucoma,2007,862,60
+Glaucoma,2008,912,56
+Glaucoma,2009,962,69
+Glaucoma,2010,963,73
+Glaucoma,2011,1083,92
+Glaucoma,2012,1095,62
+Glaucoma,2013,1162,70
+Glaucoma,2014,1289,77
+Glaucoma,2015,1344,59
+Glaucoma,2016,1441,61
+Glaucoma,2017,1462,62
+Glaucoma,2018,1476,86
+Glaucoma,2019,1525,59
+Glaucoma,2020,1893,77
+Glaucoma,2021,1888,83
+Glaucoma,2022,1935,78
+Glaucoma,2023,1870,71
+Glaucoma,2024,1891,59
+Glaucoma,2025,2058,73
+Cataract,1996,432,0
+Cataract,1997,391,0
+Cataract,1998,462,1
+Cataract,1999,469,1
+Cataract,2000,497,1
+Cataract,2001,479,2
+Cataract,2002,516,3
+Cataract,2003,532,4
+Cataract,2004,585,10
+Cataract,2005,586,21
+Cataract,2006,602,21
+Cataract,2007,665,26
+Cataract,2008,644,36
+Cataract,2009,627,49
+Cataract,2010,700,44
+Cataract,2011,663,44
+Cataract,2012,725,32
+Cataract,2013,764,41
+Cataract,2014,778,42
+Cataract,2015,830,37
+Cataract,2016,931,48
+Cataract,2017,880,63
+Cataract,2018,861,84
+Cataract,2019,918,57
+Cataract,2020,1053,64
+Cataract,2021,1111,85
+Cataract,2022,1141,74
+Cataract,2023,1061,57
+Cataract,2024,1038,55
+Cataract,2025,1191,65
+Macular degeneration,1996,89,0
+Macular degeneration,1997,98,1
+Macular degeneration,1998,102,2
+Macular degeneration,1999,147,5
+Macular degeneration,2000,171,1
+Macular degeneration,2001,182,7
+Macular degeneration,2002,222,10
+Macular degeneration,2003,222,12
+Macular degeneration,2004,256,21
+Macular degeneration,2005,359,29
+Macular degeneration,2006,410,45
+Macular degeneration,2007,525,53
+Macular degeneration,2008,497,40
+Macular degeneration,2009,497,38
+Macular degeneration,2010,486,44
+Macular degeneration,2011,532,36
+Macular degeneration,2012,548,37
+Macular degeneration,2013,635,42
+Macular degeneration,2014,710,55
+Macular degeneration,2015,755,57
+Macular degeneration,2016,724,37
+Macular degeneration,2017,780,35
+Macular degeneration,2018,647,64
+Macular degeneration,2019,680,50
+Macular degeneration,2020,907,47
+Macular degeneration,2021,927,61
+Macular degeneration,2022,916,57
+Macular degeneration,2023,928,59
+Macular degeneration,2024,1104,49
+Macular degeneration,2025,1229,67
+Hearing loss,1996,347,0
+Hearing loss,1997,353,0
+Hearing loss,1998,474,1
+Hearing loss,1999,417,1
+Hearing loss,2000,464,2
+Hearing loss,2001,481,2
+Hearing loss,2002,520,0
+Hearing loss,2003,587,2
+Hearing loss,2004,559,4
+Hearing loss,2005,614,1
+Hearing loss,2006,624,10
+Hearing loss,2007,652,15
+Hearing loss,2008,694,15
+Hearing loss,2009,693,9
+Hearing loss,2010,738,11
+Hearing loss,2011,774,17
+Hearing loss,2012,884,24
+Hearing loss,2013,925,34
+Hearing loss,2014,1029,35
+Hearing loss,2015,1084,39
+Hearing loss,2016,1124,41
+Hearing loss,2017,1054,43
+Hearing loss,2018,1216,64
+Hearing loss,2019,1303,60
+Hearing loss,2020,1414,59
+Hearing loss,2021,1555,82
+Hearing loss,2022,1468,88
+Hearing loss,2023,1496,81
+Hearing loss,2024,1702,68
+Hearing loss,2025,1827,76
+Type 2 diabetes,1996,467,3
+Type 2 diabetes,1997,408,5
+Type 2 diabetes,1998,642,9
+Type 2 diabetes,1999,813,15
+Type 2 diabetes,2000,986,24
+Type 2 diabetes,2001,1160,47
+Type 2 diabetes,2002,1535,79
+Type 2 diabetes,2003,1565,99
+Type 2 diabetes,2004,1690,169
+Type 2 diabetes,2005,2023,180
+Type 2 diabetes,2006,2079,239
+Type 2 diabetes,2007,2509,262
+Type 2 diabetes,2008,2667,318
+Type 2 diabetes,2009,2692,399
+Type 2 diabetes,2010,3019,364
+Type 2 diabetes,2011,3239,340
+Type 2 diabetes,2012,3527,352
+Type 2 diabetes,2013,3871,350
+Type 2 diabetes,2014,4685,339
+Type 2 diabetes,2015,4745,338
+Type 2 diabetes,2016,4930,326
+Type 2 diabetes,2017,5048,347
+Type 2 diabetes,2018,5047,354
+Type 2 diabetes,2019,5598,359
+Type 2 diabetes,2020,6056,313
+Type 2 diabetes,2021,6643,425
+Type 2 diabetes,2022,6805,419
+Type 2 diabetes,2023,6829,392
+Type 2 diabetes,2024,7331,447
+Type 2 diabetes,2025,8570,419
+Polycystic ovary syndrome,1996,117,0
+Polycystic ovary syndrome,1997,110,1
+Polycystic ovary syndrome,1998,136,0
+Polycystic ovary syndrome,1999,163,0
+Polycystic ovary syndrome,2000,149,4
+Polycystic ovary syndrome,2001,201,3
+Polycystic ovary syndrome,2002,216,5
+Polycystic ovary syndrome,2003,250,6
+Polycystic ovary syndrome,2004,285,9
+Polycystic ovary syndrome,2005,322,12
+Polycystic ovary syndrome,2006,393,18
+Polycystic ovary syndrome,2007,438,17
+Polycystic ovary syndrome,2008,446,24
+Polycystic ovary syndrome,2009,464,20
+Polycystic ovary syndrome,2010,454,20
+Polycystic ovary syndrome,2011,531,25
+Polycystic ovary syndrome,2012,576,31
+Polycystic ovary syndrome,2013,539,25
+Polycystic ovary syndrome,2014,694,29
+Polycystic ovary syndrome,2015,660,35
+Polycystic ovary syndrome,2016,727,36
+Polycystic ovary syndrome,2017,724,29
+Polycystic ovary syndrome,2018,751,37
+Polycystic ovary syndrome,2019,865,35
+Polycystic ovary syndrome,2020,1005,31
+Polycystic ovary syndrome,2021,1118,39
+Polycystic ovary syndrome,2022,1197,43
+Polycystic ovary syndrome,2023,1331,45
+Polycystic ovary syndrome,2024,1396,51
+Polycystic ovary syndrome,2025,1711,59
+Uterine fibroids,1996,63,0
+Uterine fibroids,1997,64,0
+Uterine fibroids,1998,71,0
+Uterine fibroids,1999,85,0
+Uterine fibroids,2000,116,2
+Uterine fibroids,2001,121,1
+Uterine fibroids,2002,156,5
+Uterine fibroids,2003,155,5
+Uterine fibroids,2004,147,8
+Uterine fibroids,2005,149,1
+Uterine fibroids,2006,170,12
+Uterine fibroids,2007,174,8
+Uterine fibroids,2008,199,15
+Uterine fibroids,2009,162,9
+Uterine fibroids,2010,163,16
+Uterine fibroids,2011,184,18
+Uterine fibroids,2012,179,21
+Uterine fibroids,2013,206,13
+Uterine fibroids,2014,250,21
+Uterine fibroids,2015,253,21
+Uterine fibroids,2016,255,19
+Uterine fibroids,2017,245,23
+Uterine fibroids,2018,255,24
+Uterine fibroids,2019,233,19
+Uterine fibroids,2020,280,17
+Uterine fibroids,2021,303,10
+Uterine fibroids,2022,347,14
+Uterine fibroids,2023,333,14
+Uterine fibroids,2024,359,14
+Uterine fibroids,2025,399,23
+Sickle cell disease,1996,259,0
+Sickle cell disease,1997,239,3
+Sickle cell disease,1998,247,1
+Sickle cell disease,1999,206,5
+Sickle cell disease,2000,250,7
+Sickle cell disease,2001,278,5
+Sickle cell disease,2002,310,5
+Sickle cell disease,2003,310,5
+Sickle cell disease,2004,319,14
+Sickle cell disease,2005,328,15
+Sickle cell disease,2006,360,18
+Sickle cell disease,2007,414,11
+Sickle cell disease,2008,440,17
+Sickle cell disease,2009,426,18
+Sickle cell disease,2010,478,23
+Sickle cell disease,2011,592,20
+Sickle cell disease,2012,556,28
+Sickle cell disease,2013,637,32
+Sickle cell disease,2014,671,38
+Sickle cell disease,2015,673,39
+Sickle cell disease,2016,744,37
+Sickle cell disease,2017,758,38
+Sickle cell disease,2018,829,53
+Sickle cell disease,2019,883,37
+Sickle cell disease,2020,1012,49
+Sickle cell disease,2021,1058,48
+Sickle cell disease,2022,1072,53
+Sickle cell disease,2023,1045,36
+Sickle cell disease,2024,1165,45
+Sickle cell disease,2025,1228,42
+Thalassemia,1996,215,0
+Thalassemia,1997,223,0
+Thalassemia,1998,259,1
+Thalassemia,1999,235,3
+Thalassemia,2000,268,5
+Thalassemia,2001,252,1
+Thalassemia,2002,291,3
+Thalassemia,2003,290,5
+Thalassemia,2004,273,10
+Thalassemia,2005,373,3
+Thalassemia,2006,396,3
+Thalassemia,2007,362,9
+Thalassemia,2008,428,10
+Thalassemia,2009,448,12
+Thalassemia,2010,459,9
+Thalassemia,2011,472,5
+Thalassemia,2012,454,16
+Thalassemia,2013,517,11
+Thalassemia,2014,547,20
+Thalassemia,2015,487,15
+Thalassemia,2016,520,12
+Thalassemia,2017,536,22
+Thalassemia,2018,517,20
+Thalassemia,2019,545,19
+Thalassemia,2020,607,15
+Thalassemia,2021,639,14
+Thalassemia,2022,608,19
+Thalassemia,2023,613,20
+Thalassemia,2024,607,31
+Thalassemia,2025,718,10
+Down syndrome,1996,372,0
+Down syndrome,1997,249,0
+Down syndrome,1998,321,0
+Down syndrome,1999,315,0
+Down syndrome,2000,345,2
+Down syndrome,2001,371,0
+Down syndrome,2002,446,1
+Down syndrome,2003,365,0
+Down syndrome,2004,388,0
+Down syndrome,2005,401,3
+Down syndrome,2006,435,4
+Down syndrome,2007,408,3
+Down syndrome,2008,442,5
+Down syndrome,2009,400,2
+Down syndrome,2010,448,8
+Down syndrome,2011,470,1
+Down syndrome,2012,472,7
+Down syndrome,2013,524,8
+Down syndrome,2014,534,5
+Down syndrome,2015,501,10
+Down syndrome,2016,516,9
+Down syndrome,2017,545,7
+Down syndrome,2018,476,16
+Down syndrome,2019,516,15
+Down syndrome,2020,614,12
+Down syndrome,2021,686,18
+Down syndrome,2022,665,15
+Down syndrome,2023,629,33
+Down syndrome,2024,594,25
+Down syndrome,2025,760,34
+Neural tube defects,1996,169,0
+Neural tube defects,1997,123,0
+Neural tube defects,1998,149,0
+Neural tube defects,1999,153,0
+Neural tube defects,2000,170,0
+Neural tube defects,2001,143,0
+Neural tube defects,2002,183,0
+Neural tube defects,2003,206,0
+Neural tube defects,2004,185,0
+Neural tube defects,2005,203,2
+Neural tube defects,2006,185,4
+Neural tube defects,2007,189,3
+Neural tube defects,2008,205,1
+Neural tube defects,2009,208,2
+Neural tube defects,2010,235,0
+Neural tube defects,2011,245,2
+Neural tube defects,2012,239,2
+Neural tube defects,2013,249,4
+Neural tube defects,2014,220,3
+Neural tube defects,2015,260,7
+Neural tube defects,2016,244,5
+Neural tube defects,2017,266,6
+Neural tube defects,2018,291,8
+Neural tube defects,2019,328,5
+Neural tube defects,2020,326,4
+Neural tube defects,2021,333,6
+Neural tube defects,2022,244,10
+Neural tube defects,2023,288,10
+Neural tube defects,2024,310,7
+Neural tube defects,2025,335,8
+Lung cancer,1996,1323,19
+Lung cancer,1997,1297,23
+Lung cancer,1998,1339,51
+Lung cancer,1999,1425,59
+Lung cancer,2000,1669,83
+Lung cancer,2001,1948,80
+Lung cancer,2002,2251,112
+Lung cancer,2003,2258,138
+Lung cancer,2004,2601,171
+Lung cancer,2005,2820,180
+Lung cancer,2006,2551,247
+Lung cancer,2007,3215,233
+Lung cancer,2008,3130,266
+Lung cancer,2009,3412,280
+Lung cancer,2010,3815,218
+Lung cancer,2011,4183,231
+Lung cancer,2012,4850,233
+Lung cancer,2013,5321,260
+Lung cancer,2014,6159,281
+Lung cancer,2015,6782,391
+Lung cancer,2016,7200,400
+Lung cancer,2017,7739,402
+Lung cancer,2018,8563,473
+Lung cancer,2019,9229,452
+Lung cancer,2020,10933,482
+Lung cancer,2021,11538,598
+Lung cancer,2022,12072,563
+Lung cancer,2023,11439,573
+Lung cancer,2024,12234,675
+Lung cancer,2025,14104,665
+Breast cancer,1996,2781,36
+Breast cancer,1997,2536,51
+Breast cancer,1998,2815,64
+Breast cancer,1999,3096,69
+Breast cancer,2000,3563,98
+Breast cancer,2001,3471,120
+Breast cancer,2002,4125,149
+Breast cancer,2003,4303,163
+Breast cancer,2004,4586,220
+Breast cancer,2005,5148,226
+Breast cancer,2006,5172,302
+Breast cancer,2007,5622,309
+Breast cancer,2008,5924,341
+Breast cancer,2009,6148,333
+Breast cancer,2010,6801,336
+Breast cancer,2011,7483,321
+Breast cancer,2012,7901,338
+Breast cancer,2013,8669,365
+Breast cancer,2014,9540,400
+Breast cancer,2015,9857,486
+Breast cancer,2016,10291,505
+Breast cancer,2017,10617,525
+Breast cancer,2018,11035,527
+Breast cancer,2019,11469,582
+Breast cancer,2020,13638,574
+Breast cancer,2021,14503,655
+Breast cancer,2022,14378,672
+Breast cancer,2023,14520,693
+Breast cancer,2024,15120,723
+Breast cancer,2025,17184,754
+Colorectal cancer,1996,1318,10
+Colorectal cancer,1997,1256,23
+Colorectal cancer,1998,1485,31
+Colorectal cancer,1999,1568,40
+Colorectal cancer,2000,1853,53
+Colorectal cancer,2001,1835,64
+Colorectal cancer,2002,2283,66
+Colorectal cancer,2003,2409,80
+Colorectal cancer,2004,2549,104
+Colorectal cancer,2005,3097,134
+Colorectal cancer,2006,3029,142
+Colorectal cancer,2007,3322,157
+Colorectal cancer,2008,3464,167
+Colorectal cancer,2009,3866,196
+Colorectal cancer,2010,4003,211
+Colorectal cancer,2011,4623,205
+Colorectal cancer,2012,5077,203
+Colorectal cancer,2013,5285,224
+Colorectal cancer,2014,6128,208
+Colorectal cancer,2015,6375,236
+Colorectal cancer,2016,6692,264
+Colorectal cancer,2017,6731,281
+Colorectal cancer,2018,7463,328
+Colorectal cancer,2019,7989,318
+Colorectal cancer,2020,9185,341
+Colorectal cancer,2021,9853,372
+Colorectal cancer,2022,9981,384
+Colorectal cancer,2023,9644,451
+Colorectal cancer,2024,10167,465
+Colorectal cancer,2025,11703,501
+Stomach cancer,1996,552,3
+Stomach cancer,1997,574,9
+Stomach cancer,1998,665,12
+Stomach cancer,1999,637,12
+Stomach cancer,2000,670,23
+Stomach cancer,2001,824,26
+Stomach cancer,2002,1164,21
+Stomach cancer,2003,1029,25
+Stomach cancer,2004,1106,40
+Stomach cancer,2005,1229,27
+Stomach cancer,2006,1235,36
+Stomach cancer,2007,1302,51
+Stomach cancer,2008,1418,56
+Stomach cancer,2009,1538,56
+Stomach cancer,2010,1576,53
+Stomach cancer,2011,1933,75
+Stomach cancer,2012,2156,87
+Stomach cancer,2013,2326,81
+Stomach cancer,2014,2877,82
+Stomach cancer,2015,2872,109
+Stomach cancer,2016,2976,95
+Stomach cancer,2017,3106,120
+Stomach cancer,2018,3425,115
+Stomach cancer,2019,3478,142
+Stomach cancer,2020,4114,155
+Stomach cancer,2021,4321,177
+Stomach cancer,2022,4351,187
+Stomach cancer,2023,4000,158
+Stomach cancer,2024,4332,196
+Stomach cancer,2025,4689,180
+Liver cancer,1996,866,2
+Liver cancer,1997,756,8
+Liver cancer,1998,876,12
+Liver cancer,1999,934,15
+Liver cancer,2000,1055,11
+Liver cancer,2001,1095,24
+Liver cancer,2002,1558,24
+Liver cancer,2003,1517,19
+Liver cancer,2004,1562,29
+Liver cancer,2005,1749,44
+Liver cancer,2006,1633,53
+Liver cancer,2007,1859,74
+Liver cancer,2008,2150,80
+Liver cancer,2009,2191,113
+Liver cancer,2010,2298,79
+Liver cancer,2011,2873,73
+Liver cancer,2012,3130,92
+Liver cancer,2013,3615,95
+Liver cancer,2014,4211,113
+Liver cancer,2015,4485,125
+Liver cancer,2016,4657,133
+Liver cancer,2017,4889,146
+Liver cancer,2018,5286,147
+Liver cancer,2019,5823,188
+Liver cancer,2020,6997,177
+Liver cancer,2021,7771,214
+Liver cancer,2022,7987,201
+Liver cancer,2023,7776,213
+Liver cancer,2024,8189,207
+Liver cancer,2025,8988,221
+Pancreatic cancer,1996,309,4
+Pancreatic cancer,1997,292,12
+Pancreatic cancer,1998,340,18
+Pancreatic cancer,1999,443,24
+Pancreatic cancer,2000,409,20
+Pancreatic cancer,2001,491,31
+Pancreatic cancer,2002,572,31
+Pancreatic cancer,2003,590,46
+Pancreatic cancer,2004,634,48
+Pancreatic cancer,2005,713,55
+Pancreatic cancer,2006,717,85
+Pancreatic cancer,2007,890,81
+Pancreatic cancer,2008,1001,71
+Pancreatic cancer,2009,1072,84
+Pancreatic cancer,2010,1168,70
+Pancreatic cancer,2011,1344,103
+Pancreatic cancer,2012,1533,85
+Pancreatic cancer,2013,1577,111
+Pancreatic cancer,2014,1868,112
+Pancreatic cancer,2015,2045,124
+Pancreatic cancer,2016,2169,157
+Pancreatic cancer,2017,2277,149
+Pancreatic cancer,2018,2588,145
+Pancreatic cancer,2019,2803,166
+Pancreatic cancer,2020,3416,172
+Pancreatic cancer,2021,3708,209
+Pancreatic cancer,2022,3796,185
+Pancreatic cancer,2023,3560,209
+Pancreatic cancer,2024,3663,240
+Pancreatic cancer,2025,4285,223
+Prostate cancer,1996,1124,12
+Prostate cancer,1997,1185,26
+Prostate cancer,1998,1284,31
+Prostate cancer,1999,1360,43
+Prostate cancer,2000,1523,57
+Prostate cancer,2001,1602,71
+Prostate cancer,2002,2024,85
+Prostate cancer,2003,2221,104
+Prostate cancer,2004,2428,110
+Prostate cancer,2005,2633,143
+Prostate cancer,2006,2749,160
+Prostate cancer,2007,3099,157
+Prostate cancer,2008,3176,144
+Prostate cancer,2009,3064,165
+Prostate cancer,2010,3311,137
+Prostate cancer,2011,3773,168
+Prostate cancer,2012,4007,194
+Prostate cancer,2013,4304,186
+Prostate cancer,2014,4736,240
+Prostate cancer,2015,4753,199
+Prostate cancer,2016,5057,234
+Prostate cancer,2017,4972,242
+Prostate cancer,2018,5069,279
+Prostate cancer,2019,5307,277
+Prostate cancer,2020,5729,261
+Prostate cancer,2021,6046,299
+Prostate cancer,2022,5752,244
+Prostate cancer,2023,5599,309
+Prostate cancer,2024,5882,351
+Prostate cancer,2025,6491,320
+Cervical cancer,1996,414,6
+Cervical cancer,1997,393,9
+Cervical cancer,1998,416,8
+Cervical cancer,1999,496,14
+Cervical cancer,2000,481,16
+Cervical cancer,2001,519,13
+Cervical cancer,2002,568,17
+Cervical cancer,2003,670,21
+Cervical cancer,2004,670,21
+Cervical cancer,2005,731,33
+Cervical cancer,2006,807,39
+Cervical cancer,2007,952,34
+Cervical cancer,2008,1005,34
+Cervical cancer,2009,1027,50
+Cervical cancer,2010,1114,45
+Cervical cancer,2011,1089,40
+Cervical cancer,2012,1275,48
+Cervical cancer,2013,1306,36
+Cervical cancer,2014,1584,55
+Cervical cancer,2015,1761,76
+Cervical cancer,2016,1664,58
+Cervical cancer,2017,1630,81
+Cervical cancer,2018,1891,82
+Cervical cancer,2019,2097,83
+Cervical cancer,2020,2483,108
+Cervical cancer,2021,2568,124
+Cervical cancer,2022,2765,112
+Cervical cancer,2023,2436,114
+Cervical cancer,2024,2842,139
+Cervical cancer,2025,3084,144
+Esophageal cancer,1996,252,4
+Esophageal cancer,1997,248,9
+Esophageal cancer,1998,275,8
+Esophageal cancer,1999,302,8
+Esophageal cancer,2000,352,25
+Esophageal cancer,2001,360,22
+Esophageal cancer,2002,494,19
+Esophageal cancer,2003,465,21
+Esophageal cancer,2004,453,28
+Esophageal cancer,2005,545,25
+Esophageal cancer,2006,609,37
+Esophageal cancer,2007,617,39
+Esophageal cancer,2008,619,37
+Esophageal cancer,2009,763,40
+Esophageal cancer,2010,713,33
+Esophageal cancer,2011,873,37
+Esophageal cancer,2012,1047,38
+Esophageal cancer,2013,1102,36
+Esophageal cancer,2014,1307,45
+Esophageal cancer,2015,1376,54
+Esophageal cancer,2016,1452,74
+Esophageal cancer,2017,1530,73
+Esophageal cancer,2018,1702,77
+Esophageal cancer,2019,1684,69
+Esophageal cancer,2020,2134,74
+Esophageal cancer,2021,2164,88
+Esophageal cancer,2022,2267,75
+Esophageal cancer,2023,2020,92
+Esophageal cancer,2024,2151,106
+Esophageal cancer,2025,2480,114
+Ovarian cancer,1996,592,14
+Ovarian cancer,1997,601,23
+Ovarian cancer,1998,556,36
+Ovarian cancer,1999,661,41
+Ovarian cancer,2000,709,37
+Ovarian cancer,2001,852,37
+Ovarian cancer,2002,887,40
+Ovarian cancer,2003,965,55
+Ovarian cancer,2004,935,59
+Ovarian cancer,2005,1076,62
+Ovarian cancer,2006,1055,75
+Ovarian cancer,2007,1151,80
+Ovarian cancer,2008,1109,73
+Ovarian cancer,2009,1363,77
+Ovarian cancer,2010,1349,94
+Ovarian cancer,2011,1489,77
+Ovarian cancer,2012,1595,75
+Ovarian cancer,2013,1746,71
+Ovarian cancer,2014,1888,82
+Ovarian cancer,2015,1997,106
+Ovarian cancer,2016,2223,113
+Ovarian cancer,2017,2252,133
+Ovarian cancer,2018,2359,136
+Ovarian cancer,2019,2505,124
+Ovarian cancer,2020,3009,122
+Ovarian cancer,2021,2959,179
+Ovarian cancer,2022,2971,149
+Ovarian cancer,2023,2782,153
+Ovarian cancer,2024,2988,156
+Ovarian cancer,2025,3360,164
+Leukemia,1996,2692,41
+Leukemia,1997,2404,41
+Leukemia,1998,2556,87
+Leukemia,1999,2484,109
+Leukemia,2000,2497,122
+Leukemia,2001,2676,106
+Leukemia,2002,3098,130
+Leukemia,2003,3143,141
+Leukemia,2004,2995,183
+Leukemia,2005,3191,206
+Leukemia,2006,3192,215
+Leukemia,2007,3354,225
+Leukemia,2008,3455,235
+Leukemia,2009,3655,242
+Leukemia,2010,3775,261
+Leukemia,2011,4104,243
+Leukemia,2012,4206,247
+Leukemia,2013,4363,246
+Leukemia,2014,4811,244
+Leukemia,2015,4724,281
+Leukemia,2016,5038,303
+Leukemia,2017,4795,284
+Leukemia,2018,4935,301
+Leukemia,2019,5207,329
+Leukemia,2020,5792,310
+Leukemia,2021,5981,360
+Leukemia,2022,5749,333
+Leukemia,2023,5582,298
+Leukemia,2024,5626,368
+Leukemia,2025,6086,378
+Brain & CNS cancer,1996,987,16
+Brain & CNS cancer,1997,931,5
+Brain & CNS cancer,1998,1071,7
+Brain & CNS cancer,1999,1169,9
+Brain & CNS cancer,2000,1189,13
+Brain & CNS cancer,2001,1228,22
+Brain & CNS cancer,2002,1232,27
+Brain & CNS cancer,2003,1394,29
+Brain & CNS cancer,2004,1438,42
+Brain & CNS cancer,2005,1701,66
+Brain & CNS cancer,2006,1684,66
+Brain & CNS cancer,2007,1738,79
+Brain & CNS cancer,2008,2026,79
+Brain & CNS cancer,2009,2283,113
+Brain & CNS cancer,2010,2521,114
+Brain & CNS cancer,2011,2793,108
+Brain & CNS cancer,2012,3105,101
+Brain & CNS cancer,2013,3310,109
+Brain & CNS cancer,2014,3791,130
+Brain & CNS cancer,2015,4082,140
+Brain & CNS cancer,2016,4226,146
+Brain & CNS cancer,2017,4541,144
+Brain & CNS cancer,2018,4881,162
+Brain & CNS cancer,2019,5092,143
+Brain & CNS cancer,2020,5889,161
+Brain & CNS cancer,2021,6577,160
+Brain & CNS cancer,2022,6729,178
+Brain & CNS cancer,2023,6425,170
+Brain & CNS cancer,2024,6803,176
+Brain & CNS cancer,2025,7397,199
+Bladder cancer,1996,395,6
+Bladder cancer,1997,331,8
+Bladder cancer,1998,352,13
+Bladder cancer,1999,384,14
+Bladder cancer,2000,431,17
+Bladder cancer,2001,435,17
+Bladder cancer,2002,516,8
+Bladder cancer,2003,521,20
+Bladder cancer,2004,529,20
+Bladder cancer,2005,596,25
+Bladder cancer,2006,680,24
+Bladder cancer,2007,743,27
+Bladder cancer,2008,817,32
+Bladder cancer,2009,904,35
+Bladder cancer,2010,931,28
+Bladder cancer,2011,1038,31
+Bladder cancer,2012,1232,40
+Bladder cancer,2013,1369,35
+Bladder cancer,2014,1459,49
+Bladder cancer,2015,1556,70
+Bladder cancer,2016,1611,85
+Bladder cancer,2017,1775,105
+Bladder cancer,2018,1958,131
+Bladder cancer,2019,2035,120
+Bladder cancer,2020,2426,114
+Bladder cancer,2021,2728,133
+Bladder cancer,2022,2738,107
+Bladder cancer,2023,2613,136
+Bladder cancer,2024,2896,122
+Bladder cancer,2025,3119,153
+Kidney cancer,1996,547,9
+Kidney cancer,1997,512,10
+Kidney cancer,1998,538,17
+Kidney cancer,1999,598,14
+Kidney cancer,2000,534,32
+Kidney cancer,2001,589,30
+Kidney cancer,2002,682,27
+Kidney cancer,2003,726,32
+Kidney cancer,2004,743,52
+Kidney cancer,2005,793,58
+Kidney cancer,2006,878,72
+Kidney cancer,2007,1052,74
+Kidney cancer,2008,1147,67
+Kidney cancer,2009,1142,59
+Kidney cancer,2010,1199,59
+Kidney cancer,2011,1333,55
+Kidney cancer,2012,1380,70
+Kidney cancer,2013,1504,45
+Kidney cancer,2014,1668,54
+Kidney cancer,2015,1715,61
+Kidney cancer,2016,1881,87
+Kidney cancer,2017,1985,93
+Kidney cancer,2018,1936,81
+Kidney cancer,2019,2143,77
+Kidney cancer,2020,2485,93
+Kidney cancer,2021,2513,85
+Kidney cancer,2022,2545,88
+Kidney cancer,2023,2438,118
+Kidney cancer,2024,2420,90
+Kidney cancer,2025,2616,107
+Melanoma,1996,1094,12
+Melanoma,1997,924,13
+Melanoma,1998,1122,23
+Melanoma,1999,1077,40
+Melanoma,2000,1203,35
+Melanoma,2001,1162,35
+Melanoma,2002,1311,38
+Melanoma,2003,1353,45
+Melanoma,2004,1374,70
+Melanoma,2005,1463,84
+Melanoma,2006,1448,78
+Melanoma,2007,1532,74
+Melanoma,2008,1649,82
+Melanoma,2009,1771,80
+Melanoma,2010,1879,91
+Melanoma,2011,2173,101
+Melanoma,2012,2209,104
+Melanoma,2013,2409,114
+Melanoma,2014,2671,114
+Melanoma,2015,2779,135
+Melanoma,2016,2988,125
+Melanoma,2017,3075,124
+Melanoma,2018,3115,144
+Melanoma,2019,3149,132
+Melanoma,2020,3541,136
+Melanoma,2021,3754,172
+Melanoma,2022,3506,154
+Melanoma,2023,3446,127
+Melanoma,2024,3594,106
+Melanoma,2025,3706,117
+Multiple myeloma,1996,406,11
+Multiple myeloma,1997,364,24
+Multiple myeloma,1998,415,36
+Multiple myeloma,1999,423,37
+Multiple myeloma,2000,396,50
+Multiple myeloma,2001,471,41
+Multiple myeloma,2002,596,54
+Multiple myeloma,2003,678,58
+Multiple myeloma,2004,640,75
+Multiple myeloma,2005,731,96
+Multiple myeloma,2006,820,101
+Multiple myeloma,2007,906,100
+Multiple myeloma,2008,846,125
+Multiple myeloma,2009,890,97
+Multiple myeloma,2010,961,124
+Multiple myeloma,2011,1051,105
+Multiple myeloma,2012,1158,123
+Multiple myeloma,2013,1301,102
+Multiple myeloma,2014,1315,120
+Multiple myeloma,2015,1388,119
+Multiple myeloma,2016,1610,113
+Multiple myeloma,2017,1518,136
+Multiple myeloma,2018,1564,139
+Multiple myeloma,2019,1662,150
+Multiple myeloma,2020,2003,120
+Multiple myeloma,2021,2200,174
+Multiple myeloma,2022,2047,165
+Multiple myeloma,2023,2106,158
+Multiple myeloma,2024,2174,147
+Multiple myeloma,2025,2447,158
+Non-Hodgkin lymphoma,1996,1824,36
+Non-Hodgkin lymphoma,1997,1724,59
+Non-Hodgkin lymphoma,1998,1894,83
+Non-Hodgkin lymphoma,1999,1918,94
+Non-Hodgkin lymphoma,2000,2013,120
+Non-Hodgkin lymphoma,2001,2143,99
+Non-Hodgkin lymphoma,2002,2482,112
+Non-Hodgkin lymphoma,2003,2434,152
+Non-Hodgkin lymphoma,2004,2427,186
+Non-Hodgkin lymphoma,2005,2731,182
+Non-Hodgkin lymphoma,2006,2824,205
+Non-Hodgkin lymphoma,2007,2988,226
+Non-Hodgkin lymphoma,2008,3044,202
+Non-Hodgkin lymphoma,2009,3037,199
+Non-Hodgkin lymphoma,2010,3301,213
+Non-Hodgkin lymphoma,2011,3518,223
+Non-Hodgkin lymphoma,2012,3552,210
+Non-Hodgkin lymphoma,2013,3729,221
+Non-Hodgkin lymphoma,2014,4103,201
+Non-Hodgkin lymphoma,2015,4173,243
+Non-Hodgkin lymphoma,2016,4189,319
+Non-Hodgkin lymphoma,2017,4060,318
+Non-Hodgkin lymphoma,2018,4244,306
+Non-Hodgkin lymphoma,2019,4372,323
+Non-Hodgkin lymphoma,2020,4927,326
+Non-Hodgkin lymphoma,2021,5196,386
+Non-Hodgkin lymphoma,2022,5017,380
+Non-Hodgkin lymphoma,2023,4954,361
+Non-Hodgkin lymphoma,2024,4909,367
+Non-Hodgkin lymphoma,2025,5384,381
+Thyroid cancer,1996,322,0
+Thyroid cancer,1997,284,2
+Thyroid cancer,1998,355,0
+Thyroid cancer,1999,340,1
+Thyroid cancer,2000,370,2
+Thyroid cancer,2001,423,2
+Thyroid cancer,2002,529,2
+Thyroid cancer,2003,441,2
+Thyroid cancer,2004,542,13
+Thyroid cancer,2005,610,8
+Thyroid cancer,2006,699,11
+Thyroid cancer,2007,738,11
+Thyroid cancer,2008,705,15
+Thyroid cancer,2009,782,11
+Thyroid cancer,2010,878,16
+Thyroid cancer,2011,969,15
+Thyroid cancer,2012,1152,21
+Thyroid cancer,2013,1225,22
+Thyroid cancer,2014,1414,23
+Thyroid cancer,2015,1477,23
+Thyroid cancer,2016,1622,25
+Thyroid cancer,2017,1588,31
+Thyroid cancer,2018,1730,34
+Thyroid cancer,2019,1830,21
+Thyroid cancer,2020,2074,39
+Thyroid cancer,2021,2238,36
+Thyroid cancer,2022,2283,40
+Thyroid cancer,2023,2212,36
+Thyroid cancer,2024,2310,31
+Thyroid cancer,2025,2586,47
+Mesothelioma,1996,156,2
+Mesothelioma,1997,170,3
+Mesothelioma,1998,169,2
+Mesothelioma,1999,181,7
+Mesothelioma,2000,176,8
+Mesothelioma,2001,221,8
+Mesothelioma,2002,205,5
+Mesothelioma,2003,236,6
+Mesothelioma,2004,264,7
+Mesothelioma,2005,290,6
+Mesothelioma,2006,289,17
+Mesothelioma,2007,317,16
+Mesothelioma,2008,353,16
+Mesothelioma,2009,355,8
+Mesothelioma,2010,340,14
+Mesothelioma,2011,360,11
+Mesothelioma,2012,400,12
+Mesothelioma,2013,420,12
+Mesothelioma,2014,406,12
+Mesothelioma,2015,398,28
+Mesothelioma,2016,466,24
+Mesothelioma,2017,446,21
+Mesothelioma,2018,500,24
+Mesothelioma,2019,465,32
+Mesothelioma,2020,532,22
+Mesothelioma,2021,580,29
+Mesothelioma,2022,522,27
+Mesothelioma,2023,493,26
+Mesothelioma,2024,437,30
+Mesothelioma,2025,437,16
+Testicular cancer,1996,206,2
+Testicular cancer,1997,197,9
+Testicular cancer,1998,184,6
+Testicular cancer,1999,210,8
+Testicular cancer,2000,181,6
+Testicular cancer,2001,176,1
+Testicular cancer,2002,207,6
+Testicular cancer,2003,219,9
+Testicular cancer,2004,214,11
+Testicular cancer,2005,255,5
+Testicular cancer,2006,232,7
+Testicular cancer,2007,274,7
+Testicular cancer,2008,246,6
+Testicular cancer,2009,267,6
+Testicular cancer,2010,251,11
+Testicular cancer,2011,273,8
+Testicular cancer,2012,217,8
+Testicular cancer,2013,279,9
+Testicular cancer,2014,285,9
+Testicular cancer,2015,264,9
+Testicular cancer,2016,291,7
+Testicular cancer,2017,248,6
+Testicular cancer,2018,316,3
+Testicular cancer,2019,312,5
+Testicular cancer,2020,315,5
+Testicular cancer,2021,323,6
+Testicular cancer,2022,292,9
+Testicular cancer,2023,329,9
+Testicular cancer,2024,314,8
+Testicular cancer,2025,314,14
+Malaria,1996,1006,0
+Malaria,1997,971,1
+Malaria,1998,1021,2
+Malaria,1999,1073,2
+Malaria,2000,1279,4
+Malaria,2001,1324,7
+Malaria,2002,1498,21
+Malaria,2003,1647,31
+Malaria,2004,1644,35
+Malaria,2005,1799,46
+Malaria,2006,1783,53
+Malaria,2007,1880,54
+Malaria,2008,1989,38
+Malaria,2009,2043,49
+Malaria,2010,2123,59
+Malaria,2011,2317,54
+Malaria,2012,2494,54
+Malaria,2013,2452,55
+Malaria,2014,2641,63
+Malaria,2015,2626,57
+Malaria,2016,2779,60
+Malaria,2017,2492,34
+Malaria,2018,2494,45
+Malaria,2019,2529,41
+Malaria,2020,2585,31
+Malaria,2021,2831,52
+Malaria,2022,2830,50
+Malaria,2023,2554,47
+Malaria,2024,2649,40
+Malaria,2025,2967,37
+Tuberculosis,1996,1827,1
+Tuberculosis,1997,1422,0
+Tuberculosis,1998,1718,2
+Tuberculosis,1999,1764,4
+Tuberculosis,2000,1921,5
+Tuberculosis,2001,2005,5
+Tuberculosis,2002,2416,5
+Tuberculosis,2003,2450,10
+Tuberculosis,2004,2394,18
+Tuberculosis,2005,2729,21
+Tuberculosis,2006,2831,21
+Tuberculosis,2007,3129,31
+Tuberculosis,2008,3212,45
+Tuberculosis,2009,3286,47
+Tuberculosis,2010,3458,40
+Tuberculosis,2011,3996,37
+Tuberculosis,2012,4228,41
+Tuberculosis,2013,4454,43
+Tuberculosis,2014,4658,45
+Tuberculosis,2015,4899,56
+Tuberculosis,2016,4959,47
+Tuberculosis,2017,4959,52
+Tuberculosis,2018,4954,37
+Tuberculosis,2019,5157,61
+Tuberculosis,2020,5522,56
+Tuberculosis,2021,5593,65
+Tuberculosis,2022,5528,57
+Tuberculosis,2023,5501,60
+Tuberculosis,2024,5964,51
+Tuberculosis,2025,6762,40
+Lower respiratory infections,1996,993,0
+Lower respiratory infections,1997,806,3
+Lower respiratory infections,1998,945,5
+Lower respiratory infections,1999,1035,4
+Lower respiratory infections,2000,1083,6
+Lower respiratory infections,2001,1139,12
+Lower respiratory infections,2002,1226,17
+Lower respiratory infections,2003,1345,34
+Lower respiratory infections,2004,1396,40
+Lower respiratory infections,2005,1467,38
+Lower respiratory infections,2006,1402,32
+Lower respiratory infections,2007,1589,42
+Lower respiratory infections,2008,1600,50
+Lower respiratory infections,2009,1620,35
+Lower respiratory infections,2010,1770,59
+Lower respiratory infections,2011,1920,55
+Lower respiratory infections,2012,2002,65
+Lower respiratory infections,2013,2134,73
+Lower respiratory infections,2014,2182,82
+Lower respiratory infections,2015,2318,98
+Lower respiratory infections,2016,2365,90
+Lower respiratory infections,2017,2396,74
+Lower respiratory infections,2018,2304,86
+Lower respiratory infections,2019,2531,101
+Lower respiratory infections,2020,2856,232
+Lower respiratory infections,2021,2980,128
+Lower respiratory infections,2022,2905,106
+Lower respiratory infections,2023,2993,137
+Lower respiratory infections,2024,3429,143
+Lower respiratory infections,2025,4273,113
+Diarrheal diseases,1996,1106,1
+Diarrheal diseases,1997,865,1
+Diarrheal diseases,1998,1025,2
+Diarrheal diseases,1999,994,3
+Diarrheal diseases,2000,982,5
+Diarrheal diseases,2001,1099,6
+Diarrheal diseases,2002,1083,12
+Diarrheal diseases,2003,1108,16
+Diarrheal diseases,2004,1112,23
+Diarrheal diseases,2005,1236,38
+Diarrheal diseases,2006,1366,41
+Diarrheal diseases,2007,1488,41
+Diarrheal diseases,2008,1568,27
+Diarrheal diseases,2009,1700,48
+Diarrheal diseases,2010,1844,60
+Diarrheal diseases,2011,1966,42
+Diarrheal diseases,2012,2096,61
+Diarrheal diseases,2013,2443,64
+Diarrheal diseases,2014,2436,63
+Diarrheal diseases,2015,2539,71
+Diarrheal diseases,2016,2604,63
+Diarrheal diseases,2017,2555,62
+Diarrheal diseases,2018,2563,57
+Diarrheal diseases,2019,2588,68
+Diarrheal diseases,2020,2666,44
+Diarrheal diseases,2021,2635,43
+Diarrheal diseases,2022,2467,43
+Diarrheal diseases,2023,2480,59
+Diarrheal diseases,2024,2472,59
+Diarrheal diseases,2025,2762,49
+Meningitis,1996,521,0
+Meningitis,1997,410,1
+Meningitis,1998,482,0
+Meningitis,1999,493,0
+Meningitis,2000,558,1
+Meningitis,2001,487,2
+Meningitis,2002,635,2
+Meningitis,2003,563,4
+Meningitis,2004,625,6
+Meningitis,2005,578,10
+Meningitis,2006,623,18
+Meningitis,2007,677,11
+Meningitis,2008,613,10
+Meningitis,2009,669,13
+Meningitis,2010,657,16
+Meningitis,2011,691,19
+Meningitis,2012,669,19
+Meningitis,2013,734,13
+Meningitis,2014,667,11
+Meningitis,2015,686,12
+Meningitis,2016,723,12
+Meningitis,2017,682,8
+Meningitis,2018,775,13
+Meningitis,2019,760,12
+Meningitis,2020,792,6
+Meningitis,2021,813,9
+Meningitis,2022,807,5
+Meningitis,2023,749,10
+Meningitis,2024,841,11
+Meningitis,2025,901,8
+Measles,1996,238,0
+Measles,1997,196,0
+Measles,1998,226,2
+Measles,1999,239,3
+Measles,2000,249,4
+Measles,2001,248,1
+Measles,2002,290,2
+Measles,2003,307,1
+Measles,2004,238,3
+Measles,2005,231,5
+Measles,2006,238,9
+Measles,2007,245,6
+Measles,2008,274,3
+Measles,2009,275,5
+Measles,2010,238,1
+Measles,2011,356,3
+Measles,2012,299,8
+Measles,2013,326,4
+Measles,2014,323,2
+Measles,2015,385,4
+Measles,2016,293,6
+Measles,2017,304,4
+Measles,2018,326,2
+Measles,2019,535,1
+Measles,2020,462,2
+Measles,2021,327,3
+Measles,2022,302,1
+Measles,2023,274,5
+Measles,2024,414,3
+Measles,2025,499,1
+Pertussis,1996,253,0
+Pertussis,1997,250,3
+Pertussis,1998,207,1
+Pertussis,1999,248,2
+Pertussis,2000,225,2
+Pertussis,2001,186,1
+Pertussis,2002,180,5
+Pertussis,2003,206,10
+Pertussis,2004,183,7
+Pertussis,2005,233,13
+Pertussis,2006,242,32
+Pertussis,2007,232,18
+Pertussis,2008,200,12
+Pertussis,2009,198,12
+Pertussis,2010,206,13
+Pertussis,2011,216,18
+Pertussis,2012,244,10
+Pertussis,2013,266,11
+Pertussis,2014,332,9
+Pertussis,2015,280,9
+Pertussis,2016,286,11
+Pertussis,2017,275,6
+Pertussis,2018,247,11
+Pertussis,2019,303,12
+Pertussis,2020,244,6
+Pertussis,2021,277,5
+Pertussis,2022,200,3
+Pertussis,2023,194,7
+Pertussis,2024,257,7
+Pertussis,2025,356,11
+Typhoid & paratyphoid,1996,105,0
+Typhoid & paratyphoid,1997,88,0
+Typhoid & paratyphoid,1998,108,0
+Typhoid & paratyphoid,1999,100,0
+Typhoid & paratyphoid,2000,106,0
+Typhoid & paratyphoid,2001,83,3
+Typhoid & paratyphoid,2002,110,0
+Typhoid & paratyphoid,2003,94,1
+Typhoid & paratyphoid,2004,103,0
+Typhoid & paratyphoid,2005,140,0
+Typhoid & paratyphoid,2006,120,4
+Typhoid & paratyphoid,2007,124,1
+Typhoid & paratyphoid,2008,122,2
+Typhoid & paratyphoid,2009,125,0
+Typhoid & paratyphoid,2010,121,2
+Typhoid & paratyphoid,2011,119,6
+Typhoid & paratyphoid,2012,122,1
+Typhoid & paratyphoid,2013,142,3
+Typhoid & paratyphoid,2014,142,2
+Typhoid & paratyphoid,2015,130,2
+Typhoid & paratyphoid,2016,126,2
+Typhoid & paratyphoid,2017,150,2
+Typhoid & paratyphoid,2018,159,5
+Typhoid & paratyphoid,2019,183,6
+Typhoid & paratyphoid,2020,182,2
+Typhoid & paratyphoid,2021,198,2
+Typhoid & paratyphoid,2022,183,4
+Typhoid & paratyphoid,2023,178,6
+Typhoid & paratyphoid,2024,215,1
+Typhoid & paratyphoid,2025,212,4
+Dengue,1996,101,0
+Dengue,1997,114,0
+Dengue,1998,148,0
+Dengue,1999,141,0
+Dengue,2000,174,0
+Dengue,2001,168,1
+Dengue,2002,204,0
+Dengue,2003,215,1
+Dengue,2004,250,2
+Dengue,2005,332,2
+Dengue,2006,327,7
+Dengue,2007,403,5
+Dengue,2008,482,6
+Dengue,2009,526,9
+Dengue,2010,530,12
+Dengue,2011,678,10
+Dengue,2012,747,7
+Dengue,2013,885,7
+Dengue,2014,1027,7
+Dengue,2015,1047,7
+Dengue,2016,1116,17
+Dengue,2017,1045,5
+Dengue,2018,1067,8
+Dengue,2019,1065,9
+Dengue,2020,1140,7
+Dengue,2021,1077,11
+Dengue,2022,1003,12
+Dengue,2023,1038,12
+Dengue,2024,1275,8
+Dengue,2025,1457,10
+Hepatitis B,1996,828,0
+Hepatitis B,1997,704,5
+Hepatitis B,1998,753,4
+Hepatitis B,1999,888,8
+Hepatitis B,2000,929,8
+Hepatitis B,2001,1059,10
+Hepatitis B,2002,1288,16
+Hepatitis B,2003,1363,29
+Hepatitis B,2004,1461,37
+Hepatitis B,2005,1507,39
+Hepatitis B,2006,1516,54
+Hepatitis B,2007,1644,45
+Hepatitis B,2008,1636,54
+Hepatitis B,2009,1720,45
+Hepatitis B,2010,1808,47
+Hepatitis B,2011,1942,40
+Hepatitis B,2012,1952,49
+Hepatitis B,2013,2247,48
+Hepatitis B,2014,2283,52
+Hepatitis B,2015,2343,71
+Hepatitis B,2016,2326,56
+Hepatitis B,2017,2247,49
+Hepatitis B,2018,2244,58
+Hepatitis B,2019,2209,59
+Hepatitis B,2020,2333,63
+Hepatitis B,2021,2496,59
+Hepatitis B,2022,2342,58
+Hepatitis B,2023,2219,46
+Hepatitis B,2024,2340,57
+Hepatitis B,2025,2566,47
+Hepatitis C,1996,1256,0
+Hepatitis C,1997,1210,2
+Hepatitis C,1998,1254,2
+Hepatitis C,1999,1353,1
+Hepatitis C,2000,1590,9
+Hepatitis C,2001,1620,14
+Hepatitis C,2002,1985,37
+Hepatitis C,2003,2034,39
+Hepatitis C,2004,2183,42
+Hepatitis C,2005,2368,71
+Hepatitis C,2006,2254,66
+Hepatitis C,2007,2399,84
+Hepatitis C,2008,2160,81
+Hepatitis C,2009,2342,103
+Hepatitis C,2010,2369,97
+Hepatitis C,2011,2684,139
+Hepatitis C,2012,2801,131
+Hepatitis C,2013,2942,119
+Hepatitis C,2014,3256,119
+Hepatitis C,2015,3157,117
+Hepatitis C,2016,3177,93
+Hepatitis C,2017,3018,93
+Hepatitis C,2018,2822,65
+Hepatitis C,2019,2544,67
+Hepatitis C,2020,2336,36
+Hepatitis C,2021,2038,23
+Hepatitis C,2022,1726,30
+Hepatitis C,2023,1389,17
+Hepatitis C,2024,1298,12
+Hepatitis C,2025,1264,9
+Syphilis,1996,119,0
+Syphilis,1997,113,0
+Syphilis,1998,126,0
+Syphilis,1999,151,1
+Syphilis,2000,146,2
+Syphilis,2001,148,1
+Syphilis,2002,159,2
+Syphilis,2003,165,1
+Syphilis,2004,194,1
+Syphilis,2005,195,0
+Syphilis,2006,240,2
+Syphilis,2007,214,0
+Syphilis,2008,241,1
+Syphilis,2009,243,2
+Syphilis,2010,257,0
+Syphilis,2011,289,4
+Syphilis,2012,291,3
+Syphilis,2013,350,3
+Syphilis,2014,334,2
+Syphilis,2015,373,3
+Syphilis,2016,367,4
+Syphilis,2017,396,1
+Syphilis,2018,418,3
+Syphilis,2019,428,4
+Syphilis,2020,494,3
+Syphilis,2021,522,6
+Syphilis,2022,496,1
+Syphilis,2023,540,9
+Syphilis,2024,625,11
+Syphilis,2025,668,16
+Gonorrhea,1996,146,0
+Gonorrhea,1997,147,0
+Gonorrhea,1998,145,0
+Gonorrhea,1999,145,1
+Gonorrhea,2000,157,0
+Gonorrhea,2001,162,2
+Gonorrhea,2002,175,0
+Gonorrhea,2003,149,2
+Gonorrhea,2004,149,2
+Gonorrhea,2005,202,1
+Gonorrhea,2006,180,0
+Gonorrhea,2007,157,2
+Gonorrhea,2008,168,0
+Gonorrhea,2009,164,0
+Gonorrhea,2010,165,2
+Gonorrhea,2011,197,3
+Gonorrhea,2012,208,3
+Gonorrhea,2013,233,5
+Gonorrhea,2014,236,3
+Gonorrhea,2015,260,6
+Gonorrhea,2016,237,2
+Gonorrhea,2017,275,7
+Gonorrhea,2018,303,10
+Gonorrhea,2019,360,9
+Gonorrhea,2020,377,5
+Gonorrhea,2021,365,7
+Gonorrhea,2022,310,9
+Gonorrhea,2023,335,7
+Gonorrhea,2024,341,7
+Gonorrhea,2025,367,9
+Genital herpes,1996,65,0
+Genital herpes,1997,63,0
+Genital herpes,1998,94,0
+Genital herpes,1999,101,1
+Genital herpes,2000,102,0
+Genital herpes,2001,89,0
+Genital herpes,2002,123,1
+Genital herpes,2003,110,4
+Genital herpes,2004,121,5
+Genital herpes,2005,128,4
+Genital herpes,2006,133,8
+Genital herpes,2007,123,3
+Genital herpes,2008,125,4
+Genital herpes,2009,118,3
+Genital herpes,2010,109,2
+Genital herpes,2011,125,1
+Genital herpes,2012,112,5
+Genital herpes,2013,118,2
+Genital herpes,2014,109,1
+Genital herpes,2015,108,4
+Genital herpes,2016,114,2
+Genital herpes,2017,119,4
+Genital herpes,2018,77,0
+Genital herpes,2019,77,1
+Genital herpes,2020,88,1
+Genital herpes,2021,83,0
+Genital herpes,2022,84,1
+Genital herpes,2023,75,4
+Genital herpes,2024,78,2
+Genital herpes,2025,97,1
+Rabies,1996,149,0
+Rabies,1997,119,0
+Rabies,1998,135,0
+Rabies,1999,134,0
+Rabies,2000,125,0
+Rabies,2001,134,0
+Rabies,2002,163,3
+Rabies,2003,147,0
+Rabies,2004,154,1
+Rabies,2005,244,0
+Rabies,2006,201,1
+Rabies,2007,202,0
+Rabies,2008,249,3
+Rabies,2009,209,2
+Rabies,2010,221,2
+Rabies,2011,251,6
+Rabies,2012,256,6
+Rabies,2013,288,6
+Rabies,2014,274,6
+Rabies,2015,269,7
+Rabies,2016,280,6
+Rabies,2017,307,2
+Rabies,2018,303,7
+Rabies,2019,318,8
+Rabies,2020,308,9
+Rabies,2021,331,3
+Rabies,2022,290,5
+Rabies,2023,309,5
+Rabies,2024,295,3
+Rabies,2025,382,6
+Encephalitis,1996,287,0
+Encephalitis,1997,261,0
+Encephalitis,1998,267,1
+Encephalitis,1999,279,0
+Encephalitis,2000,297,1
+Encephalitis,2001,317,2
+Encephalitis,2002,377,7
+Encephalitis,2003,388,2
+Encephalitis,2004,331,4
+Encephalitis,2005,362,17
+Encephalitis,2006,374,6
+Encephalitis,2007,421,8
+Encephalitis,2008,419,8
+Encephalitis,2009,433,8
+Encephalitis,2010,448,10
+Encephalitis,2011,494,3
+Encephalitis,2012,501,8
+Encephalitis,2013,530,7
+Encephalitis,2014,539,10
+Encephalitis,2015,556,10
+Encephalitis,2016,569,6
+Encephalitis,2017,556,3
+Encephalitis,2018,568,4
+Encephalitis,2019,622,6
+Encephalitis,2020,746,5
+Encephalitis,2021,717,6
+Encephalitis,2022,790,7
+Encephalitis,2023,731,6
+Encephalitis,2024,771,9
+Encephalitis,2025,844,8
+Otitis media,1996,201,1
+Otitis media,1997,220,2
+Otitis media,1998,251,0
+Otitis media,1999,238,3
+Otitis media,2000,268,1
+Otitis media,2001,232,0
+Otitis media,2002,262,6
+Otitis media,2003,314,6
+Otitis media,2004,285,4
+Otitis media,2005,333,4
+Otitis media,2006,252,9
+Otitis media,2007,250,6
+Otitis media,2008,237,8
+Otitis media,2009,274,2
+Otitis media,2010,237,7
+Otitis media,2011,233,11
+Otitis media,2012,252,8
+Otitis media,2013,269,11
+Otitis media,2014,315,5
+Otitis media,2015,263,17
+Otitis media,2016,280,8
+Otitis media,2017,261,13
+Otitis media,2018,275,9
+Otitis media,2019,264,12
+Otitis media,2020,292,3
+Otitis media,2021,274,8
+Otitis media,2022,287,7
+Otitis media,2023,307,3
+Otitis media,2024,289,7
+Otitis media,2025,331,16
+Varicella & herpes zoster,1996,330,0
+Varicella & herpes zoster,1997,259,1
+Varicella & herpes zoster,1998,320,3
+Varicella & herpes zoster,1999,257,2
+Varicella & herpes zoster,2000,306,3
+Varicella & herpes zoster,2001,311,3
+Varicella & herpes zoster,2002,329,3
+Varicella & herpes zoster,2003,322,2
+Varicella & herpes zoster,2004,303,2
+Varicella & herpes zoster,2005,313,15
+Varicella & herpes zoster,2006,340,13
+Varicella & herpes zoster,2007,379,22
+Varicella & herpes zoster,2008,375,7
+Varicella & herpes zoster,2009,372,11
+Varicella & herpes zoster,2010,394,10
+Varicella & herpes zoster,2011,397,9
+Varicella & herpes zoster,2012,378,16
+Varicella & herpes zoster,2013,434,16
+Varicella & herpes zoster,2014,458,15
+Varicella & herpes zoster,2015,459,12
+Varicella & herpes zoster,2016,497,10
+Varicella & herpes zoster,2017,436,10
+Varicella & herpes zoster,2018,555,7
+Varicella & herpes zoster,2019,482,14
+Varicella & herpes zoster,2020,521,11
+Varicella & herpes zoster,2021,607,10
+Varicella & herpes zoster,2022,658,17
+Varicella & herpes zoster,2023,620,22
+Varicella & herpes zoster,2024,688,24
+Varicella & herpes zoster,2025,784,30
+Schistosomiasis,1996,417,0
+Schistosomiasis,1997,355,0
+Schistosomiasis,1998,344,1
+Schistosomiasis,1999,398,0
+Schistosomiasis,2000,359,0
+Schistosomiasis,2001,380,1
+Schistosomiasis,2002,458,0
+Schistosomiasis,2003,529,1
+Schistosomiasis,2004,464,0
+Schistosomiasis,2005,402,2
+Schistosomiasis,2006,439,1
+Schistosomiasis,2007,413,2
+Schistosomiasis,2008,426,1
+Schistosomiasis,2009,421,2
+Schistosomiasis,2010,473,4
+Schistosomiasis,2011,599,3
+Schistosomiasis,2012,573,4
+Schistosomiasis,2013,604,1
+Schistosomiasis,2014,681,0
+Schistosomiasis,2015,637,1
+Schistosomiasis,2016,651,5
+Schistosomiasis,2017,496,2
+Schistosomiasis,2018,608,4
+Schistosomiasis,2019,597,5
+Schistosomiasis,2020,650,2
+Schistosomiasis,2021,587,4
+Schistosomiasis,2022,569,4
+Schistosomiasis,2023,527,1
+Schistosomiasis,2024,584,5
+Schistosomiasis,2025,609,3
+Lymphatic filariasis,1996,95,0
+Lymphatic filariasis,1997,50,0
+Lymphatic filariasis,1998,75,0
+Lymphatic filariasis,1999,61,0
+Lymphatic filariasis,2000,79,0
+Lymphatic filariasis,2001,82,2
+Lymphatic filariasis,2002,90,0
+Lymphatic filariasis,2003,104,0
+Lymphatic filariasis,2004,89,0
+Lymphatic filariasis,2005,101,0
+Lymphatic filariasis,2006,105,2
+Lymphatic filariasis,2007,107,1
+Lymphatic filariasis,2008,107,0
+Lymphatic filariasis,2009,96,1
+Lymphatic filariasis,2010,89,0
+Lymphatic filariasis,2011,106,0
+Lymphatic filariasis,2012,107,0
+Lymphatic filariasis,2013,103,0
+Lymphatic filariasis,2014,120,3
+Lymphatic filariasis,2015,100,2
+Lymphatic filariasis,2016,100,2
+Lymphatic filariasis,2017,117,4
+Lymphatic filariasis,2018,118,3
+Lymphatic filariasis,2019,121,1
+Lymphatic filariasis,2020,120,1
+Lymphatic filariasis,2021,96,2
+Lymphatic filariasis,2022,93,1
+Lymphatic filariasis,2023,89,0
+Lymphatic filariasis,2024,109,0
+Lymphatic filariasis,2025,119,0
+Onchocerciasis,1996,98,0
+Onchocerciasis,1997,83,0
+Onchocerciasis,1998,107,0
+Onchocerciasis,1999,68,0
+Onchocerciasis,2000,67,0
+Onchocerciasis,2001,60,0
+Onchocerciasis,2002,92,0
+Onchocerciasis,2003,58,1
+Onchocerciasis,2004,74,0
+Onchocerciasis,2005,56,0
+Onchocerciasis,2006,46,1
+Onchocerciasis,2007,69,0
+Onchocerciasis,2008,48,0
+Onchocerciasis,2009,47,1
+Onchocerciasis,2010,53,0
+Onchocerciasis,2011,43,1
+Onchocerciasis,2012,51,1
+Onchocerciasis,2013,54,0
+Onchocerciasis,2014,62,1
+Onchocerciasis,2015,78,0
+Onchocerciasis,2016,79,0
+Onchocerciasis,2017,68,2
+Onchocerciasis,2018,103,1
+Onchocerciasis,2019,72,1
+Onchocerciasis,2020,79,0
+Onchocerciasis,2021,89,7
+Onchocerciasis,2022,80,2
+Onchocerciasis,2023,75,0
+Onchocerciasis,2024,86,3
+Onchocerciasis,2025,72,2
+Chagas disease,1996,311,0
+Chagas disease,1997,215,0
+Chagas disease,1998,297,0
+Chagas disease,1999,297,1
+Chagas disease,2000,385,0
+Chagas disease,2001,324,0
+Chagas disease,2002,319,0
+Chagas disease,2003,346,2
+Chagas disease,2004,317,1
+Chagas disease,2005,345,0
+Chagas disease,2006,411,1
+Chagas disease,2007,436,2
+Chagas disease,2008,440,1
+Chagas disease,2009,537,1
+Chagas disease,2010,501,1
+Chagas disease,2011,518,4
+Chagas disease,2012,545,6
+Chagas disease,2013,502,5
+Chagas disease,2014,523,4
+Chagas disease,2015,522,4
+Chagas disease,2016,522,2
+Chagas disease,2017,521,3
+Chagas disease,2018,561,4
+Chagas disease,2019,539,5
+Chagas disease,2020,623,0
+Chagas disease,2021,585,4
+Chagas disease,2022,533,1
+Chagas disease,2023,491,0
+Chagas disease,2024,474,1
+Chagas disease,2025,555,2
+Leishmaniasis,1996,480,0
+Leishmaniasis,1997,366,0
+Leishmaniasis,1998,513,0
+Leishmaniasis,1999,514,1
+Leishmaniasis,2000,458,0
+Leishmaniasis,2001,512,0
+Leishmaniasis,2002,635,1
+Leishmaniasis,2003,595,3
+Leishmaniasis,2004,592,7
+Leishmaniasis,2005,648,7
+Leishmaniasis,2006,757,8
+Leishmaniasis,2007,778,13
+Leishmaniasis,2008,738,11
+Leishmaniasis,2009,839,8
+Leishmaniasis,2010,847,6
+Leishmaniasis,2011,860,8
+Leishmaniasis,2012,925,3
+Leishmaniasis,2013,913,7
+Leishmaniasis,2014,1124,10
+Leishmaniasis,2015,1015,2
+Leishmaniasis,2016,1087,4
+Leishmaniasis,2017,1081,4
+Leishmaniasis,2018,1094,6
+Leishmaniasis,2019,1158,6
+Leishmaniasis,2020,1266,3
+Leishmaniasis,2021,1249,6
+Leishmaniasis,2022,1043,5
+Leishmaniasis,2023,978,6
+Leishmaniasis,2024,1095,1
+Leishmaniasis,2025,1120,8
+African trypanosomiasis,1996,123,0
+African trypanosomiasis,1997,101,0
+African trypanosomiasis,1998,133,0
+African trypanosomiasis,1999,145,0
+African trypanosomiasis,2000,130,0
+African trypanosomiasis,2001,139,0
+African trypanosomiasis,2002,148,0
+African trypanosomiasis,2003,150,1
+African trypanosomiasis,2004,149,0
+African trypanosomiasis,2005,156,0
+African trypanosomiasis,2006,164,0
+African trypanosomiasis,2007,157,0
+African trypanosomiasis,2008,154,0
+African trypanosomiasis,2009,177,2
+African trypanosomiasis,2010,177,0
+African trypanosomiasis,2011,197,0
+African trypanosomiasis,2012,204,1
+African trypanosomiasis,2013,204,1
+African trypanosomiasis,2014,186,2
+African trypanosomiasis,2015,173,0
+African trypanosomiasis,2016,185,2
+African trypanosomiasis,2017,173,2
+African trypanosomiasis,2018,151,0
+African trypanosomiasis,2019,156,2
+African trypanosomiasis,2020,162,0
+African trypanosomiasis,2021,163,1
+African trypanosomiasis,2022,146,2
+African trypanosomiasis,2023,121,0
+African trypanosomiasis,2024,106,2
+African trypanosomiasis,2025,87,0
+Cysticercosis,1996,89,0
+Cysticercosis,1997,72,0
+Cysticercosis,1998,96,0
+Cysticercosis,1999,93,0
+Cysticercosis,2000,123,1
+Cysticercosis,2001,111,1
+Cysticercosis,2002,158,0
+Cysticercosis,2003,195,0
+Cysticercosis,2004,130,0
+Cysticercosis,2005,157,0
+Cysticercosis,2006,160,1
+Cysticercosis,2007,139,2
+Cysticercosis,2008,141,0
+Cysticercosis,2009,134,0
+Cysticercosis,2010,169,1
+Cysticercosis,2011,181,2
+Cysticercosis,2012,198,1
+Cysticercosis,2013,180,0
+Cysticercosis,2014,199,2
+Cysticercosis,2015,189,1
+Cysticercosis,2016,189,2
+Cysticercosis,2017,185,0
+Cysticercosis,2018,193,0
+Cysticercosis,2019,164,1
+Cysticercosis,2020,169,0
+Cysticercosis,2021,175,0
+Cysticercosis,2022,154,1
+Cysticercosis,2023,164,0
+Cysticercosis,2024,160,1
+Cysticercosis,2025,174,1
+Cystic echinococcosis,1996,137,0
+Cystic echinococcosis,1997,174,0
+Cystic echinococcosis,1998,164,0
+Cystic echinococcosis,1999,177,0
+Cystic echinococcosis,2000,190,0
+Cystic echinococcosis,2001,207,0
+Cystic echinococcosis,2002,257,0
+Cystic echinococcosis,2003,217,0
+Cystic echinococcosis,2004,227,0
+Cystic echinococcosis,2005,272,0
+Cystic echinococcosis,2006,249,1
+Cystic echinococcosis,2007,293,0
+Cystic echinococcosis,2008,292,0
+Cystic echinococcosis,2009,311,0
+Cystic echinococcosis,2010,315,1
+Cystic echinococcosis,2011,322,0
+Cystic echinococcosis,2012,369,0
+Cystic echinococcosis,2013,329,0
+Cystic echinococcosis,2014,351,0
+Cystic echinococcosis,2015,376,0
+Cystic echinococcosis,2016,311,1
+Cystic echinococcosis,2017,340,0
+Cystic echinococcosis,2018,348,0
+Cystic echinococcosis,2019,349,0
+Cystic echinococcosis,2020,395,1
+Cystic echinococcosis,2021,432,0
+Cystic echinococcosis,2022,368,1
+Cystic echinococcosis,2023,394,0
+Cystic echinococcosis,2024,441,1
+Cystic echinococcosis,2025,490,0
+Trachoma,1996,17,0
+Trachoma,1997,26,0
+Trachoma,1998,11,0
+Trachoma,1999,29,0
+Trachoma,2000,17,1
+Trachoma,2001,37,0
+Trachoma,2002,26,1
+Trachoma,2003,33,1
+Trachoma,2004,37,1
+Trachoma,2005,42,2
+Trachoma,2006,55,1
+Trachoma,2007,53,0
+Trachoma,2008,42,4
+Trachoma,2009,53,1
+Trachoma,2010,50,1
+Trachoma,2011,57,0
+Trachoma,2012,45,0
+Trachoma,2013,44,3
+Trachoma,2014,37,3
+Trachoma,2015,58,1
+Trachoma,2016,75,0
+Trachoma,2017,58,0
+Trachoma,2018,55,1
+Trachoma,2019,72,3
+Trachoma,2020,60,1
+Trachoma,2021,58,2
+Trachoma,2022,60,2
+Trachoma,2023,71,0
+Trachoma,2024,69,1
+Trachoma,2025,54,1
+Hookworm,1996,33,0
+Hookworm,1997,31,0
+Hookworm,1998,20,0
+Hookworm,1999,28,0
+Hookworm,2000,25,0
+Hookworm,2001,39,0
+Hookworm,2002,24,0
+Hookworm,2003,47,0
+Hookworm,2004,43,0
+Hookworm,2005,54,2
+Hookworm,2006,62,0
+Hookworm,2007,60,1
+Hookworm,2008,68,1
+Hookworm,2009,51,1
+Hookworm,2010,62,1
+Hookworm,2011,73,3
+Hookworm,2012,86,1
+Hookworm,2013,67,2
+Hookworm,2014,67,4
+Hookworm,2015,64,1
+Hookworm,2016,86,1
+Hookworm,2017,81,5
+Hookworm,2018,75,5
+Hookworm,2019,75,2
+Hookworm,2020,86,0
+Hookworm,2021,86,3
+Hookworm,2022,100,1
+Hookworm,2023,103,1
+Hookworm,2024,94,2
+Hookworm,2025,113,4
+Ascariasis,1996,89,0
+Ascariasis,1997,62,0
+Ascariasis,1998,75,0
+Ascariasis,1999,55,0
+Ascariasis,2000,64,0
+Ascariasis,2001,77,0
+Ascariasis,2002,70,0
+Ascariasis,2003,78,0
+Ascariasis,2004,53,0
+Ascariasis,2005,51,1
+Ascariasis,2006,69,1
+Ascariasis,2007,51,0
+Ascariasis,2008,56,0
+Ascariasis,2009,75,0
+Ascariasis,2010,60,0
+Ascariasis,2011,65,0
+Ascariasis,2012,65,0
+Ascariasis,2013,55,1
+Ascariasis,2014,57,0
+Ascariasis,2015,64,1
+Ascariasis,2016,63,0
+Ascariasis,2017,58,0
+Ascariasis,2018,55,0
+Ascariasis,2019,50,1
+Ascariasis,2020,54,0
+Ascariasis,2021,61,2
+Ascariasis,2022,60,0
+Ascariasis,2023,56,0
+Ascariasis,2024,75,2
+Ascariasis,2025,63,0
+Food-borne trematodiases,1996,72,0
+Food-borne trematodiases,1997,72,0
+Food-borne trematodiases,1998,100,0
+Food-borne trematodiases,1999,83,0
+Food-borne trematodiases,2000,103,0
+Food-borne trematodiases,2001,103,0
+Food-borne trematodiases,2002,127,0
+Food-borne trematodiases,2003,187,0
+Food-borne trematodiases,2004,134,0
+Food-borne trematodiases,2005,126,0
+Food-borne trematodiases,2006,171,0
+Food-borne trematodiases,2007,158,0
+Food-borne trematodiases,2008,169,0
+Food-borne trematodiases,2009,188,0
+Food-borne trematodiases,2010,168,0
+Food-borne trematodiases,2011,232,0
+Food-borne trematodiases,2012,182,0
+Food-borne trematodiases,2013,193,0
+Food-borne trematodiases,2014,226,0
+Food-borne trematodiases,2015,238,0
+Food-borne trematodiases,2016,270,0
+Food-borne trematodiases,2017,197,0
+Food-borne trematodiases,2018,205,0
+Food-borne trematodiases,2019,200,0
+Food-borne trematodiases,2020,211,0
+Food-borne trematodiases,2021,217,0
+Food-borne trematodiases,2022,181,1
+Food-borne trematodiases,2023,191,0
+Food-borne trematodiases,2024,228,1
+Food-borne trematodiases,2025,246,1
+Scabies,1996,29,0
+Scabies,1997,32,0
+Scabies,1998,28,0
+Scabies,1999,40,0
+Scabies,2000,44,0
+Scabies,2001,41,0
+Scabies,2002,52,0
+Scabies,2003,37,0
+Scabies,2004,36,1
+Scabies,2005,37,0
+Scabies,2006,44,0
+Scabies,2007,43,1
+Scabies,2008,48,0
+Scabies,2009,45,0
+Scabies,2010,38,0
+Scabies,2011,34,0
+Scabies,2012,47,0
+Scabies,2013,63,0
+Scabies,2014,48,1
+Scabies,2015,62,1
+Scabies,2016,63,3
+Scabies,2017,75,7
+Scabies,2018,79,4
+Scabies,2019,100,0
+Scabies,2020,110,1
+Scabies,2021,124,3
+Scabies,2022,95,4
+Scabies,2023,120,3
+Scabies,2024,141,3
+Scabies,2025,154,4
+Yellow fever,1996,25,0
+Yellow fever,1997,28,0
+Yellow fever,1998,28,0
+Yellow fever,1999,40,0
+Yellow fever,2000,37,0
+Yellow fever,2001,58,0
+Yellow fever,2002,59,0
+Yellow fever,2003,46,0
+Yellow fever,2004,56,1
+Yellow fever,2005,58,0
+Yellow fever,2006,57,0
+Yellow fever,2007,53,0
+Yellow fever,2008,65,1
+Yellow fever,2009,56,0
+Yellow fever,2010,70,1
+Yellow fever,2011,84,4
+Yellow fever,2012,59,0
+Yellow fever,2013,83,1
+Yellow fever,2014,76,0
+Yellow fever,2015,67,0
+Yellow fever,2016,106,2
+Yellow fever,2017,114,2
+Yellow fever,2018,140,3
+Yellow fever,2019,155,3
+Yellow fever,2020,133,3
+Yellow fever,2021,106,4
+Yellow fever,2022,137,5
+Yellow fever,2023,110,3
+Yellow fever,2024,121,3
+Yellow fever,2025,177,5
+Leprosy,1996,256,0
+Leprosy,1997,226,0
+Leprosy,1998,265,0
+Leprosy,1999,246,0
+Leprosy,2000,275,0
+Leprosy,2001,252,0
+Leprosy,2002,236,1
+Leprosy,2003,221,0
+Leprosy,2004,260,0
+Leprosy,2005,272,0
+Leprosy,2006,229,3
+Leprosy,2007,290,2
+Leprosy,2008,293,0
+Leprosy,2009,268,0
+Leprosy,2010,253,6
+Leprosy,2011,305,0
+Leprosy,2012,260,0
+Leprosy,2013,315,2
+Leprosy,2014,286,1
+Leprosy,2015,289,1
+Leprosy,2016,341,0
+Leprosy,2017,247,3
+Leprosy,2018,276,3
+Leprosy,2019,299,3
+Leprosy,2020,327,1
+Leprosy,2021,317,2
+Leprosy,2022,300,2
+Leprosy,2023,275,1
+Leprosy,2024,344,2
+Leprosy,2025,332,4
+Preterm birth complications,1996,591,6
+Preterm birth complications,1997,610,2
+Preterm birth complications,1998,683,3
+Preterm birth complications,1999,622,5
+Preterm birth complications,2000,770,6
+Preterm birth complications,2001,778,11
+Preterm birth complications,2002,837,8
+Preterm birth complications,2003,937,19
+Preterm birth complications,2004,1019,24
+Preterm birth complications,2005,1008,36
+Preterm birth complications,2006,1057,40
+Preterm birth complications,2007,1158,42
+Preterm birth complications,2008,1253,44
+Preterm birth complications,2009,1308,30
+Preterm birth complications,2010,1409,55
+Preterm birth complications,2011,1569,72
+Preterm birth complications,2012,1639,60
+Preterm birth complications,2013,1931,76
+Preterm birth complications,2014,2033,90
+Preterm birth complications,2015,2072,100
+Preterm birth complications,2016,2253,110
+Preterm birth complications,2017,2283,120
+Preterm birth complications,2018,2313,131
+Preterm birth complications,2019,2520,132
+Preterm birth complications,2020,2827,118
+Preterm birth complications,2021,3204,133
+Preterm birth complications,2022,3023,130
+Preterm birth complications,2023,3001,119
+Preterm birth complications,2024,3066,137
+Preterm birth complications,2025,3448,120
+Neonatal encephalopathy,1996,31,0
+Neonatal encephalopathy,1997,43,0
+Neonatal encephalopathy,1998,41,0
+Neonatal encephalopathy,1999,45,2
+Neonatal encephalopathy,2000,52,0
+Neonatal encephalopathy,2001,49,0
+Neonatal encephalopathy,2002,49,2
+Neonatal encephalopathy,2003,67,1
+Neonatal encephalopathy,2004,48,3
+Neonatal encephalopathy,2005,77,1
+Neonatal encephalopathy,2006,71,0
+Neonatal encephalopathy,2007,81,1
+Neonatal encephalopathy,2008,97,3
+Neonatal encephalopathy,2009,87,1
+Neonatal encephalopathy,2010,105,4
+Neonatal encephalopathy,2011,114,2
+Neonatal encephalopathy,2012,119,9
+Neonatal encephalopathy,2013,140,11
+Neonatal encephalopathy,2014,129,7
+Neonatal encephalopathy,2015,162,4
+Neonatal encephalopathy,2016,176,11
+Neonatal encephalopathy,2017,200,10
+Neonatal encephalopathy,2018,194,8
+Neonatal encephalopathy,2019,195,12
+Neonatal encephalopathy,2020,231,10
+Neonatal encephalopathy,2021,309,8
+Neonatal encephalopathy,2022,262,14
+Neonatal encephalopathy,2023,271,8
+Neonatal encephalopathy,2024,331,14
+Neonatal encephalopathy,2025,349,16
+Neonatal sepsis,1996,29,0
+Neonatal sepsis,1997,31,0
+Neonatal sepsis,1998,31,0
+Neonatal sepsis,1999,36,0
+Neonatal sepsis,2000,38,0
+Neonatal sepsis,2001,31,0
+Neonatal sepsis,2002,57,0
+Neonatal sepsis,2003,58,1
+Neonatal sepsis,2004,59,1
+Neonatal sepsis,2005,63,1
+Neonatal sepsis,2006,58,0
+Neonatal sepsis,2007,56,2
+Neonatal sepsis,2008,59,1
+Neonatal sepsis,2009,71,3
+Neonatal sepsis,2010,82,3
+Neonatal sepsis,2011,80,2
+Neonatal sepsis,2012,115,3
+Neonatal sepsis,2013,117,3
+Neonatal sepsis,2014,133,2
+Neonatal sepsis,2015,129,5
+Neonatal sepsis,2016,120,2
+Neonatal sepsis,2017,141,5
+Neonatal sepsis,2018,156,10
+Neonatal sepsis,2019,186,7
+Neonatal sepsis,2020,271,8
+Neonatal sepsis,2021,289,2
+Neonatal sepsis,2022,258,7
+Neonatal sepsis,2023,238,6
+Neonatal sepsis,2024,253,3
+Neonatal sepsis,2025,293,7
+Maternal hemorrhage,1996,42,0
+Maternal hemorrhage,1997,56,0
+Maternal hemorrhage,1998,43,0
+Maternal hemorrhage,1999,43,1
+Maternal hemorrhage,2000,43,0
+Maternal hemorrhage,2001,94,0
+Maternal hemorrhage,2002,80,2
+Maternal hemorrhage,2003,98,0
+Maternal hemorrhage,2004,110,2
+Maternal hemorrhage,2005,88,7
+Maternal hemorrhage,2006,108,2
+Maternal hemorrhage,2007,134,4
+Maternal hemorrhage,2008,125,2
+Maternal hemorrhage,2009,162,2
+Maternal hemorrhage,2010,155,6
+Maternal hemorrhage,2011,200,9
+Maternal hemorrhage,2012,202,23
+Maternal hemorrhage,2013,210,18
+Maternal hemorrhage,2014,234,24
+Maternal hemorrhage,2015,234,24
+Maternal hemorrhage,2016,285,22
+Maternal hemorrhage,2017,305,13
+Maternal hemorrhage,2018,292,27
+Maternal hemorrhage,2019,262,17
+Maternal hemorrhage,2020,298,20
+Maternal hemorrhage,2021,360,13
+Maternal hemorrhage,2022,360,25
+Maternal hemorrhage,2023,398,21
+Maternal hemorrhage,2024,398,20
+Maternal hemorrhage,2025,450,27
+Pre-eclampsia & hypertensive disorders of pregnancy,1996,279,0
+Pre-eclampsia & hypertensive disorders of pregnancy,1997,256,0
+Pre-eclampsia & hypertensive disorders of pregnancy,1998,298,0
+Pre-eclampsia & hypertensive disorders of pregnancy,1999,329,0
+Pre-eclampsia & hypertensive disorders of pregnancy,2000,385,2
+Pre-eclampsia & hypertensive disorders of pregnancy,2001,348,4
+Pre-eclampsia & hypertensive disorders of pregnancy,2002,377,2
+Pre-eclampsia & hypertensive disorders of pregnancy,2003,428,5
+Pre-eclampsia & hypertensive disorders of pregnancy,2004,475,4
+Pre-eclampsia & hypertensive disorders of pregnancy,2005,523,3
+Pre-eclampsia & hypertensive disorders of pregnancy,2006,477,5
+Pre-eclampsia & hypertensive disorders of pregnancy,2007,494,4
+Pre-eclampsia & hypertensive disorders of pregnancy,2008,528,9
+Pre-eclampsia & hypertensive disorders of pregnancy,2009,555,12
+Pre-eclampsia & hypertensive disorders of pregnancy,2010,600,8
+Pre-eclampsia & hypertensive disorders of pregnancy,2011,775,11
+Pre-eclampsia & hypertensive disorders of pregnancy,2012,891,18
+Pre-eclampsia & hypertensive disorders of pregnancy,2013,849,16
+Pre-eclampsia & hypertensive disorders of pregnancy,2014,902,18
+Pre-eclampsia & hypertensive disorders of pregnancy,2015,912,25
+Pre-eclampsia & hypertensive disorders of pregnancy,2016,916,18
+Pre-eclampsia & hypertensive disorders of pregnancy,2017,953,25
+Pre-eclampsia & hypertensive disorders of pregnancy,2018,1055,29
+Pre-eclampsia & hypertensive disorders of pregnancy,2019,1143,37
+Pre-eclampsia & hypertensive disorders of pregnancy,2020,1338,27
+Pre-eclampsia & hypertensive disorders of pregnancy,2021,1311,32
+Pre-eclampsia & hypertensive disorders of pregnancy,2022,1459,35
+Pre-eclampsia & hypertensive disorders of pregnancy,2023,1413,42
+Pre-eclampsia & hypertensive disorders of pregnancy,2024,1444,41
+Pre-eclampsia & hypertensive disorders of pregnancy,2025,1733,48

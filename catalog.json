@@ -1,7 +1,7 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 13,
+  "page_version": 14,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
@@ -295,14 +295,14 @@
     },
     {
       "id": "sources",
-      "title": "Papers and trials per year, 24 diseases",
-      "folder": "clinicaltrials/, pubmed/, gbd/",
+      "title": "Papers and trials per year, 131 diseases",
+      "folder": "clinicaltrials/, pubmed/, expanded/, gbd/",
       "readme": "clinicaltrials/README.md",
       "extra_readmes": [
         "pubmed/README.md",
         "gbd/citation.txt"
       ],
-      "finding": "The first data pulls: ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for 24 diseases, set against their global burden (GBD 2023 DALYs). Pick diseases to compare; by default ME/CFS is shown with three diseases of similar burden. The 120-disease work fetches its own counts.",
+      "finding": "ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for the 120 diseases of the burden comparison, plus ME/CFS, long COVID and nine conditions without a GBD burden estimate (such as fibromyalgia, POTS and lupus). Search and add diseases to compare. By default ME/CFS is shown with three long-term conditions of similar burden: schizophrenia, epilepsy and osteoarthritis.",
       "charts": [],
       "data": [
         {
@@ -314,6 +314,11 @@
           "file": "clinicaltrials/trials_per_year_2026-11-08.csv",
           "about": "Interventional trials per start year, 1996–2026, for 24 diseases.",
           "script": "clinicaltrials/trials_per_year.py"
+        },
+        {
+          "file": "expanded/per_year_2026-11-26.csv",
+          "about": "Papers and trials per year, 1996–2025, for the 111 causes in expanded/diseases.py, with the same searches as the 2021–2025 counts. The chart skips the 4 causes left out of the 120-disease comparison.",
+          "script": "expanded/fetch_per_year.py"
         },
         {
           "file": "clinicaltrials/nct_ids_2026-11-08.json",
@@ -342,7 +347,8 @@
         "data": {
           "trials": "clinicaltrials/trials_per_year_2026-11-08.csv",
           "papers": "pubmed/pubs_per_year_long_2026-11-08.csv",
-          "dalys": "analysis/burden_vs_research_2021-2025.csv"
+          "more": "expanded/per_year_2026-11-26.csv",
+          "burden": "expanded/burden_interactive_2021-2025.json"
         }
       }
     }

@@ -1,8 +1,8 @@
 <!-- Interactive "papers and trials per year, 24 diseases" chart for the catalog pages.
      tools/build_catalog.py inserts this into docs/index.html and docs/sources.html, replacing
      __DATA__ with {"trials": clinicaltrials/trials_per_year_*.csv and "papers": pubmed/pubs_per_year_long_*.csv
-     (24 diseases; papers = the `title` column), "more": expanded/per_year_*.csv (the other 111 of the 120
-     diseases), "burden": expanded/burden_interactive_2021-2025.json (DALYs, incl. ME/CFS and long COVID).
+     (24 diseases; papers = the `title` column), "more": expanded/per_year_*.csv (the other 107 of the 120
+     diseases; the 4 extra causes in that file are skipped), "burden": expanded/burden_interactive_2021-2025.json (DALYs, incl. ME/CFS and long COVID).
      Colours and fonts come from the page's tokens. Classes and ids start with py-. -->
 <style>
 .py { display: grid; gap: 1rem; min-width: 0; font-family: var(--f-body); }
@@ -90,7 +90,8 @@ const series = {}, put = (d, k, i, v) => { const s = series[d] = series[d] || { 
 const key = (d) => ALIAS[d] || d;
 D.trials.forEach((r) => YEARS.forEach((y, i) => put(key(r.disease), "trials", i, r[String(y)])));
 D.papers.forEach((r) => { if (r.year >= Y0 && r.year <= Y1) put(key(r.disease), "papers", r.year - Y0, r.title); });
-D.more.forEach((r) => { if (r.year >= Y0 && r.year <= Y1) { put(r.disease, "papers", r.year - Y0, r.papers); put(r.disease, "trials", r.year - Y0, r.trials); } });
+// The 4 causes left out of the 120-disease comparison (no DALYs in the burden data) are left out here too.
+D.more.forEach((r) => { if (r.year >= Y0 && r.year <= Y1 && dalys[r.disease] != null) { put(r.disease, "papers", r.year - Y0, r.papers); put(r.disease, "trials", r.year - Y0, r.trials); } });
 const ME_KEY = "All ME/CFS (classic + post-COVID)";
 const name = (d) => SHORT[d] || d;
 const all = Object.keys(series).sort((a, b) => (dalys[b] ?? -1) - (dalys[a] ?? -1) || a.localeCompare(b));
