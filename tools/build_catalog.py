@@ -87,9 +87,43 @@ def tracked_outputs():
             and not f.startswith(NOT_OUTPUT_DIRS)}
 
 
-def toggles(c):
+def view_label(c, key):
+    """Label of one view of a chart with "switches": the chosen option of each switch, joined."""
+    parts = []
+    for labels, i in zip(c["switches"], map(int, key.split(","))):
+        if len(labels) > 1:
+            parts.append(labels[i])
+        elif i:
+            parts.append(labels[0])
+    return ", ".join(parts)
+
+
+def views_of(c):
+    """All images of a chart as (key, file, label), the default first. A chart can have one "toggle" (one
+    row of buttons) or several "switches" with a "views" map {"i,j": file}; a switch with one label is on/off."""
+    if c.get("switches"):
+        k0 = ",".join("0" for _ in c["switches"])
+        return [(k0, c["file"], view_label(c, k0))] + [(k, f, view_label(c, k)) for k, f in c["views"].items()]
     t = c.get("toggle")
-    return [] if not t else (t if isinstance(t, list) else [t])
+    t = [] if not t else (t if isinstance(t, list) else [t])
+    return [("0", c["file"], c.get("label", "All"))] + [(str(i + 1), x["file"], x["label"]) for i, x in enumerate(t)]
+
+
+def switch_specs(c):
+    if c.get("switches"):
+        return c["switches"]
+    v = views_of(c)
+    return [[lab for _, _, lab in v]] if len(v) > 1 else []
+
+
+def toggles(c):
+    """The other images of a chart (not the default), as {"file", "label"}."""
+    return [{"file": f, "label": lab} for _, f, lab in views_of(c)[1:]]
+
+
+def solid_of(f):
+    """A chart's copy on solid green, for sharing on white pages: <folder>/solid/<name>."""
+    return os.path.join(os.path.dirname(f), "solid", os.path.basename(f))
 
 
 # ---------- gather ----------
@@ -113,6 +147,11 @@ for s in (u for sec in sections for u in units(sec)):
         catalogued.update(item["files"])
         for t in toggles(item):
             catalogued.update(expand(t)["files"])
+        if item.get("solid"):
+            for _, f, _ in views_of(item):
+                if not os.path.exists(solid_of(f)):
+                    sys.exit(f"Missing solid copy: {solid_of(f)}")
+                catalogued.add(solid_of(f))
     if s.get("interactive"):
         ov = s["interactive"].get("overview")
         for f in [s["interactive"]["html"], *data_paths(s["interactive"]),
@@ -171,23 +210,32 @@ def page_link(sid, text, cls=""):
 
 
 def chart_card(c, bare=False):
-    """A chart with its title, caption and links; bare=True (overview) shows the image and toggle only."""
+    """A chart with its title, caption and links; bare=True (overview) shows the image and switches only."""
     f = c["file"]
     script = link(BLOB + c["script"], "Script") if c.get("script") else ""
+    solid = c.get("solid")
+    solid_link = link(RAW + solid_of(f), "Solid background", "solid") if solid else ""
     toggle, views = "", ""
-    if toggles(c):
-        # Images with the same layout; the buttons swap which one shows.
-        opts = [(f, c.get("label", "All"))] + [(t["file"], t["label"]) for t in toggles(c)]
-        views = (f' data-views="{e("|".join(IMG_BASE + o for o, _ in opts))}"'
-                 f' data-paths="{e("|".join(o for o, _ in opts))}" data-raws="{e("|".join(RAW + o for o, _ in opts))}"')
-        buttons = "".join(f'\n          <button type="button" aria-pressed="{"true" if i == 0 else "false"}" data-view="{i}">{e(lab)}</button>'
-                          for i, (_, lab) in enumerate(opts))
-        toggle = f"""
-        <div class="toggle" role="group" aria-label="Chart view">{buttons}
-        </div>"""
+    v = views_of(c)
+    if len(v) > 1:
+        # Images with the same layout; the switches pick which one shows.
+        col = lambda fn: e("|".join(fn(x) for _, x, _ in v))
+        views = (f' data-keys="{e("|".join(k for k, _, _ in v))}" data-views="{col(lambda x: IMG_BASE + x)}"'
+                 f' data-paths="{col(lambda x: x)}" data-raws="{col(lambda x: RAW + x)}"'
+                 + (f' data-solids="{col(lambda x: RAW + solid_of(x))}"' if solid else ""))
+        groups = []
+        for i, labels in enumerate(switch_specs(c)):
+            if len(labels) > 1:
+                b = "".join(f'<button type="button" data-sw="{i}" data-v="{j}" aria-pressed="{"true" if j == 0 else "false"}">{e(l)}</button>'
+                            for j, l in enumerate(labels))
+                groups.append(f'<div class="toggle" role="group" aria-label="Chart view">{b}</div>')
+            else:
+                groups.append(f'<button type="button" class="pill" data-sw="{i}" aria-pressed="false"><i></i>{e(labels[0])}</button>')
+        toggle = '\n        <div class="switches">' + "".join(groups) + "</div>"
+    solid_attr = f' data-solid="{e(RAW + solid_of(f))}"' if solid else ""
     return f"""
       <figure class="chart"{views}>{toggle}
-        <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}" data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
+        <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}"{solid_attr} data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
           <img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">
         </button>{"" if bare else f"""
         <figcaption>
@@ -196,7 +244,7 @@ def chart_card(c, bare=False):
           <div class="links">
             <span class="path">{e(f)}</span>
             <span class="sep"></span>
-            {link(RAW + f, "Full size", "full")}{script}
+            {link(RAW + f, "Full size", "full")}{solid_link}{script}
           </div>
         </figcaption>"""}
       </figure>"""
@@ -536,6 +584,14 @@ a.fname:hover { color: var(--sunset); }
   border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
 .toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 .chart[data-views] { background: var(--surface); }
+.switches { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 1rem 0; align-items: center; }
+.switches .toggle { margin: 0; }
+.pill { display: inline-flex; align-items: center; gap: 0.45rem; font: 500 0.92rem var(--f-body); color: var(--muted);
+  background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.4rem 0.85rem; cursor: pointer; }
+.pill i { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1.5px solid var(--sunset); }
+.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--sunset); background: rgba(242, 184, 128, 0.14); }
+.pill[aria-pressed="true"] i { background: var(--sunset); }
+dialog.lb .lb-solid { margin-left: auto; font-size: 0.92rem; white-space: nowrap; }
 .chart[data-views] figcaption { background: transparent; }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
@@ -549,8 +605,8 @@ footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: va
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
-dialog.lb::backdrop { background: rgba(8, 30, 24, 0.95); }
-dialog.lb img { display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
+dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
+dialog.lb img { background: var(--bg); display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
 dialog.lb .lb-bar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.5rem 0.1rem; color: var(--ink); }
 dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); background: var(--raise); border: 1px solid var(--line);
   border-radius: 8px; padding: 0.35rem 0.8rem; cursor: pointer; }
@@ -558,17 +614,31 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 
 SCRIPT = """<script>
 document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
-  var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
+  // Switches pick one of the chart's images; the key is the chosen option of each switch, e.g. "1,0".
+  var d = fig.dataset, keys = d.keys.split("|"), srcs = d.views.split("|"), paths = d.paths.split("|"),
+      raws = d.raws.split("|"), solids = d.solids ? d.solids.split("|") : [];
   var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
-  var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
+  var path = fig.querySelector(".path"), full = fig.querySelector("a.full"), solid = fig.querySelector("a.solid");
+  var st = keys[0].split(",").map(Number), btns = fig.querySelectorAll("[data-sw]");
   srcs.slice(1).forEach(function (u) { new Image().src = u; });
-  fig.querySelectorAll(".toggle button").forEach(function (b) {
+  function show() {
+    var i = keys.indexOf(st.join(","));
+    if (i < 0) return;
+    img.src = srcs[i]; open.dataset.full = srcs[i];
+    if (solids[i]) open.dataset.solid = solids[i];
+    if (path) path.textContent = paths[i];
+    if (full) full.href = raws[i];
+    if (solid && solids[i]) solid.href = solids[i];
+    btns.forEach(function (b) {
+      var k = +b.dataset.sw, on = b.hasAttribute("data-v") ? st[k] === +b.dataset.v : st[k] === 1;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+  btns.forEach(function (b) {
     b.addEventListener("click", function () {
-      var i = +b.dataset.view;
-      img.src = srcs[i]; open.dataset.full = srcs[i];
-      if (path) path.textContent = paths[i];
-      if (full) full.href = raws[i];
-      fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      var k = +b.dataset.sw;
+      st[k] = b.hasAttribute("data-v") ? +b.dataset.v : 1 - st[k];
+      show();
     });
   });
 });
@@ -603,10 +673,11 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
 (function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;
-  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title");
+  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title"), sol = dlg.querySelector(".lb-solid");
   document.querySelectorAll(".chart-img").forEach(function (b) {
     b.addEventListener("click", function () {
       img.src = b.dataset.full; img.alt = b.dataset.title; title.textContent = b.dataset.title;
+      sol.hidden = !b.dataset.solid; if (b.dataset.solid) sol.href = b.dataset.solid;
       dlg.showModal();
     });
   });
@@ -641,7 +712,7 @@ def body():
   <span class="ver">v{version} · built {built}</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
-  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
 {SCRIPT}"""
@@ -663,7 +734,7 @@ def topic_body(s):
   <span class="ver">v{version} · built {built}</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
-  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
 {SCRIPT}"""

@@ -157,6 +157,14 @@ a.fname:hover { color: var(--sunset); }
   border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
 .toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 .chart[data-views] { background: var(--surface); }
+.switches { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 1rem 0; align-items: center; }
+.switches .toggle { margin: 0; }
+.pill { display: inline-flex; align-items: center; gap: 0.45rem; font: 500 0.92rem var(--f-body); color: var(--muted);
+  background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.4rem 0.85rem; cursor: pointer; }
+.pill i { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1.5px solid var(--sunset); }
+.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--sunset); background: rgba(242, 184, 128, 0.14); }
+.pill[aria-pressed="true"] i { background: var(--sunset); }
+dialog.lb .lb-solid { margin-left: auto; font-size: 0.92rem; white-space: nowrap; }
 .chart[data-views] figcaption { background: transparent; }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
@@ -170,8 +178,8 @@ footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: va
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
-dialog.lb::backdrop { background: rgba(8, 30, 24, 0.95); }
-dialog.lb img { display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
+dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
+dialog.lb img { background: var(--bg); display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
 dialog.lb .lb-bar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.5rem 0.1rem; color: var(--ink); }
 dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); background: var(--raise); border: 1px solid var(--line);
   border-radius: 8px; padding: 0.35rem 0.8rem; cursor: pointer; }
@@ -540,18 +548,14 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
       <a class="open" href="trials.html">Open page →</a>
     </header>
     <div class="charts">
-      <figure class="chart" data-views="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/all_trials_per_year.png" data-paths="analysis/drug_trials_per_year.png|analysis/sponsor_per_year.png|analysis/all_trials_per_year.png" data-raws="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/all_trials_per_year.png">
-        <div class="toggle" role="group" aria-label="Chart view">
-          <button type="button" aria-pressed="true" data-view="0">Drug trials</button>
-          <button type="button" aria-pressed="false" data-view="1">By sponsor</button>
-          <button type="button" aria-pressed="false" data-view="2">All trial types</button>
-        </div>
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png" data-title="Long COVID and ME/CFS trials per year" aria-label="Open Long COVID and ME/CFS trials per year full size">
+      <figure class="chart" data-keys="0,0|0,1|1,0|1,1" data-views="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/all_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/all_trials_sponsor_per_year.png" data-paths="analysis/drug_trials_per_year.png|analysis/sponsor_per_year.png|analysis/all_trials_per_year.png|analysis/all_trials_sponsor_per_year.png" data-raws="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/all_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/all_trials_sponsor_per_year.png" data-solids="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/solid/drug_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/solid/sponsor_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/solid/all_trials_per_year.png|https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/solid/all_trials_sponsor_per_year.png">
+        <div class="switches"><div class="toggle" role="group" aria-label="Chart view"><button type="button" data-sw="0" data-v="0" aria-pressed="true">Drug trials</button><button type="button" data-sw="0" data-v="1" aria-pressed="false">All trial types</button></div><button type="button" class="pill" data-sw="1" aria-pressed="false"><i></i>Commercial sponsor</button></div>
+        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png" data-solid="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/solid/drug_trials_per_year.png" data-title="Long COVID and ME/CFS trials per year" aria-label="Open Long COVID and ME/CFS trials per year full size">
           <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/drug_trials_per_year.png" alt="Long COVID and ME/CFS trials per year" loading="lazy" decoding="async">
         </button>
       </figure>
       <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_comparison.png" data-title="Commercial drug trials vs similar-burden diseases" aria-label="Open Commercial drug trials vs similar-burden diseases full size">
+        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_comparison.png" data-solid="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/solid/sponsor_comparison.png" data-title="Commercial drug trials vs similar-burden diseases" aria-label="Open Commercial drug trials vs similar-burden diseases full size">
           <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/analysis/sponsor_comparison.png" alt="Commercial drug trials vs similar-burden diseases" loading="lazy" decoding="async">
         </button>
       </figure>
@@ -564,12 +568,12 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
     </header>
     <div class="charts">
       <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_scatter.png" data-title="Research vs burden, by sex" aria-label="Open Research vs burden, by sex full size">
+        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_scatter.png" data-solid="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/solid/sex_scatter.png" data-title="Research vs burden, by sex" aria-label="Open Research vs burden, by sex full size">
           <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_scatter.png" alt="Research vs burden, by sex" loading="lazy" decoding="async">
         </button>
       </figure>
       <figure class="chart">
-        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_groups.png" data-title="Research by sex group" aria-label="Open Research by sex group full size">
+        <button class="chart-img" type="button" data-full="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_groups.png" data-solid="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/solid/sex_groups.png" data-title="Research by sex group" aria-label="Open Research by sex group full size">
           <img src="https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_groups.png" alt="Research by sex group" loading="lazy" decoding="async">
         </button>
       </figure>
@@ -1660,26 +1664,40 @@ render();
   </section>
 </main>
 <footer class="wrap">
-  <span class="stats">20 charts · 28 data files · <a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">code and data on GitHub</a></span>
-  <span class="ver">v21 · built 2026-11-26</span>
+  <span class="stats">20 charts · 29 data files · <a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">code and data on GitHub</a></span>
+  <span class="ver">v22 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
-  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
 <script>
 document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
-  var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
+  // Switches pick one of the chart's images; the key is the chosen option of each switch, e.g. "1,0".
+  var d = fig.dataset, keys = d.keys.split("|"), srcs = d.views.split("|"), paths = d.paths.split("|"),
+      raws = d.raws.split("|"), solids = d.solids ? d.solids.split("|") : [];
   var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
-  var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
+  var path = fig.querySelector(".path"), full = fig.querySelector("a.full"), solid = fig.querySelector("a.solid");
+  var st = keys[0].split(",").map(Number), btns = fig.querySelectorAll("[data-sw]");
   srcs.slice(1).forEach(function (u) { new Image().src = u; });
-  fig.querySelectorAll(".toggle button").forEach(function (b) {
+  function show() {
+    var i = keys.indexOf(st.join(","));
+    if (i < 0) return;
+    img.src = srcs[i]; open.dataset.full = srcs[i];
+    if (solids[i]) open.dataset.solid = solids[i];
+    if (path) path.textContent = paths[i];
+    if (full) full.href = raws[i];
+    if (solid && solids[i]) solid.href = solids[i];
+    btns.forEach(function (b) {
+      var k = +b.dataset.sw, on = b.hasAttribute("data-v") ? st[k] === +b.dataset.v : st[k] === 1;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+  btns.forEach(function (b) {
     b.addEventListener("click", function () {
-      var i = +b.dataset.view;
-      img.src = srcs[i]; open.dataset.full = srcs[i];
-      if (path) path.textContent = paths[i];
-      if (full) full.href = raws[i];
-      fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      var k = +b.dataset.sw;
+      st[k] = b.hasAttribute("data-v") ? +b.dataset.v : 1 - st[k];
+      show();
     });
   });
 });
@@ -1714,10 +1732,11 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
 (function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;
-  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title");
+  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title"), sol = dlg.querySelector(".lb-solid");
   document.querySelectorAll(".chart-img").forEach(function (b) {
     b.addEventListener("click", function () {
       img.src = b.dataset.full; img.alt = b.dataset.title; title.textContent = b.dataset.title;
+      sol.hidden = !b.dataset.solid; if (b.dataset.solid) sol.href = b.dataset.solid;
       dlg.showModal();
     });
   });

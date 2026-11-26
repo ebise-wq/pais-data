@@ -2,16 +2,25 @@
   "title": "How To Solve A Disease?",
   "subtitle": "Data & Graphs",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 21,
+  "page_version": 22,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
   "author": {
     "name": "Siebe Rozendal",
     "links": [
-      {"label": "Substack", "url": "https://siebepersists.substack.com"},
-      {"label": "X", "url": "https://x.com/PatientPersists"},
-      {"label": "LinkedIn", "url": "https://www.linkedin.com/in/sieberozendal/"}
+      {
+        "label": "Substack",
+        "url": "https://siebepersists.substack.com"
+      },
+      {
+        "label": "X",
+        "url": "https://x.com/PatientPersists"
+      },
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/sieberozendal/"
+      }
     ]
   },
   "sections": [
@@ -120,26 +129,31 @@
       "charts": [
         {
           "file": "analysis/drug_trials_per_year.png",
-          "label": "Drug trials",
-          "toggle": [
-            {
-              "file": "analysis/sponsor_per_year.png",
-              "label": "By sponsor"
-            },
-            {
-              "file": "analysis/all_trials_per_year.png",
-              "label": "All trial types"
-            }
+          "switches": [
+            [
+              "Drug trials",
+              "All trial types"
+            ],
+            [
+              "Commercial sponsor"
+            ]
           ],
+          "views": {
+            "0,1": "analysis/sponsor_per_year.png",
+            "1,0": "analysis/all_trials_per_year.png",
+            "1,1": "analysis/all_trials_sponsor_per_year.png"
+          },
           "title": "Long COVID and ME/CFS trials per year",
-          "caption": "By start year, 2020–2026. Switch between drug trials, drug trials by sponsor, and all trial types.",
-          "script": "analysis/sponsor_charts.py"
+          "caption": "By start year, 2020–2026. Switch between drug and all trial types, and show commercial sponsors.",
+          "script": "analysis/sponsor_charts.py",
+          "solid": true
         },
         {
           "file": "analysis/sponsor_comparison.png",
           "title": "Commercial drug trials vs similar-burden diseases",
           "caption": "Commercial share and trials per year, 26 diseases with 10–30M DALYs.",
-          "script": "analysis/sponsor_charts.py"
+          "script": "analysis/sponsor_charts.py",
+          "solid": true
         },
         {
           "file": "analysis/long_covid_trials_per_year.png",
@@ -164,6 +178,11 @@
           "file": "clinicaltrials/sponsor_trials_2026-11-25.csv",
           "about": "One row per drug trial per disease: lead sponsor, sponsor class, phase, title.",
           "script": "clinicaltrials/sponsor_class.py"
+        },
+        {
+          "file": "clinicaltrials/sponsor_all_types_2026-11-26.csv",
+          "about": "Every interventional long COVID and ME/CFS trial started 2020–2026, any type, with its lead sponsor class.",
+          "script": "clinicaltrials/sponsor_all_types.py"
         }
       ]
     },
@@ -178,13 +197,15 @@
           "file": "sex/sex_scatter.png",
           "title": "Research vs burden, by sex",
           "caption": "Each dot a disease: share of patients who are women vs research relative to trend.",
-          "script": "sex/plot_sex.py"
+          "script": "sex/plot_sex.py",
+          "solid": true
         },
         {
           "file": "sex/sex_groups.png",
           "title": "Research by sex group",
           "caption": "Five sex groups, each with its group average.",
-          "script": "sex/plot_sex.py"
+          "script": "sex/plot_sex.py",
+          "solid": true
         }
       ],
       "data": [

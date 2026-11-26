@@ -1,14 +1,16 @@
-"""Charts: commercial vs other sponsors of drug/biologic trials.
+"""Charts: commercial vs other sponsors of long COVID and ME/CFS trials.
 
 Run from repo root: python3 -I analysis/sponsor_charts.py
 Needs analysis/sponsor_by_year_2020-2026.csv and analysis/sponsor_by_disease_2021-2025.csv
-(from sponsor_summary.py), and clinicaltrials/trials_per_year_2026-11-08.csv for all trial types.
-Writes three per-year charts in one layout, so the catalog page can switch between them:
-analysis/drug_trials_per_year.png (drug or biologic trials), analysis/sponsor_per_year.png (the same,
-split by sponsor type) and analysis/all_trials_per_year.png (all interventional trials). Also writes
-analysis/sponsor_comparison.png.
+(from sponsor_summary.py), and clinicaltrials/sponsor_all_types_2026-11-26.csv (from
+clinicaltrials/sponsor_all_types.py) for all trial types.
+Writes four per-year charts in one layout, so the catalog page can switch between them with two switches
+(drug or all trial types; commercial sponsors shown or not): analysis/drug_trials_per_year.png,
+analysis/sponsor_per_year.png, analysis/all_trials_per_year.png and analysis/all_trials_sponsor_per_year.png.
+Also writes analysis/sponsor_comparison.png. Every chart is saved twice: transparent (for the page) and on
+solid green in analysis/solid/ (for sharing on white backgrounds).
 """
-import csv
+import csv, os
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -30,18 +32,42 @@ def style(ax):
     ax.tick_params(length=6, width=1.2, color=MUTED, pad=5)
 
 
-def per_year(version, mode):
-    """mode: "drug" (drug or biologic trials), "sponsor" (the same, split by sponsor type), "all" (all
-    interventional trials). Panels sit in the same place in every mode; only the y scale changes."""
-    split = mode == "sponsor"
-    if mode == "all":
-        tpy = {r["disease"]: r for r in csv.DictReader(open("clinicaltrials/trials_per_year_2026-11-08.csv"))}
-        get = lambda d: [(y, 0, int(tpy[d][str(y)])) for y in range(2020, 2027)]
+def save(fig, path):
+    """Transparent PNG for the page, plus a copy on solid green in <folder>/solid/ for sharing on white pages."""
+    fig.savefig(path, dpi=300, transparent=True)
+    solid = os.path.join(os.path.dirname(path), "solid", os.path.basename(path))
+    os.makedirs(os.path.dirname(solid), exist_ok=True)
+    fig.savefig(solid, dpi=300, facecolor=BG)
+    plt.close(fig)
+
+
+ALL_TYPES = "clinicaltrials/sponsor_all_types_2026-11-26.csv"
+
+
+def per_year(version, kind, split):
+    """kind: "drug" (drug or biologic trials) or "all" (all interventional trials); split: commercial sponsors
+    in their own colour. The four views share one layout, so the page can switch between them; only the y
+    scale differs between drug and all."""
+    if kind == "all":
+        rows = list(csv.DictReader(open(ALL_TYPES)))
+        def get(d):
+            out = []
+            for y in range(2020, 2027):
+                R = [r for r in rows if r["disease"] == d and int(r["start_year"]) == y]
+                c = sum(int(r["commercial"]) for r in R)
+                out.append((y, c if split else 0, len(R) - c if split else len(R)))
+            return out
         lc_max, me_max, step = 170, 51, 50
     else:
         rows = list(csv.DictReader(open("analysis/sponsor_by_year_2020-2026.csv")))
-        get = lambda d: [(int(r["year"]), int(r["commercial"]), int(r["drug_trials"]) - int(r["commercial"]))
-                         for r in rows if r["disease"] == d]
+        def get(d):
+            out = []
+            for r in rows:
+                if r["disease"] != d:
+                    continue
+                n, c = int(r["drug_trials"]), int(r["commercial"])
+                out.append((int(r["year"]), c if split else 0, n - c if split else n))
+            return out
         lc_max, me_max, step = 50, 15, 10
     fig = plt.figure(figsize=(6, 7.2), facecolor="none")
     unit = 0.525 / lc_max          # figure height per trial, same in both panels
@@ -52,39 +78,34 @@ def per_year(version, mode):
         for y, c, o in data:
             part = y == 2026
             kw = dict(width=0.62, zorder=2, linewidth=0, alpha=0.5 if part else 1)
-            low = SUNSET if split else OCEAN
-            ax.bar(y, c, color=low, hatch="///" if part else None, edgecolor=low if part else BG, **kw)
+            ax.bar(y, c, color=SUNSET, hatch="///" if part else None, edgecolor=SUNSET if part else BG, **kw)
             ax.bar(y, o, bottom=c, color=OCEAN, hatch="///" if part else None, edgecolor=OCEAN if part else BG, **kw)
             if c + o:
                 ax.annotate(f"{c}/{c + o}" if split else f"{c + o}", (y, c + o), xytext=(0, 4), textcoords="offset points", ha="center",
-                            va="bottom", fontsize=11.5, color=MUTED if part else INK)
+                            va="bottom", fontsize=11.5 if not (split and kind == "all") else 10.5, color=MUTED if part else INK)
         ax.set_xlim(2019.4, 2026.6); ax.set_ylim(0, ymax)
         ax.yaxis.set_major_locator(MultipleLocator(step)); ax.grid(True, axis="y", color=GRID, lw=1, zorder=0)
         ax.set_xticks(range(2020, 2027))
         ax.set_xticklabels([str(y) for y in range(2020, 2027)] if name == "ME/CFS" else [])
         style(ax)
         ax.text(2019.55, ymax * 0.95, name, fontsize=15, fontweight="bold", color=INK, va="top")
-    title = "Long COVID and ME/CFS trials" if mode == "all" else "Long COVID and ME/CFS drug trials"
+    title = "Long COVID and ME/CFS trials" if kind == "all" else "Long COVID and ME/CFS drug trials"
     fig.text(M, 0.945, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
-    if mode == "all":
-        fig.text(M, 0.905, "All interventional trials by start year", fontsize=12, color=MUTED, va="baseline")
-        fig.text(M, 0.865, "■ All trial types", fontsize=13, color=OCEAN, va="baseline")
-    elif split:
-        fig.text(M, 0.905, "Drug or biologic trials by start year. Label: commercial / all", fontsize=12, color=MUTED, va="baseline")
+    what = "All interventional trials by start year" if kind == "all" else "Drug or biologic trials by start year"
+    fig.text(M, 0.905, what + (". Label: commercial / all" if split else ""), fontsize=12, color=MUTED, va="baseline")
+    if split:
         fig.text(M, 0.865, "■ Commercial sponsor", fontsize=13, color=SUNSET, va="baseline")
         fig.text(M + 0.45, 0.865, "■ Other sponsor", fontsize=13, color=OCEAN, va="baseline")
     else:
-        fig.text(M, 0.905, "Drug or biologic trials by start year", fontsize=12, color=MUTED, va="baseline")
         fig.text(M, 0.865, "■ All sponsors", fontsize=13, color=OCEAN, va="baseline")
-    foot = {"sponsor": "ClinicalTrials.gov lead sponsor class. 2026 to 8 Nov.",
-            "drug": "ClinicalTrials.gov. 2026 to 8 Nov.",
-            "all": "ClinicalTrials.gov. 2026 to 8 Nov. Trials naming both count in both."}[mode]
-    fig.text(M, 0.035, foot, fontsize=10.5, color=MUTED, va="baseline")
+    foot = "ClinicalTrials.gov" + (" lead sponsor class" if split else "") + ". 2026 to " + \
+           ("26 Nov." if kind == "all" else "8 Nov.") + (" Trials naming both count in both." if kind == "all" else "")
+    foot = foot.replace(" lead sponsor class. ", ", lead sponsor. ") if kind == "all" and split else foot
+    fig.text(M, 0.035, foot, fontsize=10.5 if len(foot) < 70 else 9.5, color=MUTED, va="baseline")
     fig.text(1 - M, 0.035, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
-    out = {"sponsor": "analysis/sponsor_per_year.png", "drug": "analysis/drug_trials_per_year.png",
-           "all": "analysis/all_trials_per_year.png"}[mode]
-    fig.savefig(out, dpi=300, transparent=True)
-    plt.close(fig)
+    out = {("drug", False): "analysis/drug_trials_per_year.png", ("drug", True): "analysis/sponsor_per_year.png",
+           ("all", False): "analysis/all_trials_per_year.png", ("all", True): "analysis/all_trials_sponsor_per_year.png"}
+    save(fig, out[(kind, split)])
 
 
 def comparison(version):
@@ -132,10 +153,11 @@ def comparison(version):
     fig.text(M, 0.03, "ClinicalTrials.gov, Nov 2026. DALYs: GBD 2023; ME/CFS, long COVID: model.",
              fontsize=9.5, color=MUTED, va="baseline")
     fig.text(1 - M, 0.012, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
-    fig.savefig("analysis/sponsor_comparison.png", dpi=300, transparent=True)
+    save(fig, "analysis/sponsor_comparison.png")
 
 
-per_year("v3", "drug")
-per_year("v3", "sponsor")
-per_year("v2", "all")
-comparison("v2")
+per_year("v4", "drug", False)
+per_year("v4", "drug", True)
+per_year("v3", "all", False)
+per_year("v1", "all", True)
+comparison("v3")

@@ -88,15 +88,18 @@ Page: https://ebise-wq.github.io/pais-data/trials.html
 
 <a href="analysis/drug_trials_per_year.png"><img src="analysis/drug_trials_per_year.png" width="260" alt="Long COVID and ME/CFS trials per year"></a> <a href="analysis/sponsor_comparison.png"><img src="analysis/sponsor_comparison.png" width="260" alt="Commercial drug trials vs similar-burden diseases"></a>
 
-Long COVID and ME/CFS trials per year, by sponsor: [`analysis/sponsor_per_year.png`](analysis/sponsor_per_year.png)
+Long COVID and ME/CFS trials per year, drug trials, commercial sponsor: [`analysis/sponsor_per_year.png`](analysis/sponsor_per_year.png)
 
 Long COVID and ME/CFS trials per year, all trial types: [`analysis/all_trials_per_year.png`](analysis/all_trials_per_year.png)
+
+Long COVID and ME/CFS trials per year, all trial types, commercial sponsor: [`analysis/all_trials_sponsor_per_year.png`](analysis/all_trials_sponsor_per_year.png)
 
 | File | What it is | Rows |
 |---|---|---|
 | [`analysis/sponsor_by_disease_2021-2025.csv`](analysis/sponsor_by_disease_2021-2025.csv) | Per disease: drug trials, commercial count and share, large-pharma-led trials. | 26 |
 | [`analysis/sponsor_by_year_2020-2026.csv`](analysis/sponsor_by_year_2020-2026.csv) | Drug trials and commercial trials per disease per start year. | 182 |
 | [`clinicaltrials/sponsor_trials_2026-11-25.csv`](clinicaltrials/sponsor_trials_2026-11-25.csv) | One row per drug trial per disease: lead sponsor, sponsor class, phase, title. | 13,865 |
+| [`clinicaltrials/sponsor_all_types_2026-11-26.csv`](clinicaltrials/sponsor_all_types_2026-11-26.csv) | Every interventional long COVID and ME/CFS trial started 2020–2026, any type, with its lead sponsor class. | 662 |
 
 Notes: [`analysis/README.md`](analysis/README.md), [`analysis/sponsor_README.md`](analysis/sponsor_README.md)
 

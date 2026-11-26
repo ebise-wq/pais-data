@@ -22,6 +22,13 @@
   page and the README. The first 13-disease comparison is hidden this way at the user's request.
 - A chart can carry a `"toggle"`: one or a list of other PNGs with the same layout, each with a button
   label. The page shows a switch between them. Draw all views from one function so they line up.
+- For two or more independent switches, a chart carries `"switches"` (a list; each is a list of button
+  labels, and a switch with one label is an on/off pill) and `"views"`, a map from the chosen option of each
+  switch ("1,0") to its PNG; the default (all zeros) is `"file"`. The trials chart uses this: drug trials /
+  all trial types, and a "Commercial sponsor" pill.
+- `"solid": true` on a chart means each of its PNGs has a copy on solid green at `<folder>/solid/<name>`
+  (charts on the page are transparent). The page links it as "Solid background" under the chart and in the
+  full-size view. Chart scripts write both with a `save(fig, path)` helper.
 - The build writes `docs/index.html` (overview) and one page per section (`docs/<section id>.html`).
 - The overview is kept clean at the user's request (v16): each section shows only its title (a link to
   the topic page, with "Open page →" on the same line) and its charts. No findings, chart captions,
@@ -74,8 +81,8 @@
   `#a7bdb2`, grid `#ffffff1f`, mint `#9fd8b5` (was ocean), peach `#f2b880` (was sunset), lilac
   `#c3b1e1` for a third category. Titles in a sans-serif (Inter Tight on the page, Inter in charts),
   never a serif. Sized for phone screens; a small version number in a corner. Transparent PNGs have
-  light text, so they don't work on a white background (Substack, X): for sharing, export with
-  `facecolor="#0e2a22"` instead. Scripts that only make old or hidden charts (`expanded/analyse.py`,
+  light text, so they don't work on a white background (Substack, X): the solid copies in
+  `<folder>/solid/` are for sharing. Scripts that only make old or hidden charts (`expanded/analyse.py`,
   `analysis/burden_vs_research.py`, `analysis/long_covid_trials.py`, `analysis/shortfall_ccc.py`) still
   use the old navy colours; that's fine while their charts stay old or hidden.
 - Each folder has a README with method, choices, results and caveats. Update it with the outputs.

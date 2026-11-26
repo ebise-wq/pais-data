@@ -1,7 +1,8 @@
 """Charts: research vs burden, by how much a disease affects women. Run after analyse_sex.py.
 
 Run from the repo root: python3 -I sex/plot_sex.py
-Writes sex/sex_scatter.png (female share vs research) and sex/sex_groups.png (five sex groups).
+Writes sex/sex_scatter.png (female share vs research) and sex/sex_groups.png (five sex groups), each
+transparent for the page and again on solid green in sex/solid/ for sharing.
 Style matches analysis/sponsor_charts.py.
 """
 import os
@@ -63,6 +64,14 @@ def header(fig, title, sub, legend, y0=0.955):
         fig.text(x, y0 - 0.075, "● " + lab, fontsize=12.5, color=col, va="baseline")
 
 
+def save(fig, path):
+    """Transparent PNG for the page, plus a copy on solid green in sex/solid/ for sharing on white pages."""
+    fig.savefig(path, dpi=300, transparent=True)
+    solid = os.path.join(os.path.dirname(path), "solid", os.path.basename(path))
+    os.makedirs(os.path.dirname(solid), exist_ok=True)
+    fig.savefig(solid, dpi=300, facecolor=BG)
+
+
 def scatter(version):
     fig = plt.figure(figsize=(6, 9.2), facecolor="none")
     header(fig, "Research vs burden, by sex", "Each dot is a disease. Compared with what its burden predicts.",
@@ -105,7 +114,7 @@ def scatter(version):
     fig.text(M, 0.034, ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
     fig.text(M, 0.016, FOOT, fontsize=9.5, color=MUTED, va="baseline")
     fig.text(1 - M, 0.016, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
-    fig.savefig(os.path.join(HERE, "sex_scatter.png"), dpi=300, transparent=True)
+    save(fig, os.path.join(HERE, "sex_scatter.png"))
 
 
 def groups(version):
@@ -147,7 +156,7 @@ def groups(version):
     fig.text(M, 0.045, ME_FOOT, fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.018, FOOT, fontsize=9.5, color=MUTED, va="baseline")
     fig.text(1 - M, 0.018, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
-    fig.savefig(os.path.join(HERE, "sex_groups.png"), dpi=300, transparent=True)
+    save(fig, os.path.join(HERE, "sex_groups.png"))
 
 
 scatter("v8")

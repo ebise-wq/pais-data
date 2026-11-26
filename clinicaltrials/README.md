@@ -44,3 +44,9 @@ ME/CFS drug or biologic trials look low (13 starting in 2021–2025), so they we
   a probiotic, vitamin B1, a stellate ganglion block and two herbal products. Supplement and medical-food
   trials (oxaloacetate, melatonin + zinc, hydrogen water) are registered as dietary supplement or
   other, so they are not counted.
+
+`sponsor_all_types.py` → `sponsor_all_types_2026-11-26.csv`: every interventional long COVID and ME/CFS
+trial started 2020–2026 (any intervention type), with its lead sponsor and class, re-fetched on 26 Nov 2026
+by the NCT IDs in `nct_ids_2026-11-08.json`. Columns: `drug_or_biologic` (1 if a drug, biological or genetic
+arm), `intervention_types`, `commercial` (lead sponsor class INDUSTRY, with the same override as
+`sponsor_class.py`). Used for the all-trial-types views of the trials chart; see `../analysis/sponsor_README.md`.
