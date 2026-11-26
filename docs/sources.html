@@ -38,9 +38,28 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .top h1 { font: 600 clamp(2.1rem, 6vw, 3.1rem)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
-.stats { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; margin-top: 1.4rem; font-size: 0.95rem; color: var(--muted);
-  font-variant-numeric: tabular-nums; }
-.stats b { color: var(--ink); font-weight: 600; }
+.top .tagline { font-size: 1.05rem; }
+/* Contents: one row per topic, headline number on the left, topic and what the number means on the right. */
+.toc { display: grid; gap: 0 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+  margin-bottom: 0.5rem; }
+.tile { display: grid; grid-template-columns: 7rem minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 0.9rem;
+  align-items: baseline; padding: 0.7rem 0.1rem; border-top: 1px solid var(--line); color: var(--ink); min-width: 0; }
+.tile:hover { text-decoration: none; }
+.tile:hover .tt { color: var(--ocean); }
+.tile .tv { grid-row: 1 / span 2; font: 600 1.35rem/1.15 var(--f-display); color: var(--sunset); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tile .tt { font: 600 0.98rem/1.3 var(--f-body); color: var(--ink); }
+.tile .tl { grid-column: 2; font-size: 0.9rem; line-height: 1.35; color: var(--muted); }
+.overview { gap: 2.75rem; }
+.ov-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 1rem;
+  border-top: 1px solid var(--line); padding-top: 1.5rem; }
+section.ov:first-child .ov-head { border-top: 0; padding-top: 0; }
+.ov-head h2 { font: 600 clamp(1.45rem, 3.6vw, 1.85rem)/1.2 var(--f-display); margin: 0; text-wrap: balance; }
+.ov-head h2 a { color: var(--ink); }
+.ov-head .open { flex: none; font-size: 0.95rem; white-space: nowrap; }
+.tsub { font: 500 0.95rem/1.2 var(--f-body); color: var(--muted); white-space: nowrap; }
+/* Overview shows charts only: hide the explanation lines inside the interactive fragments. */
+.overview .bvr-sub, .overview .hint, .overview .fnd-sub, .overview .fnd-note, .overview .py-sub, .overview .pme-lede { display: none !important; }
+footer .stats { font-variant-numeric: tabular-nums; }
 
 .nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
@@ -147,9 +166,8 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 
   <section id="sources">
     <header class="sec-head">
-      <h2>Papers and trials per year, 131 diseases</h2>
+      <h2>Papers and trials per year <span class="tsub">131 diseases</span></h2>
       <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/README.md" target="_blank" rel="noopener">clinicaltrials/README.md</a><a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/README.md" target="_blank" rel="noopener">pubmed/README.md</a><a href="https://github.com/ebise-wq/pais-data/blob/main/gbd/citation.txt" target="_blank" rel="noopener">gbd/citation.txt</a></div>
-      
     </header>
     <p class="finding">ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for the 120 diseases of the burden comparison, plus ME/CFS, long COVID and nine conditions without a GBD burden estimate (such as fibromyalgia, POTS and lupus). Search and add diseases to compare. By default ME/CFS is shown with three long-term conditions of similar burden: schizophrenia, epilepsy and osteoarthritis.</p>
 <!-- Interactive "papers and trials per year, 24 diseases" chart for the catalog pages.
@@ -439,7 +457,7 @@ render();
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v16 · built 2026-11-26</span>
+  <span class="ver">v17 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
@@ -454,7 +472,9 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   fig.querySelectorAll(".toggle button").forEach(function (b) {
     b.addEventListener("click", function () {
       var i = +b.dataset.view;
-      img.src = srcs[i]; open.dataset.full = srcs[i]; path.textContent = paths[i]; full.href = raws[i];
+      img.src = srcs[i]; open.dataset.full = srcs[i];
+      if (path) path.textContent = paths[i];
+      if (full) full.href = raws[i];
       fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
     });
   });

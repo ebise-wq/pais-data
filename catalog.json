@@ -1,7 +1,7 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 16,
+  "page_version": 17,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
@@ -9,6 +9,10 @@
     {
       "id": "burden-120",
       "title": "Research vs disease burden, 120 diseases",
+      "headline": {
+        "value": "10×",
+        "label": "fewer ME/CFS papers than its burden predicts"
+      },
       "folder": "expanded/",
       "readme": "expanded/README.md",
       "finding": "Papers and trials per year (2021–2025) set against global DALYs (GBD 2023) for 120 diseases. ME/CFS has 10.3× fewer papers (90% range 7.5–14.5) and 7.7× fewer trials (5.0–11.7) than the trend predicts for its burden. On papers, only neonatal encephalopathy falls further below. The trend is loose (R² 0.39 for papers, 0.38 for trials).",
@@ -102,6 +106,10 @@
     {
       "id": "trials",
       "title": "Long COVID and ME/CFS trials",
+      "headline": {
+        "value": "155 → 70",
+        "label": "long COVID trial starts, 2023 to 2025"
+      },
       "folder": "analysis/",
       "readme": "analysis/README.md",
       "extra_readmes": [
@@ -161,6 +169,10 @@
     {
       "id": "sex",
       "title": "Research by which sex a disease mostly affects",
+      "headline": {
+        "value": "No link",
+        "label": "between share of women and research, after burden"
+      },
       "folder": "sex/",
       "readme": "sex/README.md",
       "finding": "After adjusting for burden, the share of patients who are women shows no detectable link with research volume across 120 diseases: 0.94× papers per +10 percentage points female (95% CI 0.79–1.11) and 0.99× trials (0.81–1.21). The female shares are hand-coded approximations.",
@@ -200,6 +212,10 @@
     {
       "id": "funding",
       "title": "Public biomedical R&D funding and output, 2024",
+      "headline": {
+        "value": "32 bn",
+        "label": "US public biomedical R&D budget in PPS, the largest of 19 countries"
+      },
       "folder": "funding/",
       "readme": "funding/README.md",
       "finding": "Government biomedical R&D budgets set against medical papers and citations, 19 countries. The US spends 32 bn PPS; China's budget is a guess (about 14 bn). Papers grow more slowly than budgets (log-log slope 0.76). Portugal publishes most per unit of budget, Japan and the US least. Seven budgets are estimates, so this is a rough signal, not an efficiency ranking.",
@@ -282,6 +298,10 @@
     {
       "id": "pais-burden",
       "title": "PAIS burden and ME",
+      "headline": {
+        "value": "~80%",
+        "label": "of PAIS burden is ME, in an illustrative Dutch model"
+      },
       "folder": "pais/",
       "readme": "pais/README.md",
       "finding": "An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page. Note: these numbers are not grounded in hard data. They're my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.",
@@ -296,6 +316,10 @@
     {
       "id": "global-burden",
       "title": "Global ME/CFS burden",
+      "headline": {
+        "value": "45M",
+        "label": "people with ME/CFS worldwide (CCC)"
+      },
       "folder": "global_burden/",
       "readme": "global_burden/README.md",
       "finding": "A model of how many people worldwide have ME/CFS and how much disease burden it causes, since nobody has counted it. With the Canadian Consensus Criteria, about 45 million people have ME/CFS now (90% range 27–77 million), about half of them post-COVID. That is 17.5 million DALYs a year (9.9–31.7 million), the ME/CFS burden used in the research-vs-burden charts. Strict ICC gives 27 million people, broad Fukuda 80 million. The two routes for post-COVID ME differ 2.4-fold.",
@@ -311,13 +335,24 @@
         "html": "global_burden/burden_interactive.html",
         "data": "global_burden/model_output_2026-11-26.json",
         "charts": 4,
-        "overview": false,
-        "more": "Interactive model with criteria, age groups, 21 countries, 2040 and every step explained"
+        "overview": {
+          "html": "global_burden/overview.html",
+          "pick": {
+            "cases": "criteria/CCC/both/2026/cases",
+            "daly": "criteria/CCC/both/2026/daly",
+            "h_cases": "criteria/CCC/both/2026/h_cases",
+            "h_daly": "criteria/CCC/both/2026/h_daly"
+          }
+        }
       }
     },
     {
       "id": "sources",
       "title": "Papers and trials per year, 131 diseases",
+      "headline": {
+        "value": "131",
+        "label": "diseases, 1996–2025, from ClinicalTrials.gov and PubMed"
+      },
       "folder": "clinicaltrials/, pubmed/, expanded/, gbd/",
       "readme": "clinicaltrials/README.md",
       "extra_readmes": [

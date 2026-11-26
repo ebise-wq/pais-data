@@ -23,21 +23,30 @@
 - A chart can carry a `"toggle"`: one or a list of other PNGs with the same layout, each with a button
   label. The page shows a switch between them. Draw all views from one function so they line up.
 - The build writes `docs/index.html` (overview) and one page per section (`docs/<section id>.html`).
-  The overview links to each with "Open page".
+- The overview is kept clean at the user's request (v16): each section shows only its title (a link to
+  the topic page, with "Open page →" on the same line) and its charts. No findings, chart captions,
+  README links, data files, earlier versions or subsection links; those are on the topic pages. PNG
+  charts show without their caption card, and the explanation lines inside interactive fragments
+  (`bvr-sub`, `fnd-sub`, `fnd-note`, `py-sub`, `pme-lede`, `hint`) are hidden by CSS under `.overview`.
+- The top of the overview is a contents list: one row per section with a headline number. Each section
+  needs a `"headline": {"value": "10×", "label": "fewer ME/CFS papers than its burden predicts"}`.
+- In titles, the part after the first comma ("120 diseases", "2024") is shown small.
 - A section can carry `"interactive"` (an HTML fragment plus its JSON data), e.g. the 120-disease
   burden charts in `expanded/burden_interactive.html`. Its CSS classes and ids start with `bvr-` so
   they don't clash with the page. The parts between `<!-- more:start -->` and `<!-- more:end -->`
   (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
   show on the topic page only. The headline-number boxes are page-only at the user's request.
 - An interactive with `"overview": false` shows on its topic page only; the overview gets a link line
-  (text from `"more"`). Used for the Global ME/CFS burden model (`global_burden/`), whose data are
-  about 380 KB. Its ids start with `gme-` and its styles sit under `.gme`.
+  (text from `"more"`). With `"overview": {"html": ..., "pick": {"name": "a/b/c", ...}}` the overview
+  shows that small fragment instead, given only the picked parts of the data (slash paths into the JSON).
+  The Global ME/CFS burden model (`global_burden/`, data about 380 KB, ids `gme-`, styles under `.gme`)
+  uses this: `global_burden/overview.html` shows its two distribution charts (CCC, now).
 - A section can carry `"subsections"` (same fields as a section, minus interactive). They show at the end
-  of its topic page, with a link line on the overview; `docs/<subsection id>.html` redirects there.
+  of its topic page; `docs/<subsection id>.html` redirects there.
   The WHO ICTRP analysis is a subsection of the 120-disease section this way.
 - An interactive's `"data"` can be a map `{"name": path}`; the fragment then gets an object of those
   tables (used by `clinicaltrials/per_year_interactive.html`).
-- Data files show in a collapsed block under each section's charts.
+- Data files show in a collapsed block under each section's charts on its topic page.
 - A data entry with `"hidden": true` is catalogued but not shown: use it for pipeline inputs whose
   contents already appear in another table (e.g. `sex/sex_labels.csv`, `expanded/cleaned_counts_*.csv`).
 - Keep the number of files low: add columns or rows to an existing table rather than a new small file,
