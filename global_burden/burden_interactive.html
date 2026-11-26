@@ -1,0 +1,1245 @@
+<!-- Interactive "Global ME/CFS burden" model for the catalog topic page.
+     Made as a stand-alone page in a separate session (v11.2) and moved into the catalog; the Monte Carlo
+     code that made the numbers is not in the repo. tools/build_catalog.py puts the model output
+     (global_burden/model_output_2026-11-26.json) in place of the data placeholder. Shown on the topic page only.
+     Element ids start with gme- and all styles sit under .gme, so they don't clash with the page.
+     Fonts and the base colours come from the page's tokens. -->
+<style>
+.gme { --fg: var(--ink); --azure: #8fc6ff; --azure-soft: rgba(143, 198, 255, 0.26); --cyan: #f4a184; --teal-deep: #c4644d; --gold: #e8d08c; --display: var(--f-body); --mono: var(--f-mono); }
+
+.gme {  color: var(--fg); font-family: var(--display); font-size: 15px; line-height: 1.5; margin: 0; }
+
+.gme {
+  max-width: 760px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 14px 40px;
+  display: flex; flex-direction: column; gap: 10px;
+}
+
+.gme [hidden] { display: none !important; }
+
+.gme h3 { font-size: 21px; line-height: 1.15; font-weight: 700; letter-spacing: -0.01em; margin: 0; }
+
+.gme .sub { font-size: 12.5px; color: var(--muted); margin: 2px 0 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.gme .sub b { color: var(--fg); font-weight: 500; }
+
+.gme .headrow { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 8px; align-items: center; }
+
+.gme .headrow h3 { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.gme .gear { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 9px; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
+
+.gme .gear[aria-expanded="true"] { background: var(--azure-soft); color: var(--fg); border-color: transparent; }
+
+.gme .gear:focus-visible { outline: 2px solid var(--azure); outline-offset: 1px; }
+
+.gme .settings { display: flex; flex-direction: column; gap: 7px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--line); max-height: calc(100vh - 120px); overflow-y: auto; }
+
+.gme .plab { font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-bottom: -2px; }
+
+.gme .settings .refs { flex-wrap: wrap; overflow: visible; }
+
+.gme .gme-top {
+  position: sticky; top: env(safe-area-inset-top, 0px); z-index: 6; background: var(--bg);
+  margin-left: calc(-1 * max(16px, env(safe-area-inset-left, 0px))); margin-right: calc(-1 * max(16px, env(safe-area-inset-right, 0px)));
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px));
+  padding-block: 12px 9px; margin-top: -14px; border-bottom: 1px solid var(--line);
+}
+
+.gme .seg { display: grid; grid-auto-flow: column; grid-auto-columns: 1fr; border: 1px solid var(--line); border-radius: 9px; padding: 3px; gap: 3px; }
+
+.gme .seg button { font: 600 14px var(--display); color: var(--muted); background: transparent; border: 0; border-radius: 6px; padding: 6px 0; cursor: pointer; }
+
+.gme .seg button[aria-pressed="true"] { background: var(--azure-soft); color: var(--fg); }
+
+.gme .seg button:focus-visible, .gme .tabs button:focus-visible, .gme .refs button:focus-visible { outline: 2px solid var(--azure); outline-offset: 1px; }
+
+.gme .seg.small { border-radius: 8px; padding: 2px; }
+
+.gme .seg.small button { font-size: 12.5px; padding: 4px 0; font-weight: 500; }
+
+.gme .controls { display: grid; grid-template-columns: 1fr 1fr 1.25fr; gap: 6px; }
+
+.gme .crit { font-size: 12.5px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; margin-top: -3px; }
+
+.gme .crit b { color: var(--fg); font-weight: 500; }
+
+.gme .refs { display: flex; gap: 6px; overflow-x: auto; scrollbar-width: none; }
+
+.gme .refs button { flex: none; font: 500 12px var(--display); color: var(--muted); background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 3px 9px; cursor: pointer; }
+
+.gme .refs button[aria-pressed="true"] { color: var(--bg); background: var(--gold); border-color: var(--gold); }
+
+.gme .refs.off, .gme .seg.off { opacity: 0.45; pointer-events: none; }
+
+.gme a.src { color: inherit; text-decoration: underline; text-decoration-color: var(--azure); text-underline-offset: 2px; text-decoration-thickness: 1px; }
+
+.gme a.src:hover { color: var(--azure); }
+
+.gme .tabs { display: flex; gap: 18px; border-bottom: 1px solid var(--line); }
+
+.gme .tabs button { font: 500 14px var(--display); color: var(--muted); background: none; border: 0; padding: 4px 0 6px; margin-bottom: -1px; border-bottom: 2px solid transparent; cursor: pointer; }
+
+.gme .tabs button[aria-selected="true"] { color: var(--fg); border-bottom-color: var(--azure); }
+
+.gme .dists { display: flex; flex-direction: column; gap: 10px; }
+@media (min-width: 640px) {  .gme .dists { display: grid; grid-template-columns: 1fr 1fr; } }
+
+.gme .panel { border: 1px solid var(--line); border-radius: 10px; background: var(--surface); padding: 10px 12px 8px; min-width: 0; }
+
+.gme .plabel { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+
+.gme .big { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; margin-top: 1px; }
+
+.gme .big .n { font-size: 28px; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+
+.gme .big .u { font-size: 13.5px; }
+
+.gme .range { font-family: var(--mono); font-size: 12px; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+
+.gme .gme-chart { margin-top: 5px; width: 100%; height: 70px; display: block; }
+
+.gme .note { font-size: 12.5px; color: var(--muted); margin-top: 2px; }
+
+.gme .note strong { color: var(--azure); font-weight: 600; }
+
+.gme .ages { display: flex; flex-direction: column; gap: 7px; margin-top: 8px; }
+
+.gme .age { display: grid; grid-template-columns: 44px minmax(0, 1fr) 62px; gap: 8px; align-items: center; font-variant-numeric: tabular-nums; }
+
+.gme .age .k { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+
+.gme .age .track { position: relative; height: 14px; }
+
+.gme .age .fill { position: absolute; top: 2px; height: 10px; border-radius: 3px; background: var(--azure); opacity: 0.8; }
+
+.gme .age .wh { position: absolute; top: 6.5px; height: 1px; background: var(--fg); opacity: 0.6; }
+
+.gme .age .v { font-family: var(--mono); font-size: 12.5px; text-align: right; }
+
+.gme section { display: flex; flex-direction: column; gap: 10px; margin-top: 14px; }
+
+.gme h2 { font-size: 17px; font-weight: 600; margin: 0; }
+
+.gme .lede { font-size: 14px; color: var(--muted); margin: -4px 0 0; max-width: 62ch; }
+
+.gme .split { display: flex; gap: 3px; height: 10px; border-radius: 5px; overflow: hidden; }
+
+.gme .legend { display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); gap: 10px; }
+
+.gme .legend div { min-width: 0; }
+
+.gme .legend .k { font-size: 13px; display: flex; align-items: center; gap: 6px; }
+
+.gme .legend .k .rt { display: block; width: 100%; font-size: 11.5px; color: var(--muted); margin-top: -2px; }
+
+.gme .legend .k { flex-wrap: wrap; }
+
+.gme .legend .k i { width: 9px; height: 9px; border-radius: 2px; display: inline-block; flex: none; }
+
+.gme .legend .v { font-size: 18px; font-weight: 600; font-variant-numeric: tabular-nums; }
+
+.gme .legend .r { font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+
+.gme .group { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin-top: 6px; padding-bottom: 4px; border-bottom: 1px solid var(--line); }
+
+.gme .row { display: grid; grid-template-columns: 1fr auto; gap: 2px 14px; padding: 8px 0; border-bottom: 1px solid var(--line); }
+
+.gme .row .q { font-size: 14px; min-width: 0; }
+
+.gme .row .val { font-family: var(--mono); font-size: 13px; text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+.gme .row .val small { display: block; color: var(--muted); font-size: 11px; }
+
+.gme .row .why { grid-column: 1 / -1; font-size: 12.5px; color: var(--muted); max-width: 64ch; }
+
+.gme .row.crit-row .q::before { content: ""; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--azure); margin-right: 7px; vertical-align: middle; }
+
+.gme .row.new .q::after { content: "new"; font: 600 10px var(--mono); color: var(--bg); background: var(--gold); border-radius: 3px; padding: 1px 4px; margin-left: 7px; vertical-align: middle; }
+
+.gme .chain { display: flex; flex-direction: column; }
+
+.gme .step { display: grid; grid-template-columns: minmax(0, 1fr) auto auto; gap: 2px 12px; align-items: baseline; padding: 7px 0; border-bottom: 1px solid var(--line); font-variant-numeric: tabular-nums; }
+
+.gme .step .l { font-size: 13.5px; min-width: 0; }
+
+.gme .step .x { font-family: var(--mono); font-size: 12.5px; color: var(--muted); text-align: right; }
+
+.gme .step .t { font-family: var(--mono); font-size: 13px; text-align: right; min-width: 64px; }
+
+.gme .step.final .l, .gme .step.final .t { color: var(--cyan); font-weight: 600; }
+
+.gme .torn { display: flex; flex-direction: column; gap: 9px; }
+
+.gme .tr .t { font-size: 13px; }
+
+.gme .tr .track { position: relative; height: 16px; margin-top: 3px; }
+
+.gme .tr .bar { position: absolute; top: 4px; height: 8px; border-radius: 4px; background: var(--cyan); opacity: 0.7; }
+
+.gme .tr .mid { position: absolute; top: 0; width: 1.5px; height: 16px; background: var(--fg); }
+
+.gme .tr .lo, .gme .tr .hi { position: absolute; top: 1px; font-family: var(--mono); font-size: 11px; color: var(--muted); white-space: nowrap; }
+
+.gme .callout { border-left: 2px solid var(--gold); padding: 6px 0 6px 12px; font-size: 13.5px; max-width: 64ch; }
+
+.gme .bars { display: flex; flex-direction: column; gap: 7px; }
+
+.gme .vb { display: grid; grid-template-columns: minmax(0, 1fr) 44px; gap: 4px 10px; align-items: center; }
+
+.gme .vb .t { font-size: 13px; grid-column: 1 / -1; }
+
+.gme .vb .track { height: 7px; border-radius: 4px; background: var(--surface); overflow: hidden; }
+
+.gme .vb .fill { height: 100%; background: var(--azure); border-radius: 4px; }
+
+.gme .vb .p { font-family: var(--mono); font-size: 12px; color: var(--muted); text-align: right; }
+
+.gme .yearnote { font-size: 12.5px; color: var(--gold); }
+
+.gme .h3 { font-size: 14.5px; font-weight: 600; margin: 6px 0 -4px; }
+
+.gme .steps { display: flex; flex-direction: column; }
+
+.gme .stepd { border-bottom: 1px solid var(--line); }
+
+.gme .stepd summary, .gme .stepd .sumrow { display: grid; grid-template-columns: minmax(0, 1fr) 54px 64px; gap: 10px; align-items: baseline; padding: 9px 0; cursor: pointer; list-style: none; font-variant-numeric: tabular-nums; }
+
+.gme .stepd summary::-webkit-details-marker { display: none; }
+
+.gme .stepd summary .l { font-size: 14px; min-width: 0; }
+
+.gme .stepd summary .l::before { content: "›"; display: inline-block; width: 14px; color: var(--muted); transition: transform 0.15s; }
+
+.gme .stepd[open] summary .l::before { transform: rotate(90deg); }
+
+.gme .stepd summary:focus-visible { outline: 2px solid var(--azure); outline-offset: 2px; border-radius: 4px; }
+
+.gme .stepd.fs summary { grid-template-columns: minmax(0, 1fr) 0 auto; }
+
+.gme .stepd .x { font-family: var(--mono); font-size: 12.5px; color: var(--muted); text-align: right; }
+
+.gme .stepd .t { font-family: var(--mono); font-size: 13px; text-align: right; }
+
+.gme .stepd .body { font-size: 13.5px; color: var(--muted); padding: 0 0 11px 14px; max-width: 64ch; }
+
+.gme .stepd .body.small { font-size: 12.5px; padding-left: 0; }
+
+.gme .stepd .range2 { font-family: var(--mono); font-size: 12px; margin-top: 5px; color: var(--fg); }
+
+.gme .stepd.final .sumrow { cursor: default; }
+
+.gme .stepd.final .l, .gme .stepd.final .t { color: var(--cyan); font-weight: 600; }
+
+.gme .stepd.final .l { font-size: 14px; }
+
+.gme .stepd.final.azure .l, .gme .stepd.final.azure .t { color: var(--azure); }
+
+.gme .stepd.final.teal .l, .gme .stepd.final.teal .t { color: #b9c7da; }
+
+.gme .anchor { scroll-margin-top: 80px; }
+
+.gme a.jump, .gme a.how { cursor: pointer; color: var(--azure); text-decoration: underline; text-underline-offset: 2px; text-decoration-thickness: 1px; }
+
+.gme a.how { display: inline-block; font-size: 12.5px; margin-top: 3px; }
+@media (prefers-reduced-motion: reduce) {  .gme .stepd summary .l::before { transition: none; } }
+
+.gme .eulers { display: flex; flex-direction: column; gap: 10px; }
+@media (min-width: 640px) {  .gme .eulers { display: grid; grid-template-columns: 1fr 1fr; } }
+
+.gme .eufig { margin: 0; }
+
+.gme .euler { width: 100%; height: 170px; display: block; margin-top: 4px; }
+
+.gme .euleg { display: flex; flex-direction: column; gap: 10px; margin-top: 10px; }
+
+.gme .eurow { display: grid; grid-template-columns: 12px minmax(0, 1fr) auto; gap: 9px; align-items: start; }
+
+.gme .eurow i { width: 11px; height: 11px; border-radius: 3px; display: block; margin-top: 4px; }
+
+.gme .eurow .lb { font-size: 14px; line-height: 1.35; }
+
+.gme .eurow .lb small { display: block; color: var(--muted); font-size: 12px; }
+
+.gme .eurow .lb a.how { display: block; width: fit-content; font-size: 12px; margin-top: 2px; }
+
+.gme .eurow .v { text-align: right; }
+
+.gme .eurow .v b { display: block; font-family: var(--mono); font-weight: 500; font-size: 15.5px; line-height: 1.3; font-variant-numeric: tabular-nums; }
+
+.gme .eurow .v small { display: block; font-family: var(--mono); font-size: 11.5px; line-height: 1.35; color: var(--muted); white-space: nowrap; }
+
+.gme .ctab { margin-top: 8px; }
+
+.gme .crow, .gme .ctab summary { display: grid; grid-template-columns: minmax(0, 1fr) 76px 76px 14px; gap: 8px; align-items: baseline; }
+
+.gme .crow { font-size: 12px; color: var(--muted); padding: 0 0 6px; border-bottom: 1px solid var(--line); }
+
+.gme .crow span:not(:first-child), .gme .ctab summary b { text-align: right; }
+
+.gme .ctab details { border-bottom: 1px solid var(--line); }
+
+.gme .ctab summary { list-style: none; cursor: pointer; padding: 9px 0; font-size: 14.5px; }
+
+.gme .ctab summary::-webkit-details-marker { display: none; }
+
+.gme .ctab summary b { font-family: var(--mono); font-weight: 500; font-size: 13px; font-variant-numeric: tabular-nums; }
+
+.gme .ctab summary i { color: var(--muted); font-style: normal; font-size: 12px; transition: transform .15s; text-align: right; }
+
+.gme .ctab details[open] summary i { transform: rotate(90deg); }
+
+.gme .cdet { font-size: 13px; color: var(--muted); line-height: 1.55; padding: 0 0 10px; }
+
+.gme .cdet b { color: var(--fg); font-weight: 500; font-family: var(--mono); font-size: 12.5px; }
+
+.gme .stack { display: flex; flex-direction: column; gap: 10px; }
+
+.gme .gme-foot { margin-top: 18px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+
+.gme .gme-foot .ver { font-family: var(--mono); white-space: nowrap; }
+.gme { padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; max-width: 760px; min-width: 0; color: var(--fg); }
+.gme .gme-top { top: var(--gme-navh, 0px); z-index: 4; margin-top: 0; }
+.gme .gme-foot { padding-bottom: 0; }
+
+</style>
+
+<div class="gme" id="gme-root">
+  <header class="gme-top">
+    <div class="headrow">
+      <h3 id="gme-title">Global ME/CFS burden</h3>
+      <button class="gear" id="gme-gear" aria-expanded="false" aria-controls="gme-settings" aria-label="Settings" title="Settings">
+        <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M4 7h10M18 7h2M4 17h4M12 17h8"/><circle cx="16" cy="7" r="2.2"/><circle cx="10" cy="17" r="2.2"/></svg>
+      </button>
+    </div>
+    <p class="sub" id="gme-subtitle">Classic and post-COVID ME</p>
+    <div class="settings" id="gme-settings" hidden>
+      <div class="plab">Condition</div>
+      <div class="seg" id="gme-condSeg" role="group" aria-label="Condition">
+        <button id="gme-k-me" data-v="me">ME/CFS</button>
+        <button id="gme-k-lc" data-v="lc">All long COVID</button>
+        <button id="gme-k-lcme" data-v="lcme">Both</button>
+      </div>
+      <div class="plab" id="gme-routeLab">Post-COVID ME based on</div>
+      <div class="seg small" id="gme-routeSeg" role="group" aria-label="Post-COVID ME route">
+        <button id="gme-p-rec" data-v="rec">US study</button>
+        <button id="gme-p-lc" data-v="lc">UK survey</button>
+        <button id="gme-p-both" data-v="both">Both</button>
+      </div>
+      <div class="plab" id="gme-critLab">Diagnostic criteria</div>
+      <div class="seg" id="gme-critSeg" role="group" aria-label="Diagnostic criteria">
+        <button id="gme-c-ICC" data-v="ICC">ICC</button>
+        <button id="gme-c-CCC" data-v="CCC">CCC</button>
+        <button id="gme-c-IOM" data-v="IOM">IOM</button>
+        <button id="gme-c-Fukuda" data-v="Fukuda">Fukuda</button>
+      </div>
+
+      <div class="plab">View</div>
+      <div class="controls">
+        <div class="seg small" id="gme-yearSeg" role="group" aria-label="Year">
+          <button id="gme-y-2026" data-v="2026">Now</button>
+          <button id="gme-y-2040" data-v="2040">2040</button>
+        </div>
+        <div class="seg small" id="gme-statSeg" role="group" aria-label="Middle value">
+          <button id="gme-s-median" data-v="median">Median</button>
+          <button id="gme-s-mean" data-v="mean">Mean</button>
+        </div>
+        <div class="seg small" id="gme-unitSeg" role="group" aria-label="Units">
+          <button id="gme-u-count" data-v="count">Number</button>
+          <button id="gme-u-share" data-v="share">Percent</button>
+        </div>
+      </div>
+
+      <div class="plab">Compare with</div>
+      <div class="refs" id="gme-refs" role="group" aria-label="Reference diseases">
+        <button id="gme-r-ms" data-r="ms">Multiple sclerosis</button>
+        <button id="gme-r-pd" data-r="pd">Parkinson's</button>
+        <button id="gme-r-ra" data-r="ra">Rheumatoid arthritis</button>
+        <button id="gme-r-scz" data-r="scz">Schizophrenia</button>
+        <button id="gme-r-bip" data-r="bip">Bipolar disorder</button>
+        <button id="gme-r-hiv" data-r="hiv">HIV</button>
+        <button id="gme-r-epi" data-r="epi">Epilepsy</button>
+        <button id="gme-r-dem" data-r="dem">Dementia</button>
+        <button id="gme-r-aut" data-r="aut">Autism</button>
+        <button id="gme-r-ast" data-r="ast">Asthma</button>
+        <button id="gme-r-dep" data-r="dep">Depression</button>
+      </div>
+    </div>
+  </header>
+
+  <div class="tabs" role="tablist">
+    <button id="gme-t-dist" role="tab" data-v="dist">Distribution</button>
+    <button id="gme-t-age" role="tab" data-v="age">By age</button>
+    <button id="gme-t-ctry" role="tab" data-v="countries">Countries</button>
+    <button id="gme-t-explain" role="tab" data-v="explain">How it's built</button>
+  </div>
+
+  <div class="dists">
+    <div class="panel">
+      <div class="plabel" id="gme-casesLabel">People living with it</div>
+      <div class="big"><span class="n" id="gme-casesN"></span><span class="u" id="gme-casesU"></span></div>
+      <div class="range" id="gme-casesR"></div>
+      <svg class="gme-chart" id="gme-hCases" role="img" aria-label="Distribution of people living with ME/CFS"></svg>
+      <div class="ages" id="gme-aCases" hidden></div>
+      <div class="note" id="gme-casesNote"></div>
+    </div>
+    <div class="panel">
+      <div class="plabel" id="gme-dalyLabel">Disease burden per year</div>
+      <div class="big"><span class="n" id="gme-dalyN"></span><span class="u" id="gme-dalyU"></span></div>
+      <div class="range" id="gme-dalyR"></div>
+      <svg class="gme-chart" id="gme-hDaly" role="img" aria-label="Distribution of disability-adjusted life years"></svg>
+      <div class="ages" id="gme-aDaly" hidden></div>
+      <div class="note" id="gme-dalyNote"></div>
+    </div>
+  </div>
+
+  <div id="gme-results" class="stack">
+  <section id="gme-splitSec">
+    <h2 id="gme-splitTitle">Where the cases come from</h2>
+    <div class="split" id="gme-split"></div>
+    <div class="legend" id="gme-legend"></div>
+    <p class="lede" id="gme-splitLede"></p>
+  </section>
+
+  <section>
+    <h2 id="gme-eulerTitle">How the conditions overlap</h2>
+    <p class="lede" id="gme-eulerLede"></p>
+    <div class="eulers">
+      <figure class="panel eufig"><div class="plabel">People</div><svg class="euler" id="gme-euP" role="img" aria-label="Overlap of ME/CFS and long COVID, people"></svg><div class="euleg" id="gme-euPl"></div></figure>
+      <figure class="panel eufig"><div class="plabel">Disease burden per year</div><svg class="euler" id="gme-euB" role="img" aria-label="Overlap of ME/CFS and long COVID, disease burden"></svg><div class="euleg" id="gme-euBl"></div></figure>
+    </div>
+    <div class="note" id="gme-eulerNote"></div>
+  </section>
+  </div>
+
+  <section id="gme-countries" hidden>
+    <p class="lede" id="gme-ctryLede"></p>
+    <div class="ctab" id="gme-ctryTable"></div>
+    <div class="note" id="gme-ctryNote"></div>
+  </section>
+
+  <div id="gme-explain" class="stack" hidden>
+    <section>
+      <h2>How the estimate is built</h2>
+      <p class="lede">Nobody has counted people with ME/CFS worldwide. So the model starts from the best studies in a few countries and corrects them step by step. Each correction is a range, not a single number. The computer draws from all the ranges 300,000 times, which gives the spread you see in the charts.</p>
+      <p class="lede">The ME/CFS total has two parts. <a class="jump" href="#gme-classic" data-go="classic">Classic ME</a> started before or without COVID. Post-COVID ME is estimated twice, from different studies: once from a <a class="jump" href="#gme-postcovid" data-go="postcovid">US study of infected people</a> and once from a <a class="jump" href="#gme-lcroute" data-go="lcroute">UK survey of long COVID</a>. The two routes count equally, and the page uses their average. Then people are turned into <a class="jump" href="#gme-dalys" data-go="dalys">disease burden</a>. A separate route estimates <a class="jump" href="#gme-longcovid" data-go="longcovid">all long COVID</a>. The same model gives <a class="jump" href="#gme-national" data-go="national">figures for 21 rich countries</a>.</p>
+      <div id="gme-overview"></div>
+      <div class="callout" id="gme-overviewNote"></div>
+    </section>
+
+    <section id="gme-classic" class="anchor">
+      <h2>Classic ME, step by step</h2>
+      <p class="lede">Start with everyone alive today and apply each step in turn, using the middle value of each range. Tap a step to see where it comes from.</p>
+      <div class="steps" id="gme-chainA"></div>
+    </section>
+
+    <section id="gme-postcovid" class="anchor">
+      <h2>Post-COVID ME, route 1: US study</h2>
+      <p class="lede">The first of two routes. It starts from a US study that compared infected and uninfected people. Route 2 builds on all long COVID, so it comes after that section.</p>
+      <div class="steps" id="gme-chain"></div>
+    </section>
+
+    <section id="gme-longcovid" class="anchor">
+      <h2>All long COVID, step by step</h2>
+      <p class="lede">A separate route for long COVID of any kind, built from a large UK survey rather than from RECOVER. Post-COVID ME is part of this total.</p>
+      <div class="steps" id="gme-chainLC"></div>
+      <div id="gme-lcdw"></div>
+    </section>
+
+    <section id="gme-lcroute" class="anchor">
+      <h2>Post-COVID ME, route 2: UK survey</h2>
+      <p class="lede">The second route. It starts from the all-long-COVID estimate above and asks how many of those people meet ME/CFS criteria.</p>
+      <div class="steps" id="gme-chainLR"></div>
+    </section>
+
+    <section id="gme-routes" class="anchor">
+      <h2>Averaging the two post-COVID ME routes</h2>
+      <div id="gme-routeCmp"></div>
+      <div class="callout" id="gme-routeNote"></div>
+    </section>
+
+    <section>
+      <h2>Which steps matter most for post-COVID ME</h2>
+      <p class="lede">Each bar shows the post-COVID total when one step is set to the low or high end of its range and the rest stay in the middle.</p>
+      <div class="torn" id="gme-torn"></div>
+      <div class="callout" id="gme-tornNote"></div>
+      <p class="lede">And if one step were dropped entirely:</p>
+      <div class="chain" id="gme-alts"></div>
+    </section>
+
+    <section>
+      <h2>Checks against other evidence</h2>
+      <div id="gme-checks"></div>
+    </section>
+
+    <section id="gme-future" class="anchor">
+      <h2>The 2040 projection</h2>
+      <p class="lede">A projection, not a forecast. It assumes COVID keeps circulating and today's patterns hold, and it allows for another pandemic. The inputs about new infections are judgement.</p>
+      <div class="steps" id="gme-futureSteps"></div>
+    </section>
+
+    <section id="gme-national" class="anchor">
+      <h2>National figures</h2>
+      <p class="lede">For 21 rich countries the model uses the same rates as for rich countries in general, and changes three things: the number of people in each age group (UN World Population Prospects 2024), the share of first infections that came before Omicron, and the share of people vaccinated when Omicron arrived. Countries that kept COVID out until Omicron, like Australia and New Zealand, get fewer post-COVID cases per person.</p>
+      <div id="gme-natRows"></div>
+      <div class="callout">The share infected before Omicron comes from confirmed cases up to mid-December 2021 (Our World in Data), multiplied by IHME's estimate of infections per confirmed case where it gives one for that country (Barber 2022), and by 1.9–3.0 otherwise. Vaccination is the share fully vaccinated in mid-January 2022 (Our World in Data); for Switzerland we use 66%. Long COVID starts from the UK survey, adjusted for each country's ages and its infection history compared with the UK. Not included: real differences in classic ME/CFS between countries, which nobody has measured with the same method, and differences in how many reinfections people have had since 2022.</div>
+    </section>
+
+    <section id="gme-dalys" class="anchor">
+      <h2>From people to disease burden</h2>
+      <p class="lede">Disease burden is counted in disability-adjusted life years (DALYs): healthy years lost in one year, to illness and to early death. For each group the model multiplies three things: the number of people living with it, the health each loses in a year (the disability weight), and an addition for early death.</p>
+      <div id="gme-dalyCalc"></div>
+      <div class="callout" id="gme-dalyExpl"></div>
+    </section>
+
+    <section id="gme-sev" class="anchor">
+      <h2>How severe ME/CFS is</h2>
+      <p class="lede">The International Consensus Criteria describe four levels. The bar shows the mix we assume for the criteria you picked.</p>
+      <div class="split" id="gme-sevBar"></div>
+      <div id="gme-sevRows"></div>
+      <p class="lede">Two large patient surveys give the best picture. In DecodeME (UK, 17,074 people with a GP diagnosis) 34% rated themselves mild, 53% moderate, 12% severe and 0.7% very severe. In the European ME Alliance survey (11,109 people) it was 24%, 54%, 16% and 2.4%. Both miss people: the very severe can rarely fill in a survey, so we raise that share to 3–6%. Most people who meet the criteria have no diagnosis and tend to be milder, so we also raise the mild share. Stricter criteria select sicker people.</p>
+    </section>
+
+    <section id="gme-weights" class="anchor">
+      <h2>How much health is lost</h2>
+      <p class="lede">A disability weight says how much health a condition takes away, from 0 (none) to 1 (as bad as death). A year lived with a weight of 0.4 counts as losing 0.4 healthy years. The Global Burden of Disease study sets its weights by asking thousands of people to compare short descriptions of health states. Nobody has done this for ME/CFS. So we matched each severity level to states with similar loss of function that do have a weight.</p>
+      <div id="gme-dwRows"></div>
+      <div class="callout" id="gme-dwNote"></div>
+      <div id="gme-yllRow"></div>
+    </section>
+
+    <section id="gme-world" class="anchor">
+      <h2>From rich countries to the whole world</h2>
+      <p class="lede">Almost all good studies come from rich countries. None of these effects has been measured in a low- or middle-income country.</p>
+      <div id="gme-geo"></div>
+    </section>
+
+    <section>
+      <h2>What drives the uncertainty overall</h2>
+      <p class="lede">Share of the spread in today's disease burden that each step explains, for the criteria you picked.</p>
+      <div class="bars" id="gme-var"></div>
+    </section>
+
+    <section>
+      <h2>Why these sources</h2>
+      <p class="lede">For each input we looked for the study least likely to be biased, and passed over figures that are often quoted but weakly founded.</p>
+      <div>
+        <div class="row"><div class="q">Chicago community study (Jason 1999)</div><div class="val">classic ME/CFS</div><div class="why">The researchers phoned a random sample of 28,673 households, then had doctors examine everyone who screened positive. Very few studies do both. It found 0.42% of adults. We passed over the often-quoted 0.89% from a 2020 review (Lim 2020), because it pools questionnaire surveys with doctors' diagnoses and its studies disagree tenfold. We also passed over a 2007 Georgia study whose broad definition counted many people with depression.</div></div>
+        <div class="row"><div class="q">English primary care (Nacul 2011) and Dutch patients (MECVS Nederland 2023)</div><div class="val">converting definitions</div><div class="why">Both checked the same patients against several definitions, so the ratios between definitions compare like with like. The Dutch patients were members of a patient organisation, who tend to be sicker than average, so we shifted those ratios down.</div></div>
+        <div class="row"><div class="q">RECOVER study, United States (Vernon 2025)</div><div class="val">post-COVID ME</div><div class="why">The largest study that also followed people who had not been infected, so it can separate ME caused by COVID from ME that would have happened anyway. We use only the people who joined soon after infection: those who joined when already ill met the criteria four times as often (6.3% against 1.6%). We passed over "half of long COVID patients have ME/CFS", which comes from specialist clinics where the sickest patients end up. We also passed over "400 million people with long COVID", which is a US survey rate multiplied out to the world.</div></div>
+        <div class="row"><div class="q">DecodeME and European ME Alliance surveys</div><div class="val">severity mix</div><div class="why">The two largest samples that report severity, with 17,074 and 11,109 people. Both are surveys, so they miss the very severe, who can rarely respond, and people without a diagnosis, who tend to be milder. We adjust for both by judgement. Older figures of a quarter severe or worse come from a 2000 charity member survey and clinics, which see sicker people (Grach 2023).</div></div>
+        <div class="row"><div class="q">German hospital staff (Tack 2026)</div><div class="val">check, post-COVID ME</div><div class="why">The only study we found where doctors assessed the people with lasting fatigue in a defined group of infected people. 7 of 221 (3.2%) met CCC about 21 months after an early-variant infection, before vaccination. It is small, has no uninfected comparison and is mostly middle-aged women, so we use it to widen the range rather than as the anchor.</div></div>
+        <div class="row"><div class="q">US veterans study (Xie 2024)</div><div class="val">vaccination</div><div class="why">Medical records of 441,583 infected veterans, compared with 4.7 million uninfected, split by variant and vaccination. It is the only source we found that separates the two. Veterans are older and mostly male, and the outcome is long COVID in general, not ME.</div></div>
+        <div class="row"><div class="q">Global Burden of Disease long COVID analysis (Wulf Hanson 2022)</div><div class="val">long COVID burden</div><div class="why">The Global Burden of Disease study's own estimate, from 54 studies and 1.2 million people, adjusted for health before COVID. Its average weight, 0.23, is for people with clear symptom clusters, while a quarter of the UK survey's cases say long COVID does not limit them at all. So we set weights by how limited people are, on the same Global Burden of Disease scale as the reference diseases.</div></div>
+        <div class="row"><div class="q">UK Coronavirus Infection Survey (ONS)</div><div class="val">long COVID, checks</div><div class="why">A large random sample of households (ONS, winter 2023–24). People described their own symptoms, and the question about severity had no uninfected comparison group, so we correct for symptoms not caused by infection. It is the base for the all-long-COVID route and a check on the post-COVID ME route.</div></div>
+        <div class="row"><div class="q">Dubbo study, Australia (Hickie 2006)</div><div class="val">check only</div><div class="why">Infections were confirmed in the lab and patients were followed for a year. About 11% met ME/CFS criteria six months later, whether the trigger was a virus or a bacterium.</div></div>
+        <div class="row"><div class="q">Global Burden of Disease 2010 disability weights</div><div class="val">disability weight</div><div class="why">Weights only compare fairly if they are measured the same way, so we use only Global Burden of Disease weights, matched to ME/CFS by level of function. We left out quality-of-life scores (EQ-5D) from ME/CFS patients. They sit on a different scale, and the only published conversion is a small Belgian pilot (Charafeddine 2017) whose results were not consistent; it found such scores ran about 0.30 above the matching Global Burden of Disease weights.</div></div>
+        <div class="row"><div class="q">London health records study (Roberts 2016)</div><div class="val">early death</div><div class="why">The largest study of deaths among diagnosed patients. It found no excess deaths overall but more suicides, though based on few deaths. We passed over US memorial lists, which only count deaths that someone chose to report.</div></div>
+        <div class="row"><div class="q">UN World Population Prospects 2024 and Global Burden of Disease 2021</div><div class="val">population, comparisons</div><div class="why">The standard sources for population by age and for the burden of other diseases.</div></div>
+      </div>
+    </section>
+
+  </div>
+
+  <div class="gme-foot">
+    <span>Population by age: UN World Population Prospects 2024. Reference diseases: people from GBD 2021 studies and WHO; disease burden from GBD 2023. No population study has ever applied ICC, so the ICC figures rest on ratios from patient samples. Seed 20260821.</span>
+    <span class="ver">v11.2</span>
+  </div>
+</div>
+
+<script>
+(() => {
+const D = __DATA__;
+const ROOT = document.getElementById("gme-root");
+const byId = id => document.getElementById("gme-" + id);
+const navH = () => { const n = document.querySelector(".nav"); return n ? n.getBoundingClientRect().height : 0; };
+const setNav = () => ROOT.style.setProperty("--gme-navh", navH() + "px");
+setNav();
+const S = D.shared;
+
+const NAMES = {
+  ICC: ["International Consensus Criteria (2011)", "strictest"],
+  CCC: ["Canadian Consensus Criteria (2003)", "requires post-exertional malaise"],
+  IOM: ["Institute of Medicine criteria (2015)", "used by RECOVER"],
+  Fukuda: ["Fukuda criteria (1994)", "broadest, malaise after exertion optional"]
+};
+const RATIO_A_WHY = {
+  ICC: "39% of Dutch patient-organisation members met ICC, against 90% for Fukuda (MECVS Nederland). People in the community are milder, so we assume a lower share.",
+  CCC: "58% in English primary care (Nacul 2011) and 66% among Dutch patient-organisation members.",
+  IOM: "89% among Dutch patient-organisation members. Capped at 100%.",
+  Fukuda: "Fukuda is the reference definition here."
+};
+const RATIO_B_WHY = {
+  ICC: "39 of 80 Dutch patients who met IOM also met ICC.",
+  CCC: "59 of 80 Dutch patients who met IOM also met CCC.",
+  IOM: "RECOVER itself used IOM, so no conversion is needed.",
+  Fukuda: "Fukuda does not require post-exertional malaise, so more post-COVID patients meet it."
+};
+const REFS = {
+  ms: { name: "Multiple sclerosis", tag: "MS", cases: 1.89e6, daly: 1.07e6, url: "https://www.medrxiv.org/content/10.1101/2025.04.17.25325986.full.pdf" },
+  pd: { name: "Parkinson's disease", tag: "PD", cases: 11.77e6, daly: 7.97e6, url: "https://www.frontiersin.org/journals/aging-neuroscience/articles/10.3389/fnagi.2024.1498756/full" },
+  ra: { name: "Rheumatoid arthritis", tag: "RA", cases: 17.9e6, daly: 3.34e6, url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC11931880/" },
+  scz: { name: "Schizophrenia", tag: "SCZ", cases: 23.18e6, daly: 16.95e6, url: "https://pmc.ncbi.nlm.nih.gov/articles/PMC12447577" },
+  bip: { name: "Bipolar disorder", tag: "BIP", cases: 36e6, daly: 7.63e6, url: "https://www.who.int/vietnam/news/fact-sheets/detail/bipolar-disorder" },
+  hiv: { name: "HIV", tag: "HIV", cases: 40.0e6, daly: 45.10e6, url: "https://healthdata.org/research-analysis/library/global-regional-and-national-burden-hivaids-1990-2021-and-forecasts-0" },
+  epi: { name: "Epilepsy", tag: "EPI", cases: 51.7e6, daly: 15.42e6, url: "https://www.nds.ox.ac.uk/publications/publication_modal/2098725" },
+  dem: { name: "Dementia", tag: "DEM", cases: 55e6, daly: 39.74e6, url: "https://www.frontiersin.org/articles/10.3389/fpubh.2025.1583339/full" },
+  aut: { name: "Autism", tag: "AUT", cases: 61.8e6, daly: 9.83e6, url: "https://healthdata.org/research-analysis/library/global-epidemiology-and-health-burden-autism-spectrum-findings-global" },
+  ast: { name: "Asthma", tag: "AST", cases: 260e6, daly: 25.85e6, url: "https://www.healthdata.org/research-analysis/library/global-regional-and-national-burden-asthma-and-atopic-dermatitis-1990" },
+  dep: { name: "Depression", tag: "DEP", cases: 332e6, daly: 56.03e6, url: "https://www.emro.who.int/health-topics/depression/" }
+};
+const SEV = {
+  tiers: [
+    ["Mild", "About half of former activity. Often still works or studies, with little energy left for anything else.", 0.22, "mild multiple sclerosis (0.20), blindness (0.20)"],
+    ["Moderate", "Mostly housebound. Has given up work or study.", 0.35, "moderate dementia (0.35), severe lung disease (0.38)"],
+    ["Severe", "Mostly bedbound. Can do a few daily tasks, such as washing.", 0.55, "severe Parkinson's (0.55), untreated AIDS (0.55)"],
+    ["Very severe", "Bedbound all day. Needs help with basic functions such as eating and using the toilet.", 0.71, "severe multiple sclerosis (0.71), untreated neck spinal cord injury (0.67)"]
+  ],
+  mix: { ICC: [22, 54, 18, 6], CCC: [28, 54, 14, 4], IOM: [32, 52, 12, 4], Fukuda: [40, 48, 9, 3] }
+};
+const SEVCOL = ["#c9e4ff", "#8fc6ff", "#5d93e0", "#3a64b8"];
+const POP2021 = 7.95e9;
+
+const st = { cond: "me", route: "both", crit: "CCC", year: "2026", stat: "median", unit: "count", view: "dist", refs: new Set(["ms", "hiv"]) };
+try {
+  const saved = JSON.parse(localStorage.getItem("meBurden3") || "null");
+  if (saved) {
+    if (D.criteria[saved.crit]) st.crit = saved.crit;
+    if (["2026", "2040"].includes(saved.year)) st.year = saved.year;
+    if (["median", "mean"].includes(saved.stat)) st.stat = saved.stat;
+    if (["count", "share"].includes(saved.unit)) st.unit = saved.unit;
+    if (["dist", "age", "explain"].includes(saved.view)) st.view = saved.view;
+    if (["me", "lc", "lcme"].includes(saved.cond)) st.cond = saved.cond;
+    if (["rec", "lc", "both"].includes(saved.route)) st.route = saved.route;
+    if (Array.isArray(saved.refs)) st.refs = new Set(saved.refs.filter(k => REFS[k]));
+  }
+} catch (e) {}
+function save() { try { localStorage.setItem("meBurden3", JSON.stringify({ ...st, refs: [...st.refs] })); } catch (e) {} }
+
+const pick = s => st.stat === "mean" ? s[3] : s[1];
+const fmt1 = x => x >= 100 ? x.toFixed(0) : x >= 10 ? x.toFixed(1) : x.toFixed(x < 1 ? 2 : 1);
+function pct(v, d = 0) { return (v * 100).toFixed(d) + "%"; }
+function x2(v) { return "×" + v.toFixed(2); }
+const r2 = v => v[0].toFixed(2) + "–" + v[2].toFixed(2);
+const midWord = () => st.stat === "mean" ? "mean" : "median";
+
+// unit conversions: cases -> millions or % of population; DALYs -> millions or per 100,000
+function cv(kind, v, pop) {
+  if (st.unit === "count") return v / 1e6;
+  return kind === "cases" ? 100 * v / pop : 1e5 * v / pop;
+}
+function cvText(kind, v, pop) {
+  const x = cv(kind, v, pop);
+  if (st.unit === "count") return fmt1(x) + "M";
+  return kind === "cases" ? x.toFixed(x < 1 ? 2 : 1) + "%" : Math.round(x).toLocaleString("en");
+}
+function unitWord(kind) {
+  if (st.unit === "count") return kind === "cases" ? "people" : "DALYs";
+  return kind === "cases" ? "of the world population" : "DALYs per 100,000 people";
+}
+
+function niceStep(max) {
+  const raw = max / 4, p = Math.pow(10, Math.floor(Math.log10(raw)));
+  const n = raw / p;
+  return (n < 1.5 ? 1 : n < 3.5 ? 2.5 : n < 7.5 ? 5 : 10) * p;
+}
+
+function drawHist(svg, h, sm, kind, pop) {
+  const k = cv(kind, 1e6, pop);  // value per million
+  const refs = st.year === "2026" ? [...st.refs].map(r => REFS[r]).filter(r => r[kind] != null).sort((a, b) => a[kind] - b[kind]) : [];
+  const W = Math.max(200, svg.clientWidth || 340), axis = 15, top = refs.length ? 16 : 4, H = 60 + top;
+  svg.style.height = H + "px";
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const e = h.edges.map(v => v * k), f = h.f, max = Math.max(...f), xmax = e[e.length - 1];
+  const x = v => (v / xmax) * W, y = v => (H - axis) - (v / max) * (H - axis - top);
+  const lo = cv(kind, sm[0], pop), hi = cv(kind, sm[2], pop), mid = cv(kind, pick(sm), pop);
+  let s = "";
+  for (let i = 0; i < f.length; i++) {
+    const c = (e[i] + e[i + 1]) / 2, inside = c >= lo && c <= hi;
+    const x0 = x(e[i]) + 0.6, w = Math.max(0.5, x(e[i + 1]) - x(e[i]) - 1.2);
+    s += `<rect x="${x0}" y="${y(f[i])}" width="${w}" height="${(H - axis) - y(f[i])}" fill="var(--azure)" fill-opacity="${inside ? 0.8 : 0.25}"/>`;
+  }
+  s += `<line x1="${x(mid)}" x2="${x(mid)}" y1="${top - 2}" y2="${H - axis}" stroke="var(--fg)" stroke-width="1.2" stroke-dasharray="2 2"/>`;
+  s += `<line x1="0" x2="${W}" y1="${H - axis + 0.5}" y2="${H - axis + 0.5}" stroke="var(--line)"/>`;
+  const step = niceStep(xmax);
+  const suffix = st.unit === "count" ? "M" : (kind === "cases" ? "%" : "");
+  for (let t = 0; t <= xmax + 1e-12; t += step) {
+    const tx = x(t), anchor = t === 0 ? "start" : (tx > W - 18 ? "end" : "middle");
+    const lab = t === 0 ? "0" : (+t.toPrecision(3)).toLocaleString("en") + suffix;
+    s += `<text x="${tx}" y="${H - 2}" font-size="10" font-family="IBM Plex Mono, monospace" fill="var(--muted)" text-anchor="${anchor}">${lab}</text>`;
+  }
+  let lastX = -99, tier = 0;
+  refs.forEach(r => {
+    const v = cv(kind, r[kind], POP2021); if (v > xmax) return;
+    const rx = x(v);
+    tier = (rx - lastX < 26) ? 1 - tier : 0; lastX = rx;
+    const ly = tier ? 18 : 9, anchor = rx < 10 ? "start" : (rx > W - 14 ? "end" : "middle");
+    s += `<line x1="${rx}" x2="${rx}" y1="${ly + 2}" y2="${H - axis}" stroke="var(--gold)" stroke-width="1.4"/>`;
+    s += `<text x="${rx}" y="${ly}" font-size="10" font-weight="600" font-family="IBM Plex Mono, monospace" fill="var(--gold)" text-anchor="${anchor}">${r.tag}</text>`;
+  });
+  svg.innerHTML = s;
+}
+
+function drawAges(el, bands, kind, year) {
+  const bp = D.band_pop[year];
+  const toV = (v, i) => st.unit === "count" ? v / 1e6 : (kind === "cases" ? 100 * v / bp[i] : 1e5 * v / bp[i]);
+  const vals = bands.map((b, i) => [toV(b[0], i), toV(pick(b), i), toV(b[2], i)]);
+  const mx = Math.max(...vals.map(v => v[2])) * 1.02;
+  const txt = v => st.unit === "count" ? fmt1(v) + "M" : (kind === "cases" ? v.toFixed(2) + "%" : Math.round(v).toLocaleString("en"));
+  el.innerHTML = vals.map((v, i) => `<div class="age"><div class="k">${D.bands[i]}</div><div class="track">
+      <div class="fill" style="left:0;width:${100 * v[1] / mx}%"></div>
+      <div class="wh" style="left:${100 * v[0] / mx}%;width:${100 * (v[2] - v[0]) / mx}%"></div></div>
+      <div class="v">${txt(v[1])}</div></div>`).join("");
+}
+
+function row(q, val, sub, why, cls) {
+  return `<div class="row${cls ? " " + cls : ""}"><div class="q">${q}</div><div class="val">${val}<small>${sub}</small></div><div class="why">${why}</div></div>`;
+}
+
+function setPressed(segId, v) {
+  ROOT.querySelectorAll(`#gme-${segId} button`).forEach(b => b.setAttribute("aria-pressed", b.dataset.v === v));
+}
+
+function render() {
+  const LCm = st.cond === "lc", MIX = st.cond === "lcme";
+  const C = D.criteria[st.crit], c = st.crit, pop = D.pop[st.year];
+  const R = st.route === "lc" ? C.lcroute : st.route === "both" ? C.both : C;
+  const Y = LCm ? Object.assign({}, D.lc[st.year], st.year === "2040" ? D.lc["2040r"][st.route] : {}, C.lcx[st.route][st.year]) : MIX ? C.combox[st.route][st.year] : R[st.year];
+  const ROUTE_NAME = { rec: "US study route", lc: "UK survey route", both: "both routes averaged" }[st.route];
+  const ROUTE_ANCHOR = { rec: "postcovid", lc: "lcroute", both: "routes" }[st.route];
+  setPressed("condSeg", st.cond);
+  byId("critSeg").classList.toggle("off", false);
+  byId("routeSeg").classList.toggle("off", false);
+  byId("routeLab").textContent = LCm || MIX ? "Post-COVID ME based on (ME/CFS only)" : "Post-COVID ME based on";
+  setPressed("routeSeg", st.route);
+  byId("critLab").textContent = LCm ? "Diagnostic criteria (ME/CFS only)" : "Diagnostic criteria";
+  setPressed("critSeg", c); setPressed("yearSeg", st.year); setPressed("statSeg", st.stat); setPressed("unitSeg", st.unit);
+  ROOT.querySelectorAll(".tabs button").forEach(b => b.setAttribute("aria-selected", b.dataset.v === st.view));
+  ROOT.querySelectorAll(".refs button").forEach(b => b.setAttribute("aria-pressed", st.refs.has(b.dataset.r)));
+  byId("refs").classList.toggle("off", st.year !== "2026");
+  byId("title").textContent = MIX ? (st.year === "2040" ? "Long COVID + ME/CFS, 2040" : "Long COVID + ME/CFS burden") : LCm ? (st.year === "2040" ? "Global long COVID in 2040" : "Global long COVID burden") : "Global ME/CFS burden" + (st.year === "2040" ? " in 2040" : "");
+  byId("subtitle").innerHTML = MIX ? `Long COVID + classic ME · <b>${NAMES[c][0].replace(/ \(\d{4}\)$/, "")}</b>` : LCm ? `All long COVID lasting 12+ weeks · <b>caused by infection</b>`
+    : `Classic and post-COVID · <b>${NAMES[c][0].replace(/ \(\d{4}\)$/, "")}</b>`;
+  ROOT.querySelectorAll("#gme-critSeg button").forEach(b => b.title = NAMES[b.dataset.v][0]);
+
+  const yr = st.year === "2026" ? "now" : "in 2040";
+  byId("casesLabel").textContent = `People living with it ${yr}`;
+  byId("dalyLabel").textContent = `Disease burden per year ${yr}`;
+  byId("casesN").textContent = cvText("cases", pick(Y.cases), pop);
+  byId("casesU").textContent = unitWord("cases");
+  byId("dalyN").textContent = cvText("daly", pick(Y.daly), pop);
+  byId("dalyU").textContent = unitWord("daly");
+  const rng = (kind, s) => `${midWord()} · 90% range ${cvText(kind, s[0], pop)}–${cvText(kind, s[2], pop)}`;
+  byId("casesR").textContent = rng("cases", Y.cases);
+  byId("dalyR").textContent = rng("daly", Y.daly);
+
+  const age = st.view === "age", explain = st.view === "explain", ctry = st.view === "countries";
+  ROOT.querySelector(".dists").hidden = explain || ctry;
+  byId("results").hidden = explain || ctry;
+  byId("explain").hidden = !explain;
+  byId("countries").hidden = !ctry;
+  renderCountries(c);
+  renderExplain(c);
+  ["hCases", "hDaly"].forEach(id => byId(id).style.display = age ? "none" : "block");
+  byId("aCases").hidden = !age; byId("aDaly").hidden = !age;
+  if (age) {
+    drawAges(byId("aCases"), Y.band_cases, "cases", st.year);
+    drawAges(byId("aDaly"), Y.band_daly, "daly", st.year);
+  } else {
+    drawHist(byId("hCases"), Y.h_cases, Y.cases, "cases", pop);
+    drawHist(byId("hDaly"), Y.h_daly, Y.daly, "daly", pop);
+  }
+
+  const on = st.year === "2026" ? [...st.refs].map(k => REFS[k]) : [];
+  let cn, dn;
+  if (age) {
+    cn = st.unit === "count" ? "Bars show the " + midWord() + ", lines the 90% range." : "Share of each age group. Bars show the " + midWord() + ", lines the 90% range.";
+    dn = st.unit === "count" ? "Age groups from UN World Population Prospects 2024." : "Per 100,000 people in each age group.";
+  } else if (st.year === "2040") {
+    cn = `Includes a ${pct(S.p_pand[1])} chance of another pandemic before 2040, which pulls the mean up more than the median. Reference diseases are shown for now only.`;
+    dn = "Disability-adjusted life years: years lived with disability plus years lost to early death.";
+  } else {
+    cn = on.length ? on.map(r => `<a class="src" href="${r.url}" target="_blank" rel="noopener">${r.name}</a>${r.name === r.tag ? "" : " (" + r.tag + ")"} ${cvText("cases", r.cases, POP2021)}: ${MIX ? "the total" : LCm ? "long COVID" : "ME/CFS"} <strong>${(pick(Y.cases) / r.cases).toFixed(pick(Y.cases) / r.cases < 10 ? 1 : 0)}×</strong>`).join(" · ")
+      : "Pick a disease above to compare.";
+    const onD = on.filter(r => r.daly != null);
+    dn = onD.length ? onD.map(r => `${r.tag} ${cvText("daly", r.daly, POP2021)}${r.dnote || ""}: <strong>${(pick(Y.daly) / r.daly).toFixed(pick(Y.daly) / r.daly < 10 ? 1 : 0)}×</strong>`).join(" · ") + ". Reference DALYs from Global Burden of Disease 2023" + (MIX ? ". Compare loosely: the long COVID weights are set by level of limitation, except for post-COVID ME; the ME/CFS weights are borrowed from similar conditions." : LCm ? ". Compare loosely: post-COVID ME counts at the ME/CFS weight, the rest of long COVID by how limited people are." : ". Compare loosely: the ME/CFS weights are borrowed from conditions with similar loss of function, not measured for ME/CFS itself.")
+      : "Disability-adjusted life years: years lived with disability plus years lost to early death.";
+  }
+  byId("casesNote").innerHTML = cn;
+  byId("dalyNote").innerHTML = dn;
+
+  // split
+  const split = byId("split"), legend = byId("legend");
+  const fm = v => cvText("cases", v, pop);
+  let parts;
+  if (MIX && st.year === "2026") {
+    parts = [["Classic ME", "var(--azure)", Y.A, null, "classic"], ["All long COVID", "var(--cyan)", Y.B, null, "longcovid"]];
+    byId("splitLede").innerHTML = `All long COVID already includes post-COVID ME, so post-COVID ME is not added again. Classic ME depends on the criteria you pick; long COVID does not. Each number shows the ${midWord()} and its 90% range.`;
+  } else if (MIX) {
+    const P4 = D.lc.parts40[st.route];
+    parts = [["Classic ME", "var(--azure)", Y.A, null, "classic"], ["Long COVID: post-COVID ME, broadest definition", "#5b8bd6", P4.me, null, "future"],
+             ["Other long COVID, ill since before 2026", "var(--teal-deep)", P4.oth, null, "future"],
+             ["Other long COVID, new since 2026", "var(--cyan)", P4.new, null, "future"],
+             ["Other long COVID from a new pandemic", "var(--gold)", P4.pand, `${pct(S.p_pand[1])} chance; if it happens ${fm(P4.pand_if[1])} (${fm(P4.pand_if[0])}–${fm(P4.pand_if[2])})`, "future"]];
+    byId("splitLede").textContent = "In 2040: classic ME, post-COVID ME by the broadest definition, and other long COVID. Most other long COVID clears, so it shrinks. A new pandemic has a median of zero because it probably won't happen; switch to the mean to see its expected weight.";
+  } else if (LCm && st.year === "2026") {
+    parts = [["Limited a lot", "var(--cyan)", D.lc.parts[0]], ["Limited a little", "var(--teal-deep)", D.lc.parts[1]],
+             ["Not limited", "#6f7f96", D.lc.parts[2]]];
+    byId("splitLede").innerHTML = `How much long COVID limits daily life, from the UK survey, after removing cases not caused by infection. <a class="jump" href="#longcovid" data-go="longcovid">Where these numbers come from</a>. Post-COVID ME is part of this: by ${c} it would be ${pct(D.lc.me_share[c])} of all long COVID. <a class="jump" href="#lcshare" data-go="lcshare">Is that plausible?</a>`;
+  } else if (LCm) {
+    const P4 = D.lc.parts40[st.route];
+    parts = [["Post-COVID ME, broadest definition", "#5b8bd6", P4.me, null, "future"],
+             ["Other long COVID, ill since before 2026", "var(--teal-deep)", P4.oth, null, "future"], ["Other long COVID, new since 2026", "var(--cyan)", P4.new, null, "future"],
+             ["Other long COVID from a new pandemic", "var(--gold)", P4.pand, `${pct(S.p_pand[1])} chance; if it happens ${fm(P4.pand_if[1])} (${fm(P4.pand_if[0])}–${fm(P4.pand_if[2])})`, "future"]];
+    byId("splitLede").textContent = "Long COVID in 2040. People with post-COVID ME, by the broadest definition, follow the post-COVID ME projection, including new cases. Most other long COVID clears, so it shrinks. A new pandemic has a median of zero because it probably won't happen; switch to the mean to see its expected weight.";
+  } else if (st.year === "2026") {
+    parts = [["Classic ME", "var(--azure)", Y.A, null, "classic"], [`Post-COVID ME <span class="rt">${ROUTE_NAME}</span>`, "var(--cyan)", Y.B, null, ROUTE_ANCHOR]];
+    byId("splitLede").textContent = "Two routes built from different studies. Each number shows the " + midWord() + " and its 90% range.";
+  } else {
+    parts = [["Classic ME", "var(--azure)", Y.A, null, "classic"], ["Post-COVID ME, ill since before 2026", "var(--teal-deep)", R.B_surv, null, "future"], ["Post-COVID ME, new since 2026", "var(--cyan)", R.B_new, null, "future"],
+             ["ME from a new pandemic", "var(--gold)", R.B_pand, `${pct(S.p_pand[1])} chance; if it happens ${fm(R.pand_if[1])} (${fm(R.pand_if[0])}–${fm(R.pand_if[2])})`, "future"]];
+    byId("splitLede").textContent = "In 2040, post-COVID ME is people still ill from before 2026 plus new cases from later infections. A new pandemic has a median of zero because it probably won't happen; switch to the mean to see its expected weight.";
+  }
+  byId("splitTitle").textContent = LCm ? (st.year === "2026" ? "How much it limits people" : "Where the cases come from") : "Where the cases come from";
+  const tot = parts.reduce((s, p) => s + pick(p[2]), 0);
+  split.innerHTML = parts.filter(p => pick(p[2]) > 0).map(p => `<span style="width:${100 * pick(p[2]) / tot}%;background:${p[1]}"></span>`).join("");
+  legend.innerHTML = parts.map((p, i) => `<div><div class="k"><i style="background:${p[1]}"></i>${p[0]}</div><div class="v">${fm(pick(p[2]))}</div><div class="r">${p[3] || fm(p[2][0]) + "–" + fm(p[2][2])}</div>${p[4] && (i === 0 || parts[i - 1][4] !== p[4]) ? `<a class="how" href="#${p[4]}" data-go="${p[4]}">Where this comes from</a>` : ""}</div>`).join("");
+
+  // overlap diagrams (home tab)
+  {
+    const RY = R[st.year], LY = st.year === "2040" ? D.lc["2040r"][st.route] : D.lc["2026"], popY = D.pop[st.year];
+    const A = pick(RY.A), Bv = pick(RY.B), L = pick(LY.cases);
+    const RS = C.lcrest[st.route][st.year], restC = pick(RS.cases), restD = pick(RS.daly);
+    const Ad = pick(RY.A_daly), Bd = pick(RY.B_daly);
+    const over1 = drawEuler(byId("euP"), A, Bv, L, "cases", popY);
+    drawEuler(byId("euB"), Ad, Bd, Bd + restD, "daly", popY);
+    const OV = "background:linear-gradient(135deg, var(--azure) 50%, var(--cyan) 50%)";
+    const lnk = (a, t) => `<a class="how" href="#${a}" data-go="${a}">${t}</a>`;
+    const leg = (rows, kind) => rows.map(([t, sub, sw, s, a]) =>
+      `<div class="eurow"><i style="${sw}"></i><div class="lb">${t}${sub ? `<small>${sub}</small>` : ""}${a}</div>` +
+      `<div class="v"><b>${cvText(kind, pick(s), popY)}</b><small>${cvText(kind, s[0], popY)}–${cvText(kind, s[2], popY)}</small></div></div>`).join("");
+    const isP = kind => kind === "cases";
+    byId("euPl").innerHTML = leg([
+      ["Classic ME/CFS", "", "background:var(--azure)", RY.A, lnk("classic", "Where this comes from")],
+      ["Post-COVID ME", `overlap · ${ROUTE_NAME}`, OV, RY.B, lnk(ROUTE_ANCHOR, "Where this comes from")],
+      ["Long COVID without ME", "", "background:var(--cyan)", RS.cases, lnk("longcovid", "Where this comes from")]], "cases");
+    byId("euBl").innerHTML = leg([
+      ["Classic ME/CFS", "", "background:var(--azure)", RY.A_daly, ""],
+      ["Post-COVID ME", "", OV, RY.B_daly, ""],
+      ["Long COVID without ME", `at ${restC > 0 ? (restD / restC).toFixed(2) : "–"} per person, by limitation`, "background:var(--cyan)", RS.daly, lnk("dalys", "How burden is worked out")]], "daly");
+    const merged = st.year === "2026" && st.cond !== "lc";
+    byId("splitSec").hidden = merged;
+    byId("eulerTitle").textContent = merged ? "Where the cases come from" : "How the conditions overlap";
+    byId("eulerLede").textContent = `Post-COVID ME is both ME/CFS and long COVID. ${c}, ${st.year === "2026" ? "now" : "2040"}. Each number shows the ${midWord()} and its 90% range; circle areas are to scale.`;
+    let note = "";
+    if (over1) note += ` <b style="color:var(--gold)">Here post-COVID ME comes out larger than all long COVID, which can't be right, so the overlap is drawn at the size of the long COVID circle.</b> <a class="jump" href="#routes" data-go="routes">Why the routes disagree</a>.`;
+    byId("eulerNote").innerHTML = note;
+  }
+
+  // step-by-step chains
+  const fb = v => v >= 1e9 ? (v / 1e9).toFixed(2) + "bn" : fmt1(v / 1e6) + "M";
+  const rngX = r => r[0] < 0.1 ? pct(r[0], 2) + "–" + pct(r[1], 2) : r[0].toFixed(2) + "–" + r[1].toFixed(2);
+  const multX = (k, m) => m === null ? "" : k === "newinf" ? "+" + pct(m) : (m < 0.1 ? pct(m, k === "prev" ? 2 : 1) : "×" + m.toFixed(2));
+  const prof = p => D.bands.map((b, i) => `${b}: ${i === 2 ? "1" : p[i][1].toFixed(2)}`).join(" · ");
+  const INFO_A = {
+    pop: ["Everyone alive today", "World population in 2026, from UN World Population Prospects 2024."],
+    prev: ["How common broad ME/CFS is in adults",
+      "Researchers in Chicago phoned a random sample of 28,673 households, then had doctors examine everyone who screened positive. 0.42% of adults had ME/CFS by the broad Fukuda definition (Jason 1999). Other careful studies found 0.19–0.24%, so the range is wide."],
+    age: ["Children and older people get it less often",
+      `The Chicago figure is for adults. The model gives each age group its own rate, relative to ages 30–44: ${prof(S.profA)}. Based on Jason 1999 and Norwegian diagnoses (Bakken 2014), applied to the world's age mix.`],
+    crit: [`How many of those meet ${c}`, RATIO_A_WHY[c]],
+    missed: ["Surveys miss the sickest people",
+      "People who are housebound or bedbound are less likely to answer the phone or come in for an exam, and stricter criteria select exactly these people. Judgement."],
+    trend: ["More diagnoses than in the 1990s",
+      "In Norway, new specialist diagnoses rose from 25.8 to 36.1 per 100,000 people a year between 2008–12 and 2016–18 (Bakken 2014; Hilland and Anthun 2022). Part of that is better diagnosis, so the model uses a smaller rise."],
+    world: ["Adjusting from rich countries to the world",
+      `More infections that can trigger ME, but shorter lives, so people live with it for fewer years. <a class="jump" href="#world" data-go="world">See how this is worked out</a>.`]
+  };
+  const INFO_B = {
+    pop: INFO_A.pop,
+    age: ["Children and older people get it less often",
+      `The US study looked at adults. Long COVID followed 1.0% of children's first infections against 4.0% of adults' (ONS 2023). Each age group gets its own rate, relative to ages 30–44: ${prof(S.profB)}. In effect the world counts as ${(C.chain[1][2] / 1e9).toFixed(2)} billion adults.`],
+    inf: ["Most people have had COVID", "Share of people infected at least once, from antibody surveys."],
+    recover: ["Extra ME after infection, in a US study",
+      "The US RECOVER study followed 4,515 adults from within 30 days of infection. 1.6% later met the IOM criteria for ME/CFS by questionnaire, against 0.6% of 1,439 uninfected adults (Vernon 2025). The difference, about 1%, is the part caused by COVID. We widen the range upward to 0.6–2.5%, because the only study where doctors assessed everyone found more: 3.2% of German hospital staff met CCC after an early-variant infection before vaccination, 7 of 221 (Tack 2026), which the authors call a lower bound. We passed over RECOVER's overall 4.5%: it includes 7,270 people who joined when already ill, and 6.3% of them met the criteria."],
+    volunteers: ["Study volunteers may differ from average",
+      "We only use people who joined soon after infection, before anyone knew who would stay ill. They are still volunteers, so we allow a small discount. Judgement."],
+    confirm: ["Not all would be confirmed by a doctor",
+      "RECOVER classified people from questionnaires, not exams. Some who ticked the boxes would not get a diagnosis. Judgement."],
+    crit: [`How many of those meet ${c}`, RATIO_B_WHY[c]],
+    variant: ["Early variants and fewer vaccines meant more ME",
+      `Most people RECOVER followed from infection caught Omicron after vaccination: about 90% of those infected in the Omicron era were fully vaccinated (RECOVER seminar 2023). The world's first infections were riskier. We build the world from four groups. China, with 17% of the world's people, kept COVID out until the Omicron wave of December 2022, when 82% were infected within three months (China CDC 2023); most had been vaccinated, mainly with inactivated vaccines, which we assume protect ${pct(S.e_inact[0])}–${pct(S.e_inact[2])} as well as mRNA vaccines. India, also 17%, was mostly infected by Delta in 2021: two thirds had antibodies by July 2021 (ICMR serosurvey). In rich countries about ${pct(D.lc.reg.q[2][1])} of first infections came before Omicron (21.3% of people were infected by mid-November 2021, IHME). In the rest of the world most were infected before Omicron, with 79% in sub-Saharan Africa by mid-November 2021 (IHME), and few were vaccinated when Omicron came. Together, about ${pct(S.q_g[1])} of the world's first infections came before Omicron, and about ${pct(1 - S.v_w[1])} of later first infections came without effective vaccination. In US veterans, long COVID followed 10.4 per 100 infections before Delta, 7.7 per 100 Omicron infections without vaccination, and 3.5 per 100 with vaccination; vaccination explained about 70% of the fall (Xie 2024). We use ${S.R_pre[1].toFixed(1)}× and ${S.R_ou[1].toFixed(1)}× the risk of a vaccinated Omicron infection. These figures are for long COVID in general, not ME specifically. A review of vaccine studies found protection in most, but the evidence is weak (Byambasuren 2023).`],
+    reinf: ["Reinfections add new cases, at falling risk",
+      `By 2026 an infected person has had about ${S.n26[1].toFixed(1)} infections. A second infection carries about ${pct(S.r_re[1])} of a first infection's risk: long COVID followed 2.4% of adults' second infections against 4.0% of first ones (ONS 2023), and German data found roughly half the risk (NAKO, Mikolajczyk 2024). Each later infection carries ${pct(S.decay[1])} (${pct(S.decay[0])}–${pct(S.decay[2])}) of the risk of the one before. Two things push it down: immunity builds, and the people most prone to long COVID have often already got it. Risk does not fall to zero; US veterans had more health problems with each extra infection (Bowe 2022). RECOVER already counted some reinfections, so those are not added twice.`],
+    persist: ["Some people have recovered", "Recovery from ME/CFS is uncommon, but some post-COVID cases improve. Judgement."],
+    world: ["Adjusting from rich countries to the world",
+      `Poorer baseline health raises the risk; shorter lives mean fewer years living with it. Infections are counted directly here, so the extra-infection effect used for classic ME is left out. <a class="jump" href="#world" data-go="world">See how this is worked out</a>.`]
+  };
+  const INFO_LC = {
+    pop: INFO_A.pop,
+    uk: ["Long COVID lasting 12+ weeks in the UK",
+      "In early 2024, 3.3% of people in private households in England and Scotland said they had long COVID (ONS, winter 2023–24). 1.9% said it had lasted at least 12 weeks, but that count left out people who weren't sure how long; Christina Pagel estimates the true figure is nearer 2.9% (Pagel 2024). We use 1.9–3.3%."],
+    age: ["Adjusting from the UK's age mix to the world's", "The UK is older than the world, and long COVID peaks at ages 45–64. Each age group gets the same relative rate as for post-COVID ME."],
+    att: ["Not all of it is caused by COVID",
+      `Some people who report long COVID would have had the same symptoms anyway. Studies with uninfected comparison groups find that between a fifth and four fifths of reported symptoms are caused by infection, depending on how strict the definition is (Subramanian 2022; ONS 2021). In Scotland, after adjusting for other factors, about half of the persistent symptoms in infected people were caused by the infection (Hastie 2023). We assume ${pct(D.lc.att[0][1])} (${pct(D.lc.att[0][0])}–${pct(D.lc.att[0][2])}) of the 'limited a lot' group is caused by infection, ${pct(D.lc.att[1][1])} (${pct(D.lc.att[1][0])}–${pct(D.lc.att[1][2])}) of 'limited a little' and ${pct(D.lc.att[2][1])} (${pct(D.lc.att[2][0])}–${pct(D.lc.att[2][2])}) of 'not limited'. The split by limitation is judgement: no study with a comparison group has reported it.`],
+    recov: ["Some have recovered since early 2024",
+      `Share of early-2024 cases still ill in 2026. Recovery slows the longer people have been ill: in March 2023, 41% of UK long COVID had lasted at least two years (ONS March 2023). The UK count of people limited a lot was 381,000 in both March 2023 and early 2024, so the total has not been falling fast. Judgement, guided by that.`],
+    newinf: ["New cases from reinfections since early 2024",
+      `Added on top, as a share of early-2024 cases. Based on ${D.lc.lc_re2[1] ? pct(D.lc.lc_re2[1], 1) : ""} new long COVID per second infection, falling with each later infection as for post-COVID ME, at ${S.attack[1].toFixed(2)} infections per person per year. Only about ${pct(D.lc.present[1])} of cases that start in these two years are still going in 2026, because most clear within months.`],
+    world: ["Adjusting from rich countries to the world",
+      `Lower vaccination and poorer baseline health raise the risk; shorter lives shorten the time people live with it. <a class="jump" href="#world" data-go="world">See how this is worked out</a>.`]
+  };
+  const stepsHTML = (chain, info, finalLabel, finalVal) => chain.map(s => {
+    const [k, m, run, r] = s, inf = info[k];
+    const range = r ? `<div class="range2">Range used: ${k === "newinf" || k === "recov" ? pct(r[0]) + "–" + pct(r[1]) : k === "prev" || k === "recover" ? pct(r[0], k === "prev" ? 2 : 1) + "–" + pct(r[1], k === "prev" ? 2 : 1) : rngX(r)}</div>` : "";
+    return `<details class="stepd"><summary><span class="l">${inf[0]}</span><span class="x">${multX(k, m)}</span><span class="t">${fb(run)}</span></summary><div class="body">${inf[1]}${range}</div></details>`;
+  }).join("") + `<div class="stepd final"><div class="sumrow"><span class="l">${finalLabel}</span><span class="x"></span><span class="t">${fb(finalVal)}</span></div><div class="body small">The simulation median of ${fb(finalVal)} differs a little from the last step, because it mixes all the ranges.</div></div>`;
+  byId("chainA").innerHTML = stepsHTML(C.chainA, INFO_A, "Classic ME worldwide", C["2026"].A[1]);
+  ROOT.querySelector("#gme-chainA .stepd.final").classList.add("azure");
+  byId("chain").innerHTML = stepsHTML(C.chain, INFO_B, "Post-COVID ME worldwide", C["2026"].B[1]);
+  byId("chainLC").innerHTML = stepsHTML(D.lc.chain, INFO_LC, "Long COVID worldwide", D.lc["2026"].cases[1]);
+  ROOT.querySelector("#gme-chainLC .stepd.final").classList.add("teal");
+  const INFO_LR = {
+    lot: ["Long COVID that limits people a lot", "Worldwide, after removing cases not caused by infection. From the all-long-COVID route above."],
+    plot: ["Of those, how many meet the IOM criteria",
+      `About 70% (52–94%). In specialist long COVID clinics, about half of all patients meet ME/CFS criteria (Dehlia 2024), and in a Berlin study about half of 42 patients with ongoing fatigue and exhaustion after exertion met the Canadian criteria (Kedor 2022). Clinic patients include people limited only a little, so among those limited a lot the share is likely higher. Some will have mainly lung, heart or mental-health problems instead. Judgement.`],
+    lit: ["Plus some of those limited only a little",
+      `${pct(S.p_lit[1])} (${pct(S.p_lit[0])}–${pct(S.p_lit[2])}) of the ${fb(C.lit_m)} people limited a little. The IOM criteria require a substantial drop in activity, but people with mild ME/CFS who have adapted their lives may still answer 'a little'. Judgement.`],
+    crit: [`How many of those meet ${c}`, RATIO_B_WHY[c]]
+  };
+  const lrSteps = C.chainLR.map(s => {
+    const [k, m, run, r, add] = s, inf = INFO_LR[k];
+    const x = m === null ? "" : k === "lit" ? "+" + fb(add) : k === "crit" ? "×" + m.toFixed(2) : pct(m);
+    const range = r ? `<div class="range2">Range used: ${k === "crit" ? r[0].toFixed(2) + "–" + r[1].toFixed(2) : pct(r[0]) + "–" + pct(r[1])}</div>` : "";
+    return `<details class="stepd"><summary><span class="l">${inf[0]}</span><span class="x">${x}</span><span class="t">${fb(run)}</span></summary><div class="body">${inf[1]}${range}</div></details>`;
+  }).join("");
+  byId("chainLR").innerHTML = lrSteps +
+    `<div class="stepd final"><div class="sumrow"><span class="l">Post-COVID ME worldwide</span><span class="x"></span><span class="t">${fb(C.lcroute["2026"].B[1])}</span></div><div class="body small">Simulation median.</div></div>`;
+  const rcB = [["US study route (RECOVER)", C["2026"].B, "postcovid"], ["UK survey route (long COVID)", C.lcroute["2026"].B, "lcroute"], ["Both routes averaged", C.both["2026"].B, null]];
+  byId("routeCmp").innerHTML = rcB.map(([l, v, a]) =>
+    `<div class="step"><div class="l">${a ? `<a class="jump" href="#${a}" data-go="${a}">${l}</a>` : l}</div><div class="x">${fmt1(v[0] / 1e6)}–${fmt1(v[2] / 1e6)}M</div><div class="t">${fmt1(v[1] / 1e6)}M</div></div>`).join("");
+  byId("routeNote").innerHTML =
+    `For ${c}, the US study route gives about ${(C["2026"].B[1] / C.lcroute["2026"].B[1]).toFixed(1)} times as many people as the UK survey route. The US route would make post-COVID ME ${pct(D.lc.me_share[c])} of all long COVID; the UK route makes it ${pct(D.lc.me_share_lc[c])}. The US route probably runs high, because questionnaire answers overstate ME: 0.93 per 100 uninfected RECOVER participants a year met the criteria, far above the rate of diagnosis. The UK route may run low, because the survey misses people too ill to take part and people who no longer link their illness to COVID, and because the share meeting the criteria is judgement. "Both" averages the two on a multiplying scale for each simulation, which lands between them. The page uses this average by default. Choose another route under the settings button.`;
+  byId("lcdw").innerHTML = row("Health lost per person with long COVID", C.lcx[st.route]["2026"].per_case[1].toFixed(2), `${c}, ${st.route === "both" ? "both routes" : st.route === "lc" ? "UK survey route" : "US study route"}`,
+    `People with post-COVID ME count at the ME/CFS weight for ${c} (${C.dw[1].toFixed(2)}). Everyone else is weighted by how much long COVID limits them in the UK survey: limited a lot ${r2(D.lc.dw_lv[0])}, a little ${r2(D.lc.dw_lv[1])}, not limited ${r2(D.lc.dw_lv[2])}. Judgement, on the Global Burden of Disease scale: mild depression is 0.15, moderate breathing problems 0.23. The Global Burden of Disease study's own long COVID average is 0.23, but its definition only counts people with clear symptom clusters (Wulf Hanson 2022).`);
+
+  const NAME = {
+    "Extra cases after infection (RECOVER)": INFO_B.recover[0], "RECOVER volunteers vs all infected": INFO_B.volunteers[0],
+    "Self-report vs clinician-confirmed": INFO_B.confirm[0], "Share meeting the chosen criteria": `How many meet ${c}`,
+    "Post-COVID cases meeting the criteria": `How many post-COVID cases meet ${c}`, "Variant and vaccination mix": INFO_B.variant[0], "How fast reinfection risk falls": "How fast reinfection risk falls",
+    "Second and later infections": INFO_B.reinf[0], "Still ill in 2026": INFO_B.persist[0], "Rich countries to the world": "Rich countries to the world",
+    "Children and older people less affected": INFO_B.age[0], "People who have had COVID": INFO_B.inf[0],
+    "Broad ME/CFS prevalence in rich countries": "How common broad ME/CFS is (classic)", "Share also meeting the chosen criteria": `How many meet ${c} (classic)`,
+    "Rich countries to the world (classic)": "Rich countries to the world (classic)", "Disability weight": "Disability weight",
+    "Rise in diagnoses since the 1990s": INFO_A.trend[0], "Early death on top of disability": "Early death",
+    "Phone surveys miss the severely ill": INFO_A.missed[0]
+  };
+  const nm = k => NAME[k] || k;
+
+  const B26 = C["2026"].B[1];
+  const tmax = Math.max(...C.torn.map(t => t[2])) * 1.22;
+  byId("torn").innerHTML = C.torn.map(t => {
+    const a = 100 * t[1] / tmax, b = 100 * t[2] / tmax, md = 100 * B26 / tmax;
+    return `<div class="tr"><div class="t">${nm(t[0])}</div><div class="track">
+      <span class="lo" style="right:${100 - a + 1.5}%">${fmt1(t[1] / 1e6)}M</span>
+      <div class="bar" style="left:${a}%;width:${Math.max(0.6, b - a)}%"></div>
+      <div class="mid" style="left:${md}%"></div>
+      <span class="hi" style="left:${b + 1.5}%">${fmt1(t[2] / 1e6)}M</span></div></div>`;
+  }).join("");
+  const top4 = C.var_b.slice(0, 4);
+  byId("tornNote").innerHTML =
+    `Four steps explain ${top4.reduce((s, v) => s + v[1], 0).toFixed(0)}% of the spread: ${top4.map(v => nm(v[0]).toLowerCase()).join("; ")}. Each spans roughly a factor of three. Two are judgement, and the other two each rest on a single study.`;
+  const ALT = {
+    "First infections only, no reinfection risk": "Ignore reinfections", "No discount for RECOVER volunteers": "Treat study volunteers as typical",
+    "No discount for self-report": "Count every questionnaire case", "Everyone still ill in 2026": "Assume nobody recovered",
+    "No rich-to-world adjustment": "Skip the rich-to-world adjustment"
+  };
+  byId("alts").innerHTML = C.alts.map((a, i) =>
+    `<div class="step${i === 0 ? " final" : ""}"><div class="l">${i === 0 ? "Post-COVID ME, as modelled" : (ALT[a[0]] || a[0])}</div><div class="x">${i === 0 ? "" : "×" + (a[1] / C.alts[0][1]).toFixed(2)}</div><div class="t">${fmt1(a[1] / 1e6)}M</div></div>`).join("");
+
+  const strict = ["ICC", "CCC"].includes(c), lim = strict ? 0.0063 : 0.025;
+  byId("checks").innerHTML =
+    row(`Chance a first infection leads to ${c}-level illness`, pct(C.per_inf[1], 2), pct(C.per_inf[0], 2) + "–" + pct(C.per_inf[2], 2),
+      "About 11% met broad criteria six months after EBV, Q fever or Ross River virus, and 9% at twelve months (Dubbo study, Hickie 2006). Those people were ill enough to see a doctor, so their risk should be higher. Passes.") +
+    row(`Post-COVID ${c} cases as a share of a rich country's population`, pct(C.hic_B, 2), "model, now",
+      (() => {
+        const ratio = C.hic_B / lim;
+        const ref = strict ? "the 0.63% of UK residents whose long COVID limited them a lot" : "the 2.5% of UK residents whose long COVID limited them at all";
+        const verdict = ratio < 0.6 ? "Comfortably plausible." : ratio <= 1.1 ? "High, but possible." : "Probably too high.";
+        const extra = strict ? ` If one in six of the 1.83% limited only a little have mild ME/CFS, the comparison figure becomes 0.94% and this falls to ${Math.round(100 * C.hic_B / 0.0094)}%. Mild ME/CFS is hard to diagnose, so that share is a guess.` : "";
+        return `That is ${Math.round(ratio * 100)}% of ${ref} (ONS, winter 2023–24).${extra} In specialist clinics about half of long COVID patients meet ME/CFS criteria (Dehlia 2024). The ONS figure is a soft ceiling, not a hard one: it covered private households only, probably misses people too ill to respond and people who don't call their illness long COVID, and it predates two more years of infections. <b style="color:var(--gold)">${verdict}</b>`;
+      })()) +
+    (() => {
+      const LCmid = D.lc["2026"].cases[1], lotS = D.lc.parts[0][1] / LCmid, litS = D.lc.parts[1][1] / LCmid;
+      const conv = c === "IOM" ? 1 : C.rB[2];
+      const ceil = (lotS * S.p_lot[2] + litS * S.p_lit[2]) * conv;
+      const RNm = { rec: "US study route", lc: "UK survey route", both: "both routes averaged" }[st.route];
+      const sh = D.lc.me_share_route[c][st.route], r = sh / ceil;
+      const v = r < 0.8 ? "Plausible." : r <= 1.2 ? "High, but possible." : "Probably too high.";
+      return `<div id="gme-lcshare" class="anchor">` + row(`Post-COVID ${c} as a share of all long COVID`, pct(sh), "model, now",
+        `Post-COVID ME is part of long COVID, so it cannot be most of it. After removing cases not caused by infection, ${pct(lotS)} of long COVID limits people a lot and ${pct(litS)} a little. Take the top of our ranges: ${pct(S.p_lot[2])} of those limited a lot and ${pct(S.p_lit[2])} of those limited a little meet the IOM criteria${c === "IOM" ? "" : conv <= 1 ? `, and ${pct(conv)} of those meet ${c}` : `, and ${c} counts ${conv.toFixed(1)} times as many`}. Then post-COVID ME would be ${pct(ceil)} of long COVID. That is our ceiling. The ${pct(sh)} above is for ${RNm}; by route: US study ${pct(D.lc.me_share_route[c].rec)}, UK survey ${pct(D.lc.me_share_route[c].lc)}, both averaged ${pct(D.lc.me_share_route[c].both)}. In specialist clinics about half of long COVID patients meet ME/CFS criteria (Dehlia 2024), but clinics see the sickest. <b style="color:var(--gold)">${v}</b>` +
+        (r > 1.2 ? " Either the post-COVID ME estimate runs high, most likely because questionnaire answers overstate ME, or the UK survey under-counts long COVID, for example among people too ill to take part or who no longer link their illness to COVID." : "")) + `</div>`;
+    })();
+
+  // 2040
+  const fstep = (title, val, rng, body) => `<details class="stepd fs"><summary><span class="l">${title}</span><span class="x"></span><span class="t" style="white-space:nowrap">${val}</span></summary><div class="body">${body}${rng ? `<div class="range2">Range used: ${rng}</div>` : ""}</div></details>`;
+  byId("futureSteps").innerHTML =
+    fstep("World population in 2040", (D.pop["2040"] / 1e9).toFixed(2) + "bn", "", "UN World Population Prospects 2024, medium variant. 14.4% will be 65 or older, against 10.7% now.") +
+    fstep("Classic ME: change after 2026", x2(S.drift40[1]), r2(S.drift40), "Diagnosis may keep improving, or the rise since the 1990s may level off. Judgement.") +
+    fstep("Post-COVID ME: still ill in 2040", pct(S.surv14[1]), pct(S.surv14[0]) + "–" + pct(S.surv14[2]), "Of people ill in 2026. Full recovery from ME/CFS is uncommon: a review found a median of 5% recovered at follow-up (Cairns and Hotopf 2005).") +
+    fstep("COVID infections per person per year", S.attack[1].toFixed(2), r2(S.attack), "From 2024 on. About one infection every five years on average, with a range of one every three to eight years. For comparison, England averaged almost two infections per person in the three years to March 2023, when the virus was new. Judgement.") +
+    fstep("Each reinfection carries less risk than the one before", pct(S.decay[1]), pct(S.decay[0]) + "–" + pct(S.decay[2]), "The same decline as before 2026. By then most people have had two or three infections, so new ones carry much less risk than a first infection.") +
+    fstep("Variant changes and vaccine updates", x2(S.atten[1]), r2(S.atten), "Future variants may be milder, and updated vaccines may help, or not. Judgement.") +
+    fstep("New post-COVID cases still ill in 2040", pct(S.persist_new[1]), pct(S.persist_new[0]) + "–" + pct(S.persist_new[2]), "Averaged over cases that start anywhere between 2026 and 2040.") +
+    fstep("Other long COVID: still ill in 2040", pct(D.lc.surv_other[1]), pct(D.lc.surv_other[0]) + "–" + pct(D.lc.surv_other[2]), `Long COVID in 2040 has two parts. People with post-COVID ME, by the broadest definition (Fukuda) for the route you picked, follow the post-COVID ME projection above. Of everyone else with long COVID in 2026, this share is still ill in 2040: most of it clears. In the Global Burden of Disease analysis, 15% of people with long COVID at three months still had it at a year (Wulf Hanson 2022). This keeps long COVID in 2040 at least as large as post-COVID ME.`) +
+    fstep("New long COVID per reinfection", pct(D.lc.lc_re2[1], 1), pct(D.lc.lc_re2[0], 1) + "–" + pct(D.lc.lc_re2[2], 1), "For a second infection, after removing cases not caused by infection; later infections carry less. Based on 2.4% of adults reporting long COVID after a second infection (ONS 2023).") +
+    fstep("How long a new long COVID case lasts", D.lc.dur_lc[1].toFixed(1) + " years", D.lc.dur_lc[0].toFixed(1) + "–" + D.lc.dur_lc[2].toFixed(1) + " years", "On average. Most cases clear within months, but a minority last years (Wulf Hanson 2022).") +
+    fstep("Chance of another pandemic like COVID", pct(S.p_pand[1]), pct(S.p_pand[0]) + "–" + pct(S.p_pand[2]), "A study of 400 years of epidemics put the chance of a COVID-scale pandemic at about 2% a year, possibly doubling as new diseases emerge more often (Marani 2021). Over 14 years that adds up to about one in four.") +
+    fstep("Share of people infected in that pandemic", pct(S.pand_inf[1]), pct(S.pand_inf[0]) + "–" + pct(S.pand_inf[2]), "Judgement.") +
+    fstep("Its risk of ME, compared with COVID", x2(S.pand_rel[1]), r2(S.pand_rel), "Relative to a first COVID infection. Unknown, so the range is wide. The Dubbo study found similar rates after very different infections, but a milder pandemic would cause less.") +
+    fstep(`${c} cases in 2040, without and with a pandemic`, `${fmt1(C.nopand[1] / 1e6)}M / ${fmt1(C.withpand[1] / 1e6)}M`, "", "Medians. A pandemic adds far more to the upper end of the range than to the middle.");
+
+  byId("yllRow").innerHTML = row("Early death, added on top of disability", "+" + pct(S.yllr[1]), pct(S.yllr[0]) + "–" + pct(S.yllr[2]),
+    "A London study of 2,147 patients found no excess deaths overall, but more suicides, based on few deaths (Roberts 2016).");
+
+  byId("var").innerHTML = C.var.map(([k, v]) =>
+    `<div class="vb"><div class="t">${nm(k)}</div><div class="track"><div class="fill" style="width:${Math.min(100, v * 4)}%"></div></div><div class="p">${v.toFixed(0)}%</div></div>`).join("");
+  save();
+  linkCites(ROOT);
+}
+
+function fmtN(v) {
+  if (v >= 1e6) return (v / 1e6).toFixed(v >= 1e7 ? 0 : 1) + "M";
+  if (v >= 1e3) return Math.round(v / 1e3).toLocaleString("en") + "k";
+  return Math.round(v).toLocaleString("en");
+}
+function renderCountries(c) {
+  const LCm = st.cond === "lc", MIX = st.cond === "lcme", yi = st.year === "2026" ? 0 : 1;
+  const N = D.criteria[c].nat, L = D.lc.nat;
+  const RN = { rec: "US study route", lc: "UK survey route", both: "both routes averaged" }[st.route];
+  const val = (kind, v, pop) => st.unit === "count" ? fmtN(v) : kind === "cases" ? (100 * v / pop).toFixed(2) + "%" : Math.round(1e5 * v / pop).toLocaleString("en");
+  const rows = Object.keys(L).map(nm => {
+    const n = N[nm][st.year], pop = L[nm].pop[yi];
+    const lcC = st.year === "2026" ? L[nm]["2026"].cases : L[nm]["2040r"][st.route];
+    const cs = LCm ? lcC : MIX ? n.mix[st.route] : n.tot[st.route], ds = LCm ? n.lc_daly[st.route] : MIX ? n.mix_daly[st.route] : n.tot_daly[st.route];
+    const parts = LCm ? "" :
+      `Classic ME <b>${val("cases", pick(n.A), pop)}</b>, ` + (MIX ? `long COVID <b>${val("cases", pick(lcC), pop)}</b>, of which post-COVID ME <b>${val("cases", pick(n.B[st.route]), pop)}</b>. ` : `post-COVID ME <b>${val("cases", pick(n.B[st.route]), pop)}</b>. `);
+    const det = `${parts}90% range ${val("cases", cs[0], pop)}–${val("cases", cs[2], pop)} people, ${val("daly", ds[0], pop)}–${val("daly", ds[2], pop)} DALYs${st.unit === "count" ? "" : " per 100,000"}. ` +
+      (LCm || MIX ? "" : `All long COVID: <b>${val("cases", pick(lcC), pop)}</b>. `) +
+      `First infections before Omicron: <b>${pct(L[nm].q[1])}</b>; fully vaccinated in mid-January 2022: <b>${pct(L[nm].v[1])}</b>; long COVID risk per first infection compared with the UK: <b>${x2(L[nm].rel[1])}</b>. Population ${fmtN(pop)}.`;
+    return `<details><summary><span>${nm}</span><b>${val("cases", pick(cs), pop)}</b><b>${val("daly", pick(ds), pop)}</b><i>›</i></summary><div class="cdet">${det}</div></details>`;
+  }).join("");
+  byId("ctryTable").innerHTML =
+    `<div class="crow"><span>${st.year === "2026" ? "Now" : "2040"}</span><span>${st.unit === "count" ? "People" : "% people"}</span><span>${st.unit === "count" ? "DALYs" : "DALYs /100k"}</span><span></span></div>` + rows;
+  byId("ctryLede").textContent = `${LCm ? "All long COVID" : MIX ? "Long COVID + classic ME/CFS" : "ME/CFS"}, ${c}, ${RN}, ${midWord()}s. Tap a country for details.`;
+  byId("ctryNote").innerHTML = `The same model as the world figures, with each country's ages, infection history and vaccination. It assumes classic ME/CFS is equally common in all these countries, because there is no good data to say otherwise. <a class="jump" href="#national" data-go="national">How national figures are made</a>.`;
+}
+
+function lensArea(r1, r2, d) {
+  if (d >= r1 + r2) return 0;
+  if (d <= Math.abs(r1 - r2)) return Math.PI * Math.min(r1, r2) ** 2;
+  const a1 = Math.acos((d * d + r1 * r1 - r2 * r2) / (2 * d * r1)), a2 = Math.acos((d * d + r2 * r2 - r1 * r1) / (2 * d * r2));
+  return r1 * r1 * a1 + r2 * r2 * a2 - 0.5 * Math.sqrt((-d + r1 + r2) * (d + r1 - r2) * (d - r1 + r2) * (d + r1 + r2));
+}
+function drawEuler(svg, meOnly, ov, lcTotal, kind, pop) {
+  const W = Math.max(220, svg.clientWidth || 340), H = 170, top = 18;
+  svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+  const meTot = meOnly + ov, ovC = Math.min(ov, lcTotal, meTot);
+  const r1 = Math.sqrt(meTot / Math.PI), r2 = Math.sqrt(lcTotal / Math.PI);
+  let lo = Math.abs(r1 - r2), hi = r1 + r2;
+  for (let i = 0; i < 60; i++) { const mid = (lo + hi) / 2; if (lensArea(r1, r2, mid) > ovC) lo = mid; else hi = mid; }
+  const d = (lo + hi) / 2;
+  const k = Math.min((W - 8) / (r1 + d + r2), (H - top - 6) / (2 * Math.max(r1, r2)));
+  const R1 = r1 * k, R2 = r2 * k, Dd = d * k;
+  const x1 = (W - (R1 + Dd + R2)) / 2 + R1, x2 = x1 + Dd, cy = top + (H - top - 6) / 2 + 2;
+  const lab = (x, txt, col, anchor) => `<text x="${x}" y="12" font-size="11.5" font-weight="600" fill="${col}" text-anchor="${anchor}" font-family="Schibsted Grotesk, Arial, sans-serif">${txt}</text>`;
+  svg.innerHTML =
+    `<circle cx="${x1}" cy="${cy}" r="${R1}" fill="var(--azure)" fill-opacity="0.38" stroke="var(--azure)" stroke-width="1.2"/>` +
+    `<circle cx="${x2}" cy="${cy}" r="${R2}" fill="var(--cyan)" fill-opacity="0.38" stroke="var(--cyan)" stroke-width="1.2"/>` +
+    lab(Math.max(4, x1 - R1 * 0.2), "ME/CFS", "var(--azure)", x1 - R1 < 30 ? "start" : "middle") +
+    lab(Math.min(W - 4, x2 + R2 * 0.2), "Long COVID", "var(--cyan)", x2 + R2 > W - 40 ? "end" : "middle");
+  return ov > lcTotal * 1.001;
+}
+
+function renderExplain(c) {
+  {
+    const L = D.lc.nat;
+    byId("natRows").innerHTML =
+      `<div class="step"><div class="l" style="color:var(--muted);font-size:12.5px">Country</div><div class="x">before Omicron · vaccinated</div><div class="t" style="color:var(--muted);font-size:12.5px">vs UK</div></div>` +
+      Object.keys(L).map(nm => `<div class="step"><div class="l">${nm}</div><div class="x">${pct(L[nm].q[1])} · ${pct(L[nm].v[1])}</div><div class="t">${x2(L[nm].rel[1])}</div></div>`).join("");
+  }
+  {
+    const C0 = D.criteria[c], S0 = D.shared, mM = v => fmt1(v / 1e6) + "M";
+    const RT = st.route === "lc" ? C0.lcroute : st.route === "both" ? C0.both : C0;
+    const RN = { rec: "US study route", lc: "UK survey route", both: "both routes averaged" }[st.route];
+    const bR = C0["2026"].B[1], bL = C0.lcroute["2026"].B[1], bB = C0.both["2026"].B[1];
+    const ln = (l, x, t, a, cls) => `<div class="step${cls ? " " + cls : ""}"><div class="l">${a ? `<a class="jump" href="#${a}" data-go="${a}">${l}</a>` : l}</div><div class="x">${x}</div><div class="t">${t}</div></div>`;
+    byId("overview").innerHTML =
+      ln("Classic ME", "", mM(RT["2026"].A[1]), "classic") +
+      ln("Post-COVID ME, route 1: US study", "", mM(bR), "postcovid") +
+      ln("Post-COVID ME, route 2: UK survey", "", mM(bL), "lcroute") +
+      ln("Post-COVID ME, the two averaged", "", mM(bB), "routes") +
+      ln(`People with ME/CFS (${RN})`, "", mM(RT["2026"].cases[1]), null, "final") +
+      ln("Disease burden per year", "DALYs", mM(RT["2026"].daly[1]), "dalys", "final");
+    byId("overviewNote").innerHTML =
+      `${c}, now, middle values. The two routes get equal weight, but the average multiplies instead of adds: it is the square root of the two multiplied together, worked out in each of the 300,000 draws. That lands the same factor from each route: ${mM(bB)} is ${(bR / bB).toFixed(1)}× below the US route and ${(bB / bL).toFixed(1)}× above the UK route. An ordinary average would give ${mM((bR + bL) / 2)} and lean towards the larger route. We multiply because the routes disagree by a factor, not by a fixed amount. You can use one route on its own under the settings button.`;
+    const k1 = 1 + S0.yllr[1], w = C0.dw[1], wl = D.lc.dw[1];
+    const rowC = (l, n, wt, d, a) => ln(l, `${mM(n)} × ${wt.toFixed(2)} × ${k1.toFixed(2)}`, "≈ " + mM(d), a);
+    const LCy = D.lc["2026"];
+    byId("dalyCalc").innerHTML =
+      `<div class="step"><div class="l" style="color:var(--muted);font-size:12.5px">Group</div><div class="x">people × weight × early death</div><div class="t" style="color:var(--muted);font-size:12.5px">DALYs</div></div>` +
+      rowC("Classic ME", RT["2026"].A[1], w, RT["2026"].A_daly[1], "classic") +
+      rowC(`Post-COVID ME (${RN})`, RT["2026"].B[1], w, RT["2026"].B_daly[1], st.route === "lc" ? "lcroute" : st.route === "rec" ? "postcovid" : "routes") +
+      ln(`ME/CFS, ${c}`, "", mM(RT["2026"].daly[1]), null, "final") +
+      (() => {
+        const RS = C0.lcrest[st.route]["2026"], LX = C0.lcx[st.route]["2026"];
+        const bIn = Math.min(RT["2026"].B[1], LCy.cases[1]), rC = RS.cases[1], rD = RS.daly[1];
+        return rowC("Long COVID: post-COVID ME", bIn, w, LX.daly[1] - rD, st.route === "lc" ? "lcroute" : st.route === "rec" ? "postcovid" : "routes") +
+          rowC("Long COVID: the rest", rC, rC > 0 ? rD / rC / k1 : 0, rD, "longcovid") +
+          ln("All long COVID", "", mM(LX.daly[1]), null, "final");
+      })();
+    byId("dalyExpl").innerHTML =
+      `Now, middle values. The DALY figures are the simulation's own middle values, so they differ a little from multiplying the middle values shown. The ME/CFS weight, ${w.toFixed(2)}, is the average over the ${c} severity mix: <a class="jump" href="#sev" data-go="sev">how severe ME/CFS is</a> and <a class="jump" href="#weights" data-go="weights">how much health is lost</a> explain it. Classic and post-COVID ME get the same weight. Within long COVID, people with post-COVID ME count at the ME/CFS weight; the rest of long COVID gets lighter weights, set by how much it limits people (<a class="jump" href="#longcovid" data-go="longcovid">long COVID weights</a>). Early death adds ${pct(S0.yllr[1])} (${pct(S0.yllr[0])}–${pct(S0.yllr[2])}) on top, for every group, based on the one large study of deaths in ME/CFS (Roberts 2016); for long COVID this is a simplification. Each DALY figure is the burden of a single year. For 2040 the same weights are applied to the people projected for 2040.`;
+  }
+  const mix = SEV.mix[c];
+  byId("sevBar").innerHTML = mix.map((m, i) => `<span style="width:${m}%;background:${SEVCOL[i]}"></span>`).join("");
+  byId("sevRows").innerHTML = SEV.tiers.map((t, i) =>
+    `<div class="row"><div class="q"><i style="display:inline-block;width:9px;height:9px;border-radius:2px;background:${SEVCOL[i]};margin-right:7px"></i>${t[0]}</div><div class="val">${mix[i]}%<small>of ${c} cases</small></div><div class="why">${t[1]}</div></div>`).join("");
+  byId("dwRows").innerHTML = SEV.tiers.map(t =>
+    `<div class="row"><div class="q">${t[0]}</div><div class="val">${t[2].toFixed(2)}</div><div class="why">Similar to ${t[3]}. Weights from the Global Burden of Disease 2010 study.</div></div>`).join("");
+  const C = D.criteria[c];
+  byId("dwNote").innerHTML =
+    `With the ${c} severity mix, the average weight is ${C.dw[1].toFixed(2)} (${C.dw[0].toFixed(2)}–${C.dw[2].toFixed(2)}). The range allows for two kinds of error: each matched weight could be 20% too high or too low, and the share of severe and very severe cases could be 30% lower or 40% higher than assumed (${pct(C.sev_share[0])}–${pct(C.sev_share[2])} instead of ${pct(C.sev_share[1])}). The first matters more. Shifting the severe share moves the average by only about 5%, because most people sit in the moderate level. We left out quality-of-life scores (EQ-5D) measured in ME/CFS patients, because they are on a different scale and there is no reliable way to convert them. They point the same way, though: on the same questionnaire, ME/CFS scored worse than multiple sclerosis and stroke (Hvidberg 2015).`;
+}
+
+const CITES = [
+  ["ONS, winter 2023–24", "https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/articles/selfreportedcoronaviruscovid19infectionsandassociatedsymptomsenglandandscotland/november2023tomarch2024"],
+  ["MECVS Nederland 2023", "https://mecvs.nl/onderzoek/classification-of-me-cfs-patients-based-on-their-common-symptoms/"],
+  ["MECVS Nederland", "https://mecvs.nl/onderzoek/classification-of-me-cfs-patients-based-on-their-common-symptoms/"],
+  ["UN World Population Prospects 2024", "https://population.un.org/wpp/"],
+  ["Global Burden of Disease 2010 study", "https://www.healthdata.org/research-article/common-values-assessing-health-outcomes-disease-and-injury-disability-weights"],
+  ["Global Burden of Disease 2010", "https://www.healthdata.org/research-article/common-values-assessing-health-outcomes-disease-and-injury-disability-weights"],
+  ["NAKO, Mikolajczyk 2024", "https://dzl.de/publication/10-1016-j-jinf-2024-106206/"],
+  ["SHARE survey, JECH 2023", "https://jech.bmj.com/content/77/9/601"],
+  ["RECOVER seminar 2023", "https://recovercovid.org/sites/default/files/docs/archive/R3Seminar25_6-13-2023.pdf"],
+  ["Cairns and Hotopf 2005", "https://pubmed.ncbi.nlm.nih.gov/15699087/"],
+  ["Hilland and Anthun 2022", "https://doi.org/10.7557/14.6535"],
+  ["Wulf Hanson 2022", "https://healthdata.org/research-article/estimated-global-proportions-individuals-persistent-fatigue-cognitive-and"],
+  ["Subramanian 2022", "https://research.birmingham.ac.uk/files/173552066/s41591_022_01909_w.pdf"],
+  ["Byambasuren 2023", "https://bmjmedicine.bmj.com/content/2/1/e000385.full"],
+  ["Frallonardo 2023", "https://www.nature.com/articles/s41598-023-48258-3"],
+  ["Pazukhina 2024", "https://www.psi.ox.ac.uk/research/publications/publication_modal/2041594"],
+  ["Charafeddine 2017", "https://link.springer.com/10.1186/s13690-017-0174-z"],
+  ["Antonelli 2022", "https://sciencedaily.com/releases/2022/06/220616194629.htm"],
+  ["UN DESA 2023", "https://policy.desa.un.org/sites/default/files/inline-images/eapd2023/LDC-vaccine-31-Jan-23.pdf"],
+  ["Hastie 2023", "https://eprints.gla.ac.uk/309472/2/309472.pdf"],
+  ["DecodeME", "https://www.meresearch.org.uk/initial-findings-from-the-decodeme-questionnaire/"],
+  ["European ME Alliance survey", "https://www.euro-me.org/documents/emeaeusurvey/EMEAMEsurveyreport2024.pdf"],
+  ["Tack 2026", "https://www.mdpi.com/1648-9144/62/3/480"],
+  ["Vernon 2025", "https://recovercovid.org/publications/incidence-and-prevalence-post-covid-19-myalgic-encephalomyelitis-report-observational"],
+  ["Jason 1999", "https://scilit.com/publications/3d783fc1a421fe0b338a419e395098a7"],
+  ["Nacul 2011", "https://pubmed.ncbi.nlm.nih.gov/21794183/"],
+  ["Bakken 2014", "https://pmc.ncbi.nlm.nih.gov/articles/PMC4189623"],
+  ["Hickie 2006", "https://www.bmj.com/content/333/7568/575"],
+  ["Roberts 2016", "https://pubmed.ncbi.nlm.nih.gov/26873808"],
+  ["Hvidberg 2015", "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0132421"],
+  ["Kedor 2022", "https://www.mdc-berlin.de/de/research/publications/prospective-observational-study-post-covid-19-chronic-fatigue-syndrome"],
+  ["Grach 2023", "https://pubmed.ncbi.nlm.nih.gov/37793728/"],
+  ["Marani 2021", "https://pmc.ncbi.nlm.nih.gov/articles/PMC8536331"],
+  ["Dehlia 2024", "https://pubmed.ncbi.nlm.nih.gov/39353473/"],
+  ["Xie 2024", "https://www.sciencedaily.com/releases/2024/07/240717204059.htm"],
+  ["Bowe 2022", "https://pmc.ncbi.nlm.nih.gov/articles/PMC9671810/"],
+  ["Pagel 2024", "https://christinapagel.substack.com/p/updated-estimates-of-long-covid-in"],
+  ["Lim 2020", "https://pmc.ncbi.nlm.nih.gov/articles/PMC7038594/"],
+  ["ONS March 2023", "https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/prevalenceofongoingsymptomsfollowingcoronaviruscovid19infectionintheuk/30march2023"],
+  ["ONS 2023", "https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/bulletins/newonsetselfreportedlongcovidaftercoronaviruscovid19reinfectionintheuk/23february2023"],
+  ["ONS 2021", "https://www.ons.gov.uk/peoplepopulationandcommunity/healthandsocialcare/conditionsanddiseases/articles/technicalarticleupdatedestimatesoftheprevalenceofpostacutesymptomsamongpeoplewithcoronaviruscovid19intheuk/26april2020to1august2021"],
+  ["IHME", "https://eprints.soton.ac.uk/497093/1/1-s2.0-S0140673622004846-main.pdf"],
+  ["Global Burden of Disease 2023", "https://vizhub.healthdata.org/gbd-results/"],
+  ["Barber 2022", "https://eprints.soton.ac.uk/497093/1/1-s2.0-S0140673622004846-main.pdf"],
+  ["China CDC 2023", "https://weekly.chinacdc.cn/en/article/doi/10.46234/ccdcw2023.070"],
+  ["Our World in Data", "https://ourworldindata.org/covid-vaccinations"],
+  ["three years to March 2023", "https://arxiv.org/pdf/2408.04178"]
+];
+const CITE_RE = new RegExp(CITES.map(c => c[0].replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"), "g");
+const CITE_URL = Object.fromEntries(CITES);
+function linkCites(root) {
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+    acceptNode: n => (n.parentElement && (n.parentElement.closest("a, script, style, svg, button, summary .x, summary .t")) ? NodeFilter.FILTER_REJECT : NodeFilter.FILTER_ACCEPT)
+  });
+  const nodes = [];
+  while (walker.nextNode()) { CITE_RE.lastIndex = 0; if (CITE_RE.test(walker.currentNode.nodeValue)) nodes.push(walker.currentNode); }
+  nodes.forEach(n => {
+    const frag = document.createDocumentFragment(); let last = 0; const t = n.nodeValue;
+    CITE_RE.lastIndex = 0; let m;
+    while ((m = CITE_RE.exec(t))) {
+      frag.appendChild(document.createTextNode(t.slice(last, m.index)));
+      const a = document.createElement("a"); a.className = "src"; a.href = CITE_URL[m[0]]; a.target = "_blank"; a.rel = "noopener"; a.textContent = m[0];
+      frag.appendChild(a); last = m.index + m[0].length;
+    }
+    frag.appendChild(document.createTextNode(t.slice(last)));
+    n.parentNode.replaceChild(frag, n);
+  });
+}
+
+function renderGeo() {
+  byId("geo").innerHTML =
+    row("More infections that can trigger ME", x2(S.pathogen[1]), r2(S.pathogen),
+        "More dengue, chikungunya, typhoid and other triggers. But glandular fever, a common Western trigger, is rare where everyone catches the virus in early childhood.") +
+    row("Worm infections calming the immune system", x2(S.helminth[1]), r2(S.helminth),
+        "Shown for allergy and autoimmune disease, never tested for ME. Only a minority of people carry worms, so the effect is small.") +
+    row("Classic ME: combined, weighted by income group", x2(S.gA[1]), r2(S.gA),
+        "Includes people dying of the infection before ME can develop, and shorter time living with the illness where life expectancy is lower. The infection effect explains most of the uncertainty.") +
+    row("Poorer baseline health raises the risk after infection", x2(S.base_health[1]), r2(S.base_health),
+        "For the poorest countries; less for middle-income ones. In UK primary care, with uninfected comparison groups, long COVID risk was 11% higher in the most deprived fifth of areas, 21% higher in Black people, 10% higher with obesity and 55% higher with COPD (Subramanian 2022). Crude survey gradients are much larger: in England, long COVID was reported almost twice as often in the most deprived areas (Pagel 2024). But poorer health also means more symptoms without COVID, so most of that gap is not caused by infection.") +
+    row("Riskier infection history than the UK (long COVID only)", x2(S.lc_hist[1]), r2(S.lc_hist),
+        "More of the world's first infections came before Omicron or without vaccination than in the UK. The same four groups as in the post-COVID ME vaccination step, compared with the UK's own history. For post-COVID ME this is already in that step.") +
+    row("Post-COVID ME: combined, weighted by income group", x2(S.gB[1]), r2(S.gB), "Baseline health, worm infections and shorter lives together.") +
+    row("All long COVID: combined, weighted by income group", x2(S.gLC[1]), r2(S.gLC), "As for post-COVID ME, plus the riskier infection history.") +
+    `<div class="callout">Is long COVID more common in poorer countries? Direct estimates exist, but none we found can answer it. A survey of older Europeans found lingering COVID effects in 84% of infected people in four central European countries against 70% elsewhere, but it had no uninfected comparison group and no question about duration (SHARE survey, JECH 2023). A hospital study on four continents found less long COVID reported in poorer countries (45% against 69%), again without a comparison group (Pazukhina 2024). An African review pooled 25 studies to 49%, but the studies disagreed wildly and none had uninfected controls (Frallonardo 2023). So we rely on within-country studies that did have comparison groups, and on what is known about vaccination.</div>`;
+}
+
+function bindSeg(id, key) {
+  ROOT.querySelectorAll(`#gme-${id} button`).forEach(b => b.addEventListener("click", () => { st[key] = b.dataset.v; render(); }));
+}
+bindSeg("condSeg", "cond"); bindSeg("routeSeg", "route"); bindSeg("critSeg", "crit"); bindSeg("yearSeg", "year"); bindSeg("statSeg", "stat"); bindSeg("unitSeg", "unit");
+ROOT.querySelectorAll(".tabs button").forEach(b => b.addEventListener("click", () => { st.view = b.dataset.v; render(); }));
+ROOT.querySelectorAll(".refs button").forEach(b => b.addEventListener("click", () => {
+  const k = b.dataset.r; st.refs.has(k) ? st.refs.delete(k) : st.refs.add(k); render();
+}));
+// internal links: no href, so the host page can't treat them as navigation
+function fixJumps() {
+  ROOT.querySelectorAll("a[data-go][href]").forEach(a => { a.removeAttribute("href"); a.setAttribute("role", "link"); a.tabIndex = 0; });
+}
+new MutationObserver(fixJumps).observe(ROOT, { childList: true, subtree: true });
+function goTo(id) {
+  if (st.view !== "explain") { st.view = "explain"; render(); }
+  const t = byId(id); if (!t) return;
+  const head = navH() + ROOT.querySelector(".gme-top").getBoundingClientRect().height + 8;
+  const before = window.scrollY;
+  window.scrollTo(0, t.getBoundingClientRect().top + window.scrollY - head);
+  if (Math.abs(window.scrollY - before) < 2 && Math.abs(t.getBoundingClientRect().top - head) > 4) t.scrollIntoView({ block: "start" });
+  const d = t.closest("details"); if (d) d.open = true;
+}
+document.addEventListener("click", e => {
+  const a = e.target.closest("[data-go]"); if (!a) return;
+  e.preventDefault(); e.stopPropagation();
+  goTo(a.dataset.go);
+}, true);
+document.addEventListener("keydown", e => {
+  const a = e.target.closest && e.target.closest("[data-go]");
+  if (a && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); goTo(a.dataset.go); }
+});
+renderGeo();
+render();
+fixJumps();
+const gear = byId("gear"), panel = byId("settings");
+function setPanel(open) { panel.hidden = !open; gear.setAttribute("aria-expanded", open); }
+gear.addEventListener("click", () => setPanel(panel.hidden));
+document.addEventListener("keydown", e => { if (e.key === "Escape" && !panel.hidden) { setPanel(false); gear.focus(); } });
+document.addEventListener("click", e => { if (!panel.hidden && !e.target.closest(".gme-top")) setPanel(false); });
+let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTimeout(() => { setNav(); render(); }, 120); });
+})();
+</script>

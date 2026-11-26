@@ -5,7 +5,8 @@ A section can carry "interactive": {"html": fragment, "data": json or csv (optio
 fragment is inserted with its data (placeholder __DATA__ or __BVR_DATA__; a CSV becomes a list of row objects;
 "data" can also be {"name": path, ...}, which becomes an object of those); the part between <!-- more:start --> and <!-- more:end --> shows on the
 topic page only, replaced on the overview by a link to it. Parts between <!-- page-only:start --> and
-<!-- page-only:end --> also show on the topic page only, with nothing in their place. A chart's "toggle" can be one alternative image or a list of them.
+<!-- page-only:end --> also show on the topic page only, with nothing in their place. With "overview": false the
+whole fragment shows on the topic page only, and the overview gets a link line (its text from "more"). A chart's "toggle" can be one alternative image or a list of them.
 
 A section can carry "subsections": a list of {id, title, readme, finding, charts, data}. They show at the end
 of the topic page; the overview gets one link line per subsection. docs/<subsection id>.html redirects there.
@@ -265,7 +266,11 @@ def section_html(s, page=False):
     </header>
     <p class="finding">{e(s['finding'])}</p>"""]
     if s.get("interactive"):
-        parts.append(interactive_html(s, full=page))
+        if page or s["interactive"].get("overview", True):
+            parts.append(interactive_html(s, full=page))
+        else:  # "overview": false keeps a heavy model off the overview; a link line takes its place
+            lead = s["interactive"].get("more", "Interactive model")
+            parts.append(f'    <p class="bvr-more">{e(lead)}: {page_link(s["id"], "open the topic page")}.</p>')
     parts += files_html(s)
     for sub in s.get("subsections", []):
         if page:

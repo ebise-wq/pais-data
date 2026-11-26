@@ -29,6 +29,9 @@
   they don't clash with the page. The parts between `<!-- more:start -->` and `<!-- more:end -->`
   (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
   show on the topic page only. The headline-number boxes are page-only at the user's request.
+- An interactive with `"overview": false` shows on its topic page only; the overview gets a link line
+  (text from `"more"`). Used for the Global ME/CFS burden model (`global_burden/`), whose data are
+  about 380 KB. Its ids start with `gme-` and its styles sit under `.gme`.
 - A section can carry `"subsections"` (same fields as a section, minus interactive). They show at the end
   of its topic page, with a link line on the overview; `docs/<subsection id>.html` redirects there.
   The WHO ICTRP analysis is a subsection of the 120-disease section this way.

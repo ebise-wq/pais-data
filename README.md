@@ -135,6 +135,18 @@ Page: https://ebise-wq.github.io/pais-data/pais-burden.html
 
 Notes: [`pais/README.md`](pais/README.md)
 
+### Global ME/CFS burden
+
+A model of how many people worldwide have ME/CFS and how much disease burden it causes, since nobody has counted it. With the Canadian Consensus Criteria, about 45 million people have ME/CFS now (90% range 27–77 million), about half of them post-COVID. That is 17.5 million DALYs a year (9.9–31.7 million), the ME/CFS burden used in the research-vs-burden charts. Strict ICC gives 27 million people, broad Fukuda 80 million. The two routes for post-COVID ME differ 2.4-fold.
+
+Page: https://ebise-wq.github.io/pais-data/global-burden.html
+
+| File | What it is | Rows |
+|---|---|---|
+| [`global_burden/model_output_2026-11-26.json`](global_burden/model_output_2026-11-26.json) | Model output behind the interactive page: Monte Carlo ranges for people and DALYs by criteria, route, age group, year (now and 2040) and country, with every step's inputs. Computed in a separate session; that code is not in the repo. | 6 |
+
+Notes: [`global_burden/README.md`](global_burden/README.md)
+
 ### Papers and trials per year, 24 diseases
 
 The first data pulls: ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for 24 diseases, set against their global burden (GBD 2023 DALYs). Pick diseases to compare; by default ME/CFS is shown with three diseases of similar burden. The 120-disease work fetches its own counts.
