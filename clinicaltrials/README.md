@@ -23,7 +23,8 @@ DALYs from `../expanded/burden_interactive_2021-2025.json` (GBD 2023; ME/CFS 17.
 Sjögren's, lupus, celiac disease, IBS, post-treatment Lyme and cystic fibrosis are not GBD causes, so
 they have no DALYs. It shows 1996–2025, since 2026 is a partial year. The two sources were pulled on
 different dates (8 and 26 Nov 2026) with their own searches, so the 24 and the 111 are comparable in
-method but not identical in query style.
+method but not identical in query style. The chart opens on a linear scale (v3, at the user's request); log is a
+button away.
 
 `trials_per_year_*.csv` (from `trials_per_year.py`): interventional studies per start year,
 1996–2026. Registration only became expected in 2005 (ICMJE) and required for many US trials

@@ -55,7 +55,7 @@
         <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
       </div>
       <div class="py-seg" role="group" aria-label="Scale" data-k="log">
-        <button type="button" data-v="1" aria-pressed="true">Log scale</button><button type="button" data-v="0" aria-pressed="false">Linear</button>
+        <button type="button" data-v="1" aria-pressed="false">Log scale</button><button type="button" data-v="0" aria-pressed="true">Linear</button>
       </div>
     </div>
     <h3 id="py-title"></h3>
@@ -68,7 +68,7 @@
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v2</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v3</span></div>
   </div>
 </div>
 <script>
@@ -96,7 +96,7 @@ const ME_KEY = "All ME/CFS (classic + post-COVID)";
 const name = (d) => SHORT[d] || d;
 const all = Object.keys(series).sort((a, b) => (dalys[b] ?? -1) - (dalys[a] ?? -1) || a.localeCompare(b));
 const ME = "#f4a582", PAL = ["#7fb3d5", "#8fd3c9", "#c9b8e8", "#e6a6c0", "#f2d38a", "#a8c97f", "#9fb4ff", "#e8c4a0"];
-const S = { m: "papers", log: true, on: [ME_KEY, "Schizophrenia", "Epilepsy", "Osteoarthritis"].filter((d) => series[d]), col: {} };
+const S = { m: "papers", log: false, on: [ME_KEY, "Schizophrenia", "Epilepsy", "Osteoarthritis"].filter((d) => series[d]), col: {} };
 const colour = (d) => {
   if (d === ME_KEY) return ME;
   if (!S.col[d]) { const used = new Set(Object.values(S.col)); S.col[d] = PAL.find((c) => !used.has(c)) || PAL[Object.keys(S.col).length % PAL.length]; }

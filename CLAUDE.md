@@ -28,10 +28,12 @@
   README links, data files, earlier versions or subsection links; those are on the topic pages. PNG
   charts show without their caption card, and the explanation lines inside interactive fragments
   (`bvr-sub`, `fnd-sub`, `fnd-note`, `py-sub`, `pme-lede`, `hint`) are hidden by CSS under `.overview`.
-- The top of the overview is a plain contents list of section titles (v18). Once it scrolls out of view,
-  a slim bar pinned to the top names the section in view; tapping it opens the same list. (A v16-17
-  version with a headline number per section was dropped at the user's request.) The user may later
-  want search, tags and filters here; keep it simple until asked.
+- Under the overview header: "By Siebe Rozendal" with links to Substack, X and LinkedIn (from `"author"`
+  in `catalog.json`) and "Last updated" (the build date).
+- Contents (v19): one slim bar under the header, sticky while scrolling and collapsed by default, in
+  plain regular-weight text. It names the section in view; tapping it opens the list of sections over
+  the page. (A headline number per section, v16-17, and an open list at the top, v18, were dropped at the
+  user's request.) The user may later want search, tags and filters here; keep it simple until asked.
 - In titles, the part after the first comma ("120 diseases", "2024") is shown small.
 - A section can carry `"interactive"` (an HTML fragment plus its JSON data), e.g. the 120-disease
   burden charts in `expanded/burden_interactive.html`. Its CSS classes and ids start with `bvr-` so

@@ -1,10 +1,18 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 18,
+  "page_version": 19,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
+  "author": {
+    "name": "Siebe Rozendal",
+    "links": [
+      {"label": "Substack", "url": "https://siebepersists.substack.com"},
+      {"label": "X", "url": "https://x.com/PatientPersists"},
+      {"label": "LinkedIn", "url": "https://www.linkedin.com/in/sieberozendal/"}
+    ]
+  },
   "sections": [
     {
       "id": "burden-120",
