@@ -21,6 +21,8 @@ moved into the catalog. Page: https://ebise-wq.github.io/pais-data/pais-burden.h
   guesses of absolute and relative prevalence based on reading the literature, not hard data.
   Starting point: the Dutch PAIS Alliance (paisalliantie.nl) figures, divided by 3 (post-Q fever
   unchanged). Post-Lyme is an own estimate (the earlier, doubled figure divided by 2).
+  Post-Legionella: 300 new cases a year (the Alliance cites 500) × about 5 years average duration,
+  as for post-Lyme = 1,500 people, 0.0083% of the population.
 - Each group has a share with ME. People with ME get an ME severity weight: 0.55 if house/bedbound,
   0.22 otherwise, and a mix of the two (weighted by the ME-other-trigger split) where housebound
   status is not known. People without ME get a group weight: 0.40 for housebound Long COVID, 0.07
@@ -33,7 +35,7 @@ moved into the catalog. Page: https://ebise-wq.github.io/pais-data/pais-burden.h
 
 ## Results (default assumptions)
 
-- PAIS: 1.05% of the population. ME: 0.52% of the population, 49% of PAIS patients.
+- PAIS: 1.06% of the population. ME: 0.52% of the population, 49% of PAIS patients.
 - Burden: 0.22 healthy life-years lost per 100 people each year, of which 0.18 (80%) is ME.
 - On 2026-11-26 all prevalences were cut to a third (post-Lyme to half, post-Q fever unchanged). The
   shares barely moved: before, PAIS was 3.1% of the population, with the same 49% and 80%.

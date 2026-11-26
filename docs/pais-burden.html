@@ -149,7 +149,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/pais/README.md" target="_blank" rel="noopener">pais/README.md</a></div>
       
     </header>
-    <p class="finding">An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. The prevalence figures are guesses based on reading the literature, not hard data. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.05% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.</p>
+    <p class="finding">An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. The prevalence figures are guesses based on reading the literature, not hard data. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.</p>
 <!-- Interactive "PAIS disease burden and ME" model for the catalog pages.
      tools/build_catalog.py inserts this into docs/index.html and docs/pais-burden.html. All numbers
      are in the script below (no data file). The assumption cards between more:start and more:end show
@@ -225,7 +225,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
         <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
     </div>
-    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v7</span></div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v8</span></div>
   </div>
 
   <div class="pme-poster" id="pme-p2" hidden>
@@ -238,7 +238,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
         <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
     </div>
-    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v7</span></div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v8</span></div>
   </div>
 
   <label class="pme-tog"><input type="checkbox" id="pme-hide" checked> Hide numbers</label>
@@ -279,9 +279,9 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <li><b>ME, not housebound: 0.22.</b> The GBD weight for "infectious disease, post-acute consequences" (fatigue, pain, low mood) is 0.219. An Australian study found an EQ-5D of 0.69 in mild ME against 0.89 in the population, a loss of 0.20 (<a href="https://www.ispor.org/heor-resources/presentations-database/presentation/euro2023-3788/130321" target="_blank" rel="noopener">abstract, later withdrawn</a>).</li>
       <li><b>ME, house/bedbound: 0.55.</b> In the same study, moderate ME (ICC: mostly housebound) gave a loss of 0.45; severe ME scored much lower. For comparison: GBD moderate MS 0.46, severe MS 0.72. Mean ME utility in patient associations is 0.46–0.47 (<a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a>, <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a>), but those groups are sicker than average.</li>
       <li><b>Long COVID without ME: 0.07 (other) and 0.40 (housebound).</b> GBD weights for Long COVID: mild cognitive symptoms 0.069, mild respiratory symptoms 0.019, severe 0.38–0.41 (<a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">JAMA 2022</a>). In a Japanese population study, Long COVID scored 0.94 against 0.97 (<a href="https://journals.sagepub.com/doi/reader/10.1177/00469580241246461" target="_blank" rel="noopener">INQUIRY 2024</a>).</li>
-      <li><b>Post-vax (0.0037%) and post-Legionella (0.0027%)</b> are assumptions. Post-vax has the same split as Long COVID. For post-Legionella, the Dutch PAIS Alliance cites 500 new cases a year in the Netherlands (0.003% of the population); with an illness duration of several years, prevalence is higher.</li>
+      <li><b>Post-vax (0.0037%)</b> is an assumption, with the same split as Long COVID. <b>Post-Legionella (0.0083%)</b>: 300 new cases a year in the Netherlands (the Dutch PAIS Alliance cites 500) × an average illness duration of about 5 years, as for post-Lyme = 1,500 people.</li>
       <li><b>Post-Lyme, post-Q fever, post-Legionella and post-sepsis without ME: 0.07.</b> The same assumption as mild Long COVID. ME after these triggers gets the average ME severity. The share of ME after these triggers has never been measured.</li>
-      <li>Prevalence is the share of the population, converted from Dutch estimates (population 18.0 million). Burden is DALYs per person per year: prevalence × severity, so 1% means the population loses 1% of its healthy life-years. Starting point: the <a href="https://paisalliantie.nl/over-pais-aandoeningen/" target="_blank" rel="noopener">Dutch PAIS Alliance</a>, whose figures are divided by 3 here (post-Q fever unchanged). Post-Lyme is my own estimate (<a href="https://radboudumc.nl/en/news-items/2021/long-term-symptoms-more-common-after-lyme-disease" target="_blank" rel="noopener">LymeProspect</a>, <a href="https://www.tekenbeetziekten.nl/site/assets/files/1579/the-burden-of-lyme-borreliosis-expressed-in-disability-adjusted-life-years.pdf" target="_blank" rel="noopener">RIVM</a>).</li>
+      <li>Prevalence is the share of the population, converted from Dutch estimates (population 18.0 million). Burden is DALYs per person per year: prevalence × severity, so 1% means the population loses 1% of its healthy life-years. Starting point: the <a href="https://paisalliantie.nl/over-pais-aandoeningen/" target="_blank" rel="noopener">Dutch PAIS Alliance</a>, whose figures are divided by 3 here (post-Q fever unchanged; post-Legionella as above). Post-Lyme is my own estimate (<a href="https://radboudumc.nl/en/news-items/2021/long-term-symptoms-more-common-after-lyme-disease" target="_blank" rel="noopener">LymeProspect</a>, <a href="https://www.tekenbeetziekten.nl/site/assets/files/1579/the-burden-of-lyme-borreliosis-expressed-in-disability-adjusted-life-years.pdf" target="_blank" rel="noopener">RIVM</a>).</li>
     </ul>
   </div>
   <!-- more:end -->
@@ -306,7 +306,7 @@ const R=[
   {id:"pvO",t:"PV",l:"Post-vax, other",n:0.003,me:30,w:0.07,mw:"O"},
   {id:"ly",t:"LY",l:"Post-Lyme (PTLDS)",n:0.0445,me:20,w:0.07,mw:"X"},
   {id:"q",t:"Q",l:"Post-Q fever (QFS)",n:0.008,me:80,w:0.07,mw:"X"},
-  {id:"pl",t:"PL",l:"Post-Legionella",n:0.0027,me:20,w:0.07,mw:"X"},
+  {id:"pl",t:"PL",l:"Post-Legionella",n:0.0083,me:20,w:0.07,mw:"X"},
   {id:"s",t:"S",l:"Post-sepsis, excl. post-ICU",n:0.0147,me:10,w:0.07,mw:"X"},
   {id:"p",t:"S",l:"Post-intensive care syndrome after sepsis",n:0.0187,me:0,w:0.20,mw:"X",pics:1,lockMe:1,inc:false}
 ];
@@ -497,7 +497,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v10 · built 2026-11-26</span>
+  <span class="ver">v11 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
