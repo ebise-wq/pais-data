@@ -8,7 +8,7 @@ moved into the catalog. Page: https://ebise-wq.github.io/pais-data/pais-burden.h
 
 ## Files
 
-- `burden_me.html`: the interactive model. All inputs, defaults and sources are in this file (no
+- `burden_me.html`: the interactive model. Numbers in the diagrams are hidden by default ("Hide numbers"). All inputs, defaults and sources are in this file (no
   data file). `tools/build_catalog.py` inserts it into the overview and the topic page. On the
   overview the assumption tables are left out and the defaults are used.
 
@@ -17,9 +17,10 @@ moved into the catalog. Page: https://ebise-wq.github.io/pais-data/pais-burden.h
 - Groups: Long COVID (house/bedbound and other), ME after another trigger, post-vaccination,
   post-Lyme (PTLDS), post-Q fever (QFS), post-Legionella, post-sepsis without ICU. Post-intensive
   care syndrome after sepsis is listed but left out by default.
-- Prevalence is the share of the population, converted from Dutch estimates (population 18.0 million).
-  Starting point: the Dutch PAIS Alliance (paisalliantie.nl). Post-Lyme is an own estimate, doubled to
-  stay in proportion with the other figures, which are probably about 2× too high.
+- Prevalence is the share of the population in the Netherlands (population 18.0 million). These are
+  guesses of absolute and relative prevalence based on reading the literature, not hard data.
+  Starting point: the Dutch PAIS Alliance (paisalliantie.nl) figures, divided by 3 (post-Q fever
+  unchanged). Post-Lyme is an own estimate (the earlier, doubled figure divided by 2).
 - Each group has a share with ME. People with ME get an ME severity weight: 0.55 if house/bedbound,
   0.22 otherwise, and a mix of the two (weighted by the ME-other-trigger split) where housebound
   status is not known. People without ME get a group weight: 0.40 for housebound Long COVID, 0.07
@@ -32,8 +33,10 @@ moved into the catalog. Page: https://ebise-wq.github.io/pais-data/pais-burden.h
 
 ## Results (default assumptions)
 
-- PAIS: 3.1% of the population. ME: 1.5% of the population, 49% of PAIS patients.
-- Burden: 0.65 healthy life-years lost per 100 people each year, of which 0.52 (80%) is ME.
+- PAIS: 1.05% of the population. ME: 0.52% of the population, 49% of PAIS patients.
+- Burden: 0.22 healthy life-years lost per 100 people each year, of which 0.18 (80%) is ME.
+- On 2026-11-26 all prevalences were cut to a third (post-Lyme to half, post-Q fever unchanged). The
+  shares barely moved: before, PAIS was 3.1% of the population, with the same 49% and 80%.
 
 ## Caveats
 

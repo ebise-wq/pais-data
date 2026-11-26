@@ -1207,7 +1207,7 @@ if (tb) {
       <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/pais/README.md" target="_blank" rel="noopener">pais/README.md</a></div>
       <a class="open" href="pais-burden.html">Open page →</a>
     </header>
-    <p class="finding">An illustrative model of post-acute infection syndromes (PAIS) built on Dutch prevalence estimates. With the default assumptions, ME is about half of PAIS patients (1.5% of 3.1% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.</p>
+    <p class="finding">An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. The prevalence figures are guesses based on reading the literature, not hard data. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.05% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.</p>
 <!-- Interactive "PAIS disease burden and ME" model for the catalog pages.
      tools/build_catalog.py inserts this into docs/index.html and docs/pais-burden.html. All numbers
      are in the script below (no data file). The assumption cards between more:start and more:end show
@@ -1227,6 +1227,7 @@ if (tb) {
 .pme-poster h3 { font: 600 clamp(1.35rem, 4.4vw, 1.85rem)/1.15 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 .pme-poster h3 em { font-style: normal; color: var(--sunset); }
 .pme-lede { color: var(--muted); font-size: 0.95rem; margin: 6px 0 0; max-width: 60ch; }
+.pme-note { color: var(--muted); font-size: 0.85rem; font-style: italic; margin: 6px 0 0; max-width: 70ch; }
 .pme-panels { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 14px; }
 @media (min-width: 640px) { .pme-panels { grid-template-columns: 1fr 1fr; gap: 18px; } }
 .pme-pn { min-width: 0; }
@@ -1275,28 +1276,30 @@ if (tb) {
   <div class="pme-poster" id="pme-p1">
     <h3 id="pme-ttl">ME is about half of PAIS patients, but most of the PAIS disease burden</h3>
     <p class="pme-lede">Post-Acute Infection Syndromes</p>
+    <p class="pme-note">Note: these numbers are not grounded in hard data. They're my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.</p>
     <div class="pme-panels">
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kN">–</em> of PAIS patients have ME</span><span class="pme-t" id="pme-tN"></span></div>
         <svg id="pme-vN" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS patients by trigger and ME"></svg></div>
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
         <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
     </div>
-    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v6</span></div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v7</span></div>
   </div>
 
   <div class="pme-poster" id="pme-p2" hidden>
     <h3>How Long COVID, ME, dysautonomia and MCAS may overlap</h3>
     <p class="pme-lede">Rough estimate.</p>
+    <p class="pme-note">Note: these numbers are not grounded in hard data. They're my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.</p>
     <div class="pme-panels">
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Patients</span></div>
         <svg id="pme-vS" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of patients: Long COVID, ME, dysautonomia and MCAS"></svg></div>
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
         <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
     </div>
-    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v6</span></div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v7</span></div>
   </div>
 
-  <label class="pme-tog"><input type="checkbox" id="pme-hide"> Hide numbers</label>
+  <label class="pme-tog"><input type="checkbox" id="pme-hide" checked> Hide numbers</label>
 
   <p class="bvr-more">Change the prevalence, ME shares and severity weights, with sources for each: <a href="pais-burden.html">open the topic page</a>.</p>
 </div>
@@ -1312,22 +1315,22 @@ const TR={LC:{n:"Long COVID",c:"#7fb3d5"},ME:{n:"ME",c:"#f4a582"},PV:{n:"Post-va
   Q:{n:"Post-Q fever",c:"#b3dbd6"},PL:{n:"Post-Legionella",c:"#dde9f3"},S:{n:"Post-sepsis",sub:"(excl. post-ICU)",c:"#6c9fc6"}};
 const SMALL=["PV","LY","Q","PL","S"];
 const R=[
-  {id:"lcH",t:"LC",l:"Long COVID, house/bedbound",n:0.5,me:90,w:0.40,mw:"H"},
-  {id:"lcO",t:"LC",l:"Long COVID, other",n:2.0,me:30,w:0.07,mw:"O"},
-  {id:"meH",t:"ME",l:"ME other trigger, house/bedbound",n:0.11,me:100,w:null,mw:"H",lockMe:1},
-  {id:"meO",t:"ME",l:"ME other trigger, other",n:0.33,me:100,w:null,mw:"O",lockMe:1},
-  {id:"pvH",t:"PV",l:"Post-vax, house/bedbound",n:0.002,me:90,w:0.40,mw:"H"},
-  {id:"pvO",t:"PV",l:"Post-vax, other",n:0.009,me:30,w:0.07,mw:"O"},
-  {id:"ly",t:"LY",l:"Post-Lyme (PTLDS)",n:0.089,me:20,w:0.07,mw:"X"},
+  {id:"lcH",t:"LC",l:"Long COVID, house/bedbound",n:0.167,me:90,w:0.40,mw:"H"},
+  {id:"lcO",t:"LC",l:"Long COVID, other",n:0.667,me:30,w:0.07,mw:"O"},
+  {id:"meH",t:"ME",l:"ME other trigger, house/bedbound",n:0.0367,me:100,w:null,mw:"H",lockMe:1},
+  {id:"meO",t:"ME",l:"ME other trigger, other",n:0.11,me:100,w:null,mw:"O",lockMe:1},
+  {id:"pvH",t:"PV",l:"Post-vax, house/bedbound",n:0.00067,me:90,w:0.40,mw:"H"},
+  {id:"pvO",t:"PV",l:"Post-vax, other",n:0.003,me:30,w:0.07,mw:"O"},
+  {id:"ly",t:"LY",l:"Post-Lyme (PTLDS)",n:0.0445,me:20,w:0.07,mw:"X"},
   {id:"q",t:"Q",l:"Post-Q fever (QFS)",n:0.008,me:80,w:0.07,mw:"X"},
-  {id:"pl",t:"PL",l:"Post-Legionella",n:0.008,me:20,w:0.07,mw:"X"},
-  {id:"s",t:"S",l:"Post-sepsis, excl. post-ICU",n:0.044,me:10,w:0.07,mw:"X"},
-  {id:"p",t:"S",l:"Post-intensive care syndrome after sepsis",n:0.056,me:0,w:0.20,mw:"X",pics:1,lockMe:1,inc:false}
+  {id:"pl",t:"PL",l:"Post-Legionella",n:0.0027,me:20,w:0.07,mw:"X"},
+  {id:"s",t:"S",l:"Post-sepsis, excl. post-ICU",n:0.0147,me:10,w:0.07,mw:"X"},
+  {id:"p",t:"S",l:"Post-intensive care syndrome after sepsis",n:0.0187,me:0,w:0.20,mw:"X",pics:1,lockMe:1,inc:false}
 ];
 const N=v=>(v>=1?v.toFixed(1):v>=0.1?v.toFixed(2):v>=0.01?v.toFixed(3):v.toFixed(4))+"%";
 const K=N;
 const P=v=>v>0&&v<1?"<1%":Math.round(v)+"%";
-let hide=false,tab=1;
+let hide=$("hide")?$("hide").checked:true,tab=1;
 
 const tb=$("tb");
 if(tb)tb.innerHTML=R.map(r=>`<tr id="pme-r-${r.id}"><td><i class="pme-sw" style="background:${TR[r.t].c}"></i>${r.l}${r.pics?` <label class="pme-chk"><input type="checkbox" id="pme-inc">include</label>`:""}</td>
@@ -1570,7 +1573,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
 </main>
 <footer class="wrap">
   <span>To add a chart or dataset: add it to <code>catalog.json</code>, then run <code>python3 -I tools/build_catalog.py</code>.</span>
-  <span class="ver">v8 · built 2026-11-25</span>
+  <span class="ver">v9 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
