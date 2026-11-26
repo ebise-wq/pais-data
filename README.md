@@ -65,11 +65,11 @@ Page: https://ebise-wq.github.io/pais-data/burden-120.html
 
 Notes: [`expanded/README.md`](expanded/README.md)
 
-### Trials in all registries (WHO ICTRP)
+#### Trials in all registries (WHO ICTRP)
 
 ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5× as many ME/CFS trials (1.8× without the two Chinese registries), against a median of 1.9× for 18 comparison diseases. Adjusted for this, the ME/CFS trial shortfall is about 6–8×. 29% of ME/CFS trials are not mainly in ME/CFS patients, between MS (17%) and RA (38%).
 
-Page: https://ebise-wq.github.io/pais-data/ictrp.html
+Page: https://ebise-wq.github.io/pais-data/burden-120.html#ictrp
 
 | File | What it is | Rows |
 |---|---|---|
@@ -135,9 +135,9 @@ Page: https://ebise-wq.github.io/pais-data/pais-burden.html
 
 Notes: [`pais/README.md`](pais/README.md)
 
-### Source data
+### Papers and trials per year, 24 diseases
 
-The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed paper counts per year, 1996–2026, plus the GBD 2023 burden files. The 120-disease work fetches its own counts (see above).
+The first data pulls: ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for 24 diseases, set against their global burden (GBD 2023 DALYs). Pick diseases to compare; by default ME/CFS is shown with three diseases of similar burden. The 120-disease work fetches its own counts.
 
 Page: https://ebise-wq.github.io/pais-data/sources.html
 

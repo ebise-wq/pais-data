@@ -29,6 +29,11 @@
   they don't clash with the page. The parts between `<!-- more:start -->` and `<!-- more:end -->`
   (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
   show on the topic page only. The headline-number boxes are page-only at the user's request.
+- A section can carry `"subsections"` (same fields as a section, minus interactive). They show at the end
+  of its topic page, with a link line on the overview; `docs/<subsection id>.html` redirects there.
+  The WHO ICTRP analysis is a subsection of the 120-disease section this way.
+- An interactive's `"data"` can be a map `{"name": path}`; the fragment then gets an object of those
+  tables (used by `clinicaltrials/per_year_interactive.html`).
 - Data files show in a collapsed block under each section's charts.
 - A data entry with `"hidden": true` is catalogued but not shown: use it for pipeline inputs whose
   contents already appear in another table (e.g. `sex/sex_labels.csv`, `expanded/cleaned_counts_*.csv`).

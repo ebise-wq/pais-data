@@ -66,6 +66,8 @@ section:first-child .sec-head { border-top: 0; padding-top: 0; }
 .top-sm .site span { color: var(--sunset); }
 .nav a[aria-current="page"] { border-color: var(--sunset); color: var(--ink); background: var(--raise); }
 .bvr-more { font-size: 0.95rem; color: var(--muted); margin: 0; }
+.subsec { display: grid; gap: 1.25rem; min-width: 0; margin-top: 1rem; }
+.subsec .sec-head h3 { font: 600 clamp(1.25rem, 3.2vw, 1.5rem)/1.2 var(--f-display); margin: 0; text-wrap: balance; }
 .finding { margin: 0; max-width: 68ch; font-size: 1.08rem; color: var(--ink); }
 
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
@@ -140,7 +142,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   <a class="back" href="index.html">← All topics</a>
   <p class="site"><span>PAIS</span> Data Catalog</p>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="burden-120.html" aria-current="page">Research vs disease burden</a><a href="ictrp.html">Trials in all registries</a><a href="trials.html">Long COVID and ME/CFS trials</a><a href="sex.html">Research by which sex a disease mostly affects</a><a href="funding.html">Public biomedical R&amp;D funding and output</a><a href="pais-burden.html">PAIS burden and ME</a><a href="sources.html">Source data</a></div></nav>
+<nav class="nav" aria-label="Topics"><div class="wrap"><a href="burden-120.html" aria-current="page">Research vs disease burden</a><a href="trials.html">Long COVID and ME/CFS trials</a><a href="sex.html">Research by which sex a disease mostly affects</a><a href="funding.html">Public biomedical R&amp;D funding and output</a><a href="pais-burden.html">PAIS burden and ME</a><a href="sources.html">Papers and trials per year</a></div></nav>
 <main class="wrap">
 
   <section id="burden-120">
@@ -593,11 +595,53 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
           </div>
         </figcaption>
       </figure></div></details>
+    <div class="subsec" id="ictrp">
+    <header class="sec-head">
+      <h3>Trials in all registries (WHO ICTRP)</h3>
+      <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/README.md" target="_blank" rel="noopener">expanded/ictrp/README.md</a></div>
+    </header>
+    <p class="finding">ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5× as many ME/CFS trials (1.8× without the two Chinese registries), against a median of 1.9× for 18 comparison diseases. Adjusted for this, the ME/CFS trial shortfall is about 6–8×. 29% of ME/CFS trials are not mainly in ME/CFS patients, between MS (17%) and RA (38%).</p>
+    <details class="datablock"><summary>Data files <span class="count">4</span></summary>
+    <ul class="datalist">
+        <li class="data">
+          <div class="data-main">
+            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv" target="_blank" rel="noopener">ictrp_vs_ctgov_2021-2025.csv</a><span class="folder">expanded/ictrp/</span></div>
+            <p>Trials per disease in all registries vs ClinicalTrials.gov, 31 diseases.</p>
+            <div class="meta">31 rows · 5 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/analyse_ictrp.py" target="_blank" rel="noopener">expanded/ictrp/analyse_ictrp.py</a></div>
+          </div>
+          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv" target="_blank" rel="noopener">Download</a></div>
+        </li>
+        <li class="data">
+          <div class="data-main">
+            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/mecfs_trial_criteria.csv" target="_blank" rel="noopener">mecfs_trial_criteria.csv</a><span class="folder">expanded/ictrp/</span></div>
+            <p>Every ME/CFS trial started 2021–2025, classified by diagnostic criteria. Checked by hand.</p>
+            <div class="meta">114 rows · 21 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/analyse_ictrp.py" target="_blank" rel="noopener">expanded/ictrp/analyse_ictrp.py</a></div>
+          </div>
+          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/mecfs_trial_criteria.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/mecfs_trial_criteria.csv" target="_blank" rel="noopener">Download</a></div>
+        </li>
+        <li class="data">
+          <div class="data-main">
+            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/ms_ra_trial_sample.csv" target="_blank" rel="noopener">ms_ra_trial_sample.csv</a><span class="folder">expanded/ictrp/</span></div>
+            <p>Random sample of 60 MS and 60 RA trials, classified by hand for comparison.</p>
+            <div class="meta">120 rows · 24 KB · updated 20 Nov 2026</div>
+          </div>
+          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/ictrp/ms_ra_trial_sample.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/ms_ra_trial_sample.csv" target="_blank" rel="noopener">Download</a></div>
+        </li>
+        <li class="data">
+          <div class="data-main">
+            <div class="data-name"><span class="fname">export*.xml.gz</span><span class="folder">expanded/ictrp/raw/</span></div>
+            <p>Raw ICTRP XML exports (5 files), downloaded by hand on 19 Nov 2026. WHO ICTRP terms: no commercial use.</p>
+            <div class="meta">19.0 MB · updated 20 Nov 2026</div>
+          </div>
+          <div class="actions"><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export1.xml.gz" target="_blank" rel="noopener">export1.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export2.xml.gz" target="_blank" rel="noopener">export2.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export3.xml.gz" target="_blank" rel="noopener">export3.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export4.xml.gz" target="_blank" rel="noopener">export4.xml.gz</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/ictrp/raw/export5.xml.gz" target="_blank" rel="noopener">export5.xml.gz</a></div>
+        </li>
+    </ul></details>
+    </div>
   </section>
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v12 · built 2026-11-26</span>
+  <span class="ver">v13 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>

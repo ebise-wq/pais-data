@@ -1,0 +1,187 @@
+<!-- Interactive "papers and trials per year, 24 diseases" chart for the catalog pages.
+     tools/build_catalog.py inserts this into docs/index.html and docs/sources.html, replacing
+     __DATA__ with {"trials": clinicaltrials/trials_per_year_*.csv, "papers": pubmed/pubs_per_year_long_*.csv,
+     "dalys": analysis/burden_vs_research_2021-2025.csv}. Papers = the `title` column (disease in the title).
+     Colours and fonts come from the page's tokens. Classes and ids start with py-. -->
+<style>
+.py { display: grid; gap: 1rem; min-width: 0; font-family: var(--f-body); }
+.py-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1rem 0.9rem; min-width: 0; }
+.py-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-bottom: 0.7rem; }
+.py-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--bg); }
+.py-seg button { font: 500 0.9rem var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px;
+  padding: 0.3rem 0.85rem; cursor: pointer; }
+.py-seg button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
+.py-card h3 { font: 600 1.15rem/1.3 var(--f-display); margin: 0.1rem 0 0.15rem; }
+.py-sub { font-size: 0.92rem; color: var(--muted); margin: 0 0 0.5rem; }
+.py-plot { position: relative; width: 100%; min-height: 280px; }
+.py svg { display: block; max-width: 100%; overflow: visible; }
+.py svg text { font-family: var(--f-body); fill: var(--muted); font-variant-numeric: tabular-nums; }
+.py svg text.lab { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; font-weight: 500; }
+.py-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+  padding: 0.5rem 0.7rem; font-size: 0.88rem; line-height: 1.45; color: var(--ink); min-width: 170px; z-index: 5;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; font-variant-numeric: tabular-nums; }
+.py-tip b { display: block; margin-bottom: 0.15rem; }
+.py-tip div { display: flex; justify-content: space-between; gap: 1rem; }
+.py-tip i { display: inline-block; width: 9px; height: 9px; border-radius: 50%; margin-right: 6px; }
+.py-pick-h { font-size: 0.88rem; color: var(--muted); margin: 0.8rem 0 0.4rem; }
+.py-pick { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.py-pick button { font: 400 0.88rem var(--f-body); color: var(--muted); background: var(--bg); border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.25rem 0.7rem; cursor: pointer; display: inline-flex; align-items: center; gap: 0.4rem; }
+.py-pick button small { color: var(--faint); font-size: 0.8rem; }
+.py-pick button[aria-pressed="true"] { color: var(--ink); background: var(--raise); border-color: var(--c); }
+.py-pick button i { width: 9px; height: 9px; border-radius: 50%; background: var(--c); display: none; }
+.py-pick button[aria-pressed="true"] i { display: inline-block; }
+.py button:focus-visible { outline: 2px solid var(--sunset); outline-offset: 2px; }
+.py-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem;
+  flex-wrap: wrap; margin-top: 0.8rem; }
+</style>
+<div class="py" id="py">
+  <div class="py-card">
+    <div class="py-bar">
+      <div class="py-seg" role="group" aria-label="Measure" data-k="m">
+        <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
+      </div>
+      <div class="py-seg" role="group" aria-label="Scale" data-k="log">
+        <button type="button" data-v="1" aria-pressed="true">Log scale</button><button type="button" data-v="0" aria-pressed="false">Linear</button>
+      </div>
+    </div>
+    <h3 id="py-title"></h3>
+    <p class="py-sub" id="py-sub"></p>
+    <div class="py-plot" id="py-plot"></div>
+    <p class="py-pick-h">Show diseases (sorted by global DALYs):</p>
+    <div class="py-pick" id="py-pick"></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed (pulled 8 Nov 2026) · DALYs: GBD 2023; ME/CFS 25M set by hand</span><span>v1</span></div>
+  </div>
+</div>
+<script>
+(function () {
+const root = document.getElementById("py");
+if (!root) return;
+const D = __DATA__;
+const q = (s) => root.querySelector(s);
+const Y0 = 1996, Y1 = 2025;  // 2026 is a partial year
+const YEARS = []; for (let y = Y0; y <= Y1; y++) YEARS.push(y);
+const ALIAS = { "HIV/AIDS": "HIV", "ALS / motor neuron disease": "ALS (rare ref.)" };
+const dalys = {}; D.dalys.forEach((r) => { dalys[ALIAS[r.label] || r.label] = r.dalys; });
+const name = (d) => d.replace(" (rare ref.)", "");
+const series = {};
+D.trials.forEach((r) => { (series[r.disease] = series[r.disease] || {}).trials = YEARS.map((y) => r[String(y)]); });
+const pap = {}; D.papers.forEach((r) => { (pap[r.disease] = pap[r.disease] || {})[r.year] = r.title; });
+Object.keys(pap).forEach((d) => { (series[d] = series[d] || {}).papers = YEARS.map((y) => pap[d][y] ?? null); });
+const all = Object.keys(series).sort((a, b) => (dalys[b] ?? -1) - (dalys[a] ?? -1) || a.localeCompare(b));
+const ME = "#f4a582", PAL = ["#7fb3d5", "#8fd3c9", "#c9b8e8", "#e6a6c0", "#f2d38a", "#a8c97f", "#9fb4ff", "#e8c4a0"];
+const S = { m: "papers", log: true, on: ["ME/CFS", "HIV", "Schizophrenia", "Epilepsy"], col: {} };
+const colour = (d) => {
+  if (d === "ME/CFS") return ME;
+  if (!S.col[d]) { const used = new Set(Object.values(S.col)); S.col[d] = PAL.find((c) => !used.has(c)) || PAL[Object.keys(S.col).length % PAL.length]; }
+  return S.col[d];
+};
+S.on.forEach(colour);
+const fmtD = (v) => v >= 1e6 ? (v / 1e6 >= 10 ? Math.round(v / 1e6) : (v / 1e6).toFixed(1)) + "M" : Math.round(v / 1e3) + "k";
+const fmt = (v) => v == null ? "–" : v.toLocaleString("en");
+
+function pick() {
+  q("#py-pick").innerHTML = all.map((d) => {
+    const on = S.on.includes(d);
+    return `<button type="button" data-d="${d}" aria-pressed="${on}" style="--c:${on ? colour(d) : "var(--line)"}"><i></i>${name(d)}` +
+      (dalys[d] != null ? ` <small>${fmtD(dalys[d])}</small>` : "") + `</button>`;
+  }).join("");
+}
+
+function spread(items, top, bottom) {
+  items.sort((a, b) => a.want - b.want);
+  let y = top; items.forEach((it) => { it.y = Math.max(it.want, y); y = it.y + it.h; });
+  if (y > bottom) { let yy = bottom; for (let i = items.length - 1; i >= 0; i--) { items[i].y = Math.min(items[i].y, yy - items[i].h); yy = items[i].y; } }
+}
+
+function draw() {
+  const plot = q("#py-plot"), m = S.m;
+  q("#py-title").textContent = m === "papers" ? "Papers per year" : "Trials per year";
+  q("#py-sub").textContent = m === "papers"
+    ? "PubMed papers with the disease in the title, 1996–2025."
+    : "Interventional studies on ClinicalTrials.gov by start year, 1996–2025. Few trials were registered before 2005.";
+  const W = plot.clientWidth || 640, H = Math.round(Math.min(460, Math.max(290, W * 0.62)));
+  const on = S.on.filter((d) => series[d] && series[d][m]);
+  // right margin fits the longest line label (about 7 px per character at 12.5 px)
+  const M = { l: 46, r: Math.min(W * 0.4, 16 + 7 * Math.max(6, ...on.map((d) => name(d).length))), t: 10, b: 30 };
+  let hi = 1; on.forEach((d) => series[d][m].forEach((v) => { if (v != null && v > hi) hi = v; }));
+  const X = (y) => M.l + (y - Y0) / (Y1 - Y0) * (W - M.l - M.r);
+  let Y, ticks = [];
+  if (S.log) {
+    let mn = hi; on.forEach((d) => series[d][m].forEach((v) => { if (v > 0 && v < mn) mn = v; }));
+    const a0 = Math.floor(Math.log10(mn)), a1 = Math.log10(hi * 1.15);
+    Y = (v) => H - M.b - ((Math.log10(v) - a0) / (a1 - a0)) * (H - M.t - M.b);
+    const steps = a1 - a0 < 2.5 ? [1, 2, 5] : [1];
+    for (let k = a0; k <= Math.ceil(a1); k++) steps.forEach((f) => { const t = f * 10 ** k; if (Math.log10(t) <= a1) ticks.push(t); });
+  } else {
+    const raw = hi / 4, mag = 10 ** Math.floor(Math.log10(raw)), st = [1, 2, 2.5, 5, 10].map((x) => x * mag).find((x) => x >= raw);
+    const top = Math.ceil(hi / st) * st;
+    Y = (v) => H - M.b - (v / top) * (H - M.t - M.b);
+    for (let v = 0; v <= top + 1e-9; v += st) ticks.push(v);
+  }
+  const big = (v) => v >= 1000 ? (v / 1000) + "k" : String(v);
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${m} per year for the selected diseases">`;
+  if (m === "trials") s += `<rect x="${X(Y0)}" y="${M.t}" width="${X(2005) - X(Y0)}" height="${H - M.t - M.b}" fill="var(--bg)" opacity=".7"/>`;
+  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
+  for (let y = 2000; y <= Y1; y += W < 560 ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + 19}" text-anchor="middle" font-size="12">${y}</text>`;
+  const labs = [];
+  // draw ME/CFS last so it sits on top
+  on.slice().sort((a, b) => (a === "ME/CFS") - (b === "ME/CFS")).forEach((d) => {
+    const v = series[d][m], c = colour(d);
+    let path = "", pen = false;
+    v.forEach((x, i) => {
+      if (x == null || (S.log && x <= 0)) { pen = false; return; }
+      path += `${pen ? "L" : "M"}${X(YEARS[i]).toFixed(1)},${Y(x).toFixed(1)}`; pen = true;
+    });
+    s += `<path d="${path}" fill="none" stroke="${c}" stroke-width="${d === "ME/CFS" ? 3 : 2}" stroke-linejoin="round" stroke-linecap="round"/>`;
+    let li = v.length - 1; while (li > 0 && (v[li] == null || (S.log && v[li] <= 0))) li--;
+    if (v[li] != null && !(S.log && v[li] <= 0)) labs.push({ d, c, cy: Y(v[li]), want: Y(v[li]) - 7, h: 15 });
+  });
+  spread(labs, M.t, H - M.b + 8);
+  labs.forEach((L) => { s += `<text class="lab" x="${W - M.r + 8}" y="${L.y + 11}" font-size="12.5" style="fill:${L.c}">${name(L.d)}</text>`; });
+  s += `<line id="py-cross" x1="0" x2="0" y1="${M.t}" y2="${H - M.b}" stroke="var(--muted)" stroke-dasharray="3 3" visibility="hidden"/>`;
+  s += "</svg>";
+  plot.innerHTML = s + `<div class="py-tip"></div>`;
+  const svg = plot.querySelector("svg"), tip = plot.querySelector(".py-tip"), cross = svg.querySelector("#py-cross");
+  const move = (ev) => {
+    const r = svg.getBoundingClientRect(), x = ev.clientX - r.left;
+    const yr = Math.round(Y0 + (x - M.l) / (W - M.l - M.r) * (Y1 - Y0));
+    if (yr < Y0 || yr > Y1 || !on.length) return hide();
+    const i = yr - Y0;
+    cross.setAttribute("x1", X(yr)); cross.setAttribute("x2", X(yr)); cross.setAttribute("visibility", "visible");
+    const rows = on.map((d) => ({ d, v: series[d][m][i] })).sort((a, b) => (b.v ?? -1) - (a.v ?? -1));
+    tip.innerHTML = `<b>${yr}</b>` + rows.map((o) => `<div><span><i style="background:${colour(o.d)}"></i>${name(o.d)}</span><span>${fmt(o.v)}</span></div>`).join("");
+    tip.style.display = "block";
+    const w = tip.offsetWidth;
+    const left = X(yr) + 14 + w > W ? X(yr) - 14 - w : X(yr) + 14;
+    tip.style.left = Math.max(0, Math.min(W - w, left)) + "px";
+    tip.style.top = M.t + 4 + "px";
+  };
+  const hide = () => { tip.style.display = "none"; cross.setAttribute("visibility", "hidden"); };
+  svg.addEventListener("pointermove", move);
+  svg.addEventListener("click", move);
+  svg.addEventListener("pointerleave", hide);
+}
+
+function render() {
+  root.querySelectorAll(".py-seg").forEach((g) => g.querySelectorAll("button").forEach((b) => {
+    const v = g.dataset.k === "log" ? (b.dataset.v === "1") === S.log : b.dataset.v === S.m;
+    b.setAttribute("aria-pressed", v);
+  }));
+  pick(); draw();
+}
+root.addEventListener("click", (ev) => {
+  const b = ev.target.closest(".py-seg button");
+  if (b) { const k = b.parentNode.dataset.k; if (k === "log") S.log = b.dataset.v === "1"; else S.m = b.dataset.v; return render(); }
+  const c = ev.target.closest(".py-pick button");
+  if (c) {
+    const d = c.dataset.d;
+    if (S.on.includes(d)) { S.on = S.on.filter((x) => x !== d); delete S.col[d]; } else { S.on.push(d); colour(d); }
+    render();
+  }
+});
+let lastW = 0;
+new ResizeObserver(() => { const w = q("#py-plot").clientWidth; if (Math.abs(w - lastW) > 4) { lastW = w; draw(); } }).observe(q("#py-plot"));
+render();
+})();
+</script>

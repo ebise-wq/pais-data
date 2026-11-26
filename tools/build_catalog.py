@@ -2,9 +2,13 @@
 catalog section of README.md from catalog.json.
 
 A section can carry "interactive": {"html": fragment, "data": json or csv (optional), "charts": n, "more": text}. The
-fragment is inserted with its data (placeholder __DATA__ or __BVR_DATA__; a CSV becomes a list of row objects); the part between <!-- more:start --> and <!-- more:end --> shows on the
+fragment is inserted with its data (placeholder __DATA__ or __BVR_DATA__; a CSV becomes a list of row objects;
+"data" can also be {"name": path, ...}, which becomes an object of those); the part between <!-- more:start --> and <!-- more:end --> shows on the
 topic page only, replaced on the overview by a link to it. Parts between <!-- page-only:start --> and
 <!-- page-only:end --> also show on the topic page only, with nothing in their place. A chart's "toggle" can be one alternative image or a list of them.
+
+A section can carry "subsections": a list of {id, title, readme, finding, charts, data}. They show at the end
+of the topic page; the overview gets one link line per subsection. docs/<subsection id>.html redirects there.
 
 GitHub Pages serves the docs/ folder only, so docs/index.html loads the chart images from
 raw.githubusercontent.com (the main branch). The --fragment copy uses relative image paths,
@@ -85,16 +89,28 @@ def toggles(c):
 # ---------- gather ----------
 sections = CAT["sections"]
 catalogued = set()
-for s in sections:
-    for item in s["charts"] + s["data"]:
+
+
+def units(s):
+    """A section and its subsections, which have the same charts/data/readme fields."""
+    return [s, *s.get("subsections", [])]
+
+
+def data_paths(spec):
+    d = spec.get("data")
+    return [] if not d else list(d.values()) if isinstance(d, dict) else [d]
+
+
+for s in (u for sec in sections for u in units(sec)):
+    for item in s.get("charts", []) + s.get("data", []):
         expand(item)
         catalogued.update(item["files"])
         for t in toggles(item):
             catalogued.update(expand(t)["files"])
     if s.get("interactive"):
-        for k in ("html", "data"):
-            if k in s["interactive"] and not os.path.exists(s["interactive"][k]):
-                sys.exit(f"Missing interactive file in catalog.json: {s['interactive'][k]}")
+        for f in [s["interactive"]["html"], *data_paths(s["interactive"])]:
+            if not os.path.exists(f):
+                sys.exit(f"Missing interactive file in catalog.json: {f}")
     for r in [s["readme"], *s.get("extra_readmes", [])]:
         if not os.path.exists(r):
             sys.exit(f"Missing README in catalog.json: {r}")
@@ -112,8 +128,8 @@ n_charts = (sum(1 for s in sections for c in s["charts"] if not c.get("old"))
             + sum(s.get("interactive", {}).get("charts", 0) for s in sections))
 # Data entries with "hidden": true (pipeline inputs whose contents are in other tables) stay catalogued
 # but are not shown.
-n_data = sum(len(d["files"]) for s in sections for d in s["data"] if not d.get("hidden"))
-last = max(i["updated"] for s in sections for i in s["charts"] + s["data"])
+n_data = sum(len(d["files"]) for sec in sections for s in units(sec) for d in s.get("data", []) if not d.get("hidden"))
+last = max(i["updated"] for sec in sections for s in units(sec) for i in s.get("charts", []) + s.get("data", []))
 built = datetime.date.today().isoformat()
 version = CAT["page_version"]
 
@@ -223,7 +239,9 @@ def interactive_html(s, full):
     spec = s["interactive"]
     frag = open(spec["html"]).read()
     if spec.get("data"):  # optional: some fragments hold their own numbers
-        data = json.dumps(load_data(spec["data"]), separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
+        d = spec["data"]
+        d = {k: load_data(v) for k, v in d.items()} if isinstance(d, dict) else load_data(d)
+        data = json.dumps(d, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
         frag = frag.replace("__BVR_DATA__", data).replace("__DATA__", data)
     if not full:
         lead = spec.get("more", "Rankings, comparator sets, the full data table and caveats")
@@ -233,23 +251,47 @@ def interactive_html(s, full):
     return frag
 
 
+def readme_links(s):
+    return "".join(link(BLOB + r, e(r)) for r in [s["readme"], *s.get("extra_readmes", [])])
+
+
 def section_html(s, page=False):
-    charts = [c for c in s["charts"] if not c.get("old")]
-    old_charts = [c for c in s["charts"] if c.get("old")]
-    data = [d for d in s["data"] if not d.get("old") and not d.get("hidden")]
-    old_data = [d for d in s["data"] if d.get("old") and not d.get("hidden")]
-    readmes = [s["readme"], *s.get("extra_readmes", [])]
-    readme_links = "".join(link(BLOB + r, e(r)) for r in readmes)
     parts = [f"""
   <section id="{e(s['id'])}">
     <header class="sec-head">
       <h2>{e(s['title'])}</h2>
-      <div class="sec-links"><span>Notes:</span>{readme_links}</div>
+      <div class="sec-links"><span>Notes:</span>{readme_links(s)}</div>
       {"" if page else page_link(s["id"], "Open page →", "open")}
     </header>
     <p class="finding">{e(s['finding'])}</p>"""]
     if s.get("interactive"):
         parts.append(interactive_html(s, full=page))
+    parts += files_html(s)
+    for sub in s.get("subsections", []):
+        if page:
+            parts.append(f"""    <div class="subsec" id="{e(sub['id'])}">
+    <header class="sec-head">
+      <h3>{e(sub['title'])}</h3>
+      <div class="sec-links"><span>Notes:</span>{readme_links(sub)}</div>
+    </header>
+    <p class="finding">{e(sub['finding'])}</p>""")
+            parts += files_html(sub)
+            parts.append("    </div>")
+        else:
+            href = f"{page_href(s['id'])}#{sub['id']}"
+            ext = ' target="_blank" rel="noopener"' if PAGE_BASE else ""
+            parts.append(f'    <p class="bvr-more">Also on the topic page: <a href="{e(href)}"{ext}>{e(sub["title"])}</a>.</p>')
+    parts.append("  </section>")
+    return "\n".join(parts)
+
+
+def files_html(s):
+    """Chart grid, data block and earlier versions of a section or subsection."""
+    charts = [c for c in s.get("charts", []) if not c.get("old")]
+    old_charts = [c for c in s.get("charts", []) if c.get("old")]
+    data = [d for d in s.get("data", []) if not d.get("old") and not d.get("hidden")]
+    old_data = [d for d in s.get("data", []) if d.get("old") and not d.get("hidden")]
+    parts = []
     if charts:
         parts.append('    <div class="charts">' + "".join(chart_card(c) for c in charts) + "\n    </div>")
     if data:
@@ -264,8 +306,7 @@ def section_html(s, page=False):
         if old_data:
             inner += '<ul class="datalist">' + "".join(data_row(d) for d in old_data) + "</ul>"
         parts.append(f'    <details class="older"><summary>Earlier versions ({n})</summary>{inner}</details>')
-    parts.append("  </section>")
-    return "\n".join(parts)
+    return parts
 
 
 nav = "".join(f'<a href="#{e(s["id"])}">{e(s["title"].split(",")[0].split(" (")[0])}</a>' for s in sections)
@@ -338,6 +379,8 @@ section:first-child .sec-head { border-top: 0; padding-top: 0; }
 .top-sm .site span { color: var(--sunset); }
 .nav a[aria-current="page"] { border-color: var(--sunset); color: var(--ink); background: var(--raise); }
 .bvr-more { font-size: 0.95rem; color: var(--muted); margin: 0; }
+.subsec { display: grid; gap: 1.25rem; min-width: 0; margin-top: 1rem; }
+.subsec .sec-head h3 { font: 600 clamp(1.25rem, 3.2vw, 1.5rem)/1.2 var(--f-display); margin: 0; text-wrap: balance; }
 .finding { margin: 0; max-width: 68ch; font-size: 1.08rem; color: var(--ink); }
 
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
@@ -503,6 +546,13 @@ pages = {"index.html"}
 for s in sections:
     open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {CAT['title']}", topic_body(s)))
     pages.add(f"{s['id']}.html")
+    for sub in s.get("subsections", []):  # old topic pages of what is now a subsection
+        target = f"{s['id']}.html#{sub['id']}"
+        open(f"docs/{sub['id']}.html", "w").write(
+            f'<!doctype html><meta charset="utf-8"><title>{e(sub["title"])}</title>'
+            f'<meta http-equiv="refresh" content="0; url={target}"><link rel="canonical" href="{target}">'
+            f'<p>Moved to <a href="{target}">{e(s["title"])}</a>.</p>\n')
+        pages.add(f"{sub['id']}.html")
 for old in glob.glob("docs/*.html"):  # pages of removed or hidden sections
     if os.path.basename(old) not in pages:
         os.remove(old)
@@ -514,9 +564,12 @@ if "--fragment" in sys.argv:
 
 
 # ---------- README section ----------
-def md_section(s):
-    lines = [f"### {s['title']}", "", s["finding"], "", f"Page: {SITE}{s['id']}.html", ""]
-    charts = [c for c in s["charts"] if not c.get("old")]
+def md_section(s, sub_of=None):
+    if sub_of:
+        lines = [f"#### {s['title']}", "", s["finding"], "", f"Page: {SITE}{sub_of['id']}.html#{s['id']}", ""]
+    else:
+        lines = [f"### {s['title']}", "", s["finding"], "", f"Page: {SITE}{s['id']}.html", ""]
+    charts = [c for c in s.get("charts", []) if not c.get("old")]
     if charts:
         lines.append(" ".join(f'<a href="{c["file"]}"><img src="{c["file"]}" width="260" alt="{c["title"]}"></a>'
                               for c in charts))
@@ -524,7 +577,7 @@ def md_section(s):
             for t in toggles(c):
                 lines.append(f'\n{c["title"]}, {t["label"].lower()}: [`{t["file"]}`]({t["file"]})')
         lines.append("")
-    data = [d for d in s["data"] if not d.get("old") and not d.get("hidden")]
+    data = [d for d in s.get("data", []) if not d.get("old") and not d.get("hidden")]
     if data:
         lines += ["| File | What it is | Rows |", "|---|---|---|"]
         for d in data:
@@ -534,6 +587,8 @@ def md_section(s):
         lines.append("")
     notes = ", ".join(f"[`{r}`]({r})" for r in [s["readme"], *s.get("extra_readmes", [])])
     lines += [f"Notes: {notes}", ""]
+    for sub in s.get("subsections", []):
+        lines.append(md_section(sub, sub_of=s))
     return "\n".join(lines)
 
 

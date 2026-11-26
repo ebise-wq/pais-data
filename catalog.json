@@ -1,7 +1,7 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 12,
+  "page_version": 13,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
@@ -65,35 +65,37 @@
         "html": "expanded/burden_interactive.html",
         "data": "expanded/burden_interactive_2021-2025.json",
         "charts": 4
-      }
-    },
-    {
-      "id": "ictrp",
-      "title": "Trials in all registries (WHO ICTRP)",
-      "folder": "expanded/ictrp/",
-      "readme": "expanded/ictrp/README.md",
-      "finding": "ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5× as many ME/CFS trials (1.8× without the two Chinese registries), against a median of 1.9× for 18 comparison diseases. Adjusted for this, the ME/CFS trial shortfall is about 6–8×. 29% of ME/CFS trials are not mainly in ME/CFS patients, between MS (17%) and RA (38%).",
-      "charts": [],
-      "data": [
+      },
+      "subsections": [
         {
-          "file": "expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv",
-          "about": "Trials per disease in all registries vs ClinicalTrials.gov, 31 diseases.",
-          "script": "expanded/ictrp/analyse_ictrp.py"
-        },
-        {
-          "file": "expanded/ictrp/mecfs_trial_criteria.csv",
-          "about": "Every ME/CFS trial started 2021–2025, classified by diagnostic criteria. Checked by hand.",
-          "script": "expanded/ictrp/analyse_ictrp.py"
-        },
-        {
-          "file": "expanded/ictrp/ms_ra_trial_sample.csv",
-          "about": "Random sample of 60 MS and 60 RA trials, classified by hand for comparison.",
-          "script": null
-        },
-        {
-          "file": "expanded/ictrp/raw/export*.xml.gz",
-          "about": "Raw ICTRP XML exports (5 files), downloaded by hand on 19 Nov 2026. WHO ICTRP terms: no commercial use.",
-          "script": null
+          "id": "ictrp",
+          "title": "Trials in all registries (WHO ICTRP)",
+          "folder": "expanded/ictrp/",
+          "readme": "expanded/ictrp/README.md",
+          "finding": "ClinicalTrials.gov misses trials registered elsewhere. All registries hold 2.5× as many ME/CFS trials (1.8× without the two Chinese registries), against a median of 1.9× for 18 comparison diseases. Adjusted for this, the ME/CFS trial shortfall is about 6–8×. 29% of ME/CFS trials are not mainly in ME/CFS patients, between MS (17%) and RA (38%).",
+          "charts": [],
+          "data": [
+            {
+              "file": "expanded/ictrp/ictrp_vs_ctgov_2021-2025.csv",
+              "about": "Trials per disease in all registries vs ClinicalTrials.gov, 31 diseases.",
+              "script": "expanded/ictrp/analyse_ictrp.py"
+            },
+            {
+              "file": "expanded/ictrp/mecfs_trial_criteria.csv",
+              "about": "Every ME/CFS trial started 2021–2025, classified by diagnostic criteria. Checked by hand.",
+              "script": "expanded/ictrp/analyse_ictrp.py"
+            },
+            {
+              "file": "expanded/ictrp/ms_ra_trial_sample.csv",
+              "about": "Random sample of 60 MS and 60 RA trials, classified by hand for comparison.",
+              "script": null
+            },
+            {
+              "file": "expanded/ictrp/raw/export*.xml.gz",
+              "about": "Raw ICTRP XML exports (5 files), downloaded by hand on 19 Nov 2026. WHO ICTRP terms: no commercial use.",
+              "script": null
+            }
+          ]
         }
       ]
     },
@@ -293,14 +295,14 @@
     },
     {
       "id": "sources",
-      "title": "Source data",
+      "title": "Papers and trials per year, 24 diseases",
       "folder": "clinicaltrials/, pubmed/, gbd/",
       "readme": "clinicaltrials/README.md",
       "extra_readmes": [
         "pubmed/README.md",
         "gbd/citation.txt"
       ],
-      "finding": "The first pulls, for 24 diseases: ClinicalTrials.gov trial counts and PubMed paper counts per year, 1996–2026, plus the GBD 2023 burden files. The 120-disease work fetches its own counts (see above).",
+      "finding": "The first data pulls: ClinicalTrials.gov trials and PubMed papers per year, 1996–2025, for 24 diseases, set against their global burden (GBD 2023 DALYs). Pick diseases to compare; by default ME/CFS is shown with three diseases of similar burden. The 120-disease work fetches its own counts.",
       "charts": [],
       "data": [
         {
@@ -333,7 +335,16 @@
           "about": "GBD 2023 DALYs, global, both sexes, all ages, level-3 and level-4 causes (2 files). Cite as in gbd/citation.txt.",
           "script": null
         }
-      ]
+      ],
+      "interactive": {
+        "html": "clinicaltrials/per_year_interactive.html",
+        "charts": 1,
+        "data": {
+          "trials": "clinicaltrials/trials_per_year_2026-11-08.csv",
+          "papers": "pubmed/pubs_per_year_long_2026-11-08.csv",
+          "dalys": "analysis/burden_vs_research_2021-2025.csv"
+        }
+      }
     }
   ]
 }
