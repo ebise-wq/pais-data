@@ -1,11 +1,12 @@
 <!-- Interactive "public biomedical R&D funding vs research output" chart for the catalog pages.
      tools/build_catalog.py inserts this into docs/index.html and docs/funding.html, replacing
      __DATA__ with the rows of funding/biomedical_rnd_2024.csv (numbers parsed, blanks as null).
-     One card with a view switch (budget / output per budget / output vs budget) instead of three charts.
+     Two cards: bars with a view switch (budget / output per budget), and the scatter (output vs budget).
      The part between more:start and more:end shows on the topic page only. Colours and fonts come
      from the page's tokens. Classes and ids start with fnd-. -->
 <style>
 .fnd { display: grid; gap: 1.25rem; min-width: 0; font-family: var(--f-body); }
+.fnd-grid2 { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); align-items: start; }
 .fnd-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 1rem 0.9rem; min-width: 0; }
 .fnd-card h3 { font: 600 1.15rem/1.3 var(--f-display); margin: 0.2rem 0 0.15rem; }
 .fnd-sub { font-size: 0.92rem; color: var(--muted); margin: 0 0 0.7rem; }
@@ -82,20 +83,29 @@
 .fnd th { color: var(--muted); font-weight: 500; }
 .fnd td.st { text-align: left; color: var(--muted); }
 .fnd-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
-@media (max-width: 520px) { .fnd-bars { --lab: 6.6rem; } .fnd-card { padding-inline: 0.75rem; } .fnd-long { display: none; }
-  .fnd-view button::first-letter { text-transform: uppercase; } }
+@media (max-width: 520px) { .fnd-bars { --lab: 6.6rem; } .fnd-card { padding-inline: 0.75rem; } }
 </style>
 <div class="fnd" id="fnd">
-  <div class="fnd-card">
-    <div class="fnd-seg fnd-view" role="group" aria-label="View" id="fnd-view">
-      <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio"><span class="fnd-long">Output </span>per budget</button><button type="button" data-v="scatter"><span class="fnd-long">Output </span>vs budget</button>
+  <div class="fnd-grid2">
+    <div class="fnd-card" data-card="bars">
+      <div class="fnd-seg fnd-view" role="group" aria-label="View">
+        <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
+      </div>
+      <h3 class="fnd-title"></h3>
+      <p class="fnd-sub"></p>
+      <div class="fnd-bar-row fnd-opts"></div>
+      <div class="fnd-legend"></div>
+      <div class="fnd-plot"></div>
+      <p class="fnd-note"></p>
     </div>
-    <h3 id="fnd-title"></h3>
-    <p class="fnd-sub" id="fnd-sub"></p>
-    <div class="fnd-bar-row" id="fnd-opts"></div>
-    <div class="fnd-legend" id="fnd-lg"></div>
-    <div class="fnd-plot" id="fnd-plot"></div>
-    <p class="fnd-note" id="fnd-note"></p>
+    <div class="fnd-card" data-card="scat">
+      <h3 class="fnd-title"></h3>
+      <p class="fnd-sub"></p>
+      <div class="fnd-bar-row fnd-opts"></div>
+      <div class="fnd-legend"></div>
+      <div class="fnd-plot"></div>
+      <p class="fnd-note"></p>
+    </div>
   </div>
   <!-- more:start -->
   <details class="fnd-det">
@@ -117,7 +127,7 @@
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v2</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v3</span></div>
 </div>
 <script>
 (function () {
@@ -131,7 +141,14 @@ const GREY = "#8a93a3";
 const kind = (r) => r.iso2 === "CN" ? "cn" : r.iso2 === "EU" ? "eu" : r.budget_status === "estimated" ? "est" : "rep";
 const budgetRows = RAW.filter((r) => r.budget_mio_pps != null);
 const outRows = budgetRows.filter((r) => r.med_docs_2024 != null && r.iso2 !== "IE");
-const S = { view: "budget", unit: "abs", split: false, hideUS: false, hideCN: false, out: "docs", log: true };
+// Two cards, each with its own state. use(k) makes one the current card for the drawing functions.
+const CARDS = {
+  bars: { el: q('[data-card="bars"]'), S: { view: "budget", unit: "abs", split: false, hideUS: false, hideCN: false, out: "docs" } },
+  scat: { el: q('[data-card="scat"]'), S: { view: "scatter", hideUS: false, hideCN: false, out: "docs", log: true } },
+};
+let S, C;
+const use = (k) => { C = CARDS[k]; S = C.S; };
+const cq = (sel) => C.el.querySelector(sel);
 const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 const bn = (v) => { const b = v / 1000; return b >= 10 ? b.toFixed(0) : b >= 1 ? b.toFixed(1) : b.toFixed(2); };
 const big = (v) => v >= 1e6 ? +(v / 1e6).toFixed(1) + "M" : v >= 1000 ? +(v / 1000).toFixed(v < 10000 ? 1 : 0) + "k" : String(Math.round(v));
@@ -146,7 +163,7 @@ if (!document.getElementById("fnd-emoji")) {
   l.href = "https://fonts.googleapis.com/css2?family=Noto+Color+Emoji&display=swap&text=" +
     encodeURIComponent(RAW.filter((r) => r.med_docs_2024 != null && r.iso2 && r.iso2.length === 2).map((r) => flag(r.iso2)).join(""));
   document.head.appendChild(l);
-  if (document.fonts) document.fonts.load('19px "Noto Color Emoji"', flag("US")).then(() => { if (S.view === "scatter") drawScatter(); }).catch(() => {});
+  if (document.fonts) document.fonts.load('19px "Noto Color Emoji"', flag("US")).then(() => render("scat")).catch(() => {});
 }
 
 function niceStep(max, n) {
@@ -174,20 +191,19 @@ function controls() {
     if (S.view === "scatter") o += seg("log", [["true", "Log"], ["false", "Linear"]], S.log) + chip("hideUS", "Hide US");
     o += chip("hideCN", "Hide China");
   }
-  q("#fnd-opts").innerHTML = o;
+  cq(".fnd-opts").innerHTML = o;
 }
 
 // ---------- tooltip ----------
-let tip;
-function showTip(html, x, y) {
-  const plot = q("#fnd-plot");
+function showTip(tip, html, x, y) {
+  const plot = tip.parentNode;
   tip.innerHTML = html; tip.style.display = "block";
   const w = tip.offsetWidth, h = tip.offsetHeight, W = plot.clientWidth;
   let left = Math.min(Math.max(4, x - w / 2), W - w - 4);
   let top = y - h - 12; if (top < 0) top = y + 16;
   tip.style.left = left + "px"; tip.style.top = top + "px";
 }
-const hideTip = () => { if (tip) tip.style.display = "none"; };
+const hideTip = (tip) => { tip.style.display = "none"; };
 
 // ---------- bars ----------
 function bars(items, fmt, axisTitle) {
@@ -213,22 +229,22 @@ function bars(items, fmt, axisTitle) {
     return `<div class="fnd-row" data-i="${i}"><span class="fnd-lab ${d.k}">${esc(short(d.name))}</span>` +
       `<span class="fnd-track">${bar}${wh}<span class="fnd-v ${d.k}" style="left:${end}%">${d.label || fmt(d.v)}</span></span></div>`;
   }).join("");
-  const plot = q("#fnd-plot");
+  const plot = cq(".fnd-plot");
   plot.innerHTML = `<div class="fnd-bars"><div class="fnd-grid">${g}</div>${rows}</div>` +
     `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div><div class="fnd-tip"></div>`;
-  tip = plot.querySelector(".fnd-tip");
+  const tip = plot.querySelector(".fnd-tip");
   plot.querySelectorAll(".fnd-row").forEach((row) => {
     const d = items[+row.dataset.i];
     const show = () => {
       plot.querySelectorAll(".fnd-row.hl").forEach((r) => r.classList.remove("hl"));
       row.classList.add("hl");
       const pr = plot.getBoundingClientRect(), rr = row.getBoundingClientRect();
-      showTip(d.tip, pr.width * 0.6, rr.top - pr.top);
+      showTip(tip, d.tip, pr.width * 0.6, rr.top - pr.top);
     };
     row.addEventListener("pointerenter", show);
     row.addEventListener("click", show);
   });
-  plot.addEventListener("pointerleave", () => { hideTip(); plot.querySelectorAll(".fnd-row.hl").forEach((r) => r.classList.remove("hl")); });
+  plot.onpointerleave = () => { hideTip(tip); plot.querySelectorAll(".fnd-row.hl").forEach((r) => r.classList.remove("hl")); };
 }
 
 function budgetTip(r, extra) {
@@ -295,7 +311,7 @@ function drawScatter() {
   const key = outKey();
   const rows = outRows.filter((r) => !(S.hideUS && r.iso2 === "US") && !(S.hideCN && r.iso2 === "CN"));
   const F = fit(rows, key); lastFit = F;
-  const plot = q("#fnd-plot");
+  const plot = cq(".fnd-plot"), word = outWord();
   const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72)));
   const M = { l: 50, r: 14, t: 10, b: 42 };
   const xs = rows.flatMap((r) => [r.budget_lo_mio_pps || r.budget_mio_pps, r.budget_hi_mio_pps || r.budget_mio_pps]);
@@ -309,7 +325,7 @@ function drawScatter() {
   const logTicks = (lo, hi) => { const o = []; for (let k = Math.floor(L(lo)); k <= Math.ceil(L(hi)); k++) for (const m of [1, 2, 5]) { const v = m * 10 ** k; if (v >= lo && v <= hi) o.push(v); } return o; };
   const linTicks = (hi) => { const st = niceStep(hi, 4), o = []; for (let v = 0; v <= hi; v += st) o.push(v); return o; };
   const xt = S.log ? logTicks(x0, x1) : linTicks(x1), yt = S.log ? logTicks(y0, y1) : linTicks(y1);
-  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${outWord()} against budget, one dot per country">`;
+  let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${word} against budget, one dot per country">`;
   xt.forEach((t) => { s += `<line x1="${X(t)}" x2="${X(t)}" y1="${M.t}" y2="${H - M.b}" stroke="var(--line)"/><text x="${X(t)}" y="${H - M.b + 17}" text-anchor="middle" font-size="12">${bn(t)}</text>`; });
   yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
   s += `<text x="${(M.l + W - M.r) / 2}" y="${H - 6}" text-anchor="middle" font-size="12.5">Public biomedical R&amp;D, billion PPS${S.log ? " (log)" : ""}</text>`;
@@ -358,7 +374,7 @@ function drawScatter() {
   });
   s += labels + "</svg>";
   plot.innerHTML = s + `<div class="fnd-flags" style="--fz:${FZ}px">${flags}</div><div class="fnd-tip"></div>`;
-  tip = plot.querySelector(".fnd-tip");
+  const tip = plot.querySelector(".fnd-tip");
   const svg = plot.querySelector("svg");
   const near = (ev) => {
     const bb = svg.getBoundingClientRect();
@@ -369,13 +385,13 @@ function drawScatter() {
   };
   const onMove = (ev) => {
     const p = near(ev);
-    if (!p) return hideTip();
+    if (!p) return hideTip(tip);
     const r = p.r, fitv = 10 ** (F.ic + F.sl * L(r.budget_mio_pps));
-    showTip(budgetTip(r, `${r[key].toLocaleString("en")} ${outWord()} <span>(${(r[key] / fitv).toFixed(2)}× the fit)</span>`), p.x, p.y);
+    showTip(tip, budgetTip(r, `${r[key].toLocaleString("en")} ${word} <span>(${(r[key] / fitv).toFixed(2)}× the fit)</span>`), p.x, p.y);
   };
   svg.addEventListener("pointermove", onMove);
   svg.addEventListener("click", onMove);
-  svg.addEventListener("pointerleave", hideTip);
+  svg.addEventListener("pointerleave", () => hideTip(tip));
 }
 
 // ---------- titles, legend, note ----------
@@ -414,28 +430,35 @@ function texts() {
     const F = lastFit, nm = (a) => a.map((x) => short(x.r.country)).join(", ");
     note = F ? `Fit slope ${F.sl.toFixed(2)} (R² ${F.r2.toFixed(2)}): ${F.sl < 1 ? "output grows more slowly than budget" : "output grows at least as fast as budget"}. Furthest above the line: ${nm(F.res.slice(-3).reverse())}. Below: ${nm(F.res.slice(0, 3))}.` : "";
   }
-  q("#fnd-title").textContent = t; q("#fnd-sub").textContent = st;
-  q("#fnd-lg").innerHTML = lg.join(""); q("#fnd-note").textContent = note;
+  cq(".fnd-title").textContent = t; cq(".fnd-sub").textContent = st;
+  cq(".fnd-legend").innerHTML = lg.join(""); cq(".fnd-note").textContent = note;
 }
 
-function render() {
-  root.querySelectorAll("#fnd-view button").forEach((b) => { const on = b.dataset.v === S.view; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
+function render(k) {
+  use(k);
+  C.el.querySelectorAll(".fnd-view button").forEach((b) => { const on = b.dataset.v === S.view; b.classList.toggle("on", on); b.setAttribute("aria-pressed", on); });
   controls();
   if (S.view === "budget") drawBudget(); else if (S.view === "ratio") drawRatio(); else drawScatter();
   texts();
 }
 
 root.addEventListener("click", (ev) => {
-  const v = ev.target.closest("#fnd-view button");
-  if (v) { S.view = v.dataset.v; return render(); }
+  const card = ev.target.closest(".fnd-card");
+  if (!card) return;
+  const k = card.dataset.card;
+  use(k);
+  const v = ev.target.closest(".fnd-view button");
+  if (v) { S.view = v.dataset.v; return render(k); }
   const sb = ev.target.closest(".fnd-seg[data-k] button");
-  if (sb) { const k = sb.parentNode.dataset.k; S[k] = k === "log" ? sb.dataset.val === "true" : sb.dataset.val; return render(); }
+  if (sb) { const key = sb.parentNode.dataset.k; S[key] = key === "log" ? sb.dataset.val === "true" : sb.dataset.val; return render(k); }
   const c = ev.target.closest(".fnd-chip");
-  if (c) { S[c.dataset.chip] = !S[c.dataset.chip]; return render(); }
+  if (c) { S[c.dataset.chip] = !S[c.dataset.chip]; return render(k); }
 });
 let lastW = 0;
-new ResizeObserver(() => { const w = q("#fnd-plot").clientWidth; if (S.view === "scatter" && Math.abs(w - lastW) > 4) { lastW = w; drawScatter(); } }).observe(q("#fnd-plot"));
-render();
+const scatPlot = CARDS.scat.el.querySelector(".fnd-plot");
+new ResizeObserver(() => { const w = scatPlot.clientWidth; if (Math.abs(w - lastW) > 4) { lastW = w; use("scat"); drawScatter(); } }).observe(scatPlot);
+render("bars");
+render("scat");
 
 // data table (topic page only)
 const tb = q("#fnd-table");

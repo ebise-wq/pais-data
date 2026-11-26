@@ -9,11 +9,13 @@ Compiled by Siebe Rozendal, November 2026.
 - `biomedical_rnd_2024.csv`: one row per country or funder, plus one aggregate row. Compiled in a
   separate session; the code that built it is not in the repo.
 - `funding_interactive.html`: the interactive chart on the catalog page. `tools/build_catalog.py`
-  inserts it with the CSV rows. One card with a view switch replaces three earlier React charts:
-  - **Budget**: billion PPS or % of GDP, optionally split by funding type, US can be hidden.
-  - **Output per budget**: papers or citations per million PPS, China can be hidden.
-  - **Output vs budget**: scatter with a log-log fit (log or linear axes), US and China can be hidden.
-    The fit, its slope and the countries furthest above and below it are recomputed for what is shown.
+  inserts it with the CSV rows. Two cards replace three earlier React charts:
+  - **Bar chart**, with a switch between **Budget** (billion PPS or % of GDP, optionally split by
+    funding type, US can be hidden) and **Output per budget** (papers or citations per million PPS,
+    China can be hidden).
+  - **Scatter, output vs budget**: circular flags, a log-log fit (log or linear axes), US and China
+    can be hidden. The fit, its slope and the countries furthest above and below it are recomputed
+    for what is shown. Each card keeps its own settings.
 
 ## Results (all 19 countries with output data, Ireland excluded)
 
