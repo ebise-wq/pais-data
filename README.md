@@ -129,7 +129,7 @@ Notes: [`funding/README.md`](funding/README.md)
 
 ### PAIS burden and ME
 
-An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. The prevalence figures are guesses based on reading the literature, not hard data. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.
+An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page. Note: these numbers are not grounded in hard data. They're my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.
 
 Page: https://ebise-wq.github.io/pais-data/pais-burden.html
 

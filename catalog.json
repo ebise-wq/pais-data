@@ -1,7 +1,7 @@
 {
   "title": "PAIS Data Catalog",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 11,
+  "page_version": 12,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
@@ -282,7 +282,7 @@
       "title": "PAIS burden and ME",
       "folder": "pais/",
       "readme": "pais/README.md",
-      "finding": "An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. The prevalence figures are guesses based on reading the literature, not hard data. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.",
+      "finding": "An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page. Note: these numbers are not grounded in hard data. They're my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.",
       "charts": [],
       "data": [],
       "interactive": {

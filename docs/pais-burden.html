@@ -149,7 +149,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/pais/README.md" target="_blank" rel="noopener">pais/README.md</a></div>
       
     </header>
-    <p class="finding">An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. The prevalence figures are guesses based on reading the literature, not hard data. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page.</p>
+    <p class="finding">An illustrative model of post-acute infection syndromes (PAIS) in the Netherlands. With the default assumptions, ME is about half of PAIS patients (0.52% of 1.06% of the population) but about 80% of the PAIS disease burden, because ME is much more disabling than most PAIS without ME. A second view sketches how Long COVID, ME, dysautonomia and MCAS may overlap. Every input can be changed on the topic page. Note: these numbers are not grounded in hard data. They&#x27;re my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.</p>
 <!-- Interactive "PAIS disease burden and ME" model for the catalog pages.
      tools/build_catalog.py inserts this into docs/index.html and docs/pais-burden.html. All numbers
      are in the script below (no data file). The assumption cards between more:start and more:end show
@@ -169,7 +169,6 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 .pme-poster h3 { font: 600 clamp(1.35rem, 4.4vw, 1.85rem)/1.15 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 .pme-poster h3 em { font-style: normal; color: var(--sunset); }
 .pme-lede { color: var(--muted); font-size: 0.95rem; margin: 6px 0 0; max-width: 60ch; }
-.pme-note { color: var(--muted); font-size: 0.85rem; font-style: italic; margin: 6px 0 0; max-width: 70ch; }
 .pme-panels { display: grid; grid-template-columns: 1fr; gap: 6px; margin-top: 14px; }
 @media (min-width: 640px) { .pme-panels { grid-template-columns: 1fr 1fr; gap: 18px; } }
 .pme-pn { min-width: 0; }
@@ -195,7 +194,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 .pme td.pme-o { font-family: var(--f-mono); }
 .pme td.pme-o small { color: var(--muted); font-family: var(--f-body); margin-left: 6px; }
 .pme tfoot td { border-bottom: 0; font-weight: 500; }
-.pme input[type=number] { width: 84px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; color: var(--ink);
+.pme input[type=number] { width: 96px; background: var(--bg); border: 1px solid var(--line); border-radius: 6px; color: var(--ink);
   font: 500 0.88rem var(--f-mono); padding: 4px 6px; text-align: right; }
 .pme input.pme-s { width: 62px; }
 .pme-na { color: var(--faint); }
@@ -218,27 +217,25 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   <div class="pme-poster" id="pme-p1">
     <h3 id="pme-ttl">ME is about half of PAIS patients, but most of the PAIS disease burden</h3>
     <p class="pme-lede">Post-Acute Infection Syndromes</p>
-    <p class="pme-note">Note: these numbers are not grounded in hard data. They're my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.</p>
     <div class="pme-panels">
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kN">–</em> of PAIS patients have ME</span><span class="pme-t" id="pme-tN"></span></div>
         <svg id="pme-vN" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS patients by trigger and ME"></svg></div>
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
         <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
     </div>
-    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v8</span></div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v9</span></div>
   </div>
 
   <div class="pme-poster" id="pme-p2" hidden>
     <h3>How Long COVID, ME, dysautonomia and MCAS may overlap</h3>
     <p class="pme-lede">Rough estimate.</p>
-    <p class="pme-note">Note: these numbers are not grounded in hard data. They're my guesses of absolute and relative prevalence in The Netherlands based on reading the literature.</p>
     <div class="pme-panels">
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Patients</span></div>
         <svg id="pme-vS" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of patients: Long COVID, ME, dysautonomia and MCAS"></svg></div>
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
         <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
     </div>
-    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v8</span></div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v9</span></div>
   </div>
 
   <label class="pme-tog"><input type="checkbox" id="pme-hide" checked> Hide numbers</label>
@@ -497,7 +494,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v11 · built 2026-11-26</span>
+  <span class="ver">v12 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
