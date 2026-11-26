@@ -13,7 +13,8 @@ The ME/CFS burden in the research-vs-burden charts (`analysis/`, `expanded/`) co
 
 ## Files
 
-- `burden_interactive.html`: the interactive page. `tools/build_catalog.py` inserts it into
+- `burden_interactive.html`: the interactive page (v11.3). Tabs: distribution, by age, countries;
+  "How it's built" follows below them rather than as a tab. `tools/build_catalog.py` inserts it into
   `docs/global-burden.html` only, not into the overview, because its data are large (about 380 KB).
   Ids start with `gme-` and all styles sit under `.gme`. Text, sources and reasoning for every step
   are in this file.

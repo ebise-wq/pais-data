@@ -153,7 +153,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </header>
     <p class="finding">A model of how many people worldwide have ME/CFS and how much disease burden it causes, since nobody has counted it. With the Canadian Consensus Criteria, about 45 million people have ME/CFS now (90% range 27–77 million), about half of them post-COVID. That is 17.5 million DALYs a year (9.9–31.7 million), the ME/CFS burden used in the research-vs-burden charts. Strict ICC gives 27 million people, broad Fukuda 80 million. The two routes for post-COVID ME differ 2.4-fold.</p>
 <!-- Interactive "Global ME/CFS burden" model for the catalog topic page.
-     Made as a stand-alone page in a separate session (v11.2) and moved into the catalog; the Monte Carlo
+     Made as a stand-alone page in a separate session (v11.2) and moved into the catalog (v11.3: "How it's built" moved from a tab to the bottom); the Monte Carlo
      code that made the numbers is not in the repo. tools/build_catalog.py puts the model output
      (global_burden/model_output_2026-11-26.json) in place of the data placeholder. Shown on the topic page only.
      Element ids start with gme- and all styles sit under .gme, so they don't clash with the page.
@@ -457,6 +457,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 .gme { padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; max-width: 760px; min-width: 0; color: var(--fg); }
 .gme .gme-top { top: var(--gme-navh, 0px); z-index: 4; margin-top: 0; }
 .gme .gme-foot { padding-bottom: 0; }
+.gme .gme-explain { margin-top: 22px; padding-top: 6px; border-top: 1px solid var(--line); }
 
 </style>
 
@@ -527,7 +528,6 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     <button id="gme-t-dist" role="tab" data-v="dist">Distribution</button>
     <button id="gme-t-age" role="tab" data-v="age">By age</button>
     <button id="gme-t-ctry" role="tab" data-v="countries">Countries</button>
-    <button id="gme-t-explain" role="tab" data-v="explain">How it's built</button>
   </div>
 
   <div class="dists">
@@ -574,7 +574,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     <div class="note" id="gme-ctryNote"></div>
   </section>
 
-  <div id="gme-explain" class="stack" hidden>
+  <div id="gme-explain" class="stack gme-explain">
     <section>
       <h2>How the estimate is built</h2>
       <p class="lede">Nobody has counted people with ME/CFS worldwide. So the model starts from the best studies in a few countries and corrects them step by step. Each correction is a range, not a single number. The computer draws from all the ranges 300,000 times, which gives the spread you see in the charts.</p>
@@ -699,7 +699,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 
   <div class="gme-foot">
     <span>Population by age: UN World Population Prospects 2024. Reference diseases: people from GBD 2021 studies and WHO; disease burden from GBD 2023. No population study has ever applied ICC, so the ICC figures rest on ratios from patient samples. Seed 20260821.</span>
-    <span class="ver">v11.2</span>
+    <span class="ver">v11.3</span>
   </div>
 </div>
 
@@ -764,7 +764,7 @@ try {
     if (["2026", "2040"].includes(saved.year)) st.year = saved.year;
     if (["median", "mean"].includes(saved.stat)) st.stat = saved.stat;
     if (["count", "share"].includes(saved.unit)) st.unit = saved.unit;
-    if (["dist", "age", "explain"].includes(saved.view)) st.view = saved.view;
+    if (["dist", "age", "countries"].includes(saved.view)) st.view = saved.view;
     if (["me", "lc", "lcme"].includes(saved.cond)) st.cond = saved.cond;
     if (["rec", "lc", "both"].includes(saved.route)) st.route = saved.route;
     if (Array.isArray(saved.refs)) st.refs = new Set(saved.refs.filter(k => REFS[k]));
@@ -889,10 +889,9 @@ function render() {
   byId("casesR").textContent = rng("cases", Y.cases);
   byId("dalyR").textContent = rng("daly", Y.daly);
 
-  const age = st.view === "age", explain = st.view === "explain", ctry = st.view === "countries";
-  ROOT.querySelector(".dists").hidden = explain || ctry;
-  byId("results").hidden = explain || ctry;
-  byId("explain").hidden = !explain;
+  const age = st.view === "age", ctry = st.view === "countries";
+  ROOT.querySelector(".dists").hidden = ctry;
+  byId("results").hidden = ctry;
   byId("countries").hidden = !ctry;
   renderCountries(c);
   renderExplain(c);
@@ -1369,7 +1368,6 @@ function fixJumps() {
 }
 new MutationObserver(fixJumps).observe(ROOT, { childList: true, subtree: true });
 function goTo(id) {
-  if (st.view !== "explain") { st.view = "explain"; render(); }
   const t = byId(id); if (!t) return;
   const head = navH() + ROOT.querySelector(".gme-top").getBoundingClientRect().height + 8;
   const before = window.scrollY;
@@ -1413,7 +1411,7 @@ let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTime
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v14 · built 2026-11-26</span>
+  <span class="ver">v15 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
