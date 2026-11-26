@@ -1,0 +1,73 @@
+<!-- Overview snapshot of the Global ME/CFS burden model: the two distribution cards (people and DALYs,
+     CCC, both post-COVID routes, now, medians). tools/build_catalog.py puts a small extract of
+     global_burden/model_output_2026-11-26.json in place of the data placeholder (the paths are in
+     catalog.json under "overview": "pick"), so the overview does not load the whole 380 KB model.
+     The bars are drawn the same way as drawHist() in burden_interactive.html (no reference diseases).
+     Ids and classes start with gmo-. -->
+<style>
+.gmo { display: grid; gap: 10px; --azure: #8fc6ff; }
+@media (min-width: 640px) { .gmo { grid-template-columns: 1fr 1fr; } }
+.gmo-panel { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 12px 14px 10px; min-width: 0; }
+.gmo-lab { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.gmo-big { display: flex; align-items: baseline; gap: 7px; flex-wrap: wrap; margin-top: 2px; }
+.gmo-big .n { font-size: 2rem; font-weight: 700; line-height: 1.05; font-variant-numeric: tabular-nums; letter-spacing: -0.01em; }
+.gmo-big .u { font-size: 1rem; }
+.gmo-range { font-family: var(--f-mono); font-size: 0.85rem; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
+.gmo svg { display: block; width: 100%; margin-top: 8px; }
+</style>
+<div class="gmo" id="gmo-root">
+  <div class="gmo-panel">
+    <div class="gmo-lab">People living with it now · CCC</div>
+    <div class="gmo-big"><span class="n" id="gmo-casesN"></span><span class="u">people</span></div>
+    <div class="gmo-range" id="gmo-casesR"></div>
+    <svg id="gmo-hCases" role="img" aria-label="Distribution of people living with ME/CFS"></svg>
+  </div>
+  <div class="gmo-panel">
+    <div class="gmo-lab">Disease burden per year now · CCC</div>
+    <div class="gmo-big"><span class="n" id="gmo-dalyN"></span><span class="u">DALYs</span></div>
+    <div class="gmo-range" id="gmo-dalyR"></div>
+    <svg id="gmo-hDaly" role="img" aria-label="Distribution of disability-adjusted life years"></svg>
+  </div>
+</div>
+<script>
+(function () {
+  const D = __DATA__;
+  const $ = id => document.getElementById("gmo-" + id);
+  const fmt1 = x => x >= 100 ? x.toFixed(0) : x >= 10 ? x.toFixed(1) : x.toFixed(x < 1 ? 2 : 1);
+  const M = v => fmt1(v / 1e6) + "M";
+  function niceStep(max) {
+    const raw = max / 4, p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw / p;
+    return (n < 1.5 ? 1 : n < 3.5 ? 2.5 : n < 7.5 ? 5 : 10) * p;
+  }
+  function drawHist(svg, h, sm) {
+    const W = Math.max(200, svg.clientWidth || 340), axis = 15, top = 4, H = 64 + top;
+    svg.style.height = H + "px";
+    svg.setAttribute("viewBox", `0 0 ${W} ${H}`);
+    const e = h.edges, f = h.f, max = Math.max(...f), xmax = e[e.length - 1];
+    const x = v => (v / xmax) * W, y = v => (H - axis) - (v / max) * (H - axis - top);
+    const lo = sm[0] / 1e6, hi = sm[2] / 1e6, mid = sm[1] / 1e6;
+    let s = "";
+    for (let i = 0; i < f.length; i++) {
+      const c = (e[i] + e[i + 1]) / 2, inside = c >= lo && c <= hi;
+      const x0 = x(e[i]) + 0.6, w = Math.max(0.5, x(e[i + 1]) - x(e[i]) - 1.2);
+      s += `<rect x="${x0}" y="${y(f[i])}" width="${w}" height="${(H - axis) - y(f[i])}" fill="var(--azure)" fill-opacity="${inside ? 0.8 : 0.25}"/>`;
+    }
+    s += `<line x1="${x(mid)}" x2="${x(mid)}" y1="${top - 2}" y2="${H - axis}" stroke="var(--ink)" stroke-width="1.2" stroke-dasharray="2 2"/>`;
+    s += `<line x1="0" x2="${W}" y1="${H - axis + 0.5}" y2="${H - axis + 0.5}" stroke="var(--line)"/>`;
+    const step = niceStep(xmax);
+    for (let t = 0; t <= xmax + 1e-12; t += step) {
+      const tx = x(t), anchor = t === 0 ? "start" : (tx > W - 18 ? "end" : "middle");
+      const lab = t === 0 ? "0" : (+t.toPrecision(3)).toLocaleString("en") + "M";
+      s += `<text x="${tx}" y="${H - 2}" font-size="11" font-family="IBM Plex Mono, monospace" fill="var(--muted)" text-anchor="${anchor}">${lab}</text>`;
+    }
+    svg.innerHTML = s;
+  }
+  $("casesN").textContent = M(D.cases[1]);
+  $("dalyN").textContent = M(D.daly[1]);
+  $("casesR").textContent = `median · 90% range ${M(D.cases[0])}–${M(D.cases[2])}`;
+  $("dalyR").textContent = `median · 90% range ${M(D.daly[0])}–${M(D.daly[2])}`;
+  function draw() { drawHist($("hCases"), D.h_cases, D.cases); drawHist($("hDaly"), D.h_daly, D.daly); }
+  draw();
+  let t; window.addEventListener("resize", () => { clearTimeout(t); t = setTimeout(draw, 120); });
+})();
+</script>

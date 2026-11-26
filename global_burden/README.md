@@ -15,9 +15,10 @@ The ME/CFS burden in the research-vs-burden charts (`analysis/`, `expanded/`) co
 
 - `burden_interactive.html`: the interactive page (v11.3). Tabs: distribution, by age, countries;
   "How it's built" follows below them rather than as a tab. `tools/build_catalog.py` inserts it into
-  `docs/global-burden.html` only, not into the overview, because its data are large (about 380 KB).
-  Ids start with `gme-` and all styles sit under `.gme`. Text, sources and reasoning for every step
+  `docs/global-burden.html` only, because its data are large (about 380 KB). Ids start with `gme-` and all styles sit under `.gme`. Text, sources and reasoning for every step
   are in this file.
+- `overview.html`: the snapshot on the catalog overview: the two distribution charts (people and
+  DALYs, CCC, both routes, now). The build gives it only those four parts of the model output.
 - `model_output_2026-11-26.json`: the model output the page reads: ranges for people and DALYs by
   criteria, post-COVID route, age group, year and country, and the inputs of each step.
 

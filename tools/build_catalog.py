@@ -6,7 +6,12 @@ fragment is inserted with its data (placeholder __DATA__ or __BVR_DATA__; a CSV 
 "data" can also be {"name": path, ...}, which becomes an object of those); the part between <!-- more:start --> and <!-- more:end --> shows on the
 topic page only, replaced on the overview by a link to it. Parts between <!-- page-only:start --> and
 <!-- page-only:end --> also show on the topic page only, with nothing in their place. With "overview": false the
-whole fragment shows on the topic page only, and the overview gets a link line (its text from "more"). A chart's "toggle" can be one alternative image or a list of them.
+whole fragment shows on the topic page only, and the overview gets a link line (its text from "more"); with
+"overview": {"html", "pick"} the overview shows that small fragment, given only the picked parts of the data.
+A chart's "toggle" can be one alternative image or a list of them.
+
+The overview shows each section's title (a link to its topic page) and charts only; the top is a contents
+list built from each section's "headline". Findings, captions, notes and data files are on the topic pages.
 
 A section can carry "subsections": a list of {id, title, readme, finding, charts, data}. They show at the end
 of the topic page; the overview gets one link line per subsection. docs/<subsection id>.html redirects there.
@@ -109,7 +114,9 @@ for s in (u for sec in sections for u in units(sec)):
         for t in toggles(item):
             catalogued.update(expand(t)["files"])
     if s.get("interactive"):
-        for f in [s["interactive"]["html"], *data_paths(s["interactive"])]:
+        ov = s["interactive"].get("overview")
+        for f in [s["interactive"]["html"], *data_paths(s["interactive"]),
+                  *([ov["html"]] if isinstance(ov, dict) else [])]:
             if not os.path.exists(f):
                 sys.exit(f"Missing interactive file in catalog.json: {f}")
     for r in [s["readme"], *s.get("extra_readmes", [])]:
@@ -163,7 +170,8 @@ def page_link(sid, text, cls=""):
     return f'<a{c} href="{e(page_href(sid))}"{ext}>{text}</a>'
 
 
-def chart_card(c):
+def chart_card(c, bare=False):
+    """A chart with its title, caption and links; bare=True (overview) shows the image and toggle only."""
     f = c["file"]
     script = link(BLOB + c["script"], "Script") if c.get("script") else ""
     toggle, views = "", ""
@@ -181,7 +189,7 @@ def chart_card(c):
       <figure class="chart"{views}>{toggle}
         <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}" data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
           <img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">
-        </button>
+        </button>{"" if bare else f"""
         <figcaption>
           <h3>{e(c['title'])}</h3>
           <p>{e(c['caption'])}</p>
@@ -190,7 +198,7 @@ def chart_card(c):
             <span class="sep"></span>
             {link(RAW + f, "Full size", "full")}{script}
           </div>
-        </figcaption>
+        </figcaption>"""}
       </figure>"""
 
 
@@ -244,48 +252,87 @@ def interactive_html(s, full):
         d = {k: load_data(v) for k, v in d.items()} if isinstance(d, dict) else load_data(d)
         data = json.dumps(d, separators=(",", ":"), ensure_ascii=False).replace("</", "<\\/")
         frag = frag.replace("__BVR_DATA__", data).replace("__DATA__", data)
-    if not full:
-        lead = spec.get("more", "Rankings, comparator sets, the full data table and caveats")
-        more = f'<p class="bvr-more">{e(lead)}: {page_link(s["id"], "open the topic page")}.</p>'
-        frag = re.sub(r"<!-- more:start -->.*?<!-- more:end -->", more, frag, flags=re.S)
+    if not full:  # the overview: the charts only; the title links to the topic page for the rest
+        frag = re.sub(r"<!-- more:start -->.*?<!-- more:end -->", "", frag, flags=re.S)
         frag = re.sub(r"<!-- page-only:start -->.*?<!-- page-only:end -->", "", frag, flags=re.S)
     return frag
+
+
+def snapshot_html(s):
+    """A small overview fragment ("overview": {"html", "pick"}) that gets only the picked parts of the
+    interactive's data, given as slash paths into the JSON, so the overview stays light."""
+    ov = s["interactive"]["overview"]
+    full = load_data(s["interactive"]["data"])
+
+    def walk(path):
+        v = full
+        for k in path.split("/"):
+            v = v[k]
+        return v
+    data = json.dumps({k: walk(v) for k, v in ov["pick"].items()}, separators=(",", ":"), ensure_ascii=False)
+    return open(ov["html"]).read().replace("__DATA__", data.replace("</", "<\\/"))
 
 
 def readme_links(s):
     return "".join(link(BLOB + r, e(r)) for r in [s["readme"], *s.get("extra_readmes", [])])
 
 
+def title_html_of(t, tag="h2", href=None):
+    """Title with the part after the first comma ("120 diseases") set small."""
+    main, _, rest = t.partition(", ")
+    inner = e(main) + (f' <span class="tsub">{e(rest)}</span>' if rest else "")
+    if href:
+        ext = ' target="_blank" rel="noopener"' if PAGE_BASE else ""
+        inner = f'<a href="{e(href)}"{ext}>{inner}</a>'
+    return f"<{tag}>{inner}</{tag}>"
+
+
 def section_html(s, page=False):
+    if not page:
+        return overview_section(s)
     parts = [f"""
   <section id="{e(s['id'])}">
     <header class="sec-head">
-      <h2>{e(s['title'])}</h2>
+      {title_html_of(s['title'])}
       <div class="sec-links"><span>Notes:</span>{readme_links(s)}</div>
-      {"" if page else page_link(s["id"], "Open page →", "open")}
     </header>
     <p class="finding">{e(s['finding'])}</p>"""]
     if s.get("interactive"):
-        if page or s["interactive"].get("overview", True):
-            parts.append(interactive_html(s, full=page))
-        else:  # "overview": false keeps a heavy model off the overview; a link line takes its place
-            lead = s["interactive"].get("more", "Interactive model")
-            parts.append(f'    <p class="bvr-more">{e(lead)}: {page_link(s["id"], "open the topic page")}.</p>')
+        parts.append(interactive_html(s, full=True))
     parts += files_html(s)
     for sub in s.get("subsections", []):
-        if page:
-            parts.append(f"""    <div class="subsec" id="{e(sub['id'])}">
+        parts.append(f"""    <div class="subsec" id="{e(sub['id'])}">
     <header class="sec-head">
-      <h3>{e(sub['title'])}</h3>
+      {title_html_of(sub['title'], "h3")}
       <div class="sec-links"><span>Notes:</span>{readme_links(sub)}</div>
     </header>
     <p class="finding">{e(sub['finding'])}</p>""")
-            parts += files_html(sub)
-            parts.append("    </div>")
-        else:
-            href = f"{page_href(s['id'])}#{sub['id']}"
-            ext = ' target="_blank" rel="noopener"' if PAGE_BASE else ""
-            parts.append(f'    <p class="bvr-more">Also on the topic page: <a href="{e(href)}"{ext}>{e(sub["title"])}</a>.</p>')
+        parts += files_html(sub)
+        parts.append("    </div>")
+    parts.append("  </section>")
+    return "\n".join(parts)
+
+
+def overview_section(s):
+    """Overview: the title (a link to the topic page) and the charts, nothing else. Findings, captions,
+    notes, data files and subsections are on the topic page."""
+    href = page_href(s["id"])
+    parts = [f"""
+  <section id="{e(s['id'])}" class="ov">
+    <header class="ov-head">
+      {title_html_of(s['title'], href=href)}
+      {page_link(s["id"], "Open page →", "open")}
+    </header>"""]
+    spec = s.get("interactive")
+    if spec:
+        ov = spec.get("overview", True)
+        if ov is True:
+            parts.append(interactive_html(s, full=False))
+        elif isinstance(ov, dict):
+            parts.append(snapshot_html(s))
+    charts = [c for c in s.get("charts", []) if not c.get("old")]
+    if charts:
+        parts.append('    <div class="charts">' + "".join(chart_card(c, bare=True) for c in charts) + "\n    </div>")
     parts.append("  </section>")
     return "\n".join(parts)
 
@@ -314,7 +361,18 @@ def files_html(s):
     return parts
 
 
-nav = "".join(f'<a href="#{e(s["id"])}">{e(s["title"].split(",")[0].split(" (")[0])}</a>' for s in sections)
+def short_title(t):
+    return t.split(",")[0].split(" (")[0]
+
+
+def tile(s):
+    """Overview contents: one tile per topic with its headline number; links to the section below."""
+    h = s.get("headline") or {}
+    return (f'<a class="tile" href="#{e(s["id"])}"><span class="tt">{e(short_title(s["title"]))}</span>'
+            f'<span class="tv">{e(h.get("value", ""))}</span><span class="tl">{e(h.get("label", ""))}</span></a>')
+
+
+toc = "".join(tile(s) for s in sections)
 
 def head(title):
     return HEAD.replace(f"<title>{e(CAT['title'])}</title>", f"<title>{e(title)}</title>", 1)
@@ -356,9 +414,28 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .top h1 { font: 600 clamp(2.1rem, 6vw, 3.1rem)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
-.stats { display: flex; flex-wrap: wrap; gap: 0.4rem 1.4rem; margin-top: 1.4rem; font-size: 0.95rem; color: var(--muted);
-  font-variant-numeric: tabular-nums; }
-.stats b { color: var(--ink); font-weight: 600; }
+.top .tagline { font-size: 1.05rem; }
+/* Contents: one row per topic, headline number on the left, topic and what the number means on the right. */
+.toc { display: grid; gap: 0 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
+  margin-bottom: 0.5rem; }
+.tile { display: grid; grid-template-columns: 7rem minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 0.9rem;
+  align-items: baseline; padding: 0.7rem 0.1rem; border-top: 1px solid var(--line); color: var(--ink); min-width: 0; }
+.tile:hover { text-decoration: none; }
+.tile:hover .tt { color: var(--ocean); }
+.tile .tv { grid-row: 1 / span 2; font: 600 1.35rem/1.15 var(--f-display); color: var(--sunset); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tile .tt { font: 600 0.98rem/1.3 var(--f-body); color: var(--ink); }
+.tile .tl { grid-column: 2; font-size: 0.9rem; line-height: 1.35; color: var(--muted); }
+.overview { gap: 2.75rem; }
+.ov-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 1rem;
+  border-top: 1px solid var(--line); padding-top: 1.5rem; }
+section.ov:first-child .ov-head { border-top: 0; padding-top: 0; }
+.ov-head h2 { font: 600 clamp(1.45rem, 3.6vw, 1.85rem)/1.2 var(--f-display); margin: 0; text-wrap: balance; }
+.ov-head h2 a { color: var(--ink); }
+.ov-head .open { flex: none; font-size: 0.95rem; white-space: nowrap; }
+.tsub { font: 500 0.95rem/1.2 var(--f-body); color: var(--muted); white-space: nowrap; }
+/* Overview shows charts only: hide the explanation lines inside the interactive fragments. */
+.overview .bvr-sub, .overview .hint, .overview .fnd-sub, .overview .fnd-note, .overview .py-sub, .overview .pme-lede { display: none !important; }
+footer .stats { font-variant-numeric: tabular-nums; }
 
 .nav { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: color-mix(in srgb, var(--bg) 92%, transparent);
   backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); }
@@ -464,7 +541,9 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   fig.querySelectorAll(".toggle button").forEach(function (b) {
     b.addEventListener("click", function () {
       var i = +b.dataset.view;
-      img.src = srcs[i]; open.dataset.full = srcs[i]; path.textContent = paths[i]; full.href = raws[i];
+      img.src = srcs[i]; open.dataset.full = srcs[i];
+      if (path) path.textContent = paths[i];
+      if (full) full.href = raws[i];
       fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
     });
   });
@@ -488,15 +567,13 @@ def body():
     return f"""<div class="wrap top">
   <h1>{title_html}</h1>
   <p class="tagline">{e(CAT['tagline'])}</p>
-  <div class="stats"><span><b>{n_charts}</b> charts</span><span><b>{n_data}</b> data files</span>
-    <span>Last change <b>{nice_date(last)}</b></span><span>{link(TREE, "Code on GitHub")}</span></div>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap">{nav}</div></nav>
-<main class="wrap">
+<nav class="wrap toc" aria-label="Topics">{toc}</nav>
+<main class="wrap overview">
 {"".join(section_html(s) for s in sections)}
 </main>
 <footer class="wrap">
-  <span>To add a chart or dataset: add it to <code>catalog.json</code>, then run <code>python3 -I tools/build_catalog.py</code>.</span>
+  <span class="stats">{n_charts} charts · {n_data} data files · last change {nice_date(last)} · {link(TREE, "code and data on GitHub")}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
@@ -508,7 +585,7 @@ def body():
 
 def topic_body(s):
     chips = "".join(f'<a href="{e(page_href(t["id"]))}"{" aria-current=\"page\"" if t is s else ""}>'
-                    f'{e(t["title"].split(",")[0].split(" (")[0])}</a>' for t in sections)
+                    f'{e(short_title(t["title"]))}</a>' for t in sections)
     return f"""<div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
   <p class="site">{title_html}</p>
