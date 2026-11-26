@@ -141,10 +141,10 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 <div class="wrap top">
   <h1><span>PAIS</span> Data Catalog</h1>
   <p class="tagline">Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.</p>
-  <div class="stats"><span><b>16</b> charts</span><span><b>27</b> data files</span>
+  <div class="stats"><span><b>20</b> charts</span><span><b>28</b> data files</span>
     <span>Last change <b>26 Nov 2026</b></span><span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code on GitHub</a></span></div>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="#burden-120">Research vs disease burden</a><a href="#trials">Long COVID and ME/CFS trials</a><a href="#sex">Research by which sex a disease mostly affects</a><a href="#funding">Public biomedical R&amp;D funding and output</a><a href="#pais-burden">PAIS burden and ME</a><a href="#sources">Papers and trials per year</a></div></nav>
+<nav class="nav" aria-label="Topics"><div class="wrap"><a href="#burden-120">Research vs disease burden</a><a href="#trials">Long COVID and ME/CFS trials</a><a href="#sex">Research by which sex a disease mostly affects</a><a href="#funding">Public biomedical R&amp;D funding and output</a><a href="#pais-burden">PAIS burden and ME</a><a href="#global-burden">Global ME/CFS burden</a><a href="#sources">Papers and trials per year</a></div></nav>
 <main class="wrap">
 
   <section id="burden-120">
@@ -1491,6 +1491,26 @@ setTab(location.hash==="#pme-symptoms"?2:1);
 </script>
 
   </section>
+  <section id="global-burden">
+    <header class="sec-head">
+      <h2>Global ME/CFS burden</h2>
+      <div class="sec-links"><span>Notes:</span><a href="https://github.com/ebise-wq/pais-data/blob/main/global_burden/README.md" target="_blank" rel="noopener">global_burden/README.md</a></div>
+      <a class="open" href="global-burden.html">Open page →</a>
+    </header>
+    <p class="finding">A model of how many people worldwide have ME/CFS and how much disease burden it causes, since nobody has counted it. With the Canadian Consensus Criteria, about 45 million people have ME/CFS now (90% range 27–77 million), about half of them post-COVID. That is 17.5 million DALYs a year (9.9–31.7 million), the ME/CFS burden used in the research-vs-burden charts. Strict ICC gives 27 million people, broad Fukuda 80 million. The two routes for post-COVID ME differ 2.4-fold.</p>
+    <p class="bvr-more">Interactive model with criteria, age groups, 21 countries, 2040 and every step explained: <a href="global-burden.html">open the topic page</a>.</p>
+    <details class="datablock"><summary>Data behind these charts <span class="count">1</span></summary>
+    <ul class="datalist">
+        <li class="data">
+          <div class="data-main">
+            <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/global_burden/model_output_2026-11-26.json" target="_blank" rel="noopener">model_output_2026-11-26.json</a><span class="folder">global_burden/</span></div>
+            <p>Model output behind the interactive page: Monte Carlo ranges for people and DALYs by criteria, route, age group, year (now and 2040) and country, with every step&#x27;s inputs. Computed in a separate session; that code is not in the repo.</p>
+            <div class="meta">6 rows · 373 KB · updated 26 Nov 2026</div>
+          </div>
+          <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/global_burden/model_output_2026-11-26.json" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/global_burden/model_output_2026-11-26.json" target="_blank" rel="noopener">Download</a></div>
+        </li>
+    </ul></details>
+  </section>
   <section id="sources">
     <header class="sec-head">
       <h2>Papers and trials per year, 131 diseases</h2>
@@ -1785,7 +1805,7 @@ render();
 </main>
 <footer class="wrap">
   <span>To add a chart or dataset: add it to <code>catalog.json</code>, then run <code>python3 -I tools/build_catalog.py</code>.</span>
-  <span class="ver">v14 · built 2026-11-26</span>
+  <span class="ver">v16 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
