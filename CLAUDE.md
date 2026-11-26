@@ -78,8 +78,9 @@
 - Charts and page use the "Forest glass" style (v21, chosen by the user on 2026-11-26 from twelve mockups):
   deep green page `#0e2a22` with soft light from the top left; charts are saved with a transparent
   background (`savefig(..., transparent=True)`) so the green shows through. Ink `#e9efe9`, muted
-  `#a7bdb2`, grid `#ffffff1f`, mint `#9fd8b5` (was ocean), peach `#f2b880` (was sunset), lilac
-  `#c3b1e1` for a third category. Titles in a sans-serif (Inter Tight on the page, Inter in charts),
+  `#a7bdb2`, grid `#ffffff1f`, mint `#9fd8b5` (was ocean), peach `#f2b880` (was sunset), blue
+  `#7fb2f0` and violet `#b48cf0` for more categories (the user wants some blue, e.g. "mostly men"; no pale
+  lilac). ME/CFS stays peach; long COVID is violet where both appear. Titles in a sans-serif (Inter Tight on the page, Inter in charts),
   never a serif. Sized for phone screens; a small version number in a corner. Transparent PNGs have
   light text, so they don't work on a white background (Substack, X): the solid copies in
   `<folder>/solid/` are for sharing. Scripts that only make old or hidden charts (`expanded/analyse.py`,

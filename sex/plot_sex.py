@@ -16,7 +16,7 @@ from matplotlib.ticker import FixedLocator, NullLocator
 HERE = os.path.dirname(os.path.abspath(__file__))
 # Forest glass: transparent background (the page shows deep green through it). BG is only used for edges.
 BG, INK, MUTED, GRID, BAND = "#0e2a22", "#e9efe9", "#a7bdb2", "#ffffff1f", "#ffffff0d"
-OCEAN, SUNSET, NEUTRAL = "#9fd8b5", "#f2b880", "#7f968b"   # mostly men, mostly women, balanced
+OCEAN, SUNSET, NEUTRAL = "#7fb2f0", "#f2b880", "#7f968b"   # mostly men (blue), mostly women, balanced
 plt.rcParams.update({"font.family": ["Inter", "DejaVu Sans"], "font.size": 13, "text.color": INK,
                      "xtick.color": MUTED, "ytick.color": MUTED, "xtick.labelsize": 13, "ytick.labelsize": 13})
 M = 0.055
@@ -159,5 +159,5 @@ def groups(version):
     save(fig, os.path.join(HERE, "sex_groups.png"))
 
 
-scatter("v8")
-groups("v6")
+scatter("v9")
+groups("v7")

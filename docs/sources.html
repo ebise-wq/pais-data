@@ -269,7 +269,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v4</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v5</span></div>
   </div>
 </div>
 <script>
@@ -296,7 +296,7 @@ D.more.forEach((r) => { if (r.year >= Y0 && r.year <= Y1 && dalys[r.disease] != 
 const ME_KEY = "All ME/CFS (classic + post-COVID)";
 const name = (d) => SHORT[d] || d;
 const all = Object.keys(series).sort((a, b) => (dalys[b] ?? -1) - (dalys[a] ?? -1) || a.localeCompare(b));
-const ME = "#f2b880", PAL = ["#9fd8b5", "#8fb8e8", "#c9b8e8", "#e6a6c0", "#f2d38a", "#a8c97f", "#9fb4ff", "#e8c4a0"];
+const ME = "#f2b880", PAL = ["#9fd8b5", "#7fb2f0", "#b48cf0", "#e6a6c0", "#f2d38a", "#a8c97f", "#9fb4ff", "#e8c4a0"];
 const S = { m: "papers", log: false, on: [ME_KEY, "Schizophrenia", "Epilepsy", "Osteoarthritis"].filter((d) => series[d]), col: {} };
 const colour = (d) => {
   if (d === ME_KEY) return ME;
@@ -486,7 +486,7 @@ render();
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v22 · built 2026-11-26</span>
+  <span class="ver">v23 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>

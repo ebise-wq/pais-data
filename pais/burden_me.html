@@ -71,7 +71,7 @@
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
         <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
     </div>
-    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v10</span></div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v11</span></div>
   </div>
 
   <div class="pme-poster" id="pme-p2" hidden>
@@ -83,7 +83,7 @@
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
         <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
     </div>
-    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v10</span></div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v11</span></div>
   </div>
 
   <label class="pme-tog"><input type="checkbox" id="pme-hide" checked> Hide numbers</label>
@@ -280,7 +280,7 @@ function euler4(svgId,S,tgt,unit){
   const mem=(x,y)=>C.map((_,i)=>inside(i,x,y));
   const edge=(x,y)=>Math.min(...C.map(c=>Math.abs(Math.hypot(x-c.x,y-c.y)-c.r)));
   const wants=[[m=>m[0]&&!m[1]&&!m[2]&&!m[3]],[m=>m[1]&&!m[0]&&!m[2]&&!m[3],m=>m[1]&&!m[0]],[m=>m[2]&&!m[3]],[m=>m[3]&&!m[2]]];
-  const tint=["#b8e2cb","#f8c9ae","#e2d8f2","#f1c6d6"];
+  const tint=["#b8e2cb","#f8c9ae","#c4dcf7","#f1c6d6"];
   const placed=[];
   S.forEach((s,i)=>{
     const lines=[s.n,...sub(s)],tw=Math.max(...lines.map((l,k)=>l.length*(k?6.4:7.6)))+6,th=lines.length*15+2;
@@ -317,7 +317,7 @@ function render2(T){
     const sum=f=>cells.filter(f).reduce((a,c)=>a+c[key],0);
     const A={PC:sum(c=>c.pc),ME:sum(c=>c.me),D:sum(c=>c.D),M:sum(c=>c.M)};
     const S=[{k:"PC",n:"Long COVID",A:A.PC,c:TR.LC.c,me:sum(c=>c.pc&&c.me)/(A.PC||1)},{k:"ME",n:"ME",A:A.ME,c:TR.ME.c,me:null},
-      {k:"D",n:"Dysautonomia",A:A.D,c:"#c9b8e8",me:sum(c=>c.D&&c.me)/(A.D||1)},{k:"M",n:"MCAS",A:A.M,c:"#e6a6c0",dash:1,me:sum(c=>c.M&&c.me)/(A.M||1)}];
+      {k:"D",n:"Dysautonomia",A:A.D,c:"#7fb2f0",me:sum(c=>c.D&&c.me)/(A.D||1)},{k:"M",n:"MCAS",A:A.M,c:"#e6a6c0",dash:1,me:sum(c=>c.M&&c.me)/(A.M||1)}];
     const tgt={"PC|ME":sum(c=>c.pc&&c.me),"PC|D":sum(c=>c.pc&&c.D),"ME|D":sum(c=>c.me&&c.D),"PC|M":sum(c=>c.pc&&c.M),"ME|M":sum(c=>c.me&&c.M),"D|M":sum(c=>c.D&&c.M)};
     return{S,tgt};
   };
