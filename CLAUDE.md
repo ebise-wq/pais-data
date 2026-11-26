@@ -28,8 +28,10 @@
   README links, data files, earlier versions or subsection links; those are on the topic pages. PNG
   charts show without their caption card, and the explanation lines inside interactive fragments
   (`bvr-sub`, `fnd-sub`, `fnd-note`, `py-sub`, `pme-lede`, `hint`) are hidden by CSS under `.overview`.
-- The top of the overview is a contents list: one row per section with a headline number. Each section
-  needs a `"headline": {"value": "10×", "label": "fewer ME/CFS papers than its burden predicts"}`.
+- The top of the overview is a plain contents list of section titles (v18). Once it scrolls out of view,
+  a slim bar pinned to the top names the section in view; tapping it opens the same list. (A v16-17
+  version with a headline number per section was dropped at the user's request.) The user may later
+  want search, tags and filters here; keep it simple until asked.
 - In titles, the part after the first comma ("120 diseases", "2024") is shown small.
 - A section can carry `"interactive"` (an HTML fragment plus its JSON data), e.g. the 120-disease
   burden charts in `expanded/burden_interactive.html`. Its CSS classes and ids start with `bvr-` so

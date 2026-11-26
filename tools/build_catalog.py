@@ -11,7 +11,7 @@ whole fragment shows on the topic page only, and the overview gets a link line (
 A chart's "toggle" can be one alternative image or a list of them.
 
 The overview shows each section's title (a link to its topic page) and charts only; the top is a contents
-list built from each section's "headline". Findings, captions, notes and data files are on the topic pages.
+list of section titles, with a bar pinned to the top once that list scrolls away. Findings, captions, notes and data files are on the topic pages.
 
 A section can carry "subsections": a list of {id, title, readme, finding, charts, data}. They show at the end
 of the topic page; the overview gets one link line per subsection. docs/<subsection id>.html redirects there.
@@ -365,14 +365,17 @@ def short_title(t):
     return t.split(",")[0].split(" (")[0]
 
 
-def tile(s):
-    """Overview contents: one tile per topic with its headline number; links to the section below."""
-    h = s.get("headline") or {}
-    return (f'<a class="tile" href="#{e(s["id"])}"><span class="tt">{e(short_title(s["title"]))}</span>'
-            f'<span class="tv">{e(h.get("value", ""))}</span><span class="tl">{e(h.get("label", ""))}</span></a>')
+def toc_items():
+    """Overview contents: one link per section, with the part after the first comma set small."""
+    items = []
+    for s in sections:
+        main, _, rest = s["title"].partition(", ")
+        sub = f' <span class="tsub">{e(rest)}</span>' if rest else ""
+        items.append(f'<li><a href="#{e(s["id"])}" data-toc="{e(s["id"])}">{e(main)}{sub}</a></li>')
+    return "".join(items)
 
 
-toc = "".join(tile(s) for s in sections)
+toc = toc_items()
 
 def head(title):
     return HEAD.replace(f"<title>{e(CAT['title'])}</title>", f"<title>{e(title)}</title>", 1)
@@ -415,16 +418,30 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
-/* Contents: one row per topic, headline number on the left, topic and what the number means on the right. */
-.toc { display: grid; gap: 0 1.5rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr));
-  margin-bottom: 0.5rem; }
-.tile { display: grid; grid-template-columns: 7rem minmax(0, 1fr); grid-template-rows: auto auto; column-gap: 0.9rem;
-  align-items: baseline; padding: 0.7rem 0.1rem; border-top: 1px solid var(--line); color: var(--ink); min-width: 0; }
-.tile:hover { text-decoration: none; }
-.tile:hover .tt { color: var(--ocean); }
-.tile .tv { grid-row: 1 / span 2; font: 600 1.35rem/1.15 var(--f-display); color: var(--sunset); font-variant-numeric: tabular-nums; white-space: nowrap; }
-.tile .tt { font: 600 0.98rem/1.3 var(--f-body); color: var(--ink); }
-.tile .tl { grid-column: 2; font-size: 0.9rem; line-height: 1.35; color: var(--muted); }
+/* Contents: a plain list under the header. Once it scrolls out of view a slim bar is pinned to the top,
+   naming the section in view; tapping it opens the same list. */
+.toc-full { padding-bottom: 0.5rem; }
+.toc-full h2 { font: 500 0.8rem/1 var(--f-body); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); margin: 0 0 0.4rem; }
+.toc-list { list-style: none; margin: 0; padding: 0; display: grid; column-gap: 1.5rem;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); }
+.toc-list a { display: block; padding: 0.55rem 0.1rem; border-top: 1px solid var(--line); color: var(--ink);
+  font: 500 1.02rem/1.35 var(--f-body); }
+.toc-list a:hover { color: var(--ocean); text-decoration: none; }
+.toc-list a[aria-current="true"] { color: var(--sunset); }
+.toc-list .tsub { font-size: 0.85rem; }
+.toc-bar { position: fixed; inset: 0 0 auto; z-index: 20; padding-top: env(safe-area-inset-top, 0px);
+  background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--line);
+  transform: translateY(-110%); transition: transform 0.18s ease; }
+.toc-bar.on { transform: none; }
+@media (prefers-reduced-motion: reduce) { .toc-bar { transition: none; } }
+.toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 48px; padding: 0; border: 0; background: none;
+  color: var(--ink); font: 500 1rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
+.toc-btn .lab { flex: none; font-size: 0.78rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.toc-btn .cur { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.toc-btn .chev { flex: none; width: 0.55rem; height: 0.55rem; margin: 0 0.3rem 0.25rem; border-right: 2px solid var(--muted);
+  border-bottom: 2px solid var(--muted); transform: rotate(45deg); transition: transform 0.15s; }
+.toc-btn[aria-expanded="true"] .chev { transform: rotate(225deg); margin-bottom: -0.15rem; }
+.toc-drop { padding-bottom: 0.6rem; max-height: calc(100vh - 60px); overflow-y: auto; }
 .overview { gap: 2.75rem; }
 .ov-head { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: baseline; gap: 1rem;
   border-top: 1px solid var(--line); padding-top: 1.5rem; }
@@ -549,6 +566,37 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   });
 });
 (function () {
+  // Contents bar: shown once the contents list has scrolled away; names the section in view.
+  var full = document.getElementById("toc"), bar = document.getElementById("toc-bar");
+  if (!full || !bar || !("IntersectionObserver" in window)) return;
+  var btn = bar.querySelector(".toc-btn"), drop = bar.querySelector(".toc-drop"), cur = bar.querySelector(".cur");
+  var links = drop.querySelectorAll("[data-toc]");
+  function setOpen(o) { drop.hidden = !o; btn.setAttribute("aria-expanded", o ? "true" : "false"); }
+  new IntersectionObserver(function (es) {
+    var on = !es[0].isIntersecting && es[0].boundingClientRect.top < 0;
+    bar.classList.toggle("on", on); btn.tabIndex = on ? 0 : -1;
+    if (!on) setOpen(false);
+  }).observe(full);
+  btn.addEventListener("click", function () { setOpen(drop.hidden); });
+  drop.addEventListener("click", function (ev) { if (ev.target.closest("a")) setOpen(false); });
+  document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") setOpen(false); });
+  var secs = [].slice.call(document.querySelectorAll("main.overview > section"));
+  function spy() {
+    var y = 80, id = secs.length ? secs[0].id : "";
+    secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= y) id = sec.id; });
+    var t = "";
+    links.forEach(function (a) {
+      var hit = a.dataset.toc === id;
+      a.setAttribute("aria-current", hit ? "true" : "false");
+      if (hit) t = a.firstChild.textContent;
+    });
+    cur.textContent = t;
+  }
+  var raf = 0;
+  window.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; spy(); }); }, { passive: true });
+  spy();
+})();
+(function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;
   var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title");
@@ -568,7 +616,15 @@ def body():
   <h1>{title_html}</h1>
   <p class="tagline">{e(CAT['tagline'])}</p>
 </div>
-<nav class="wrap toc" aria-label="Topics">{toc}</nav>
+<nav class="wrap toc-full" id="toc" aria-labelledby="toc-h"><h2 id="toc-h">Contents</h2><ol class="toc-list">{toc}</ol></nav>
+<div class="toc-bar" id="toc-bar">
+  <div class="wrap">
+    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop" tabindex="-1">
+      <span class="lab">Contents</span><span class="cur"></span><span class="chev" aria-hidden="true"></span>
+    </button>
+    <nav class="toc-drop" id="toc-drop" aria-label="Contents" hidden><ol class="toc-list">{toc}</ol></nav>
+  </div>
+</div>
 <main class="wrap overview">
 {"".join(section_html(s) for s in sections)}
 </main>
