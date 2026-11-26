@@ -378,10 +378,10 @@ def toc_items():
 toc = toc_items()
 
 def head(title):
-    return HEAD.replace(f"<title>{e(CAT['title'])}</title>", f"<title>{e(title)}</title>", 1)
+    return HEAD.replace(f"<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>", f"<title>{e(title)}</title>", 1)
 
 
-HEAD = f"""<title>{e(CAT['title'])}</title>
+HEAD = f"""<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="{e(CAT['tagline'])}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -414,10 +414,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 .top { padding-block: 2.75rem 0; }
-.top h1 { font: 600 clamp(2.1rem, 6vw, 3.1rem)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.top h1 { font: 600 clamp(1.85rem, 7.2vw, 3.1rem)/1.08 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
+.top .kicker { margin: 0.35rem 0 0; font: 500 clamp(1.15rem, 3.6vw, 1.45rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: 0.01em; }
+.top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
 .byline .upd { display: block; margin-top: 0.15rem; color: var(--faint); font-size: 0.88rem; }
@@ -609,10 +611,13 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
 })();
 </script>"""
 
-title_html = e(CAT["title"]).replace("PAIS", "<span>PAIS</span>", 1)
+# Brand: the Substack's name, with "Data & Graphs" under it. The question mark takes the accent colour.
+title_html = e(CAT["title"]).replace("?", "<span>?</span>", 1)
+FULL_TITLE = f"{CAT['title']} · {CAT['subtitle']}"
 def body():
     return f"""<div class="wrap top">
   <h1>{title_html}</h1>
+  <p class="kicker">{e(CAT['subtitle'])}</p>
   <p class="tagline">{e(CAT['tagline'])}</p>
   <p class="byline">By {e(CAT['author']['name'])} · {" · ".join(link(l["url"], e(l["label"])) for l in CAT['author']['links'])}
     <span class="upd">Last updated {nice_date(built)}</span></p>
@@ -644,7 +649,7 @@ def topic_body(s):
                     f'{e(short_title(t["title"]))}</a>' for t in sections)
     return f"""<div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
-  <p class="site">{title_html}</p>
+  <p class="site">{title_html} <span class="kicker-sm">{e(CAT['subtitle'])}</span></p>
 </div>
 <nav class="nav" aria-label="Topics"><div class="wrap">{chips}</div></nav>
 <main class="wrap">
@@ -679,10 +684,10 @@ def document(title, inner):
 
 IMG_BASE, PAGE_BASE = RAW, ""
 os.makedirs("docs", exist_ok=True)
-open("docs/index.html", "w").write(document(CAT["title"], body()))
+open("docs/index.html", "w").write(document(FULL_TITLE, body()))
 pages = {"index.html"}
 for s in sections:
-    open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {CAT['title']}", topic_body(s)))
+    open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {FULL_TITLE}", topic_body(s)))
     pages.add(f"{s['id']}.html")
     for sub in s.get("subsections", []):  # old topic pages of what is now a subsection
         target = f"{s['id']}.html#{sub['id']}"

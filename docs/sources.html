@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Papers and trials per year, 131 diseases · PAIS Data Catalog</title>
+<title>Papers and trials per year, 131 diseases · How To Solve A Disease? · Data &amp; Graphs</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -35,10 +35,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 .top { padding-block: 2.75rem 0; }
-.top h1 { font: 600 clamp(2.1rem, 6vw, 3.1rem)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.top h1 { font: 600 clamp(1.85rem, 7.2vw, 3.1rem)/1.08 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
+.top .kicker { margin: 0.35rem 0 0; font: 500 clamp(1.15rem, 3.6vw, 1.45rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: 0.01em; }
+.top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
 .byline .upd { display: block; margin-top: 0.15rem; color: var(--faint); font-size: 0.88rem; }
@@ -175,7 +177,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 <body>
 <div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
-  <p class="site"><span>PAIS</span> Data Catalog</p>
+  <p class="site">How To Solve A Disease<span>?</span> <span class="kicker-sm">Data &amp; Graphs</span></p>
 </div>
 <nav class="nav" aria-label="Topics"><div class="wrap"><a href="burden-120.html">Research vs disease burden</a><a href="trials.html">Long COVID and ME/CFS trials</a><a href="sex.html">Research by which sex a disease mostly affects</a><a href="funding.html">Public biomedical R&amp;D funding and output</a><a href="pais-burden.html">PAIS burden and ME</a><a href="global-burden.html">Global ME/CFS burden</a><a href="sources.html" aria-current="page">Papers and trials per year</a></div></nav>
 <main class="wrap">
@@ -473,7 +475,7 @@ render();
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v19 · built 2026-11-26</span>
+  <span class="ver">v20 · built 2026-11-26</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
