@@ -386,16 +386,18 @@ HEAD = f"""<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>
 <meta name="description" content="{e(CAT['tagline'])}">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">"""
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">"""
 
 STYLE = """<style>
 /* Layout: one reading column. Header, topic chips, then one section per analysis:
    key finding, chart grid, then the data files in a collapsed block. Colours match the charts themselves. */
 :root {
-  --bg: #141a24; --surface: #1a2230; --raise: #212a3a; --line: #2a3446;
-  --ink: #eef1f6; --muted: #a3acba; --faint: #6f7a8c;
-  --ocean: #7fb3d5; --sunset: #f4a582;
-  --f-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  /* Forest glass (v21): deep green with soft light from the top left; cards and charts are see-through.
+     --ocean and --sunset keep their names but are now mint and peach. */
+  --bg: #0e2a22; --surface: rgba(255, 255, 255, 0.045); --raise: rgba(255, 255, 255, 0.09); --line: rgba(255, 255, 255, 0.11);
+  --ink: #e9efe9; --muted: #a7bdb2; --faint: #7e978b;
+  --ocean: #9fd8b5; --sunset: #f2b880;
+  --f-display: "Inter Tight", "Inter", system-ui, sans-serif;
   --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
@@ -403,7 +405,8 @@ STYLE = """<style>
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.55 var(--f-body);
+html { background: #0b231c; }
+body { margin: 0; background: radial-gradient(120% 80% at 10% 0%, #1f4d3e 0%, #12342a 38%, #0e2a22 62%, #0b231c 100%) fixed; color: var(--ink); font: 400 17px/1.55 var(--f-body);
   -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
   z-index: 10; background: var(--bg); }
@@ -414,7 +417,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 .top { padding-block: 2.75rem 0; }
-.top h1 { font: 600 clamp(1.85rem, 7.2vw, 3.1rem)/1.08 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.top h1 { font: 700 clamp(1.85rem, 7.2vw, 3.1rem)/1.08 var(--f-display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
@@ -438,7 +441,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); transition: transform 0.15s; }
 .toc-btn[aria-expanded="true"] .chev { transform: rotate(225deg); margin-bottom: -0.1rem; }
 .toc-drop { position: absolute; left: 0; right: 0; top: 100%; margin-top: 1px; padding: 0.2rem max(16px, env(safe-area-inset-left, 0px)) 0.5rem;
-  background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  background: #10302a; border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
   max-height: calc(100vh - 60px); overflow-y: auto; }
 .toc-list { list-style: none; margin: 0; padding: 0; }
 .toc-list a { display: block; padding: 0.5rem 0; color: var(--ink); font: 400 0.95rem/1.35 var(--f-body); }
@@ -489,7 +492,7 @@ section:first-child .sec-head { border-top: 0; padding-top: 0; }
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
 .chart { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
   display: flex; flex-direction: column; min-width: 0; }
-.chart-img { display: block; width: 100%; padding: 0; border: 0; background: var(--bg); cursor: zoom-in; }
+.chart-img { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
 .chart-img img { display: block; width: 100%; height: auto; max-width: 100%; }
 .chart figcaption { padding: 0.9rem 1rem 1rem; display: grid; gap: 0.35rem; border-top: 1px solid var(--line); flex: 1; align-content: start; }
 .chart h3 { margin: 0; font: 600 1.05rem/1.3 var(--f-body); }
@@ -532,8 +535,8 @@ a.fname:hover { color: var(--sunset); }
 .toggle button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0;
   border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
 .toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
-.chart[data-views] { background: var(--bg); }
-.chart[data-views] figcaption { background: var(--surface); }
+.chart[data-views] { background: var(--surface); }
+.chart[data-views] figcaption { background: transparent; }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
 .older[open] summary { margin-bottom: 1rem; }
@@ -546,7 +549,7 @@ footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: va
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
-dialog.lb::backdrop { background: rgba(8, 11, 17, 0.88); }
+dialog.lb::backdrop { background: rgba(8, 30, 24, 0.95); }
 dialog.lb img { display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
 dialog.lb .lb-bar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.5rem 0.1rem; color: var(--ink); }
 dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); background: var(--raise); border: 1px solid var(--line);

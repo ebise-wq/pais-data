@@ -30,8 +30,6 @@
   (`bvr-sub`, `fnd-sub`, `fnd-note`, `py-sub`, `pme-lede`, `hint`) are hidden by CSS under `.overview`.
 - Brand: the site is titled after the user's Substack, "How To Solve A Disease?" (`"title"` in
   `catalog.json`), with "Data & Graphs" (`"subtitle"`) under it; the question mark takes the accent colour.
-  The chart style is being reconsidered so it looks less like CrunchME's (mockups of six options were
-  made on 2026-11-26; no choice yet). Until the user picks one, keep the colours below.
 - Under the overview header: "By Siebe Rozendal" with links to Substack, X and LinkedIn (from `"author"`
   in `catalog.json`) and "Last updated" (the build date).
 - Contents (v19): one slim bar under the header, sticky while scrolling and collapsed by default, in
@@ -70,6 +68,14 @@
 - Run scripts from the repo root with `python3 -I <folder>/<script>.py`.
 - Put the pull date in data file names (`counts_2026-11-08.csv`). Keep API caches in `cache/`
   folders, which are git-ignored.
-- Charts: dark background `#141a24`, ink `#eef1f6`, muted `#a3acba`, ocean `#7fb3d5`, sunset
-  `#f4a582`; Inter; sized for phone screens; a small version number in a corner.
+- Charts and page use the "Forest glass" style (v21, chosen by the user on 2026-11-26 from twelve mockups):
+  deep green page `#0e2a22` with soft light from the top left; charts are saved with a transparent
+  background (`savefig(..., transparent=True)`) so the green shows through. Ink `#e9efe9`, muted
+  `#a7bdb2`, grid `#ffffff1f`, mint `#9fd8b5` (was ocean), peach `#f2b880` (was sunset), lilac
+  `#c3b1e1` for a third category. Titles in a sans-serif (Inter Tight on the page, Inter in charts),
+  never a serif. Sized for phone screens; a small version number in a corner. Transparent PNGs have
+  light text, so they don't work on a white background (Substack, X): for sharing, export with
+  `facecolor="#0e2a22"` instead. Scripts that only make old or hidden charts (`expanded/analyse.py`,
+  `analysis/burden_vs_research.py`, `analysis/long_covid_trials.py`, `analysis/shortfall_ccc.py`) still
+  use the old navy colours; that's fine while their charts stay old or hidden.
 - Each folder has a README with method, choices, results and caveats. Update it with the outputs.

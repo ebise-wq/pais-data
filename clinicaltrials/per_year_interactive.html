@@ -18,7 +18,7 @@
 .py svg { display: block; max-width: 100%; overflow: visible; }
 .py svg text { font-family: var(--f-body); fill: var(--muted); font-variant-numeric: tabular-nums; }
 .py svg text.lab { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; font-weight: 500; }
-.py-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+.py-tip { position: absolute; pointer-events: none; background: #0c2620; border: 1px solid var(--line); border-radius: 10px;
   padding: 0.5rem 0.7rem; font-size: 0.88rem; line-height: 1.45; color: var(--ink); min-width: 170px; z-index: 5;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; font-variant-numeric: tabular-nums; }
 .py-tip b { display: block; margin-bottom: 0.15rem; }
@@ -68,7 +68,7 @@
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v3</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v4</span></div>
   </div>
 </div>
 <script>
@@ -95,7 +95,7 @@ D.more.forEach((r) => { if (r.year >= Y0 && r.year <= Y1 && dalys[r.disease] != 
 const ME_KEY = "All ME/CFS (classic + post-COVID)";
 const name = (d) => SHORT[d] || d;
 const all = Object.keys(series).sort((a, b) => (dalys[b] ?? -1) - (dalys[a] ?? -1) || a.localeCompare(b));
-const ME = "#f4a582", PAL = ["#7fb3d5", "#8fd3c9", "#c9b8e8", "#e6a6c0", "#f2d38a", "#a8c97f", "#9fb4ff", "#e8c4a0"];
+const ME = "#f2b880", PAL = ["#9fd8b5", "#8fb8e8", "#c9b8e8", "#e6a6c0", "#f2d38a", "#a8c97f", "#9fb4ff", "#e8c4a0"];
 const S = { m: "papers", log: false, on: [ME_KEY, "Schizophrenia", "Epilepsy", "Osteoarthritis"].filter((d) => series[d]), col: {} };
 const colour = (d) => {
   if (d === ME_KEY) return ME;

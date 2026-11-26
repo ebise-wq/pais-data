@@ -13,8 +13,9 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedLocator, NullLocator
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-BG, INK, MUTED, GRID, BAND = "#141a24", "#eef1f6", "#a3acba", "#262f3d", "#1d2533"
-OCEAN, SUNSET, NEUTRAL = "#7fb3d5", "#f4a582", "#6b7585"   # mostly men, mostly women, balanced
+# Forest glass: transparent background (the page shows deep green through it). BG is only used for edges.
+BG, INK, MUTED, GRID, BAND = "#0e2a22", "#e9efe9", "#a7bdb2", "#ffffff1f", "#ffffff0d"
+OCEAN, SUNSET, NEUTRAL = "#9fd8b5", "#f2b880", "#7f968b"   # mostly men, mostly women, balanced
 plt.rcParams.update({"font.family": ["Inter", "DejaVu Sans"], "font.size": 13, "text.color": INK,
                      "xtick.color": MUTED, "ytick.color": MUTED, "xtick.labelsize": 13, "ytick.labelsize": 13})
 M = 0.055
@@ -49,7 +50,7 @@ YL = ["30× fewer", "10× fewer", "3× fewer", "As expected", "3× more", "10× 
 
 
 def style(ax):
-    ax.set_facecolor(BG)
+    ax.set_facecolor("none")
     for s in ("top", "right"): ax.spines[s].set_visible(False)
     for s in ("left", "bottom"): ax.spines[s].set_color(MUTED); ax.spines[s].set_linewidth(1.2)
     ax.tick_params(length=6, width=1.2, color=MUTED, pad=5)
@@ -63,7 +64,7 @@ def header(fig, title, sub, legend, y0=0.955):
 
 
 def scatter(version):
-    fig = plt.figure(figsize=(6, 9.2), facecolor=BG)
+    fig = plt.figure(figsize=(6, 9.2), facecolor="none")
     header(fig, "Research vs burden, by sex", "Each dot is a disease. Compared with what its burden predicts.",
            [("Mostly women", SUNSET), ("Balanced", NEUTRAL), ("Mostly men", OCEAN)])
     panels = [("Papers", "papers", 0.48), ("Trials", "trials", 0.118)]
@@ -103,8 +104,8 @@ def scatter(version):
     fig.text(M, 0.845, "White line: trend (one-sex diseases left out). It is flat.", fontsize=11.5, color=MUTED, va="baseline")
     fig.text(M, 0.034, ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
     fig.text(M, 0.016, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.016, version, fontsize=9, color=GRID, ha="right", va="baseline")
-    fig.savefig(os.path.join(HERE, "sex_scatter.png"), dpi=300, facecolor=BG)
+    fig.text(1 - M, 0.016, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    fig.savefig(os.path.join(HERE, "sex_scatter.png"), dpi=300, transparent=True)
 
 
 def groups(version):
@@ -112,7 +113,7 @@ def groups(version):
              ("balanced", "Balanced", NEUTRAL), ("male-dominant", "Mostly men", OCEAN),
              ("male-specific", "Men only", OCEAN)]
     rng = np.random.default_rng(46739079)  # seed drawn from a random number generator; jitter only
-    fig = plt.figure(figsize=(6, 6.4), facecolor=BG)
+    fig = plt.figure(figsize=(6, 6.4), facecolor="none")
     fig.text(M, 0.94, "Research by sex group", fontsize=20, fontweight="bold", color=INK, va="baseline")
     fig.text(M, 0.902, "Compared with what each disease's burden predicts", fontsize=12.5, color=MUTED, va="baseline")
     fig.text(M, 0.866, "Dots: diseases. White bar: group average.", fontsize=12.5, color=MUTED, va="baseline")
@@ -145,9 +146,9 @@ def groups(version):
     fig.text(M, 0.072, "Women-only and men-only groups include cancers, which get more research", fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.045, ME_FOOT, fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.018, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.018, version, fontsize=9, color=GRID, ha="right", va="baseline")
-    fig.savefig(os.path.join(HERE, "sex_groups.png"), dpi=300, facecolor=BG)
+    fig.text(1 - M, 0.018, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    fig.savefig(os.path.join(HERE, "sex_groups.png"), dpi=300, transparent=True)
 
 
-scatter("v7")
-groups("v5")
+scatter("v8")
+groups("v6")

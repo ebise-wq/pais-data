@@ -15,15 +15,16 @@ import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
 
 PULL = "25 Nov 2026"
-BG, INK, MUTED, GRID, BAND = "#141a24", "#eef1f6", "#a3acba", "#262f3d", "#1d2533"
-OCEAN, SUNSET = "#7fb3d5", "#f4a582"   # other sponsors, commercial sponsors
+# Forest glass: transparent background (the page shows deep green through it). BG is only used for edges.
+BG, INK, MUTED, GRID, BAND = "#0e2a22", "#e9efe9", "#a7bdb2", "#ffffff1f", "#ffffff0d"
+OCEAN, SUNSET = "#9fd8b5", "#f2b880"   # other sponsors, commercial sponsors
 plt.rcParams.update({"font.family": ["Inter", "DejaVu Sans"], "font.size": 13, "text.color": INK,
                      "xtick.color": MUTED, "ytick.color": MUTED, "xtick.labelsize": 13, "ytick.labelsize": 13})
 M = 0.055
 
 
 def style(ax):
-    ax.set_facecolor(BG)
+    ax.set_facecolor("none")
     for s in ("top", "right"): ax.spines[s].set_visible(False)
     for s in ("left", "bottom"): ax.spines[s].set_color(MUTED); ax.spines[s].set_linewidth(1.2)
     ax.tick_params(length=6, width=1.2, color=MUTED, pad=5)
@@ -42,7 +43,7 @@ def per_year(version, mode):
         get = lambda d: [(int(r["year"]), int(r["commercial"]), int(r["drug_trials"]) - int(r["commercial"]))
                          for r in rows if r["disease"] == d]
         lc_max, me_max, step = 50, 15, 10
-    fig = plt.figure(figsize=(6, 7.2), facecolor=BG)
+    fig = plt.figure(figsize=(6, 7.2), facecolor="none")
     unit = 0.525 / lc_max          # figure height per trial, same in both panels
     panels = [("Long COVID", lc_max, 0.30), ("ME/CFS", me_max, 0.115)]
     for name, ymax, bottom in panels:
@@ -79,10 +80,10 @@ def per_year(version, mode):
             "drug": "ClinicalTrials.gov. 2026 to 8 Nov.",
             "all": "ClinicalTrials.gov. 2026 to 8 Nov. Trials naming both count in both."}[mode]
     fig.text(M, 0.035, foot, fontsize=10.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.035, version, fontsize=9, color=GRID, ha="right", va="baseline")
+    fig.text(1 - M, 0.035, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
     out = {"sponsor": "analysis/sponsor_per_year.png", "drug": "analysis/drug_trials_per_year.png",
            "all": "analysis/all_trials_per_year.png"}[mode]
-    fig.savefig(out, dpi=300, facecolor=BG)
+    fig.savefig(out, dpi=300, transparent=True)
     plt.close(fig)
 
 
@@ -93,7 +94,7 @@ def comparison(version):
     short = {"Cardiomyopathy & myocarditis": "Cardiomyopathy", "Congenital heart disease": "Congenital heart dis.",
              "Rheumatic heart disease": "Rheumatic heart dis.", "Alcohol use disorders": "Alcohol use disorder",
              "Opioid use disorders": "Opioid use disorder"}
-    fig = plt.figure(figsize=(6, 9.6), facecolor=BG)
+    fig = plt.figure(figsize=(6, 9.6), facecolor="none")
     top, bot = 0.835, 0.085
     a1 = fig.add_axes([0.385, bot, 0.27, top - bot])
     a2 = fig.add_axes([0.70, bot, 0.255, top - bot])
@@ -130,11 +131,11 @@ def comparison(version):
     fig.text(M + 0.42, 0.875, "● Other sponsor", fontsize=12.5, color=OCEAN, va="baseline")
     fig.text(M, 0.03, "ClinicalTrials.gov, Nov 2026. DALYs: GBD 2023; ME/CFS, long COVID: model.",
              fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.012, version, fontsize=9, color=GRID, ha="right", va="baseline")
-    fig.savefig("analysis/sponsor_comparison.png", dpi=300, facecolor=BG)
+    fig.text(1 - M, 0.012, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    fig.savefig("analysis/sponsor_comparison.png", dpi=300, transparent=True)
 
 
-per_year("v2", "drug")
-per_year("v2", "sponsor")
-per_year("v1", "all")
-comparison("v1")
+per_year("v3", "drug")
+per_year("v3", "sponsor")
+per_year("v2", "all")
+comparison("v2")

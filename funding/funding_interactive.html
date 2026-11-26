@@ -43,7 +43,7 @@
 .fnd-b { position: absolute; left: 0; top: 50%; height: 0.95rem; transform: translateY(-50%); border-radius: 0 4px 4px 0; display: flex; gap: 2px; overflow: hidden; }
 .fnd-b.rep { background: var(--ocean); }
 .fnd-b.est { background: repeating-linear-gradient(135deg, var(--ocean) 0 3px, color-mix(in srgb, var(--ocean) 35%, var(--surface)) 3px 6px); }
-.fnd-b.eu { background: repeating-linear-gradient(135deg, #8a93a3 0 3px, color-mix(in srgb, #8a93a3 35%, var(--surface)) 3px 6px); }
+.fnd-b.eu { background: repeating-linear-gradient(135deg, #8fa69a 0 3px, color-mix(in srgb, #8fa69a 35%, var(--surface)) 3px 6px); }
 .fnd-b.cn { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--sunset) 55%, transparent) 0 3px, transparent 3px 6px);
   outline: 1.5px dashed var(--sunset); outline-offset: -1.5px; }
 .fnd-b.split { background: none; }
@@ -64,7 +64,7 @@
 .fnd-flag span { font: 400 var(--fz)/1 "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", sans-serif; transform: scale(1.8); }
 .fnd-flag.est { --fc: var(--ocean); }
 .fnd-flag.cn { --fc: var(--sunset); }
-.fnd-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+.fnd-tip { position: absolute; pointer-events: none; background: #0c2620; border: 1px solid var(--line); border-radius: 10px;
   padding: 0.55rem 0.7rem; font-size: 0.88rem; line-height: 1.4; color: var(--ink); max-width: 280px; z-index: 5;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; }
 .fnd-tip b { display: block; font-size: 0.95rem; margin-bottom: 0.15rem; }
@@ -127,7 +127,7 @@
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v3</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v4</span></div>
 </div>
 <script>
 (function () {
@@ -137,7 +137,7 @@ if (!root) return;
 const q = (s) => root.querySelector(s);
 const SHORT = { "United States": "US", "United Kingdom": "UK" };
 const short = (n) => SHORT[n] || n;
-const GREY = "#8a93a3";
+const GREY = "#8fa69a";
 const kind = (r) => r.iso2 === "CN" ? "cn" : r.iso2 === "EU" ? "eu" : r.budget_status === "estimated" ? "est" : "rep";
 const budgetRows = RAW.filter((r) => r.budget_mio_pps != null);
 const outRows = budgetRows.filter((r) => r.med_docs_2024 != null && r.iso2 !== "IE");
