@@ -198,6 +198,34 @@ def nice_date(iso):
 
 e = html.escape
 
+# The credit under every chart, as in the downloads: "Siebe Rozendal · How To Solve A Disease? · CC BY 4.0".
+# Interactive fragments write __CREDIT__ after their footer; the chart PNGs draw the same row with
+# tools/chart_credit.py. "CC BY 4.0" links to the licence note at the bottom of the page.
+PUB = CAT["subtitle"]
+CC_BY = "https://creativecommons.org/licenses/by/4.0/"
+# On the page "CC BY 4.0" sits at the right end of the row (no dot), so on a phone it drops to its own line cleanly.
+CREDIT_HTML = (f'<div class="credit-row"><span class="who"><b>{e(CAT["author"]["name"])}</b><i>·</i>'
+               f'<span class="pub">{e(PUB)}</span></span><a class="lic" href="#licence">CC BY 4.0</a></div>')
+
+
+def fill_credit(frag):
+    return frag.replace("__CREDIT__", CREDIT_HTML)
+
+
+def licence_html():
+    """Plain-English note on what the licence allows, at the bottom of every page."""
+    return f"""<div class="licence" id="licence">
+    <p><b>Using these charts.</b> Charts, text and tables here are {link(CC_BY, "CC BY 4.0")}. You can share,
+    copy and adapt them, also commercially: in an article, a talk, or a company&rsquo;s fundraising deck. Two
+    conditions: credit &ldquo;{e(CAT["author"]["name"])} · {e(PUB)}&rdquo; with a link to {link(CAT["site"], "this site")},
+    and say if you changed anything. Leaving the credit line on the image is enough. Removing it, or presenting
+    the work as your own, is not allowed.</p>
+    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
+    so commercial users should check {link("https://www.healthdata.org/node/822", "IHME&rsquo;s")} and
+    {link("https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database", "WHO ICTRP&rsquo;s")}
+    terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit. Code is GPL-3.0.</p>
+  </div>"""
+
 
 # ---------- HTML ----------
 def link(href, text, cls=""):
@@ -310,7 +338,7 @@ def load_data(path):
 
 def interactive_html(s, full):
     spec = s["interactive"]
-    frag = open(spec["html"]).read()
+    frag = fill_credit(open(spec["html"]).read())
     if spec.get("data"):  # optional: some fragments hold their own numbers
         d = spec["data"]
         d = {k: load_data(v) for k, v in d.items()} if isinstance(d, dict) else load_data(d)
@@ -334,7 +362,7 @@ def snapshot_html(s):
             v = v[k]
         return v
     data = json.dumps({k: walk(v) for k, v in ov["pick"].items()}, separators=(",", ":"), ensure_ascii=False)
-    return open(ov["html"]).read().replace("__DATA__", data.replace("</", "<\\/"))
+    return fill_credit(open(ov["html"]).read()).replace("__DATA__", data.replace("</", "<\\/"))
 
 
 def readme_links(s):
@@ -678,6 +706,18 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
+footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
+footer .licence p + p { margin-top: 0.6rem; }
+footer .licence b { color: var(--ink); font-weight: 600; }
+/* credit row under every interactive chart, as in the downloads */
+.credit-row { margin-top: 0.7rem; padding-top: 0.65rem; border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.15rem 1rem; font: 500 0.95rem/1.45 var(--f-body); color: var(--muted); }
+.credit-row .who { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.55rem; }
+.credit-row b { font-weight: 600; color: var(--ink); }
+.credit-row i { font-style: normal; }
+.credit-row .pub { color: var(--ocean); }
+.credit-row .lic { margin-left: auto; color: var(--muted); font-weight: 400; }
+.credit-row .lic:hover { color: var(--ink); }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
 dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
@@ -803,7 +843,7 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
     }, "image/png");
   }
   function generic(root, fmt) {
-    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var d = root.dataset, skip = ".dl,.credit-row" + (d.dlSkip ? "," + d.dlSkip : "");
     var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
     var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
       filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
@@ -863,6 +903,8 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
       x.font = "600 15px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 15);
       var nw = x.measureText("Siebe Rozendal").width; x.font = "500 15px " + FONT; x.fillStyle = "#9fd8b5";
       x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 15);
+      var pw = x.measureText("  ·  How To Solve A Disease?").width; x.font = "400 15px " + FONT; x.fillStyle = "#a7bdb2";
+      x.fillText("  ·  CC BY 4.0", tx + nw + pw, fy - 15);
       save(cv, d.dl + (fmt === "square" ? "-square" : ""));
     });
   }
@@ -920,6 +962,7 @@ def body():
 {"".join(section_html(s) for s in sections)}
 </main>
 <footer class="wrap">
+  {licence_html()}
   <span class="stats">{n_charts} charts · {n_data} data files · {link(TREE, "code and data on GitHub")}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>
@@ -941,6 +984,7 @@ def topic_body(s):
 {section_html(s, page=True)}
 </main>
 <footer class="wrap">
+  {licence_html()}
   <span>{link(TREE, "Code and data on GitHub")}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>

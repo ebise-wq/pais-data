@@ -100,7 +100,8 @@
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v29</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v30</span></div>
+  __CREDIT__
 </div>
 <script>
 (function(){
@@ -360,7 +361,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v29',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v30',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -417,6 +418,7 @@ function exportPng(pid,square){
     x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-40);x.lineTo(cw-pad,ch-40);x.stroke();
     x.font='600 15px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-15);
     const nw=x.measureText(nm).width;x.font='500 15px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-15);
+    const pw=x.measureText('  ·  How To Solve A Disease?').width;x.font='400 15px '+EXP.font;x.fillStyle=C.ink2;x.fillText('  ·  CC BY 4.0',pad+nw+pw,ch-15);
     const hid=CATS.some(([k])=>HIDE.has(k));
     cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
       a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid?'some-hidden':'',square?'square':''].filter(Boolean).join('-')+'.png';

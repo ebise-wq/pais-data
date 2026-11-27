@@ -218,6 +218,18 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
+footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
+footer .licence p + p { margin-top: 0.6rem; }
+footer .licence b { color: var(--ink); font-weight: 600; }
+/* credit row under every interactive chart, as in the downloads */
+.credit-row { margin-top: 0.7rem; padding-top: 0.65rem; border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.15rem 1rem; font: 500 0.95rem/1.45 var(--f-body); color: var(--muted); }
+.credit-row .who { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.55rem; }
+.credit-row b { font-weight: 600; color: var(--ink); }
+.credit-row i { font-style: normal; }
+.credit-row .pub { color: var(--ocean); }
+.credit-row .lic { margin-left: auto; color: var(--muted); font-weight: 400; }
+.credit-row .lic:hover { color: var(--ink); }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
 dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
@@ -351,7 +363,8 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v29</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v30</span></div>
+  <div class="credit-row"><span class="who"><b>Siebe Rozendal</b><i>·</i><span class="pub">How To Solve A Disease?</span></span><a class="lic" href="#licence">CC BY 4.0</a></div>
 </div>
 <script>
 (function(){
@@ -611,7 +624,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v29',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v30',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -668,6 +681,7 @@ function exportPng(pid,square){
     x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-40);x.lineTo(cw-pad,ch-40);x.stroke();
     x.font='600 15px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-15);
     const nw=x.measureText(nm).width;x.font='500 15px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-15);
+    const pw=x.measureText('  ·  How To Solve A Disease?').width;x.font='400 15px '+EXP.font;x.fillStyle=C.ink2;x.fillText('  ·  CC BY 4.0',pad+nw+pw,ch-15);
     const hid=CATS.some(([k])=>HIDE.has(k));
     cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
       a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid?'some-hidden':'',square?'square':''].filter(Boolean).join('-')+'.png';
@@ -721,7 +735,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/expanded/counts_2026-11-11.csv" target="_blank" rel="noopener">counts_2026-11-11.csv</a><span class="folder">expanded/</span></div>
             <p>Raw papers and trials per year, 2021–2025, for the 111 fetched causes.</p>
-            <div class="meta">111 rows · 10 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
+            <div class="meta">111 rows · 10 KB · updated 11 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/counts_2026-11-11.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/counts_2026-11-11.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -729,7 +743,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/expanded/queries_2026-11-11.csv" target="_blank" rel="noopener">queries_2026-11-11.csv</a><span class="folder">expanded/</span></div>
             <p>The exact PubMed and ClinicalTrials.gov search for each cause.</p>
-            <div class="meta">111 rows · 29 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
+            <div class="meta">111 rows · 29 KB · updated 11 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/queries_2026-11-11.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/queries_2026-11-11.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -808,8 +822,19 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
   </section>
 </main>
 <footer class="wrap">
+  <div class="licence" id="licence">
+    <p><b>Using these charts.</b> Charts, text and tables here are <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. You can share,
+    copy and adapt them, also commercially: in an article, a talk, or a company&rsquo;s fundraising deck. Two
+    conditions: credit &ldquo;Siebe Rozendal · How To Solve A Disease?&rdquo; with a link to <a href="https://ebise-wq.github.io/pais-data/" target="_blank" rel="noopener">this site</a>,
+    and say if you changed anything. Leaving the credit line on the image is enough. Removing it, or presenting
+    the work as your own, is not allowed.</p>
+    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
+    so commercial users should check <a href="https://www.healthdata.org/node/822" target="_blank" rel="noopener">IHME&rsquo;s</a> and
+    <a href="https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database" target="_blank" rel="noopener">WHO ICTRP&rsquo;s</a>
+    terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit. Code is GPL-3.0.</p>
+  </div>
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v41 · built 2026-11-27</span>
+  <span class="ver">v42 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -932,7 +957,7 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
     }, "image/png");
   }
   function generic(root, fmt) {
-    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var d = root.dataset, skip = ".dl,.credit-row" + (d.dlSkip ? "," + d.dlSkip : "");
     var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
     var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
       filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
@@ -992,6 +1017,8 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
       x.font = "600 15px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 15);
       var nw = x.measureText("Siebe Rozendal").width; x.font = "500 15px " + FONT; x.fillStyle = "#9fd8b5";
       x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 15);
+      var pw = x.measureText("  ·  How To Solve A Disease?").width; x.font = "400 15px " + FONT; x.fillStyle = "#a7bdb2";
+      x.fillText("  ·  CC BY 4.0", tx + nw + pw, fy - 15);
       save(cv, d.dl + (fmt === "square" ? "-square" : ""));
     });
   }

@@ -10,12 +10,14 @@ analysis/sponsor_per_year.png, analysis/all_trials_per_year.png and analysis/all
 Also writes analysis/sponsor_comparison.png. Every chart is saved twice: transparent (for the page) and on
 solid green in analysis/solid/ (for sharing on white backgrounds).
 """
-import csv, os
+import csv, os, sys
 import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
+sys.path.insert(0, "tools")
+from chart_credit import add_credit
 
 PULL = "25 Nov 2026"
 # Forest glass: transparent background (the page shows deep green through it). BG is only used for edges.
@@ -125,7 +127,7 @@ def per_year(version, kind, split, wide=False):
            ("26 Nov." if kind == "all" else "8 Nov.") + (" Trials naming both count in both." if kind == "all" else "")
     foot = foot.replace(" lead sponsor class. ", ", lead sponsor. ") if kind == "all" and split else foot
     fig.text(L, Yb(0.252), foot, fontsize=10.5 if (wide or len(foot) < 70) else 9.5, color=MUTED, va="baseline")
-    fig.text(1 - L, Yb(0.252), version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    add_credit(fig, version)
     out = {("drug", False): "analysis/drug_trials_per_year.png", ("drug", True): "analysis/sponsor_per_year.png",
            ("all", False): "analysis/all_trials_per_year.png", ("all", True): "analysis/all_trials_sponsor_per_year.png"}
     path = out[(kind, split)]
@@ -176,13 +178,13 @@ def comparison(version):
     fig.text(M + 0.42, 0.875, "● Other sponsor", fontsize=12.5, color=OCEAN, va="baseline")
     fig.text(M, 0.03, "ClinicalTrials.gov, Nov 2026. DALYs: GBD 2023; ME/CFS, long COVID: model.",
              fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.012, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    add_credit(fig, version)
     save(fig, "analysis/sponsor_comparison.png")
 
 
 for wide in (False, True):
-    per_year("v6", "drug", False, wide)
-    per_year("v7", "drug", True, wide)
-    per_year("v5", "all", False, wide)
-    per_year("v4", "all", True, wide)
-comparison("v4")
+    per_year("v7", "drug", False, wide)
+    per_year("v8", "drug", True, wide)
+    per_year("v6", "all", False, wide)
+    per_year("v5", "all", True, wide)
+comparison("v5")

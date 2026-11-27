@@ -6,12 +6,15 @@ transparent for the page and again on solid green in sex/solid/ for sharing.
 Style matches analysis/sponsor_charts.py.
 """
 import os
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedLocator, NullLocator
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "tools"))
+from chart_credit import add_credit
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 # Forest glass: transparent background (the page shows deep green through it). BG is only used for edges.
@@ -137,7 +140,7 @@ def scatter(version, wide=False):
         fig.text(M, 0.845, note, fontsize=11.5, color=MUTED, va="baseline")
         fig.text(M, 0.034, ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
         fig.text(M, 0.016, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-        fig.text(1 - M, 0.016, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+        add_credit(fig, version)
         save(fig, os.path.join(HERE, "sex_scatter.png"))
         return
     W, H = 10, 6.2
@@ -157,7 +160,7 @@ def scatter(version, wide=False):
                  color=INK, ha="center", va="baseline")
     fig.text(X(0.33), Yb(0.3), ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
     fig.text(X(0.33), Yb(0.14), FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - X(0.33), Yb(0.14), version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    add_credit(fig, version)
     save(fig, os.path.join(HERE, "wide", "sex_scatter.png"))
 
 
@@ -199,10 +202,10 @@ def groups(version):
     fig.text(M, 0.072, "Women-only and men-only groups include cancers, which get more research", fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.045, ME_FOOT, fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.018, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.018, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    add_credit(fig, version)
     save(fig, os.path.join(HERE, "sex_groups.png"))
 
 
-scatter("v11")
-scatter("v11", wide=True)
-groups("v8")
+scatter("v12")
+scatter("v12", wide=True)
+groups("v9")

@@ -218,6 +218,18 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
+footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
+footer .licence p + p { margin-top: 0.6rem; }
+footer .licence b { color: var(--ink); font-weight: 600; }
+/* credit row under every interactive chart, as in the downloads */
+.credit-row { margin-top: 0.7rem; padding-top: 0.65rem; border-top: 1px solid rgba(255, 255, 255, 0.12);
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: 0.15rem 1rem; font: 500 0.95rem/1.45 var(--f-body); color: var(--muted); }
+.credit-row .who { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 0.55rem; }
+.credit-row b { font-weight: 600; color: var(--ink); }
+.credit-row i { font-style: normal; }
+.credit-row .pub { color: var(--ocean); }
+.credit-row .lic { margin-left: auto; color: var(--muted); font-weight: 400; }
+.credit-row .lic:hover { color: var(--ink); }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
 dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
@@ -319,7 +331,8 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v11</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v12</span></div>
+    <div class="credit-row"><span class="who"><b>Siebe Rozendal</b><i>·</i><span class="pub">How To Solve A Disease?</span></span><a class="lic" href="#licence">CC BY 4.0</a></div>
   </div>
 </div>
 <script>
@@ -489,7 +502,7 @@ render();
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/counts_2026-11-08.csv" target="_blank" rel="noopener">counts_2026-11-08.csv</a><span class="folder">clinicaltrials/</span></div>
             <p>Study counts for 24 diseases: all studies, trials, randomised, drug, phase and industry-led.</p>
-            <div class="meta">24 rows · 1 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/fetch_counts.py" target="_blank" rel="noopener">clinicaltrials/fetch_counts.py</a></div>
+            <div class="meta">24 rows · 1 KB · updated 8 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/fetch_counts.py" target="_blank" rel="noopener">clinicaltrials/fetch_counts.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/counts_2026-11-08.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/clinicaltrials/counts_2026-11-08.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -497,7 +510,7 @@ render();
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/trials_per_year_2026-11-08.csv" target="_blank" rel="noopener">trials_per_year_2026-11-08.csv</a><span class="folder">clinicaltrials/</span></div>
             <p>Interventional trials per start year, 1996–2026, for 24 diseases.</p>
-            <div class="meta">24 rows · 3 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/trials_per_year.py" target="_blank" rel="noopener">clinicaltrials/trials_per_year.py</a></div>
+            <div class="meta">24 rows · 3 KB · updated 8 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/trials_per_year.py" target="_blank" rel="noopener">clinicaltrials/trials_per_year.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/trials_per_year_2026-11-08.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/clinicaltrials/trials_per_year_2026-11-08.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -513,7 +526,7 @@ render();
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/nct_ids_2026-11-08.json" target="_blank" rel="noopener">nct_ids_2026-11-08.json</a><span class="folder">clinicaltrials/</span></div>
             <p>The trial IDs (NCT numbers) selected for each of the 24 diseases.</p>
-            <div class="meta">24 rows · 676 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/fetch_counts.py" target="_blank" rel="noopener">clinicaltrials/fetch_counts.py</a></div>
+            <div class="meta">24 rows · 676 KB · updated 8 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/fetch_counts.py" target="_blank" rel="noopener">clinicaltrials/fetch_counts.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/clinicaltrials/nct_ids_2026-11-08.json" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/clinicaltrials/nct_ids_2026-11-08.json" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -521,7 +534,7 @@ render();
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/pubs_per_year_long_2026-11-08.csv" target="_blank" rel="noopener">pubs_per_year_long_2026-11-08.csv</a><span class="folder">pubmed/</span></div>
             <p>Papers per year with the disease in the title, 1996–2026, for 24 diseases, plus publication-date and MeSH counts.</p>
-            <div class="meta">744 rows · 24 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/pubs_per_year.py" target="_blank" rel="noopener">pubmed/pubs_per_year.py</a></div>
+            <div class="meta">744 rows · 24 KB · updated 8 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/pubs_per_year.py" target="_blank" rel="noopener">pubmed/pubs_per_year.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/pubs_per_year_long_2026-11-08.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/pubmed/pubs_per_year_long_2026-11-08.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -529,7 +542,7 @@ render();
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/queries_2026-11-08.csv" target="_blank" rel="noopener">queries_2026-11-08.csv</a><span class="folder">pubmed/</span></div>
             <p>The exact PubMed search string for each disease.</p>
-            <div class="meta">24 rows · 3 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/pubs_per_year.py" target="_blank" rel="noopener">pubmed/pubs_per_year.py</a></div>
+            <div class="meta">24 rows · 3 KB · updated 8 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/pubs_per_year.py" target="_blank" rel="noopener">pubmed/pubs_per_year.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/pubmed/queries_2026-11-08.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/pubmed/queries_2026-11-08.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -537,7 +550,7 @@ render();
           <div class="data-main">
             <div class="data-name"><span class="fname">IHME-GBD_2023_DATA-*.csv</span><span class="folder">gbd/</span></div>
             <p>GBD 2023 DALYs, global, both sexes, all ages, level-3 and level-4 causes (2 files). Cite as in gbd/citation.txt.</p>
-            <div class="meta">5,553 rows · 946 KB · updated 20 Nov 2026</div>
+            <div class="meta">5,553 rows · 946 KB · updated 9 Nov 2026</div>
           </div>
           <div class="actions"><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/gbd/IHME-GBD_2023_DATA-08b3fc6f-1.csv" target="_blank" rel="noopener">IHME-GBD_2023_DATA-08b3fc6f-1.csv</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/gbd/IHME-GBD_2023_DATA-ff76c2f3-1.csv" target="_blank" rel="noopener">IHME-GBD_2023_DATA-ff76c2f3-1.csv</a></div>
         </li>
@@ -545,8 +558,19 @@ render();
   </section>
 </main>
 <footer class="wrap">
+  <div class="licence" id="licence">
+    <p><b>Using these charts.</b> Charts, text and tables here are <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. You can share,
+    copy and adapt them, also commercially: in an article, a talk, or a company&rsquo;s fundraising deck. Two
+    conditions: credit &ldquo;Siebe Rozendal · How To Solve A Disease?&rdquo; with a link to <a href="https://ebise-wq.github.io/pais-data/" target="_blank" rel="noopener">this site</a>,
+    and say if you changed anything. Leaving the credit line on the image is enough. Removing it, or presenting
+    the work as your own, is not allowed.</p>
+    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
+    so commercial users should check <a href="https://www.healthdata.org/node/822" target="_blank" rel="noopener">IHME&rsquo;s</a> and
+    <a href="https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database" target="_blank" rel="noopener">WHO ICTRP&rsquo;s</a>
+    terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit. Code is GPL-3.0.</p>
+  </div>
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v41 · built 2026-11-27</span>
+  <span class="ver">v42 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -669,7 +693,7 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
     }, "image/png");
   }
   function generic(root, fmt) {
-    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var d = root.dataset, skip = ".dl,.credit-row" + (d.dlSkip ? "," + d.dlSkip : "");
     var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
     var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
       filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
@@ -729,6 +753,8 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
       x.font = "600 15px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 15);
       var nw = x.measureText("Siebe Rozendal").width; x.font = "500 15px " + FONT; x.fillStyle = "#9fd8b5";
       x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 15);
+      var pw = x.measureText("  ·  How To Solve A Disease?").width; x.font = "400 15px " + FONT; x.fillStyle = "#a7bdb2";
+      x.fillText("  ·  CC BY 4.0", tx + nw + pw, fy - 15);
       save(cv, d.dl + (fmt === "square" ? "-square" : ""));
     });
   }

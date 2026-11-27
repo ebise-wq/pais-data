@@ -121,6 +121,19 @@
   `--fragment <scratchpad>/pais-catalog.html` and republish that file to this URL with the
   Artifact tool, passing every chart PNG in `files` under its repo path.
 
+## Credit and licence (v42)
+- Charts, text and tables are CC BY 4.0; code is GPL-3.0. Every page footer has a plain-English licence note
+  (`licence_html()` in `tools/build_catalog.py`, anchor `#licence`), which also names the non-commercial terms
+  of GBD (IHME) and WHO ICTRP data.
+- Every chart carries the credit row the user liked in the downloads: a thin rule, then "Siebe Rozendal"
+  (bold, ink) · "How To Solve A Disease?" (mint) · "CC BY 4.0" (muted).
+  - Chart PNGs: call `add_credit(fig, version)` from `tools/chart_credit.py` last, before `save()`. It ends
+    the lowest text line (the source) with " · <version>" and draws the rule and credit under it.
+  - Interactive fragments: write `__CREDIT__` after their footer; the build puts in the credit row (`.credit-row`;
+    on the page "CC BY 4.0" sits at the right end with no dot and links to `#licence`). Downloads leave the
+    row out (`.credit-row` is in the skip list) and draw their own footer, which ends in "· CC BY 4.0".
+- Old charts (`"old": true`) and the hidden 13-disease charts were not redrawn with the credit.
+
 ## Conventions
 - Run scripts from the repo root with `python3 -I <folder>/<script>.py`.
 - Put the pull date in data file names (`counts_2026-11-08.csv`). Keep API caches in `cache/`
@@ -131,7 +144,7 @@
   `#a7bdb2`, grid `#ffffff1f`, mint `#9fd8b5` (was ocean), peach `#f2b880` (was sunset), blue
   `#7fb2f0` and violet `#b48cf0` for more categories (the user wants some blue, e.g. "mostly men"; no pale
   lilac). ME/CFS stays peach; long COVID is violet where both appear. Titles in a sans-serif (Inter Tight on the page, Inter in charts),
-  never a serif. Sized for phone screens; a small version number in a corner. Transparent PNGs have
+  never a serif. Sized for phone screens; the version number ends the source line, above the credit row (see above). Transparent PNGs have
   light text, so they don't work on a white background (Substack, X): the solid copies in
   `<folder>/solid/` are for sharing. Scripts that only make old or hidden charts (`expanded/analyse.py`,
   `analysis/burden_vs_research.py`, `analysis/long_covid_trials.py`, `analysis/shortfall_ccc.py`) still
