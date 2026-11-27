@@ -329,7 +329,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-square-width="720" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v9">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-square-width="720" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v10">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -340,7 +340,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v9">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v10">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -369,7 +369,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v9</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v10</span></div>
 </div>
 <script>
 (function () {
@@ -518,7 +518,7 @@ function drawBudget() {
     .map((r) => {
       const k = kind(r);
       const d = { name: r.country, k, v: r.budget_mio_pps, lo: r.budget_lo_mio_pps, hi: r.budget_hi_mio_pps, tip: budgetTip(r) };
-      if (k === "cn") d.label = bn(r.budget_mio_pps) + "?";
+      if (k === "cn") d.label = bn(r.budget_mio_pps) + "B?";
       if (S.split && r.nabs07_directed_mio_pps != null) {
         d.segs = [[r.nabs07_directed_mio_pps, "var(--ocean)"], [r.nabs123_univ_funds_mio_pps || 0, "var(--sunset)"], [r.nabs133_other_mio_pps || 0, GREY]];
         const sh = (x) => Math.round(100 * (x || 0) / r.budget_mio_pps) + "%";
@@ -526,7 +526,7 @@ function drawBudget() {
       }
       return d;
     });
-  bars(items, (v) => bn(v), "Billion PPS");
+  bars(items, (v, ax) => ax ? bn(v) : bn(v) + "B", "Billion PPS");  // value labels end in B (billions); axis ticks plain
 }
 
 function drawRatio() {
@@ -750,7 +750,7 @@ if (tb) {
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v36 · built 2026-11-27</span>
+  <span class="ver">v37 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
