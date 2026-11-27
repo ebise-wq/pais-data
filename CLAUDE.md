@@ -78,7 +78,12 @@
   exporter sets `--dl-extra` (the height left over in the square) and fires a resize; charts that draw
   their own height add `window.dlExtra(el)` to it (the 131-disease chart and the funding scatter), so they
   fill the square instead of leaving bands above and below. Text in downloads is a bit larger than on the page
-  (titles about 1.65rem; `.dl-capturing` rules in the page CSS; larger canvas header and footer). Long lists are cut to 15 rows
+  (titles about 1.65rem; `.dl-capturing` rules in the page CSS; larger canvas header and footer).
+  The user's 70-year-old mother should be able to read the labels: in the square download, line and
+  disease labels are about 15–17px (131-disease chart, rankings, funding). Inter is embedded in every
+  download (`window.dlFonts()` inlines the page's Google Fonts, latin subset). The card's side padding is
+  dropped during capture, and the 131-disease chart sizes its label margin from measured label widths.
+  The rankings lay out at 700px wide and the funding bars at 720px for the square. Long lists are cut to 15 rows
   in the square image only (user's request): the shortfall rankings show the top 12 plus the 3 other
   groups, the funding bars the largest 15 ("Largest 15 of N shown."); both check for `dl-sq` on their card. Downloads do nothing in
   the claude.ai artifact copy (the viewer blocks them); the buttons are hidden on the overview anyway.

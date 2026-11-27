@@ -73,12 +73,15 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
   color: var(--ink); font: 500 1rem var(--f-body); }
 .dl-hidden { display: none !important; }
-/* Downloads: titles and the lines under them a bit larger than on the page */
+/* Downloads: titles, labels and the lines under them larger than on the page (readable for older eyes) */
+.dl-capturing .fnd-bars { --lab: 9.5rem !important; }
+.dl-capturing .fnd-lab { font-size: 1.05rem !important; }
+.dl-capturing .fnd-v { font-size: 1rem !important; }
 .dl-capturing h3 { font-size: 1.65rem !important; line-height: 1.2 !important; }
 .dl-capturing .bvr-sub, .dl-capturing .py-sub, .dl-capturing .fnd-sub, .dl-capturing .pme-lede { font-size: 1.05rem !important; }
 .dl-capturing .bvr-legend, .dl-capturing .fnd-legend, .dl-capturing .plabel { font-size: 1rem !important; }
 .topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
-.dl-capturing { background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+.dl-capturing { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; border-color: transparent !important; box-shadow: none !important;
   backdrop-filter: none !important; }
 .dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
   padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
@@ -322,7 +325,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v33 · built 2026-11-27</span>
+  <span class="ver">v35 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -401,12 +404,31 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
 // ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
 // The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
 // green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// The page's web fonts (latin subset) as @font-face rules with the font files inlined, so saved images
+// render in Inter instead of the device's fallback font. Loaded once, on the first download.
+window.dlFonts = function () {
+  if (window.dlFonts.p) return window.dlFonts.p;
+  var link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  var asData = function (u) {
+    return fetch(u).then(function (r) { return r.blob(); }).then(function (b) {
+      return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok(fr.result); }; fr.readAsDataURL(b); });
+    });
+  };
+  window.dlFonts.p = !link ? Promise.resolve("") : fetch(link.href).then(function (r) { return r.text(); }).then(function (css) {
+    var blocks = css.split("/* ").filter(function (b) { return b.indexOf("latin */") === 0; }).map(function (b) { return b.slice(9); });
+    var urls = {}; blocks.forEach(function (b) { (b.match(/url\((https:[^)]+)\)/g) || []).forEach(function (m) { urls[m.slice(4, -1)] = 1; }); });
+    return Promise.all(Object.keys(urls).map(function (u) { return asData(u).then(function (d) { urls[u] = d; }); })).then(function () {
+      return blocks.join(" ").replace(/url\((https:[^)]+)\)/g, function (m, u) { return "url(" + urls[u] + ")"; });
+    });
+  }).catch(function () { return ""; });
+  return window.dlFonts.p;
+};
 // Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
 window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
 (function () {
   var roots = document.querySelectorAll("[data-dl]");
   if (!roots.length) return;
-  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null, fontCss = null;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null;
   var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
   function load() {
     if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
@@ -467,9 +489,7 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
         }
         return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
       };
-      if (fontCss === null) return h2i.getFontEmbedCSS(root).then(function (c) { fontCss = c; opt.fontEmbedCSS = c; return go(); }, function () { fontCss = ""; opt.skipFonts = true; return go(); });
-      if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
-      return go();
+      return window.dlFonts().then(function (css) { if (css) opt.fontEmbedCSS = css; else opt.skipFonts = true; return go(); });
     }).then(function (shot) {
       var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 52 + srcLines.length * 16;
       var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;

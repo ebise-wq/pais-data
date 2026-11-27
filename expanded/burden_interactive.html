@@ -63,13 +63,13 @@
   </div>
   <!-- more:start -->
   <div class="bvr-grid">
-    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v27">
+    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v28">
       <h3>Largest papers shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg3"></div>
       <div class="bvr-plot" id="bvr-rk-papers"></div>
     </div>
-    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v27">
+    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v28">
       <h3>Largest trials shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg4"></div>
@@ -100,7 +100,7 @@
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v27</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v28</span></div>
 </div>
 <script>
 (function(){
@@ -284,7 +284,7 @@ function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into anothe
 // ---------- ranking: top 20 of comparators + All ME/CFS, then the other groups
 function rank(id,m){
   const host=$(id);host.innerHTML='';
-  const W=host.clientWidth,narrow=W<520,fs=narrow?14:14.5;
+  const W=host.clientWidth,narrow=W<520,fs=host.closest('.dl-sq')?16.5:(narrow?14:14.5);  // larger in the square download
   const others=R.filter(r=>!isComp(r)&&r!==all&&shown(r)).sort((a,b)=>b[m].sf-a[m].sf);
   // the square download (class dl-sq on the card) keeps it to 15 rows in all
   const card=host.closest('.bvr-card'),sq=!!(card&&card.classList.contains('dl-sq')),nTop=sq?Math.max(5,15-others.length):20;
@@ -356,7 +356,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v27',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v28',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -371,11 +371,13 @@ function svgUrl(svg){
       if(o.tagName==='text')d.setAttribute('font-size',cs.fontSize);
       if(o.classList.contains('halo')){d.setAttribute('stroke',EXP.halo);d.setAttribute('stroke-width','4');d.setAttribute('paint-order','stroke');d.setAttribute('stroke-linejoin','round');}}});
   cl.setAttribute('xmlns',NS);
+  if(EXP.css){const st=document.createElementNS(NS,'style');st.textContent=EXP.css;cl.insertBefore(st,cl.firstChild);}  // Inter, embedded
   // 8px spare on the left: fallback fonts in the saved image can run a little wider than on the page
   cl.setAttribute('viewBox',`-8 0 ${W+8} ${H}`);cl.setAttribute('width',W+8);
   return URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(cl)],{type:'image/svg+xml'}));
 }
 function exportPng(pid,square){
+  if(EXP.css==null&&window.dlFonts)return window.dlFonts().then(css=>{EXP.css=css||'';return exportPng(pid,square);});
   const host=$(pid);if(!host||!host.querySelector('svg'))return;
   const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
   const S=square?2.5:3,pad=square?28:22,x0=document.createElement('canvas').getContext('2d');

@@ -73,12 +73,15 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
   color: var(--ink); font: 500 1rem var(--f-body); }
 .dl-hidden { display: none !important; }
-/* Downloads: titles and the lines under them a bit larger than on the page */
+/* Downloads: titles, labels and the lines under them larger than on the page (readable for older eyes) */
+.dl-capturing .fnd-bars { --lab: 9.5rem !important; }
+.dl-capturing .fnd-lab { font-size: 1.05rem !important; }
+.dl-capturing .fnd-v { font-size: 1rem !important; }
 .dl-capturing h3 { font-size: 1.65rem !important; line-height: 1.2 !important; }
 .dl-capturing .bvr-sub, .dl-capturing .py-sub, .dl-capturing .fnd-sub, .dl-capturing .pme-lede { font-size: 1.05rem !important; }
 .dl-capturing .bvr-legend, .dl-capturing .fnd-legend, .dl-capturing .plabel { font-size: 1rem !important; }
 .topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
-.dl-capturing { background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+.dl-capturing { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; border-color: transparent !important; box-shadow: none !important;
   backdrop-filter: none !important; }
 .dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
   padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
@@ -288,7 +291,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   flex-wrap: wrap; margin-top: 0.8rem; }
 </style>
 <div class="py" id="py">
-  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v8">
+  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v10">
     <div class="py-bar">
       <div class="py-seg" role="group" aria-label="Measure" data-k="m">
         <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
@@ -307,7 +310,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v8</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v10</span></div>
   </div>
 </div>
 <script>
@@ -374,8 +377,13 @@ function draw() {
     : "Interventional studies on ClinicalTrials.gov by start year, 1996–2025. Few trials were registered before 2005.";
   const W = plot.clientWidth || 640, H = Math.round(Math.min(460, Math.max(290, W * 0.62))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
   const on = S.on.filter((d) => series[d] && series[d][m]);
-  // right margin fits the longest line label (about 7 px per character at 12.5 px)
-  const M = { l: 46, r: Math.min(W * 0.4, 16 + 7 * Math.max(6, ...on.map((d) => name(d).length))), t: 10, b: 30 };
+  // type sizes: line labels and axis numbers, larger in the square download (readable for older eyes)
+  const sq = !!plot.closest(".dl-sq"), LF = sq ? 17 : 14, TF = sq ? 15 : 12.5;
+  // right margin fits the longest line label, measured in the label font
+  const mc = (draw.mc = draw.mc || document.createElement("canvas").getContext("2d"));
+  mc.font = "500 " + LF + "px " + getComputedStyle(plot).fontFamily;
+  const labW = Math.max(mc.measureText("ME/CFS").width, ...on.map((d) => mc.measureText(name(d)).width));
+  const M = { l: sq ? 46 : 40, r: Math.min(W * 0.42, 14 + Math.ceil(labW)), t: 10, b: sq ? 34 : 30 };
   let hi = 1; on.forEach((d) => series[d][m].forEach((v) => { if (v != null && v > hi) hi = v; }));
   const X = (y) => M.l + (y - Y0) / (Y1 - Y0) * (W - M.l - M.r);
   let Y, ticks = [];
@@ -394,8 +402,8 @@ function draw() {
   const big = (v) => v >= 1000 ? (v / 1000) + "k" : String(v);
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${m} per year for the selected diseases">`;
   if (m === "trials") s += `<rect x="${X(Y0)}" y="${M.t}" width="${X(2005) - X(Y0)}" height="${H - M.t - M.b}" fill="var(--bg)" opacity=".7"/>`;
-  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
-  for (let y = 2000; y <= Y1; y += W < 560 ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + 19}" text-anchor="middle" font-size="12">${y}</text>`;
+  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="${TF}">${big(t)}</text>`; });
+  for (let y = 2000; y <= Y1; y += W < 560 && !sq ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + TF + 7}" text-anchor="middle" font-size="${TF}">${y}</text>`;
   const labs = [];
   // draw ME/CFS last so it sits on top
   on.slice().sort((a, b) => (a === ME_KEY) - (b === ME_KEY)).forEach((d) => {
@@ -407,10 +415,10 @@ function draw() {
     });
     s += `<path d="${path}" fill="none" stroke="${c}" stroke-width="${d === ME_KEY ? 3 : 2}" stroke-linejoin="round" stroke-linecap="round"/>`;
     let li = v.length - 1; while (li > 0 && (v[li] == null || (S.log && v[li] <= 0))) li--;
-    if (v[li] != null && !(S.log && v[li] <= 0)) labs.push({ d, c, cy: Y(v[li]), want: Y(v[li]) - 7, h: 15 });
+    if (v[li] != null && !(S.log && v[li] <= 0)) labs.push({ d, c, cy: Y(v[li]), want: Y(v[li]) - LF * 0.55, h: LF + 2 });
   });
   spread(labs, M.t, H - M.b + 8);
-  labs.forEach((L) => { s += `<text class="lab" x="${W - M.r + 8}" y="${L.y + 11}" font-size="12.5" style="fill:${L.c}">${esc(name(L.d))}</text>`; });
+  labs.forEach((L) => { s += `<text class="lab" x="${W - M.r + 8}" y="${L.y + LF * 0.85}" font-size="${LF}" style="fill:${L.c}">${esc(name(L.d))}</text>`; });
   s += `<line id="py-cross" x1="0" x2="0" y1="${M.t}" y2="${H - M.b}" stroke="var(--muted)" stroke-dasharray="3 3" visibility="hidden"/>`;
   s += "</svg>";
   plot.innerHTML = s + `<div class="py-tip"></div>`;
@@ -526,7 +534,7 @@ render();
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v33 · built 2026-11-27</span>
+  <span class="ver">v35 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -605,12 +613,31 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
 // ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
 // The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
 // green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// The page's web fonts (latin subset) as @font-face rules with the font files inlined, so saved images
+// render in Inter instead of the device's fallback font. Loaded once, on the first download.
+window.dlFonts = function () {
+  if (window.dlFonts.p) return window.dlFonts.p;
+  var link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  var asData = function (u) {
+    return fetch(u).then(function (r) { return r.blob(); }).then(function (b) {
+      return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok(fr.result); }; fr.readAsDataURL(b); });
+    });
+  };
+  window.dlFonts.p = !link ? Promise.resolve("") : fetch(link.href).then(function (r) { return r.text(); }).then(function (css) {
+    var blocks = css.split("/* ").filter(function (b) { return b.indexOf("latin */") === 0; }).map(function (b) { return b.slice(9); });
+    var urls = {}; blocks.forEach(function (b) { (b.match(/url\((https:[^)]+)\)/g) || []).forEach(function (m) { urls[m.slice(4, -1)] = 1; }); });
+    return Promise.all(Object.keys(urls).map(function (u) { return asData(u).then(function (d) { urls[u] = d; }); })).then(function () {
+      return blocks.join(" ").replace(/url\((https:[^)]+)\)/g, function (m, u) { return "url(" + urls[u] + ")"; });
+    });
+  }).catch(function () { return ""; });
+  return window.dlFonts.p;
+};
 // Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
 window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
 (function () {
   var roots = document.querySelectorAll("[data-dl]");
   if (!roots.length) return;
-  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null, fontCss = null;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null;
   var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
   function load() {
     if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
@@ -671,9 +698,7 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
         }
         return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
       };
-      if (fontCss === null) return h2i.getFontEmbedCSS(root).then(function (c) { fontCss = c; opt.fontEmbedCSS = c; return go(); }, function () { fontCss = ""; opt.skipFonts = true; return go(); });
-      if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
-      return go();
+      return window.dlFonts().then(function (css) { if (css) opt.fontEmbedCSS = css; else opt.skipFonts = true; return go(); });
     }).then(function (shot) {
       var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 52 + srcLines.length * 16;
       var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;

@@ -49,7 +49,7 @@
   flex-wrap: wrap; margin-top: 0.8rem; }
 </style>
 <div class="py" id="py">
-  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v8">
+  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v10">
     <div class="py-bar">
       <div class="py-seg" role="group" aria-label="Measure" data-k="m">
         <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
@@ -68,7 +68,7 @@
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v8</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v10</span></div>
   </div>
 </div>
 <script>
@@ -135,8 +135,13 @@ function draw() {
     : "Interventional studies on ClinicalTrials.gov by start year, 1996–2025. Few trials were registered before 2005.";
   const W = plot.clientWidth || 640, H = Math.round(Math.min(460, Math.max(290, W * 0.62))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
   const on = S.on.filter((d) => series[d] && series[d][m]);
-  // right margin fits the longest line label (about 7 px per character at 12.5 px)
-  const M = { l: 46, r: Math.min(W * 0.4, 16 + 7 * Math.max(6, ...on.map((d) => name(d).length))), t: 10, b: 30 };
+  // type sizes: line labels and axis numbers, larger in the square download (readable for older eyes)
+  const sq = !!plot.closest(".dl-sq"), LF = sq ? 17 : 14, TF = sq ? 15 : 12.5;
+  // right margin fits the longest line label, measured in the label font
+  const mc = (draw.mc = draw.mc || document.createElement("canvas").getContext("2d"));
+  mc.font = "500 " + LF + "px " + getComputedStyle(plot).fontFamily;
+  const labW = Math.max(mc.measureText("ME/CFS").width, ...on.map((d) => mc.measureText(name(d)).width));
+  const M = { l: sq ? 46 : 40, r: Math.min(W * 0.42, 14 + Math.ceil(labW)), t: 10, b: sq ? 34 : 30 };
   let hi = 1; on.forEach((d) => series[d][m].forEach((v) => { if (v != null && v > hi) hi = v; }));
   const X = (y) => M.l + (y - Y0) / (Y1 - Y0) * (W - M.l - M.r);
   let Y, ticks = [];
@@ -155,8 +160,8 @@ function draw() {
   const big = (v) => v >= 1000 ? (v / 1000) + "k" : String(v);
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${m} per year for the selected diseases">`;
   if (m === "trials") s += `<rect x="${X(Y0)}" y="${M.t}" width="${X(2005) - X(Y0)}" height="${H - M.t - M.b}" fill="var(--bg)" opacity=".7"/>`;
-  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
-  for (let y = 2000; y <= Y1; y += W < 560 ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + 19}" text-anchor="middle" font-size="12">${y}</text>`;
+  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="${TF}">${big(t)}</text>`; });
+  for (let y = 2000; y <= Y1; y += W < 560 && !sq ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + TF + 7}" text-anchor="middle" font-size="${TF}">${y}</text>`;
   const labs = [];
   // draw ME/CFS last so it sits on top
   on.slice().sort((a, b) => (a === ME_KEY) - (b === ME_KEY)).forEach((d) => {
@@ -168,10 +173,10 @@ function draw() {
     });
     s += `<path d="${path}" fill="none" stroke="${c}" stroke-width="${d === ME_KEY ? 3 : 2}" stroke-linejoin="round" stroke-linecap="round"/>`;
     let li = v.length - 1; while (li > 0 && (v[li] == null || (S.log && v[li] <= 0))) li--;
-    if (v[li] != null && !(S.log && v[li] <= 0)) labs.push({ d, c, cy: Y(v[li]), want: Y(v[li]) - 7, h: 15 });
+    if (v[li] != null && !(S.log && v[li] <= 0)) labs.push({ d, c, cy: Y(v[li]), want: Y(v[li]) - LF * 0.55, h: LF + 2 });
   });
   spread(labs, M.t, H - M.b + 8);
-  labs.forEach((L) => { s += `<text class="lab" x="${W - M.r + 8}" y="${L.y + 11}" font-size="12.5" style="fill:${L.c}">${esc(name(L.d))}</text>`; });
+  labs.forEach((L) => { s += `<text class="lab" x="${W - M.r + 8}" y="${L.y + LF * 0.85}" font-size="${LF}" style="fill:${L.c}">${esc(name(L.d))}</text>`; });
   s += `<line id="py-cross" x1="0" x2="0" y1="${M.t}" y2="${H - M.b}" stroke="var(--muted)" stroke-dasharray="3 3" visibility="hidden"/>`;
   s += "</svg>";
   plot.innerHTML = s + `<div class="py-tip"></div>`;

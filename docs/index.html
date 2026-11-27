@@ -73,12 +73,15 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
   color: var(--ink); font: 500 1rem var(--f-body); }
 .dl-hidden { display: none !important; }
-/* Downloads: titles and the lines under them a bit larger than on the page */
+/* Downloads: titles, labels and the lines under them larger than on the page (readable for older eyes) */
+.dl-capturing .fnd-bars { --lab: 9.5rem !important; }
+.dl-capturing .fnd-lab { font-size: 1.05rem !important; }
+.dl-capturing .fnd-v { font-size: 1rem !important; }
 .dl-capturing h3 { font-size: 1.65rem !important; line-height: 1.2 !important; }
 .dl-capturing .bvr-sub, .dl-capturing .py-sub, .dl-capturing .fnd-sub, .dl-capturing .pme-lede { font-size: 1.05rem !important; }
 .dl-capturing .bvr-legend, .dl-capturing .fnd-legend, .dl-capturing .plabel { font-size: 1rem !important; }
 .topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
-.dl-capturing { background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+.dl-capturing { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; border-color: transparent !important; box-shadow: none !important;
   backdrop-filter: none !important; }
 .dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
   padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
@@ -302,7 +305,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </div>
   </div>
   
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v27</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v28</span></div>
 </div>
 <script>
 (function(){
@@ -486,7 +489,7 @@ function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into anothe
 // ---------- ranking: top 20 of comparators + All ME/CFS, then the other groups
 function rank(id,m){
   const host=$(id);host.innerHTML='';
-  const W=host.clientWidth,narrow=W<520,fs=narrow?14:14.5;
+  const W=host.clientWidth,narrow=W<520,fs=host.closest('.dl-sq')?16.5:(narrow?14:14.5);  // larger in the square download
   const others=R.filter(r=>!isComp(r)&&r!==all&&shown(r)).sort((a,b)=>b[m].sf-a[m].sf);
   // the square download (class dl-sq on the card) keeps it to 15 rows in all
   const card=host.closest('.bvr-card'),sq=!!(card&&card.classList.contains('dl-sq')),nTop=sq?Math.max(5,15-others.length):20;
@@ -558,7 +561,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v27',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v28',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -573,11 +576,13 @@ function svgUrl(svg){
       if(o.tagName==='text')d.setAttribute('font-size',cs.fontSize);
       if(o.classList.contains('halo')){d.setAttribute('stroke',EXP.halo);d.setAttribute('stroke-width','4');d.setAttribute('paint-order','stroke');d.setAttribute('stroke-linejoin','round');}}});
   cl.setAttribute('xmlns',NS);
+  if(EXP.css){const st=document.createElementNS(NS,'style');st.textContent=EXP.css;cl.insertBefore(st,cl.firstChild);}  // Inter, embedded
   // 8px spare on the left: fallback fonts in the saved image can run a little wider than on the page
   cl.setAttribute('viewBox',`-8 0 ${W+8} ${H}`);cl.setAttribute('width',W+8);
   return URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(cl)],{type:'image/svg+xml'}));
 }
 function exportPng(pid,square){
+  if(EXP.css==null&&window.dlFonts)return window.dlFonts().then(css=>{EXP.css=css||'';return exportPng(pid,square);});
   const host=$(pid);if(!host||!host.querySelector('svg'))return;
   const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
   const S=square?2.5:3,pad=square?28:22,x0=document.createElement('canvas').getContext('2d');
@@ -768,7 +773,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v7">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-square-width="720" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v8">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -779,7 +784,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v7">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v8">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -789,7 +794,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
     </div>
   </div>
   
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v7</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v8</span></div>
 </div>
 <script>
 (function () {
@@ -979,6 +984,7 @@ function drawScatter() {
   const F = fit(rows, key); lastFit = F;
   const plot = cq(".fnd-plot"), word = outWord();
   const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
+  const sq = !!plot.closest(".dl-sq"), AF = sq ? 14 : 12;  // larger text in the square download
   const M = { l: 50, r: 14, t: 10, b: 42 };
   const xs = rows.flatMap((r) => [r.budget_lo_mio_pps || r.budget_mio_pps, r.budget_hi_mio_pps || r.budget_mio_pps]);
   const ys = rows.map((r) => r[key]);
@@ -992,9 +998,9 @@ function drawScatter() {
   const linTicks = (hi) => { const st = niceStep(hi, 4), o = []; for (let v = 0; v <= hi; v += st) o.push(v); return o; };
   const xt = S.log ? logTicks(x0, x1) : linTicks(x1), yt = S.log ? logTicks(y0, y1) : linTicks(y1);
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${word} against budget, one dot per country">`;
-  xt.forEach((t) => { s += `<line x1="${X(t)}" x2="${X(t)}" y1="${M.t}" y2="${H - M.b}" stroke="var(--line)"/><text x="${X(t)}" y="${H - M.b + 17}" text-anchor="middle" font-size="12">${bn(t)}</text>`; });
-  yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
-  s += `<text x="${(M.l + W - M.r) / 2}" y="${H - 6}" text-anchor="middle" font-size="12.5">Public biomedical R&amp;D, billion PPS${S.log ? " (log)" : ""}</text>`;
+  xt.forEach((t) => { s += `<line x1="${X(t)}" x2="${X(t)}" y1="${M.t}" y2="${H - M.b}" stroke="var(--line)"/><text x="${X(t)}" y="${H - M.b + 17}" text-anchor="middle" font-size="${AF}">${bn(t)}</text>`; });
+  yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="${AF}">${big(t)}</text>`; });
+  s += `<text x="${(M.l + W - M.r) / 2}" y="${H - 6}" text-anchor="middle" font-size="${AF + 0.5}">Public biomedical R&amp;D, billion PPS${S.log ? " (log)" : ""}</text>`;
   // fit line, sampled so it is right on linear axes too
   const pts = [];
   const a = S.log ? x0 * 1.02 : Math.max(x1 / 300, 1), b = x1 * 0.98;
@@ -1015,9 +1021,9 @@ function drawScatter() {
   // flags sit in an HTML layer over the svg (emoji render more reliably there)
   const flags = P.map((p) => `<div class="fnd-flag ${p.k}" style="left:${p.x}px;top:${p.y}px"><span>${flag(p.r.iso2)}</span></div>`).join("");
   // labels: try right, left, above, below, diagonals; skip if all collide
-  const FZ = W < 480 ? 16 : 20, R = FZ / 2 + 2;
+  const FZ = sq ? 22 : (W < 480 ? 16 : 20), R = FZ / 2 + 2;
   const placed = P.map((p) => ({ x0: p.x - R, x1: p.x + R, y0: p.y - R, y1: p.y + R }));
-  const fs = W < 480 ? 11.5 : 12.5, cw = fs * 0.56;
+  const fs = sq ? 15 : (W < 480 ? 11.5 : 12.5), cw = fs * 0.56;
   yt.forEach((t) => placed.push({ x0: 0, x1: M.l - 4, y0: Y(t) - 8, y1: Y(t) + 8 }));  // tick labels
   const hit = (b) => placed.some((o) => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0) || b.x0 < 2 || b.x1 > W - 2 || b.y0 < 0 || b.y1 > H - M.b;
   let labels = "";
@@ -1592,7 +1598,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
   flex-wrap: wrap; margin-top: 0.8rem; }
 </style>
 <div class="py" id="py">
-  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v8">
+  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v10">
     <div class="py-bar">
       <div class="py-seg" role="group" aria-label="Measure" data-k="m">
         <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
@@ -1611,7 +1617,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v8</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v10</span></div>
   </div>
 </div>
 <script>
@@ -1678,8 +1684,13 @@ function draw() {
     : "Interventional studies on ClinicalTrials.gov by start year, 1996–2025. Few trials were registered before 2005.";
   const W = plot.clientWidth || 640, H = Math.round(Math.min(460, Math.max(290, W * 0.62))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
   const on = S.on.filter((d) => series[d] && series[d][m]);
-  // right margin fits the longest line label (about 7 px per character at 12.5 px)
-  const M = { l: 46, r: Math.min(W * 0.4, 16 + 7 * Math.max(6, ...on.map((d) => name(d).length))), t: 10, b: 30 };
+  // type sizes: line labels and axis numbers, larger in the square download (readable for older eyes)
+  const sq = !!plot.closest(".dl-sq"), LF = sq ? 17 : 14, TF = sq ? 15 : 12.5;
+  // right margin fits the longest line label, measured in the label font
+  const mc = (draw.mc = draw.mc || document.createElement("canvas").getContext("2d"));
+  mc.font = "500 " + LF + "px " + getComputedStyle(plot).fontFamily;
+  const labW = Math.max(mc.measureText("ME/CFS").width, ...on.map((d) => mc.measureText(name(d)).width));
+  const M = { l: sq ? 46 : 40, r: Math.min(W * 0.42, 14 + Math.ceil(labW)), t: 10, b: sq ? 34 : 30 };
   let hi = 1; on.forEach((d) => series[d][m].forEach((v) => { if (v != null && v > hi) hi = v; }));
   const X = (y) => M.l + (y - Y0) / (Y1 - Y0) * (W - M.l - M.r);
   let Y, ticks = [];
@@ -1698,8 +1709,8 @@ function draw() {
   const big = (v) => v >= 1000 ? (v / 1000) + "k" : String(v);
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${m} per year for the selected diseases">`;
   if (m === "trials") s += `<rect x="${X(Y0)}" y="${M.t}" width="${X(2005) - X(Y0)}" height="${H - M.t - M.b}" fill="var(--bg)" opacity=".7"/>`;
-  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
-  for (let y = 2000; y <= Y1; y += W < 560 ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + 19}" text-anchor="middle" font-size="12">${y}</text>`;
+  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="${TF}">${big(t)}</text>`; });
+  for (let y = 2000; y <= Y1; y += W < 560 && !sq ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + TF + 7}" text-anchor="middle" font-size="${TF}">${y}</text>`;
   const labs = [];
   // draw ME/CFS last so it sits on top
   on.slice().sort((a, b) => (a === ME_KEY) - (b === ME_KEY)).forEach((d) => {
@@ -1711,10 +1722,10 @@ function draw() {
     });
     s += `<path d="${path}" fill="none" stroke="${c}" stroke-width="${d === ME_KEY ? 3 : 2}" stroke-linejoin="round" stroke-linecap="round"/>`;
     let li = v.length - 1; while (li > 0 && (v[li] == null || (S.log && v[li] <= 0))) li--;
-    if (v[li] != null && !(S.log && v[li] <= 0)) labs.push({ d, c, cy: Y(v[li]), want: Y(v[li]) - 7, h: 15 });
+    if (v[li] != null && !(S.log && v[li] <= 0)) labs.push({ d, c, cy: Y(v[li]), want: Y(v[li]) - LF * 0.55, h: LF + 2 });
   });
   spread(labs, M.t, H - M.b + 8);
-  labs.forEach((L) => { s += `<text class="lab" x="${W - M.r + 8}" y="${L.y + 11}" font-size="12.5" style="fill:${L.c}">${esc(name(L.d))}</text>`; });
+  labs.forEach((L) => { s += `<text class="lab" x="${W - M.r + 8}" y="${L.y + LF * 0.85}" font-size="${LF}" style="fill:${L.c}">${esc(name(L.d))}</text>`; });
   s += `<line id="py-cross" x1="0" x2="0" y1="${M.t}" y2="${H - M.b}" stroke="var(--muted)" stroke-dasharray="3 3" visibility="hidden"/>`;
   s += "</svg>";
   plot.innerHTML = s + `<div class="py-tip"></div>`;
@@ -1771,7 +1782,7 @@ render();
 </main>
 <footer class="wrap">
   <span class="stats">20 charts · 29 data files · <a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">code and data on GitHub</a></span>
-  <span class="ver">v33 · built 2026-11-27</span>
+  <span class="ver">v35 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -1849,12 +1860,31 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
 // ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
 // The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
 // green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// The page's web fonts (latin subset) as @font-face rules with the font files inlined, so saved images
+// render in Inter instead of the device's fallback font. Loaded once, on the first download.
+window.dlFonts = function () {
+  if (window.dlFonts.p) return window.dlFonts.p;
+  var link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  var asData = function (u) {
+    return fetch(u).then(function (r) { return r.blob(); }).then(function (b) {
+      return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok(fr.result); }; fr.readAsDataURL(b); });
+    });
+  };
+  window.dlFonts.p = !link ? Promise.resolve("") : fetch(link.href).then(function (r) { return r.text(); }).then(function (css) {
+    var blocks = css.split("/* ").filter(function (b) { return b.indexOf("latin */") === 0; }).map(function (b) { return b.slice(9); });
+    var urls = {}; blocks.forEach(function (b) { (b.match(/url\((https:[^)]+)\)/g) || []).forEach(function (m) { urls[m.slice(4, -1)] = 1; }); });
+    return Promise.all(Object.keys(urls).map(function (u) { return asData(u).then(function (d) { urls[u] = d; }); })).then(function () {
+      return blocks.join(" ").replace(/url\((https:[^)]+)\)/g, function (m, u) { return "url(" + urls[u] + ")"; });
+    });
+  }).catch(function () { return ""; });
+  return window.dlFonts.p;
+};
 // Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
 window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
 (function () {
   var roots = document.querySelectorAll("[data-dl]");
   if (!roots.length) return;
-  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null, fontCss = null;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null;
   var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
   function load() {
     if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
@@ -1915,9 +1945,7 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
         }
         return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
       };
-      if (fontCss === null) return h2i.getFontEmbedCSS(root).then(function (c) { fontCss = c; opt.fontEmbedCSS = c; return go(); }, function () { fontCss = ""; opt.skipFonts = true; return go(); });
-      if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
-      return go();
+      return window.dlFonts().then(function (css) { if (css) opt.fontEmbedCSS = css; else opt.skipFonts = true; return go(); });
     }).then(function (shot) {
       var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 52 + srcLines.length * 16;
       var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
