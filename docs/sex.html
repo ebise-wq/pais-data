@@ -286,7 +286,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v31 · built 2026-11-27</span>
+  <span class="ver">v32 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -365,6 +365,8 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
 // ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
 // The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
 // green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
+window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
 (function () {
   var roots = document.querySelectorAll("[data-dl]");
   if (!roots.length) return;
@@ -393,6 +395,14 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
     var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
       filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
     var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var PAD = 24, HEAD = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0);
+    function srcWrap(width) {  // the footer's source line, wrapped to the chart's width
+      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", out = [];
+      if (!src) return out;
+      var m = document.createElement("canvas").getContext("2d"); m.font = "400 11px " + FONT; var cur = "";
+      src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > width && cur) { out.push(cur); cur = wd; } else cur = t; });
+      out.push(cur); return out;
+    }
     var cover = document.createElement("div"); cover.className = "dl-cover"; cover.textContent = "Preparing image…";
     return load().then(function (h2i) {
       // Square: lay the chart out at a fixed width first (the charts redraw on resize), so it fills the square
@@ -410,9 +420,14 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
           window.dispatchEvent(new Event("resize")); return v; };
         var ready = wait(60);
         if (fmt === "square") {  // data-dl-square-width: another layout width; class dl-sq lets CSS change the layout
-          var sw = (d.dlSquareWidth || 640) + "px"; root.classList.add("dl-sq");
+          var swn = +(d.dlSquareWidth || 640), sw = swn + "px"; root.classList.add("dl-sq");
           root.style.width = sw; root.style.maxWidth = "none"; root.style.minWidth = sw; root.style.boxSizing = "content-box";
-          window.dispatchEvent(new Event("resize")); ready = wait(500);
+          window.dispatchEvent(new Event("resize"));
+          // second pass: charts that read --dl-extra grow by the height left over in the square
+          ready = wait(450).then(function () {
+            var side = root.offsetWidth + 2 * PAD, spare = side - PAD - HEAD - (44 + srcWrap(root.offsetWidth).length * 14) - root.offsetHeight - PAD / 2;
+            if (spare > 24) { root.style.setProperty("--dl-extra", Math.round(spare) + "px"); window.dispatchEvent(new Event("resize")); return wait(450); }
+          });
         }
         return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
       };
@@ -420,13 +435,7 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
       if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
       return go();
     }).then(function (shot) {
-      var cw = shot.width / 3, chh = shot.height / 3, pad = 24, head = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0);
-      // footer: the source line wraps to the chart's width
-      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", srcLines = [];
-      if (src) { var m = document.createElement("canvas").getContext("2d"); m.font = "400 11px " + FONT; var cur = "";
-        src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > cw && cur) { srcLines.push(cur); cur = wd; } else cur = t; });
-        srcLines.push(cur); }
-      var foot = 44 + srcLines.length * 14;
+      var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 44 + srcLines.length * 14;
       var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
       if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
       var cv = document.createElement("canvas"), x = cv.getContext("2d");

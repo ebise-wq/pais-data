@@ -74,7 +74,10 @@
   repeat a legend the chart already labels (e.g. the 131-disease chips). Square lays the element out at
   640px wide first (or `data-dl-square-width`; class `dl-sq` is added so CSS can change the layout, e.g.
   the PAIS diagrams side by side), waits for the charts to redraw, then centres it in the square; the
-  120-disease scatter plots redraw to fill it. A cover hides the brief layout change. Long lists are cut to 15 rows
+  120-disease scatter plots redraw to fill it. A cover hides the brief layout change. In a second pass the
+  exporter sets `--dl-extra` (the height left over in the square) and fires a resize; charts that draw
+  their own height add `window.dlExtra(el)` to it (the 131-disease chart and the funding scatter), so they
+  fill the square instead of leaving bands above and below. Long lists are cut to 15 rows
   in the square image only (user's request): the shortfall rankings show the top 12 plus the 3 other
   groups, the funding bars the largest 15 ("Largest 15 of N shown."); both check for `dl-sq` on their card. Downloads do nothing in
   the claude.ai artifact copy (the viewer blocks them); the buttons are hidden on the overview anyway.

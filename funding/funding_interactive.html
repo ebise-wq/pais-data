@@ -87,7 +87,7 @@
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v7">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -98,7 +98,7 @@
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v7">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -127,7 +127,7 @@
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v6</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v7</span></div>
 </div>
 <script>
 (function () {
@@ -316,7 +316,7 @@ function drawScatter() {
   const rows = outRows.filter((r) => !(S.hideUS && r.iso2 === "US") && !(S.hideCN && r.iso2 === "CN"));
   const F = fit(rows, key); lastFit = F;
   const plot = cq(".fnd-plot"), word = outWord();
-  const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72)));
+  const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
   const M = { l: 50, r: 14, t: 10, b: 42 };
   const xs = rows.flatMap((r) => [r.budget_lo_mio_pps || r.budget_mio_pps, r.budget_hi_mio_pps || r.budget_mio_pps]);
   const ys = rows.map((r) => r[key]);
@@ -466,6 +466,8 @@ render("scat");
 // re-draw the bars when the page's download adds or removes its square layout (it fires a resize)
 let barsSq = false;
 addEventListener("resize", () => { const sq = CARDS.bars.el.classList.contains("dl-sq"); if (sq !== barsSq) { barsSq = sq; render("bars"); } });
+let scatX = 0;  // and the scatter when the square download changes its extra height
+addEventListener("resize", () => { const x = window.dlExtra ? window.dlExtra(scatPlot) : 0; if (x !== scatX) { scatX = x; use("scat"); drawScatter(); } });
 
 // data table (topic page only)
 const tb = q("#fnd-table");

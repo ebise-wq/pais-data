@@ -322,7 +322,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v7">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -333,7 +333,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v7">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -362,7 +362,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v6</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v7</span></div>
 </div>
 <script>
 (function () {
@@ -551,7 +551,7 @@ function drawScatter() {
   const rows = outRows.filter((r) => !(S.hideUS && r.iso2 === "US") && !(S.hideCN && r.iso2 === "CN"));
   const F = fit(rows, key); lastFit = F;
   const plot = cq(".fnd-plot"), word = outWord();
-  const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72)));
+  const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
   const M = { l: 50, r: 14, t: 10, b: 42 };
   const xs = rows.flatMap((r) => [r.budget_lo_mio_pps || r.budget_mio_pps, r.budget_hi_mio_pps || r.budget_mio_pps]);
   const ys = rows.map((r) => r[key]);
@@ -701,6 +701,8 @@ render("scat");
 // re-draw the bars when the page's download adds or removes its square layout (it fires a resize)
 let barsSq = false;
 addEventListener("resize", () => { const sq = CARDS.bars.el.classList.contains("dl-sq"); if (sq !== barsSq) { barsSq = sq; render("bars"); } });
+let scatX = 0;  // and the scatter when the square download changes its extra height
+addEventListener("resize", () => { const x = window.dlExtra ? window.dlExtra(scatPlot) : 0; if (x !== scatX) { scatX = x; use("scat"); drawScatter(); } });
 
 // data table (topic page only)
 const tb = q("#fnd-table");
@@ -736,7 +738,7 @@ if (tb) {
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v31 · built 2026-11-27</span>
+  <span class="ver">v32 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -815,6 +817,8 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
 // ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
 // The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
 // green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
+window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
 (function () {
   var roots = document.querySelectorAll("[data-dl]");
   if (!roots.length) return;
@@ -843,6 +847,14 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
     var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
       filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
     var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var PAD = 24, HEAD = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0);
+    function srcWrap(width) {  // the footer's source line, wrapped to the chart's width
+      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", out = [];
+      if (!src) return out;
+      var m = document.createElement("canvas").getContext("2d"); m.font = "400 11px " + FONT; var cur = "";
+      src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > width && cur) { out.push(cur); cur = wd; } else cur = t; });
+      out.push(cur); return out;
+    }
     var cover = document.createElement("div"); cover.className = "dl-cover"; cover.textContent = "Preparing image…";
     return load().then(function (h2i) {
       // Square: lay the chart out at a fixed width first (the charts redraw on resize), so it fills the square
@@ -860,9 +872,14 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
           window.dispatchEvent(new Event("resize")); return v; };
         var ready = wait(60);
         if (fmt === "square") {  // data-dl-square-width: another layout width; class dl-sq lets CSS change the layout
-          var sw = (d.dlSquareWidth || 640) + "px"; root.classList.add("dl-sq");
+          var swn = +(d.dlSquareWidth || 640), sw = swn + "px"; root.classList.add("dl-sq");
           root.style.width = sw; root.style.maxWidth = "none"; root.style.minWidth = sw; root.style.boxSizing = "content-box";
-          window.dispatchEvent(new Event("resize")); ready = wait(500);
+          window.dispatchEvent(new Event("resize"));
+          // second pass: charts that read --dl-extra grow by the height left over in the square
+          ready = wait(450).then(function () {
+            var side = root.offsetWidth + 2 * PAD, spare = side - PAD - HEAD - (44 + srcWrap(root.offsetWidth).length * 14) - root.offsetHeight - PAD / 2;
+            if (spare > 24) { root.style.setProperty("--dl-extra", Math.round(spare) + "px"); window.dispatchEvent(new Event("resize")); return wait(450); }
+          });
         }
         return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
       };
@@ -870,13 +887,7 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
       if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
       return go();
     }).then(function (shot) {
-      var cw = shot.width / 3, chh = shot.height / 3, pad = 24, head = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0);
-      // footer: the source line wraps to the chart's width
-      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", srcLines = [];
-      if (src) { var m = document.createElement("canvas").getContext("2d"); m.font = "400 11px " + FONT; var cur = "";
-        src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > cw && cur) { srcLines.push(cur); cur = wd; } else cur = t; });
-        srcLines.push(cur); }
-      var foot = 44 + srcLines.length * 14;
+      var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 44 + srcLines.length * 14;
       var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
       if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
       var cv = document.createElement("canvas"), x = cv.getContext("2d");

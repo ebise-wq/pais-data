@@ -49,7 +49,7 @@
   flex-wrap: wrap; margin-top: 0.8rem; }
 </style>
 <div class="py" id="py">
-  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v7">
+  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v8">
     <div class="py-bar">
       <div class="py-seg" role="group" aria-label="Measure" data-k="m">
         <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
@@ -68,7 +68,7 @@
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v7</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v8</span></div>
   </div>
 </div>
 <script>
@@ -133,7 +133,7 @@ function draw() {
   q("#py-sub").textContent = m === "papers"
     ? "PubMed papers with the disease in the title, 1996–2025."
     : "Interventional studies on ClinicalTrials.gov by start year, 1996–2025. Few trials were registered before 2005.";
-  const W = plot.clientWidth || 640, H = Math.round(Math.min(460, Math.max(290, W * 0.62)));
+  const W = plot.clientWidth || 640, H = Math.round(Math.min(460, Math.max(290, W * 0.62))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
   const on = S.on.filter((d) => series[d] && series[d][m]);
   // right margin fits the longest line label (about 7 px per character at 12.5 px)
   const M = { l: 46, r: Math.min(W * 0.4, 16 + 7 * Math.max(6, ...on.map((d) => name(d).length))), t: 10, b: 30 };
@@ -218,6 +218,8 @@ root.addEventListener("click", (ev) => {
 q("#py-q").addEventListener("input", list);
 let lastW = 0;
 new ResizeObserver(() => { const w = q("#py-plot").clientWidth; if (Math.abs(w - lastW) > 4) { lastW = w; draw(); } }).observe(q("#py-plot"));
+let lastX = 0;  // the square download changes the height only: redraw when its extra height changes
+addEventListener("resize", () => { const x = window.dlExtra ? window.dlExtra(q("#py-plot")) : 0; if (x !== lastX) { lastX = x; draw(); } });
 render();
 })();
 </script>
