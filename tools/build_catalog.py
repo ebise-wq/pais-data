@@ -452,12 +452,23 @@ def toc_html(current=None):
 </nav>"""
 
 def head(title):
-    return HEAD.replace(f"<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>", f"<title>{e(title)}</title>", 1)
+    full = e(CAT['title'] + ' · ' + CAT['subtitle'])
+    return (HEAD.replace(f"<title>{full}</title>", f"<title>{e(title)}</title>", 1)
+            .replace(f'<meta property="og:title" content="{full}">', f'<meta property="og:title" content="{e(title)}">', 1))
 
 
 HEAD = f"""<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="{e(CAT['tagline'])}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{e(CAT['title'] + ' · ' + CAT['subtitle'])}">
+<meta property="og:title" content="{e(CAT['title'] + ' · ' + CAT['subtitle'])}">
+<meta property="og:description" content="{e(CAT['tagline'])}">
+<meta property="og:image" content="{e(SITE)}preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Data &amp; Graphs: papers per year against disease burden for 120 diseases, with ME/CFS and long COVID marked.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">"""
