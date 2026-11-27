@@ -460,7 +460,7 @@ def head(title):
 
 # Link-preview title. Signal shows at most two title lines beside the image and the description below it, so
 # the Substack name is joined with no-break spaces: the line breaks after "Data & Graphs ·", not inside it.
-OG_TITLE = CAT["title"] + " · " + ("‘" + CAT["subtitle"] + "’").replace(" ", "\u00a0")
+OG_TITLE = CAT["title"] + " · " + CAT["subtitle"].replace(" ", "\u00a0")
 
 HEAD = f"""<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
