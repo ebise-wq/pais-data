@@ -83,7 +83,10 @@
   disease labels are about 15–17px (131-disease chart, rankings, funding). Inter is embedded in every
   download (`window.dlFonts()` inlines the page's Google Fonts, latin subset). The card's side padding is
   dropped during capture, and the 131-disease chart sizes its label margin from measured label widths.
-  The rankings lay out at 700px wide and the funding bars at 720px for the square. Long lists are cut to 15 rows
+  The rankings lay out at 700px wide and the funding bars at 720px for the square.
+- Y-axis numbers start at the left edge of the chart, in line with the title and other text (user's
+  request, v36); the plot starts just after the widest number (measured). Used in the 131-disease
+  chart, the funding scatter and the 120-disease scatter plots. Long lists are cut to 15 rows
   in the square image only (user's request): the shortfall rankings show the top 12 plus the 3 other
   groups, the funding bars the largest 15 ("Largest 15 of N shown."); both check for `dl-sq` on their card. Downloads do nothing in
   the claude.ai artifact copy (the viewer blocks them); the buttons are hidden on the overview anyway.

@@ -291,7 +291,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   flex-wrap: wrap; margin-top: 0.8rem; }
 </style>
 <div class="py" id="py">
-  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v10">
+  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-pick,.py-add,.py-foot,.py-tip" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v11">
     <div class="py-bar">
       <div class="py-seg" role="group" aria-label="Measure" data-k="m">
         <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
@@ -310,7 +310,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v10</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v11</span></div>
   </div>
 </div>
 <script>
@@ -400,9 +400,12 @@ function draw() {
     for (let v = 0; v <= top + 1e-9; v += st) ticks.push(v);
   }
   const big = (v) => v >= 1000 ? (v / 1000) + "k" : String(v);
+  // y numbers start at the left edge (in line with the title); the plot starts just after the widest one
+  mc.font = TF + "px " + getComputedStyle(plot).fontFamily;
+  M.l = Math.ceil(Math.max(...ticks.map((t) => mc.measureText(big(t)).width))) + 10;
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${m} per year for the selected diseases">`;
   if (m === "trials") s += `<rect x="${X(Y0)}" y="${M.t}" width="${X(2005) - X(Y0)}" height="${H - M.t - M.b}" fill="var(--bg)" opacity=".7"/>`;
-  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="${TF}">${big(t)}</text>`; });
+  ticks.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="0" y="${Y(t) + 4}" font-size="${TF}">${big(t)}</text>`; });
   for (let y = 2000; y <= Y1; y += W < 560 && !sq ? 10 : 5) s += `<text x="${X(y)}" y="${H - M.b + TF + 7}" text-anchor="middle" font-size="${TF}">${y}</text>`;
   const labs = [];
   // draw ME/CFS last so it sits on top
@@ -534,7 +537,7 @@ render();
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v35 · built 2026-11-27</span>
+  <span class="ver">v36 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>

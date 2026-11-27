@@ -87,7 +87,7 @@
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-square-width="720" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v8">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-square-width="720" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v9">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -98,7 +98,7 @@
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v8">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v9">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -127,7 +127,7 @@
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v8</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v9</span></div>
 </div>
 <script>
 (function () {
@@ -330,9 +330,13 @@ function drawScatter() {
   const logTicks = (lo, hi) => { const o = []; for (let k = Math.floor(L(lo)); k <= Math.ceil(L(hi)); k++) for (const m of [1, 2, 5]) { const v = m * 10 ** k; if (v >= lo && v <= hi) o.push(v); } return o; };
   const linTicks = (hi) => { const st = niceStep(hi, 4), o = []; for (let v = 0; v <= hi; v += st) o.push(v); return o; };
   const xt = S.log ? logTicks(x0, x1) : linTicks(x1), yt = S.log ? logTicks(y0, y1) : linTicks(y1);
+  // y numbers start at the left edge (in line with the title); the plot starts just after the widest one
+  const mc = (drawScatter.mc = drawScatter.mc || document.createElement("canvas").getContext("2d"));
+  mc.font = AF + "px " + getComputedStyle(plot).fontFamily;
+  M.l = Math.ceil(Math.max(...yt.map((t) => mc.measureText(big(t)).width))) + 10;
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${word} against budget, one dot per country">`;
   xt.forEach((t) => { s += `<line x1="${X(t)}" x2="${X(t)}" y1="${M.t}" y2="${H - M.b}" stroke="var(--line)"/><text x="${X(t)}" y="${H - M.b + 17}" text-anchor="middle" font-size="${AF}">${bn(t)}</text>`; });
-  yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="${AF}">${big(t)}</text>`; });
+  yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="0" y="${Y(t) + 4}" font-size="${AF}">${big(t)}</text>`; });
   s += `<text x="${(M.l + W - M.r) / 2}" y="${H - 6}" text-anchor="middle" font-size="${AF + 0.5}">Public biomedical R&amp;D, billion PPS${S.log ? " (log)" : ""}</text>`;
   // fit line, sampled so it is right on linear axes too
   const pts = [];

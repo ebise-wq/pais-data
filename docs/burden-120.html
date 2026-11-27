@@ -305,13 +305,13 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   </div>
   <!-- more:start -->
   <div class="bvr-grid">
-    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v28">
+    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v29">
       <h3>Largest papers shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg3"></div>
       <div class="bvr-plot" id="bvr-rk-papers"></div>
     </div>
-    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v28">
+    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v29">
       <h3>Largest trials shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg4"></div>
@@ -342,7 +342,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v28</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v29</span></div>
 </div>
 <script>
 (function(){
@@ -421,6 +421,10 @@ function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into anothe
   const vis=R.filter(shown),xmin=vis.length?Math.min(...vis.map(r=>r.dalys)):1e4;
   const xd=LOG?[Math.max(1e4,xmin/1.6),3e8]:[0,ZX[ZOOM]],yd=LOG?(m==='papers'?[30,40000]:[0.3,1500]):[0,ZY[m][ZOOM]];
   const fx=v=>LOG?Math.log10(v):v,fy=v=>LOG?Math.log10(Math.max(v,1e-9)):v;
+  // y numbers start at the left edge (in line with the title); the plot starts just after the widest one
+  const yTicks=LOG?(m==='papers'?[100,1000,10000]:[1,10,100,1000]):linTicks(yd[1]),yLab=v=>LOG?(v>=1000?(v/1000)+'k':String(v)):fmtTick(v);
+  {const mc=document.createElement('canvas').getContext('2d');mc.font=fs+'px '+getComputedStyle(host).fontFamily;
+   M.l=Math.ceil(Math.max(...yTicks.map(v=>mc.measureText(yLab(v)).width)))+10;}
   const lx=v=>M.l+(fx(v)-fx(xd[0]))/(fx(xd[1])-fx(xd[0]))*(W-M.l-M.r);
   const ly=v=>H-M.b-(fy(v)-fy(yd[0]))/(fy(yd[1])-fy(yd[0]))*(H-M.t-M.b);
   // x positions to sample the trend and band: dense near zero, even across the range
@@ -432,9 +436,9 @@ function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into anothe
   (LOG?[[1e4,'10k'],[1e5,'100k'],[1e6,'1M'],[1e7,'10M'],[1e8,'100M']].filter(([v])=>v>=xd[0]*0.999):linTicks(xd[1]).map(v=>[v,fmtTick(v)])).forEach(([v,t])=>{
     el('line',{x1:lx(v),x2:lx(v),y1:M.t,y2:H-M.b,stroke:C.grid},svg);
     el('text',{x:lx(v),y:H-M.b+18,'text-anchor':'middle','font-size':fs,fill:C.muted},svg).textContent=t;});
-  (LOG?(m==='papers'?[100,1000,10000]:[1,10,100,1000]):linTicks(yd[1])).forEach(v=>{
+  yTicks.forEach(v=>{
     el('line',{x1:M.l,x2:W-M.r,y1:ly(v),y2:ly(v),stroke:C.grid},svg);
-    el('text',{x:M.l-7,y:ly(v)+4.5,'text-anchor':'end','font-size':fs,fill:C.muted},svg).textContent=LOG?(v>=1000?(v/1000)+'k':v):fmtTick(v);});
+    el('text',{x:0,y:ly(v)+4.5,'font-size':fs,fill:C.muted},svg).textContent=yLab(v);});
   el('text',{x:(M.l+W-M.r)/2,y:H-6,'text-anchor':'middle','font-size':fs,fill:C.ink2},svg).textContent='DALYs per year';
   // fit, 90% confidence band and 90% prediction range
   const X=comps.map(r=>Math.log10(r.dalys)),Y=comps.map(r=>Math.log10(r[m].n)),n=X.length;
@@ -598,7 +602,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v28',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v29',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -648,7 +652,7 @@ function exportPng(pid,square){
     rows.forEach(r=>{let cx=pad;r.forEach(it=>{
       if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+6,y-5,6,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-6,16,2.2);}
       x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?18:22),y);cx+=x.measureText(it.t).width+32+(it.c?0:4);});y+=LR;});
-    x.drawImage(img,pad,top,W+8,H);URL.revokeObjectURL(url);
+    x.drawImage(img,pad-8,top,W+8,H);URL.revokeObjectURL(url);  // the SVG has 8px spare on its left: line its edge up with the title
     // footer: source and version, then the credit
     x.font='400 12.5px '+EXP.font;x.fillStyle=C.muted;
     x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-50);
@@ -796,7 +800,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v35 · built 2026-11-27</span>
+  <span class="ver">v36 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
