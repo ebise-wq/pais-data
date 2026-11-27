@@ -514,7 +514,20 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 /* Portrait charts without a landscape copy: no taller than the screen on desktop. */
 @media (min-width: 800px) { .topic .chart:not([data-wide]) .chart-img img { width: auto; max-width: 100%; max-height: 82vh; margin: 0 auto; } }
 .topic .gme .dists, .topic .gme .eulers { display: flex !important; flex-direction: column; }
-.overview .bvr-dl { display: none; }
+.overview .dl { display: none; }
+.dl { position: relative; display: flex; justify-content: flex-end; margin: 0.5rem 0 0; }
+.dl-btn { font: 500 0.88rem var(--f-body); color: var(--ocean); background: none; border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; }
+.dl-btn::before { content: "↓ "; }
+.dl-btn[aria-expanded="true"] { border-color: var(--ocean); }
+.dl-menu { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 30; display: grid; min-width: 11rem;
+  background: #10302a; border: 1px solid var(--line); border-radius: 10px; padding: 4px; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+.dl-menu[hidden] { display: none; }
+.dl-capturing { background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+  backdrop-filter: none !important; }
+.dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
+  padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
+.dl-menu button:hover { background: var(--raise); }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -715,6 +728,88 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
   var raf = 0;
   window.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; spy(); }); }, { passive: true });
   spy();
+})();
+// ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
+// The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
+// green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+(function () {
+  var roots = document.querySelectorAll("[data-dl]");
+  if (!roots.length) return;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null, fontCss = null;
+  var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
+  function load() {
+    if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
+    return lib;
+  }
+  function glow(x, w, h) {  // CSS radial-gradient(120% 80% at 10% 0%, ...) of the page
+    x.fillStyle = "#0b231c"; x.fillRect(0, 0, w, h); x.save(); x.translate(0.1 * w, 0); x.scale(1.2 * w, 0.8 * h);
+    var g = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+    [[0, "#1f4d3e"], [0.38, "#12342a"], [0.62, "#0e2a22"], [1, "#0b231c"]].forEach(function (s) { g.addColorStop(s[0], s[1]); });
+    x.fillStyle = g; x.fillRect(-1, -1, 2, 2); x.restore();
+  }
+  function txt(sel) { var n = sel && document.querySelector(sel); return n ? n.textContent.trim() : ""; }
+  function save(cv, name) {
+    cv.toBlob(function (b) {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name + ".png";
+      document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    }, "image/png");
+  }
+  function generic(root, fmt) {
+    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
+    var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
+      filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
+    return load().then(function (h2i) {
+      // the card's own background and border would frame the chart: make them transparent while capturing
+      var go = function () {
+        root.classList.add("dl-capturing");
+        var un = function (v) { root.classList.remove("dl-capturing"); return v; };
+        return h2i.toCanvas(root, opt).then(un, function (e) { un(); throw e; });
+      };
+      if (fontCss === null) return h2i.getFontEmbedCSS(root).then(function (c) { fontCss = c; opt.fontEmbedCSS = c; return go(); }, function () { fontCss = ""; opt.skipFonts = true; return go(); });
+      if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
+      return go();
+    }).then(function (shot) {
+      var cw = shot.width / 3, chh = shot.height / 3, pad = 24, head = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0), foot = 62;
+      var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
+      if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
+      var cv = document.createElement("canvas"), x = cv.getContext("2d");
+      cv.width = Math.round(w * S); cv.height = Math.round(h * S); x.scale(S, S); glow(x, w, h);
+      var tx = fmt === "square" ? ox : pad, ty = (fmt === "square" ? oy - head : pad);
+      x.textBaseline = "alphabetic";
+      if (title) { x.fillStyle = "#e9efe9"; x.font = "700 21px " + FONT; x.fillText(title, tx, ty + 20); ty += 30; }
+      if (sub) { x.fillStyle = "#a7bdb2"; x.font = "400 13px " + FONT; x.fillText(sub, tx, ty + 14); }
+      x.drawImage(shot, ox, oy, cw, chh);
+      var fy = (fmt === "square" ? oy + chh + foot : h);
+      x.font = "400 11px " + FONT; x.fillStyle = "#7e978b";
+      if (d.dlSource) x.fillText("Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : ""), tx, fy - 42);
+      x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 34); x.lineTo(tx + cw, fy - 34); x.stroke();
+      x.font = "600 13px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 14);
+      var nw = x.measureText("Siebe Rozendal").width; x.font = "500 13px " + FONT; x.fillStyle = "#9fd8b5";
+      x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 14);
+      save(cv, d.dl + (fmt === "square" ? "-square" : ""));
+    });
+  }
+  roots.forEach(function (root) {
+    var box = document.createElement("div"); box.className = "dl";
+    box.innerHTML = '<button type="button" class="dl-btn" aria-expanded="false" aria-haspopup="true">Download</button>' +
+      '<div class="dl-menu" role="menu" hidden><button type="button" role="menuitem" data-fmt="square">Square image</button>' +
+      '<button type="button" role="menuitem" data-fmt="screen">As on screen</button></div>';
+    root.appendChild(box);
+    var btn = box.querySelector(".dl-btn"), menu = box.querySelector(".dl-menu");
+    function open(o) { menu.hidden = !o; btn.setAttribute("aria-expanded", o ? "true" : "false"); }
+    btn.addEventListener("click", function (ev) { ev.stopPropagation(); open(menu.hidden); });
+    document.addEventListener("click", function (ev) { if (!box.contains(ev.target)) open(false); });
+    menu.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        open(false); var fmt = b.dataset.fmt, c = root.dataset.dlCustom;
+        btn.disabled = true; btn.textContent = "Preparing…";
+        var done = function () { btn.disabled = false; btn.textContent = "Download"; };
+        Promise.resolve(c && window.DL_CUSTOM && window.DL_CUSTOM[c] ? window.DL_CUSTOM[c](fmt) : generic(root, fmt))
+          .then(done, function (e) { done(); alert("Sorry, the image could not be made in this browser."); console.error(e); });
+      });
+    });
+  });
 })();
 (function () {
   var dlg = document.getElementById("lb");

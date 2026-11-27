@@ -61,7 +61,20 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 /* Portrait charts without a landscape copy: no taller than the screen on desktop. */
 @media (min-width: 800px) { .topic .chart:not([data-wide]) .chart-img img { width: auto; max-width: 100%; max-height: 82vh; margin: 0 auto; } }
 .topic .gme .dists, .topic .gme .eulers { display: flex !important; flex-direction: column; }
-.overview .bvr-dl { display: none; }
+.overview .dl { display: none; }
+.dl { position: relative; display: flex; justify-content: flex-end; margin: 0.5rem 0 0; }
+.dl-btn { font: 500 0.88rem var(--f-body); color: var(--ocean); background: none; border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; }
+.dl-btn::before { content: "↓ "; }
+.dl-btn[aria-expanded="true"] { border-color: var(--ocean); }
+.dl-menu { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 30; display: grid; min-width: 11rem;
+  background: #10302a; border: 1px solid var(--line); border-radius: 10px; padding: 4px; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+.dl-menu[hidden] { display: none; }
+.dl-capturing { background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+  backdrop-filter: none !important; }
+.dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
+  padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
+.dl-menu button:hover { background: var(--raise); }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -261,34 +274,27 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 .bvr-notes { font-size: 0.92rem; color: var(--muted); margin: 0.6rem 0 0; padding-left: 1.1rem; max-width: 72ch; }
 .bvr-notes li { margin-bottom: 0.3rem; }
 .bvr-more { font-size: 0.95rem; color: var(--muted); margin: 0; }
-.bvr-dls { display: flex; justify-content: flex-end; gap: 0.4rem; flex-wrap: wrap; margin: 0.4rem 0.35rem 0; }
-.bvr-dls .bvr-dl { margin: 0; }
-.bvr-dl { display: block; margin: 0.4rem 0.35rem 0 auto; font: 500 0.88rem var(--f-body); color: var(--ocean); background: none;
-  border: 1px solid var(--line); border-radius: 999px; padding: 0.3rem 0.8rem; cursor: pointer; }
-.bvr-dl::before { content: "↓ "; }
 .bvr-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 </style>
 <div class="bvr">
   <div class="bvr-grid">
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="papers-vs-burden" data-dl-custom="bvr-sc-papers">
       <h3>Papers per year vs burden</h3>
       <p class="bvr-sub">2021–2025 averages. Burden in DALYs. <span class="bvr-scl">Log scales.</span> Tap a dot for details.</p>
       <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg1"></div>
       <div class="bvr-plot" id="bvr-sc-papers"></div>
-      <div class="bvr-dls"><button type="button" class="bvr-dl" data-plot="bvr-sc-papers" data-square="1">Square image</button><button type="button" class="bvr-dl" data-plot="bvr-sc-papers">As on screen</button></div>
     </div>
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="trials-vs-burden" data-dl-custom="bvr-sc-trials">
       <h3>Trials per year vs burden</h3>
       <p class="bvr-sub">Interventional trials on ClinicalTrials.gov. <span class="bvr-scl">Log scales.</span></p>
       <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg2"></div>
       <div class="bvr-plot" id="bvr-sc-trials"></div>
-      <div class="bvr-dls"><button type="button" class="bvr-dl" data-plot="bvr-sc-trials" data-square="1">Square image</button><button type="button" class="bvr-dl" data-plot="bvr-sc-trials">As on screen</button></div>
     </div>
   </div>
   
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v24</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v25</span></div>
 </div>
 <script>
 (function(){
@@ -541,7 +547,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v23',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v25',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -602,7 +608,8 @@ function exportPng(pid,square){
   };
   img.src=url;
 }
-ROOT.querySelectorAll('.bvr-dl').forEach(b=>b.addEventListener('click',()=>exportPng(b.dataset.plot,!!b.dataset.square)));
+// the page's Download button (see tools/build_catalog.py) calls these for the two scatter plots
+window.DL_CUSTOM=Object.assign(window.DL_CUSTOM||{},{'bvr-sc-papers':f=>exportPng('bvr-sc-papers',f==='square'),'bvr-sc-trials':f=>exportPng('bvr-sc-trials',f==='square')});
 
 const JOBS=[['bvr-sc-papers',()=>scatter('bvr-sc-papers','papers')],['bvr-sc-trials',()=>scatter('bvr-sc-trials','trials')],
   ['bvr-rk-papers',()=>rank('bvr-rk-papers','papers')],['bvr-rk-trials',()=>rank('bvr-rk-trials','trials')]].filter(([id])=>$(id));
@@ -749,7 +756,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v5">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -760,7 +767,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v5">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -770,7 +777,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
     </div>
   </div>
   
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v4</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v5</span></div>
 </div>
 <script>
 (function () {
@@ -1192,7 +1199,7 @@ if (tb) {
     <button type="button" id="pme-tab2" aria-pressed="false">Dysautonomia and MCAS</button>
   </div>
 
-  <div class="pme-poster" id="pme-p1">
+  <div class="pme-poster" id="pme-p1" data-dl="pais-burden" data-dl-skip=".pme-foot" data-dl-source="illustrative model; prevalence based on Dutch estimates; severity: GBD, EQ-5D (Denmark, Australia)" data-dl-ver="v12">
     <h3 id="pme-ttl">ME is about half of PAIS patients, but most of the PAIS disease burden</h3>
     <p class="pme-lede">Post-Acute Infection Syndromes</p>
     <div class="pme-panels">
@@ -1201,10 +1208,10 @@ if (tb) {
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
         <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
     </div>
-    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v11</span></div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v12</span></div>
   </div>
 
-  <div class="pme-poster" id="pme-p2" hidden>
+  <div class="pme-poster" id="pme-p2" hidden data-dl="pais-overlap" data-dl-skip=".pme-foot" data-dl-source="rough estimate; dysautonomia = OI/POTS; MCAS = mast cell activation syndrome; overlaps approximate" data-dl-ver="v12">
     <h3>How Long COVID, ME, dysautonomia and MCAS may overlap</h3>
     <p class="pme-lede">Rough estimate.</p>
     <div class="pme-panels">
@@ -1213,7 +1220,7 @@ if (tb) {
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
         <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
     </div>
-    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v11</span></div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v12</span></div>
   </div>
 
   <label class="pme-tog"><input type="checkbox" id="pme-hide" checked> Hide numbers</label>
@@ -1564,7 +1571,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
   flex-wrap: wrap; margin-top: 0.8rem; }
 </style>
 <div class="py" id="py">
-  <div class="py-card">
+  <div class="py-card" data-dl="papers-trials-per-year" data-dl-skip=".py-bar,.py-pick-h,.py-add,.py-foot,.py-tip,.py-pick button b" data-dl-source="PubMed, ClinicalTrials.gov; DALYs: GBD 2023, ME/CFS and long COVID from the ME/CFS model" data-dl-ver="v6">
     <div class="py-bar">
       <div class="py-seg" role="group" aria-label="Measure" data-k="m">
         <button type="button" data-v="papers" aria-pressed="true">Papers</button><button type="button" data-v="trials" aria-pressed="false">Trials</button>
@@ -1583,7 +1590,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v5</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v6</span></div>
   </div>
 </div>
 <script>
@@ -1741,7 +1748,7 @@ render();
 </main>
 <footer class="wrap">
   <span class="stats">20 charts · 29 data files · <a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">code and data on GitHub</a></span>
-  <span class="ver">v28 · built 2026-11-27</span>
+  <span class="ver">v29 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -1815,6 +1822,88 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
   var raf = 0;
   window.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; spy(); }); }, { passive: true });
   spy();
+})();
+// ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
+// The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
+// green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+(function () {
+  var roots = document.querySelectorAll("[data-dl]");
+  if (!roots.length) return;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null, fontCss = null;
+  var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
+  function load() {
+    if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
+    return lib;
+  }
+  function glow(x, w, h) {  // CSS radial-gradient(120% 80% at 10% 0%, ...) of the page
+    x.fillStyle = "#0b231c"; x.fillRect(0, 0, w, h); x.save(); x.translate(0.1 * w, 0); x.scale(1.2 * w, 0.8 * h);
+    var g = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+    [[0, "#1f4d3e"], [0.38, "#12342a"], [0.62, "#0e2a22"], [1, "#0b231c"]].forEach(function (s) { g.addColorStop(s[0], s[1]); });
+    x.fillStyle = g; x.fillRect(-1, -1, 2, 2); x.restore();
+  }
+  function txt(sel) { var n = sel && document.querySelector(sel); return n ? n.textContent.trim() : ""; }
+  function save(cv, name) {
+    cv.toBlob(function (b) {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name + ".png";
+      document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    }, "image/png");
+  }
+  function generic(root, fmt) {
+    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
+    var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
+      filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
+    return load().then(function (h2i) {
+      // the card's own background and border would frame the chart: make them transparent while capturing
+      var go = function () {
+        root.classList.add("dl-capturing");
+        var un = function (v) { root.classList.remove("dl-capturing"); return v; };
+        return h2i.toCanvas(root, opt).then(un, function (e) { un(); throw e; });
+      };
+      if (fontCss === null) return h2i.getFontEmbedCSS(root).then(function (c) { fontCss = c; opt.fontEmbedCSS = c; return go(); }, function () { fontCss = ""; opt.skipFonts = true; return go(); });
+      if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
+      return go();
+    }).then(function (shot) {
+      var cw = shot.width / 3, chh = shot.height / 3, pad = 24, head = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0), foot = 62;
+      var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
+      if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
+      var cv = document.createElement("canvas"), x = cv.getContext("2d");
+      cv.width = Math.round(w * S); cv.height = Math.round(h * S); x.scale(S, S); glow(x, w, h);
+      var tx = fmt === "square" ? ox : pad, ty = (fmt === "square" ? oy - head : pad);
+      x.textBaseline = "alphabetic";
+      if (title) { x.fillStyle = "#e9efe9"; x.font = "700 21px " + FONT; x.fillText(title, tx, ty + 20); ty += 30; }
+      if (sub) { x.fillStyle = "#a7bdb2"; x.font = "400 13px " + FONT; x.fillText(sub, tx, ty + 14); }
+      x.drawImage(shot, ox, oy, cw, chh);
+      var fy = (fmt === "square" ? oy + chh + foot : h);
+      x.font = "400 11px " + FONT; x.fillStyle = "#7e978b";
+      if (d.dlSource) x.fillText("Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : ""), tx, fy - 42);
+      x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 34); x.lineTo(tx + cw, fy - 34); x.stroke();
+      x.font = "600 13px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 14);
+      var nw = x.measureText("Siebe Rozendal").width; x.font = "500 13px " + FONT; x.fillStyle = "#9fd8b5";
+      x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 14);
+      save(cv, d.dl + (fmt === "square" ? "-square" : ""));
+    });
+  }
+  roots.forEach(function (root) {
+    var box = document.createElement("div"); box.className = "dl";
+    box.innerHTML = '<button type="button" class="dl-btn" aria-expanded="false" aria-haspopup="true">Download</button>' +
+      '<div class="dl-menu" role="menu" hidden><button type="button" role="menuitem" data-fmt="square">Square image</button>' +
+      '<button type="button" role="menuitem" data-fmt="screen">As on screen</button></div>';
+    root.appendChild(box);
+    var btn = box.querySelector(".dl-btn"), menu = box.querySelector(".dl-menu");
+    function open(o) { menu.hidden = !o; btn.setAttribute("aria-expanded", o ? "true" : "false"); }
+    btn.addEventListener("click", function (ev) { ev.stopPropagation(); open(menu.hidden); });
+    document.addEventListener("click", function (ev) { if (!box.contains(ev.target)) open(false); });
+    menu.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        open(false); var fmt = b.dataset.fmt, c = root.dataset.dlCustom;
+        btn.disabled = true; btn.textContent = "Preparing…";
+        var done = function () { btn.disabled = false; btn.textContent = "Download"; };
+        Promise.resolve(c && window.DL_CUSTOM && window.DL_CUSTOM[c] ? window.DL_CUSTOM[c](fmt) : generic(root, fmt))
+          .then(done, function (e) { done(); alert("Sorry, the image could not be made in this browser."); console.error(e); });
+      });
+    });
+  });
 })();
 (function () {
   var dlg = document.getElementById("lb");

@@ -59,13 +59,19 @@
   they don't clash with the page. The parts between `<!-- more:start -->` and `<!-- more:end -->`
   (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
   show on the topic page only. The headline-number boxes were removed at the user's request (v25).
-  Each chart card there has download buttons (topic page only) that save the chart as set up on screen
-  (scale, zoom, hidden groups) as a PNG on the page's green glow, with title, one data line, the visible
-  legend and the user's name. No line about the scale or what is hidden (the reader can see it). The
-  scatter plots offer "Square image" (default, 1600 × 1600; the chart is redrawn off screen to fit) and
-  "As on screen"; the rankings only "Download image".
+  Its scatter plots use their own exporter (`window.DL_CUSTOM`), which redraws the chart off screen for
+  the square version.
   Solid copies and downloads both paint the same glow as the page (light from the top left; `glow()` in
   the chart scripts, `paintBg()` in the fragment).
+- Downloads (v29): every interactive chart has one "Download" button (topic pages only) that opens a menu:
+  "Square image" (first; 1600 × 1600) or "As on screen". Mark the element to capture with `data-dl="<file
+  stem>"`, plus optional `data-dl-skip` (selectors left out, e.g. controls), `data-dl-title` /
+  `data-dl-title-from` / `data-dl-sub-from` (a header drawn above), `data-dl-source` and `data-dl-ver` (footer
+  line) or `data-dl-custom` (an exporter in `window.DL_CUSTOM`). The page script adds the button, renders the
+  element with html-to-image (cdnjs, loaded on first use), and puts it on the page's green glow with
+  "Siebe Rozendal · How To Solve A Disease?" under it. No line about the scale or what is hidden. Square
+  centres the chart in a square; the 120-disease scatter plots redraw to fill it. Downloads do nothing in
+  the claude.ai artifact copy (the viewer blocks them); the buttons are hidden on the overview anyway.
 - An interactive with `"overview": false` shows on its topic page only; the overview gets a link line
   (text from `"more"`). With `"overview": {"html": ..., "pick": {"name": "a/b/c", ...}}` the overview
   shows that small fragment instead, given only the picked parts of the data (slash paths into the JSON).
