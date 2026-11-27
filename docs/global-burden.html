@@ -3,20 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Global ME/CFS burden · PAIS Data Catalog</title>
+<title>Global ME/CFS burden · Data &amp; Graphs · How To Solve A Disease?</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Data &amp; Graphs">
+<meta property="og:title" content="Global ME/CFS burden · Data &amp; Graphs">
+<meta property="og:description" content="by Siebe Rozendal">
+<meta property="og:image" content="https://ebise-wq.github.io/pais-data/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Scatter plot of papers per year against disease burden for 120 diseases, with ME/CFS and long COVID marked.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: one reading column. Header, topic chips, then one section per analysis:
    key finding, chart grid, then the data files in a collapsed block. Colours match the charts themselves. */
 :root {
-  --bg: #141a24; --surface: #1a2230; --raise: #212a3a; --line: #2a3446;
-  --ink: #eef1f6; --muted: #a3acba; --faint: #6f7a8c;
-  --ocean: #7fb3d5; --sunset: #f4a582;
-  --f-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  /* Forest glass (v21): deep green with soft light from the top left; cards and charts are see-through.
+     --ocean and --sunset keep their names but are now mint and peach. */
+  --bg: #0e2a22; --surface: rgba(255, 255, 255, 0.045); --raise: rgba(255, 255, 255, 0.09); --line: rgba(255, 255, 255, 0.11);
+  --ink: #e9efe9; --muted: #a7bdb2; --faint: #7e978b;
+  --ocean: #9fd8b5; --sunset: #f2b880;
+  --f-display: "Inter Tight", "Inter", system-ui, sans-serif;
   --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
@@ -24,7 +35,8 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.55 var(--f-body);
+html { background: #0b231c; }
+body { margin: 0; background: radial-gradient(120% 80% at 10% 0%, #1f4d3e 0%, #12342a 38%, #0e2a22 62%, #0b231c 100%) fixed; color: var(--ink); font: 400 17px/1.55 var(--f-body);
   -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
   z-index: 10; background: var(--bg); }
@@ -35,10 +47,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 .top { padding-block: 2.75rem 0; }
-.top h1 { font: 600 clamp(2.1rem, 6vw, 3.1rem)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.top h1 { font: 700 clamp(3rem, 14vw, 5.2rem)/1 var(--f-display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
+.top .kicker { margin: 0.5rem 0 0; font: 600 clamp(1.3rem, 5vw, 1.7rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: -0.005em; }
+.top .kicker span, .top-sm .kicker-sm span { color: var(--sunset); }
+.top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
 .byline .upd { display: block; margin-top: 0.15rem; color: var(--faint); font-size: 0.88rem; }
@@ -48,6 +63,38 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px);
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .toc .wrap { position: relative; }
+.toc-static { position: relative; top: auto; margin-top: 0.6rem; }
+/* Topic pages: one reading column, one chart at a time (also on desktop), at the user's request. */
+.topic .wrap { max-width: 52rem; }
+.topic .charts, .topic .bvr-grid, .topic .fnd-grid2, .topic .pme-panels { grid-template-columns: minmax(0, 1fr) !important; }
+/* Portrait charts without a landscape copy: no taller than the screen on desktop. */
+@media (min-width: 800px) { .topic .chart:not([data-wide]) .chart-img img { width: auto; max-width: 100%; max-height: 82vh; margin: 0 auto; } }
+.topic .gme .dists, .topic .gme .eulers { display: flex !important; flex-direction: column; }
+.overview .dl { display: none; }
+.dl { position: relative; display: flex; justify-content: flex-end; margin: 0.5rem 0 0; }
+.dl-btn { font: 500 0.88rem var(--f-body); color: var(--ocean); background: none; border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; }
+.dl-btn::before { content: "↓ "; }
+.dl-btn[aria-expanded="true"] { border-color: var(--ocean); }
+.dl-menu { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 30; display: grid; min-width: 11rem;
+  background: #10302a; border: 1px solid var(--line); border-radius: 10px; padding: 4px; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+.dl-menu[hidden] { display: none; }
+.dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
+  color: var(--ink); font: 500 1rem var(--f-body); }
+.dl-hidden { display: none !important; }
+/* Downloads: titles, labels and the lines under them larger than on the page (readable for older eyes) */
+.dl-capturing .fnd-bars { --lab: 9.5rem !important; }
+.dl-capturing .fnd-lab { font-size: 1.05rem !important; }
+.dl-capturing .fnd-v { font-size: 1rem !important; }
+.dl-capturing h3 { font-size: 1.65rem !important; line-height: 1.2 !important; }
+.dl-capturing .bvr-sub, .dl-capturing .py-sub, .dl-capturing .fnd-sub, .dl-capturing .pme-lede { font-size: 1.05rem !important; }
+.dl-capturing .bvr-legend, .dl-capturing .fnd-legend, .dl-capturing .plabel { font-size: 1rem !important; }
+.topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
+.dl-capturing { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+  backdrop-filter: none !important; }
+.dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
+  padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
+.dl-menu button:hover { background: var(--raise); }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -57,7 +104,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); transition: transform 0.15s; }
 .toc-btn[aria-expanded="true"] .chev { transform: rotate(225deg); margin-bottom: -0.1rem; }
 .toc-drop { position: absolute; left: 0; right: 0; top: 100%; margin-top: 1px; padding: 0.2rem max(16px, env(safe-area-inset-left, 0px)) 0.5rem;
-  background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  background: #10302a; border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
   max-height: calc(100vh - 60px); overflow-y: auto; }
 .toc-list { list-style: none; margin: 0; padding: 0; }
 .toc-list a { display: block; padding: 0.5rem 0; color: var(--ink); font: 400 0.95rem/1.35 var(--f-body); }
@@ -108,7 +155,7 @@ section:first-child .sec-head { border-top: 0; padding-top: 0; }
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
 .chart { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
   display: flex; flex-direction: column; min-width: 0; }
-.chart-img { display: block; width: 100%; padding: 0; border: 0; background: var(--bg); cursor: zoom-in; }
+.chart-img { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
 .chart-img img { display: block; width: 100%; height: auto; max-width: 100%; }
 .chart figcaption { padding: 0.9rem 1rem 1rem; display: grid; gap: 0.35rem; border-top: 1px solid var(--line); flex: 1; align-content: start; }
 .chart h3 { margin: 0; font: 600 1.05rem/1.3 var(--f-body); }
@@ -151,8 +198,16 @@ a.fname:hover { color: var(--sunset); }
 .toggle button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0;
   border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
 .toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
-.chart[data-views] { background: var(--bg); }
-.chart[data-views] figcaption { background: var(--surface); }
+.chart[data-views] { background: var(--surface); }
+.switches { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 1rem 0; align-items: center; }
+.switches .toggle { margin: 0; }
+.pill { display: inline-flex; align-items: center; gap: 0.45rem; font: 500 0.92rem var(--f-body); color: var(--muted);
+  background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.4rem 0.85rem; cursor: pointer; }
+.pill i { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1.5px solid var(--sunset); }
+.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--sunset); background: rgba(242, 184, 128, 0.14); }
+.pill[aria-pressed="true"] i { background: var(--sunset); }
+dialog.lb .lb-solid { margin-left: auto; font-size: 0.92rem; white-space: nowrap; }
+.chart[data-views] figcaption { background: transparent; }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
 .older[open] summary { margin-bottom: 1rem; }
@@ -163,26 +218,29 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
-footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
-footer .licence p + p { margin-top: 0.6rem; }
-footer .licence b { color: var(--ink); font-weight: 600; }
-.credit-part { white-space: nowrap; }
-a.credit-lic { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px; }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
-dialog.lb::backdrop { background: rgba(8, 11, 17, 0.88); }
-dialog.lb img { display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
+dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
+dialog.lb img { background: var(--bg); display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
 dialog.lb .lb-bar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.5rem 0.1rem; color: var(--ink); }
 dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); background: var(--raise); border: 1px solid var(--line);
   border-radius: 8px; padding: 0.35rem 0.8rem; cursor: pointer; }
 </style>
 </head>
 <body>
+<div class="topic">
 <div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
-  <p class="site"><span>PAIS</span> Data Catalog</p>
+  <p class="site">Data &amp; Graphs <span class="kicker-sm">How To Solve A Disease<span>?</span></span></p>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="burden-120.html">Research vs disease burden</a><a href="trials.html">Long COVID and ME/CFS trials</a><a href="sex.html">Research by which sex a disease mostly affects</a><a href="funding.html">Public biomedical R&amp;D funding and output</a><a href="pais-burden.html">PAIS burden and ME</a><a href="global-burden.html" aria-current="page">Global ME/CFS burden</a><a href="sources.html">Papers and trials per year</a></div></nav>
+<nav class="toc toc-static" id="toc" aria-label="Contents">
+  <div class="wrap">
+    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
+      <span class="lab">Contents</span><span class="cur">Global ME/CFS burden</span><span class="chev" aria-hidden="true"></span>
+    </button>
+    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list"><li><a href="burden-120.html" data-toc="burden-120">Research vs disease burden <span class="tsub">120 diseases</span></a></li><li><a href="trials.html" data-toc="trials">Long COVID and ME/CFS trials</a></li><li><a href="sex.html" data-toc="sex">Research by which sex a disease mostly affects</a></li><li><a href="funding.html" data-toc="funding">Public biomedical R&amp;D funding and output <span class="tsub">2024</span></a></li><li><a href="pais-burden.html" data-toc="pais-burden">PAIS burden and ME</a></li><li><a href="global-burden.html" data-toc="global-burden" aria-current="true">Global ME/CFS burden</a></li><li><a href="sources.html" data-toc="sources">Papers and trials per year <span class="tsub">131 diseases</span></a></li></ol></div>
+  </div>
+</nav>
 <main class="wrap">
 
   <section id="global-burden">
@@ -198,7 +256,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
      Element ids start with gme- and all styles sit under .gme, so they don't clash with the page.
      Fonts and the base colours come from the page's tokens. -->
 <style>
-.gme { --fg: var(--ink); --azure: #8fc6ff; --azure-soft: rgba(143, 198, 255, 0.26); --cyan: #f4a184; --teal-deep: #c4644d; --gold: #e8d08c; --display: var(--f-body); --mono: var(--f-mono); }
+.gme { --fg: var(--ink); --azure: #9fd8b5; --azure-soft: rgba(159, 216, 181, 0.26); --cyan: #f2b880; --teal-deep: #c9784a; --gold: #e8d08c; --display: var(--f-body); --mono: var(--f-mono); }
 
 .gme {  color: var(--fg); font-family: var(--display); font-size: 15px; line-height: 1.5; margin: 0; }
 
@@ -430,7 +488,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 
 .gme .stepd.final.azure .l, .gme .stepd.final.azure .t { color: var(--azure); }
 
-.gme .stepd.final.teal .l, .gme .stepd.final.teal .t { color: #b9c7da; }
+.gme .stepd.final.teal .l, .gme .stepd.final.teal .t { color: #c3d6cb; }
 
 .gme .anchor { scroll-margin-top: 80px; }
 
@@ -490,9 +548,9 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 
 .gme .stack { display: flex; flex-direction: column; gap: 10px; }
 
-.gme .gme-foot { margin-top: 18px; font-size: 12px; color: var(--muted); display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 12px; border-top: 1px solid var(--line); padding-top: 10px; }
+.gme .gme-foot { margin-top: 18px; font-size: 12px; color: var(--muted); display: flex; justify-content: space-between; gap: 12px; border-top: 1px solid var(--line); padding-top: 10px; }
 
-.gme .gme-foot .ver { font-family: var(--mono); }
+.gme .gme-foot .ver { font-family: var(--mono); white-space: nowrap; }
 .gme { padding: 0; margin: 0; display: flex; flex-direction: column; gap: 10px; max-width: 760px; min-width: 0; color: var(--fg); }
 .gme .gme-top { top: var(--gme-navh, 0px); z-index: 4; margin-top: 0; }
 .gme .gme-foot { padding-bottom: 0; }
@@ -570,7 +628,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   </div>
 
   <div class="dists">
-    <div class="panel">
+    <div class="panel" data-dl="global-mecfs-people" data-dl-title-from="#gme-title" data-dl-sub-from="#gme-subtitle" data-dl-source="Global ME/CFS burden model; every step on ebise-wq.github.io/pais-data/global-burden.html" data-dl-ver="v11.5">
       <div class="plabel" id="gme-casesLabel">People living with it</div>
       <div class="big"><span class="n" id="gme-casesN"></span><span class="u" id="gme-casesU"></span></div>
       <div class="range" id="gme-casesR"></div>
@@ -578,7 +636,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="ages" id="gme-aCases" hidden></div>
       <div class="note" id="gme-casesNote"></div>
     </div>
-    <div class="panel">
+    <div class="panel" data-dl="global-mecfs-dalys" data-dl-title-from="#gme-title" data-dl-sub-from="#gme-subtitle" data-dl-source="Global ME/CFS burden model; every step on ebise-wq.github.io/pais-data/global-burden.html" data-dl-ver="v11.5">
       <div class="plabel" id="gme-dalyLabel">Disease burden per year</div>
       <div class="big"><span class="n" id="gme-dalyN"></span><span class="u" id="gme-dalyU"></span></div>
       <div class="range" id="gme-dalyR"></div>
@@ -589,7 +647,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   </div>
 
   <div id="gme-results" class="stack">
-  <section id="gme-splitSec">
+  <section id="gme-splitSec" data-dl="global-mecfs-where-cases-come-from" data-dl-title="" data-dl-sub-from="#gme-subtitle" data-dl-source="Global ME/CFS burden model; every step on ebise-wq.github.io/pais-data/global-burden.html" data-dl-ver="v11.5">
     <h2 id="gme-splitTitle">Where the cases come from</h2>
     <div class="split" id="gme-split"></div>
     <div class="legend" id="gme-legend"></div>
@@ -600,8 +658,8 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     <h2 id="gme-eulerTitle">How the conditions overlap</h2>
     <p class="lede" id="gme-eulerLede"></p>
     <div class="eulers">
-      <figure class="panel eufig"><div class="plabel">People</div><svg class="euler" id="gme-euP" role="img" aria-label="Overlap of ME/CFS and long COVID, people"></svg><div class="euleg" id="gme-euPl"></div></figure>
-      <figure class="panel eufig"><div class="plabel">Disease burden per year</div><svg class="euler" id="gme-euB" role="img" aria-label="Overlap of ME/CFS and long COVID, disease burden"></svg><div class="euleg" id="gme-euBl"></div></figure>
+      <figure class="panel eufig" data-dl="global-mecfs-overlap-people" data-dl-title-from="#gme-eulerTitle" data-dl-sub-from="#gme-subtitle" data-dl-source="Global ME/CFS burden model; every step on ebise-wq.github.io/pais-data/global-burden.html" data-dl-ver="v11.5"><div class="plabel">People</div><svg class="euler" id="gme-euP" role="img" aria-label="Overlap of ME/CFS and long COVID, people"></svg><div class="euleg" id="gme-euPl"></div></figure>
+      <figure class="panel eufig" data-dl="global-mecfs-overlap-dalys" data-dl-title-from="#gme-eulerTitle" data-dl-sub-from="#gme-subtitle" data-dl-source="Global ME/CFS burden model; every step on ebise-wq.github.io/pais-data/global-burden.html" data-dl-ver="v11.5"><div class="plabel">Disease burden per year</div><svg class="euler" id="gme-euB" role="img" aria-label="Overlap of ME/CFS and long COVID, disease burden"></svg><div class="euleg" id="gme-euBl"></div></figure>
     </div>
     <div class="note" id="gme-eulerNote"></div>
   </section>
@@ -738,7 +796,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 
   <div class="gme-foot">
     <span>Population by age: UN World Population Prospects 2024. Reference diseases: people from GBD 2021 studies and WHO; disease burden from GBD 2023. No population study has ever applied ICC, so the ICC figures rest on ratios from patient samples. Seed 20260821.</span>
-    <span class="ver"><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v11.4</span>
+    <span class="ver">v11.5</span>
   </div>
 </div>
 
@@ -792,7 +850,7 @@ const SEV = {
   ],
   mix: { ICC: [22, 54, 18, 6], CCC: [28, 54, 14, 4], IOM: [32, 52, 12, 4], Fukuda: [40, 48, 9, 3] }
 };
-const SEVCOL = ["#c9e4ff", "#8fc6ff", "#5d93e0", "#3a64b8"];
+const SEVCOL = ["#d3f0de", "#9fd8b5", "#5fae85", "#3b7d5c"];
 const POP2021 = 7.95e9;
 
 const st = { cond: "me", route: "both", crit: "CCC", year: "2026", stat: "median", unit: "count", view: "dist", refs: new Set(["ms", "hiv"]) };
@@ -971,18 +1029,18 @@ function render() {
     byId("splitLede").innerHTML = `All long COVID already includes post-COVID ME, so post-COVID ME is not added again. Classic ME depends on the criteria you pick; long COVID does not. Each number shows the ${midWord()} and its 90% range.`;
   } else if (MIX) {
     const P4 = D.lc.parts40[st.route];
-    parts = [["Classic ME", "var(--azure)", Y.A, null, "classic"], ["Long COVID: post-COVID ME, broadest definition", "#5b8bd6", P4.me, null, "future"],
+    parts = [["Classic ME", "var(--azure)", Y.A, null, "classic"], ["Long COVID: post-COVID ME, broadest definition", "#4f9a72", P4.me, null, "future"],
              ["Other long COVID, ill since before 2026", "var(--teal-deep)", P4.oth, null, "future"],
              ["Other long COVID, new since 2026", "var(--cyan)", P4.new, null, "future"],
              ["Other long COVID from a new pandemic", "var(--gold)", P4.pand, `${pct(S.p_pand[1])} chance; if it happens ${fm(P4.pand_if[1])} (${fm(P4.pand_if[0])}–${fm(P4.pand_if[2])})`, "future"]];
     byId("splitLede").textContent = "In 2040: classic ME, post-COVID ME by the broadest definition, and other long COVID. Most other long COVID clears, so it shrinks. A new pandemic has a median of zero because it probably won't happen; switch to the mean to see its expected weight.";
   } else if (LCm && st.year === "2026") {
     parts = [["Limited a lot", "var(--cyan)", D.lc.parts[0]], ["Limited a little", "var(--teal-deep)", D.lc.parts[1]],
-             ["Not limited", "#6f7f96", D.lc.parts[2]]];
+             ["Not limited", "#7f968b", D.lc.parts[2]]];
     byId("splitLede").innerHTML = `How much long COVID limits daily life, from the UK survey, after removing cases not caused by infection. <a class="jump" href="#longcovid" data-go="longcovid">Where these numbers come from</a>. Post-COVID ME is part of this: by ${c} it would be ${pct(D.lc.me_share[c])} of all long COVID. <a class="jump" href="#lcshare" data-go="lcshare">Is that plausible?</a>`;
   } else if (LCm) {
     const P4 = D.lc.parts40[st.route];
-    parts = [["Post-COVID ME, broadest definition", "#5b8bd6", P4.me, null, "future"],
+    parts = [["Post-COVID ME, broadest definition", "#4f9a72", P4.me, null, "future"],
              ["Other long COVID, ill since before 2026", "var(--teal-deep)", P4.oth, null, "future"], ["Other long COVID, new since 2026", "var(--cyan)", P4.new, null, "future"],
              ["Other long COVID from a new pandemic", "var(--gold)", P4.pand, `${pct(S.p_pand[1])} chance; if it happens ${fm(P4.pand_if[1])} (${fm(P4.pand_if[0])}–${fm(P4.pand_if[2])})`, "future"]];
     byId("splitLede").textContent = "Long COVID in 2040. People with post-COVID ME, by the broadest definition, follow the post-COVID ME projection, including new cases. Most other long COVID clears, so it shrinks. A new pandemic has a median of zero because it probably won't happen; switch to the mean to see its expected weight.";
@@ -1449,39 +1507,53 @@ let rt; window.addEventListener("resize", () => { clearTimeout(rt); rt = setTime
   </section>
 </main>
 <footer class="wrap">
-  <div class="licence" id="licence">
-    <p><b>Using these charts.</b> Charts, text and tables here are <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. You can share,
-    copy and adapt them, also commercially: in an article, a talk, or a company's fundraising deck. Two conditions:
-    credit &ldquo;Siebe Rozendal • How to Solve A Disease?&rdquo; with a link to <a href="https://ebise-wq.github.io/pais-data/" target="_blank" rel="noopener">this site</a>, and say if you
-    changed anything. Leaving the credit line on the image is enough. Removing it, or presenting the work as your
-    own, is not allowed.</p>
-    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
-    so commercial users should check <a href="https://www.healthdata.org/node/822" target="_blank" rel="noopener">IHME&rsquo;s</a>
-    and <a href="https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database" target="_blank" rel="noopener">WHO ICTRP&rsquo;s</a> terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit.
-    Code is GPL-3.0.</p>
-  </div>
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v20 · built 2026-11-27</span>
+  <span class="ver">v41 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
-  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
+</div>
 <script>
-document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
-  var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
-  var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
-  var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
-  srcs.slice(1).forEach(function (u) { new Image().src = u; });
-  fig.querySelectorAll(".toggle button").forEach(function (b) {
+// Charts: switches pick one of the chart's images (key = chosen option of each switch, e.g. "1,0"). Charts with
+// data-wide also have landscape copies, shown on desktop; links and the full-size view follow the shape on screen.
+var WIDE = window.matchMedia ? window.matchMedia("(min-width: 800px)") : { matches: false };
+document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(function (fig) {
+  var d = fig.dataset, sp = function (k) { return d[k] ? d[k].split("|") : []; };
+  var keys = d.keys ? d.keys.split("|") : ["0"], srcs = d.views ? sp("views") : [fig.querySelector(".chart-img img").getAttribute("src")],
+      paths = sp("paths"), raws = sp("raws"), solids = sp("solids"), wides = sp("wide"), wraws = sp("wraws"), wsolids = sp("wsolids");
+  var img = fig.querySelector(".chart-img img"), source = fig.querySelector("picture source"), open = fig.querySelector(".chart-img");
+  var path = fig.querySelector(".path"), full = fig.querySelector("a.full"), solid = fig.querySelector("a.solid");
+  if (!raws.length && full) raws = [full.href];
+  if (!solids.length && solid) solids = [solid.href];
+  var st = keys[0].split(",").map(Number), btns = fig.querySelectorAll("[data-sw]");
+  (WIDE.matches && wides.length ? wides : srcs).slice(1).forEach(function (u) { new Image().src = u; });
+  function show() {
+    var i = keys.indexOf(st.join(","));
+    if (i < 0) return;
+    var w = WIDE.matches && wides.length;
+    img.src = srcs[i]; if (source) source.srcset = wides[i];
+    open.dataset.full = w ? wides[i] : srcs[i];
+    var so = w && wsolids.length ? wsolids[i] : solids[i];
+    if (so) open.dataset.solid = so;
+    if (path && paths[i]) path.textContent = paths[i];
+    if (full && raws[i]) full.href = w && wraws.length ? wraws[i] : raws[i];
+    if (solid && so) solid.href = so;
+    btns.forEach(function (b) {
+      var k = +b.dataset.sw, on = b.hasAttribute("data-v") ? st[k] === +b.dataset.v : st[k] === 1;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+  btns.forEach(function (b) {
     b.addEventListener("click", function () {
-      var i = +b.dataset.view;
-      img.src = srcs[i]; open.dataset.full = srcs[i];
-      if (path) path.textContent = paths[i];
-      if (full) full.href = raws[i];
-      fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      var k = +b.dataset.sw;
+      st[k] = b.hasAttribute("data-v") ? +b.dataset.v : 1 - st[k];
+      show();
     });
   });
+  if (WIDE.addEventListener) WIDE.addEventListener("change", show);
+  show();
 });
 (function () {
   // Contents bar: collapsed list of sections; names the section in view.
@@ -1495,6 +1567,7 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") setOpen(false); });
   document.addEventListener("click", function (ev) { if (!bar.contains(ev.target)) setOpen(false); });
   var secs = [].slice.call(document.querySelectorAll("main.overview > section"));
+  if (!secs.length) return;  // topic page: the bar already names the page
   function spy() {
     var y = bar.getBoundingClientRect().bottom + 48, id = "";
     secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= y) id = sec.id; });
@@ -1511,13 +1584,145 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   window.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; spy(); }); }, { passive: true });
   spy();
 })();
+// ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
+// The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
+// green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// The page's web fonts (latin subset) as @font-face rules with the font files inlined, so saved images
+// render in Inter instead of the device's fallback font. Loaded once, on the first download.
+window.dlFonts = function () {
+  if (window.dlFonts.p) return window.dlFonts.p;
+  var link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  var asData = function (u) {
+    return fetch(u).then(function (r) { return r.blob(); }).then(function (b) {
+      return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok(fr.result); }; fr.readAsDataURL(b); });
+    });
+  };
+  window.dlFonts.p = !link ? Promise.resolve("") : fetch(link.href).then(function (r) { return r.text(); }).then(function (css) {
+    var blocks = css.split("/* ").filter(function (b) { return b.indexOf("latin */") === 0; }).map(function (b) { return b.slice(9); });
+    var urls = {}; blocks.forEach(function (b) { (b.match(/url\((https:[^)]+)\)/g) || []).forEach(function (m) { urls[m.slice(4, -1)] = 1; }); });
+    return Promise.all(Object.keys(urls).map(function (u) { return asData(u).then(function (d) { urls[u] = d; }); })).then(function () {
+      return blocks.join(" ").replace(/url\((https:[^)]+)\)/g, function (m, u) { return "url(" + urls[u] + ")"; });
+    });
+  }).catch(function () { return ""; });
+  return window.dlFonts.p;
+};
+// Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
+window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
+(function () {
+  var roots = document.querySelectorAll("[data-dl]");
+  if (!roots.length) return;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null;
+  var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
+  function load() {
+    if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
+    return lib;
+  }
+  function glow(x, w, h) {  // CSS radial-gradient(120% 80% at 10% 0%, ...) of the page
+    x.fillStyle = "#0b231c"; x.fillRect(0, 0, w, h); x.save(); x.translate(0.1 * w, 0); x.scale(1.2 * w, 0.8 * h);
+    var g = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+    [[0, "#1f4d3e"], [0.38, "#12342a"], [0.62, "#0e2a22"], [1, "#0b231c"]].forEach(function (s) { g.addColorStop(s[0], s[1]); });
+    x.fillStyle = g; x.fillRect(-1, -1, 2, 2); x.restore();
+  }
+  function txt(sel) { var n = sel && document.querySelector(sel); return n ? n.textContent.trim() : ""; }
+  function save(cv, name) {
+    cv.toBlob(function (b) {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name + ".png";
+      document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    }, "image/png");
+  }
+  function generic(root, fmt) {
+    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
+    var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
+      filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var PAD = 24, HEAD = (title ? 36 : 0) + (sub ? 22 : 0) + (title || sub ? 8 : 0);
+    function srcWrap(width) {  // the footer's source line, wrapped to the chart's width
+      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", out = [];
+      if (!src) return out;
+      var m = document.createElement("canvas").getContext("2d"); m.font = "400 12.5px " + FONT; var cur = "";
+      src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > width && cur) { out.push(cur); cur = wd; } else cur = t; });
+      out.push(cur); return out;
+    }
+    var cover = document.createElement("div"); cover.className = "dl-cover"; cover.textContent = "Preparing image…";
+    return load().then(function (h2i) {
+      // Square: lay the chart out at a fixed width first (the charts redraw on resize), so it fills the square
+      // whatever the screen size. The card's own background and border would frame the chart: make them
+      // transparent while capturing. A cover hides the brief change.
+      var go = function () {
+        var css = root.getAttribute("style") || "";
+        document.body.appendChild(cover);
+        root.classList.add("dl-capturing");
+        // left-out parts are hidden on the page too, so the image is sized without them
+        var gone = Array.prototype.slice.call(root.querySelectorAll(skip));
+        gone.forEach(function (n) { n.classList.add("dl-hidden"); });
+        var un = function (v) { root.classList.remove("dl-capturing", "dl-sq"); root.setAttribute("style", css); cover.remove();
+          gone.forEach(function (n) { n.classList.remove("dl-hidden"); });
+          window.dispatchEvent(new Event("resize")); return v; };
+        var ready = wait(60);
+        if (fmt === "square") {  // data-dl-square-width: another layout width; class dl-sq lets CSS change the layout
+          var swn = +(d.dlSquareWidth || 560), sw = swn + "px"; root.classList.add("dl-sq");
+          root.style.width = sw; root.style.maxWidth = "none"; root.style.minWidth = sw; root.style.boxSizing = "content-box";
+          window.dispatchEvent(new Event("resize"));
+          // second pass: charts that read --dl-extra grow by the height left over in the square
+          ready = wait(450).then(function () {
+            var side = root.offsetWidth + 2 * PAD, spare = side - PAD - HEAD - (52 + srcWrap(root.offsetWidth).length * 16) - root.offsetHeight - PAD / 2;
+            if (spare > 24) { root.style.setProperty("--dl-extra", Math.round(spare) + "px"); window.dispatchEvent(new Event("resize")); return wait(450); }
+          });
+        }
+        return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
+      };
+      return window.dlFonts().then(function (css) { if (css) opt.fontEmbedCSS = css; else opt.skipFonts = true; return go(); });
+    }).then(function (shot) {
+      var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 52 + srcLines.length * 16;
+      var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
+      if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
+      var cv = document.createElement("canvas"), x = cv.getContext("2d");
+      cv.width = Math.round(w * S); cv.height = Math.round(h * S); x.scale(S, S); glow(x, w, h);
+      var tx = fmt === "square" ? ox : pad, ty = (fmt === "square" ? oy - head : pad);
+      x.textBaseline = "alphabetic";
+      if (title) { x.fillStyle = "#e9efe9"; x.font = "700 27px " + FONT; x.fillText(title, tx, ty + 25); ty += 36; }
+      if (sub) { x.fillStyle = "#a7bdb2"; x.font = "400 15px " + FONT; x.fillText(sub, tx, ty + 16); }
+      x.drawImage(shot, ox, oy, cw, chh);
+      var fy = (fmt === "square" ? oy + chh + foot : h);
+      x.font = "400 12.5px " + FONT; x.fillStyle = "#7e978b";
+      srcLines.forEach(function (l, i) { x.fillText(l, tx, fy - 50 - (srcLines.length - 1 - i) * 16); });
+      x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 40); x.lineTo(tx + cw, fy - 40); x.stroke();
+      x.font = "600 15px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 15);
+      var nw = x.measureText("Siebe Rozendal").width; x.font = "500 15px " + FONT; x.fillStyle = "#9fd8b5";
+      x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 15);
+      save(cv, d.dl + (fmt === "square" ? "-square" : ""));
+    });
+  }
+  roots.forEach(function (root) {
+    var box = document.createElement("div"); box.className = "dl";
+    box.innerHTML = '<button type="button" class="dl-btn" aria-expanded="false" aria-haspopup="true">Download</button>' +
+      '<div class="dl-menu" role="menu" hidden><button type="button" role="menuitem" data-fmt="square">Square image</button>' +
+      '<button type="button" role="menuitem" data-fmt="screen">As on screen</button></div>';
+    root.appendChild(box);
+    var btn = box.querySelector(".dl-btn"), menu = box.querySelector(".dl-menu");
+    function open(o) { menu.hidden = !o; btn.setAttribute("aria-expanded", o ? "true" : "false"); }
+    btn.addEventListener("click", function (ev) { ev.stopPropagation(); open(menu.hidden); });
+    document.addEventListener("click", function (ev) { if (!box.contains(ev.target)) open(false); });
+    menu.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        open(false); var fmt = b.dataset.fmt, c = root.dataset.dlCustom;
+        btn.disabled = true; btn.textContent = "Preparing…";
+        var done = function () { btn.disabled = false; btn.textContent = "Download"; };
+        Promise.resolve(c && window.DL_CUSTOM && window.DL_CUSTOM[c] ? window.DL_CUSTOM[c](fmt) : generic(root, fmt))
+          .then(done, function (e) { done(); alert("Sorry, the image could not be made in this browser."); console.error(e); });
+      });
+    });
+  });
+})();
 (function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;
-  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title");
+  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title"), sol = dlg.querySelector(".lb-solid");
   document.querySelectorAll(".chart-img").forEach(function (b) {
     b.addEventListener("click", function () {
       img.src = b.dataset.full; img.alt = b.dataset.title; title.textContent = b.dataset.title;
+      sol.hidden = !b.dataset.solid; if (b.dataset.solid) sol.href = b.dataset.solid;
       dlg.showModal();
     });
   });

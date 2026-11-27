@@ -3,20 +3,31 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>Research vs disease burden, 120 diseases · PAIS Data Catalog</title>
+<title>Research vs disease burden, 120 diseases · Data &amp; Graphs · How To Solve A Disease?</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Data &amp; Graphs">
+<meta property="og:title" content="Research vs disease burden, 120 diseases · Data &amp; Graphs">
+<meta property="og:description" content="by Siebe Rozendal">
+<meta property="og:image" content="https://ebise-wq.github.io/pais-data/preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Scatter plot of papers per year against disease burden for 120 diseases, with ME/CFS and long COVID marked.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
 /* Layout: one reading column. Header, topic chips, then one section per analysis:
    key finding, chart grid, then the data files in a collapsed block. Colours match the charts themselves. */
 :root {
-  --bg: #141a24; --surface: #1a2230; --raise: #212a3a; --line: #2a3446;
-  --ink: #eef1f6; --muted: #a3acba; --faint: #6f7a8c;
-  --ocean: #7fb3d5; --sunset: #f4a582;
-  --f-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  /* Forest glass (v21): deep green with soft light from the top left; cards and charts are see-through.
+     --ocean and --sunset keep their names but are now mint and peach. */
+  --bg: #0e2a22; --surface: rgba(255, 255, 255, 0.045); --raise: rgba(255, 255, 255, 0.09); --line: rgba(255, 255, 255, 0.11);
+  --ink: #e9efe9; --muted: #a7bdb2; --faint: #7e978b;
+  --ocean: #9fd8b5; --sunset: #f2b880;
+  --f-display: "Inter Tight", "Inter", system-ui, sans-serif;
   --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
@@ -24,7 +35,8 @@
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.55 var(--f-body);
+html { background: #0b231c; }
+body { margin: 0; background: radial-gradient(120% 80% at 10% 0%, #1f4d3e 0%, #12342a 38%, #0e2a22 62%, #0b231c 100%) fixed; color: var(--ink); font: 400 17px/1.55 var(--f-body);
   -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
   z-index: 10; background: var(--bg); }
@@ -35,10 +47,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 .top { padding-block: 2.75rem 0; }
-.top h1 { font: 600 clamp(2.1rem, 6vw, 3.1rem)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.top h1 { font: 700 clamp(3rem, 14vw, 5.2rem)/1 var(--f-display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
+.top .kicker { margin: 0.5rem 0 0; font: 600 clamp(1.3rem, 5vw, 1.7rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: -0.005em; }
+.top .kicker span, .top-sm .kicker-sm span { color: var(--sunset); }
+.top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
 .byline .upd { display: block; margin-top: 0.15rem; color: var(--faint); font-size: 0.88rem; }
@@ -48,6 +63,38 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px);
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .toc .wrap { position: relative; }
+.toc-static { position: relative; top: auto; margin-top: 0.6rem; }
+/* Topic pages: one reading column, one chart at a time (also on desktop), at the user's request. */
+.topic .wrap { max-width: 52rem; }
+.topic .charts, .topic .bvr-grid, .topic .fnd-grid2, .topic .pme-panels { grid-template-columns: minmax(0, 1fr) !important; }
+/* Portrait charts without a landscape copy: no taller than the screen on desktop. */
+@media (min-width: 800px) { .topic .chart:not([data-wide]) .chart-img img { width: auto; max-width: 100%; max-height: 82vh; margin: 0 auto; } }
+.topic .gme .dists, .topic .gme .eulers { display: flex !important; flex-direction: column; }
+.overview .dl { display: none; }
+.dl { position: relative; display: flex; justify-content: flex-end; margin: 0.5rem 0 0; }
+.dl-btn { font: 500 0.88rem var(--f-body); color: var(--ocean); background: none; border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; }
+.dl-btn::before { content: "↓ "; }
+.dl-btn[aria-expanded="true"] { border-color: var(--ocean); }
+.dl-menu { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 30; display: grid; min-width: 11rem;
+  background: #10302a; border: 1px solid var(--line); border-radius: 10px; padding: 4px; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+.dl-menu[hidden] { display: none; }
+.dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
+  color: var(--ink); font: 500 1rem var(--f-body); }
+.dl-hidden { display: none !important; }
+/* Downloads: titles, labels and the lines under them larger than on the page (readable for older eyes) */
+.dl-capturing .fnd-bars { --lab: 9.5rem !important; }
+.dl-capturing .fnd-lab { font-size: 1.05rem !important; }
+.dl-capturing .fnd-v { font-size: 1rem !important; }
+.dl-capturing h3 { font-size: 1.65rem !important; line-height: 1.2 !important; }
+.dl-capturing .bvr-sub, .dl-capturing .py-sub, .dl-capturing .fnd-sub, .dl-capturing .pme-lede { font-size: 1.05rem !important; }
+.dl-capturing .bvr-legend, .dl-capturing .fnd-legend, .dl-capturing .plabel { font-size: 1rem !important; }
+.topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
+.dl-capturing { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+  backdrop-filter: none !important; }
+.dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
+  padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
+.dl-menu button:hover { background: var(--raise); }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -57,7 +104,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); transition: transform 0.15s; }
 .toc-btn[aria-expanded="true"] .chev { transform: rotate(225deg); margin-bottom: -0.1rem; }
 .toc-drop { position: absolute; left: 0; right: 0; top: 100%; margin-top: 1px; padding: 0.2rem max(16px, env(safe-area-inset-left, 0px)) 0.5rem;
-  background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  background: #10302a; border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
   max-height: calc(100vh - 60px); overflow-y: auto; }
 .toc-list { list-style: none; margin: 0; padding: 0; }
 .toc-list a { display: block; padding: 0.5rem 0; color: var(--ink); font: 400 0.95rem/1.35 var(--f-body); }
@@ -108,7 +155,7 @@ section:first-child .sec-head { border-top: 0; padding-top: 0; }
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
 .chart { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
   display: flex; flex-direction: column; min-width: 0; }
-.chart-img { display: block; width: 100%; padding: 0; border: 0; background: var(--bg); cursor: zoom-in; }
+.chart-img { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
 .chart-img img { display: block; width: 100%; height: auto; max-width: 100%; }
 .chart figcaption { padding: 0.9rem 1rem 1rem; display: grid; gap: 0.35rem; border-top: 1px solid var(--line); flex: 1; align-content: start; }
 .chart h3 { margin: 0; font: 600 1.05rem/1.3 var(--f-body); }
@@ -151,8 +198,16 @@ a.fname:hover { color: var(--sunset); }
 .toggle button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0;
   border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
 .toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
-.chart[data-views] { background: var(--bg); }
-.chart[data-views] figcaption { background: var(--surface); }
+.chart[data-views] { background: var(--surface); }
+.switches { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 1rem 0; align-items: center; }
+.switches .toggle { margin: 0; }
+.pill { display: inline-flex; align-items: center; gap: 0.45rem; font: 500 0.92rem var(--f-body); color: var(--muted);
+  background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.4rem 0.85rem; cursor: pointer; }
+.pill i { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1.5px solid var(--sunset); }
+.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--sunset); background: rgba(242, 184, 128, 0.14); }
+.pill[aria-pressed="true"] i { background: var(--sunset); }
+dialog.lb .lb-solid { margin-left: auto; font-size: 0.92rem; white-space: nowrap; }
+.chart[data-views] figcaption { background: transparent; }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
 .older[open] summary { margin-bottom: 1rem; }
@@ -163,26 +218,29 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
-footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
-footer .licence p + p { margin-top: 0.6rem; }
-footer .licence b { color: var(--ink); font-weight: 600; }
-.credit-part { white-space: nowrap; }
-a.credit-lic { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px; }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
-dialog.lb::backdrop { background: rgba(8, 11, 17, 0.88); }
-dialog.lb img { display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
+dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
+dialog.lb img { background: var(--bg); display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
 dialog.lb .lb-bar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.5rem 0.1rem; color: var(--ink); }
 dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); background: var(--raise); border: 1px solid var(--line);
   border-radius: 8px; padding: 0.35rem 0.8rem; cursor: pointer; }
 </style>
 </head>
 <body>
+<div class="topic">
 <div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
-  <p class="site"><span>PAIS</span> Data Catalog</p>
+  <p class="site">Data &amp; Graphs <span class="kicker-sm">How To Solve A Disease<span>?</span></span></p>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="burden-120.html" aria-current="page">Research vs disease burden</a><a href="trials.html">Long COVID and ME/CFS trials</a><a href="sex.html">Research by which sex a disease mostly affects</a><a href="funding.html">Public biomedical R&amp;D funding and output</a><a href="pais-burden.html">PAIS burden and ME</a><a href="global-burden.html">Global ME/CFS burden</a><a href="sources.html">Papers and trials per year</a></div></nav>
+<nav class="toc toc-static" id="toc" aria-label="Contents">
+  <div class="wrap">
+    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
+      <span class="lab">Contents</span><span class="cur">Research vs disease burden</span><span class="chev" aria-hidden="true"></span>
+    </button>
+    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list"><li><a href="burden-120.html" data-toc="burden-120" aria-current="true">Research vs disease burden <span class="tsub">120 diseases</span></a></li><li><a href="trials.html" data-toc="trials">Long COVID and ME/CFS trials</a></li><li><a href="sex.html" data-toc="sex">Research by which sex a disease mostly affects</a></li><li><a href="funding.html" data-toc="funding">Public biomedical R&amp;D funding and output <span class="tsub">2024</span></a></li><li><a href="pais-burden.html" data-toc="pais-burden">PAIS burden and ME</a></li><li><a href="global-burden.html" data-toc="global-burden">Global ME/CFS burden</a></li><li><a href="sources.html" data-toc="sources">Papers and trials per year <span class="tsub">131 diseases</span></a></li></ol></div>
+  </div>
+</nav>
 <main class="wrap">
 
   <section id="burden-120">
@@ -197,32 +255,26 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
      more:end, and between page-only:start and page-only:end, are shown on the topic page only. Colours and fonts come from the page's tokens. -->
 <style>
 .bvr { display: grid; gap: 1.25rem; min-width: 0; font-family: var(--f-body); }
-.bvr-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0.75rem; }
-.bvr-tiles .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 0.8rem; }
-.bvr-tiles .k { font-size: 0.9rem; color: var(--muted); }
-.bvr-tiles .v { font: 600 2.7rem/1.05 var(--f-display); margin: 0.25rem 0 0.1rem; letter-spacing: -0.01em; }
-.bvr-tiles .v span { display: block; font: 500 1rem var(--f-body); color: var(--muted); margin-top: 0.15rem; }
-.bvr-tiles .d { font-size: 0.92rem; color: var(--ink); }
-.bvr-tiles .r { font-size: 0.85rem; color: var(--faint); margin-top: 0.2rem; font-variant-numeric: tabular-nums; }
 .bvr-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); align-items: start; }
 .bvr-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 0.75rem 0.75rem; position: relative; min-width: 0; }
 .bvr-card h3 { font: 600 1.15rem/1.3 var(--f-display); margin: 0 0.35rem 0.15rem; }
 .bvr-sub { font-size: 0.92rem; color: var(--muted); margin: 0 0.35rem 0.6rem; }
 .bvr-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; margin: 0 0.35rem 0.6rem; background: var(--bg); }
 .bvr-seg button { font: 500 0.88rem var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 0.25rem 0.85rem; cursor: pointer; }
+.bvr-zoom[hidden] { display: none; }
 .bvr-seg button.on { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 .bvr-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; margin: 0 0.35rem 0.4rem; font-size: 0.88rem; color: var(--muted); }
 .bvr-legend button { all: unset; cursor: pointer; display: inline-flex; align-items: center; padding: 0.15rem 0.1rem; border-radius: 6px; color: var(--muted); font-size: 0.88rem; -webkit-tap-highlight-color: transparent; }
 .bvr-legend button.off { opacity: 0.38; text-decoration: line-through; }
 .bvr-legend .hint { color: var(--faint); font-size: 0.82rem; padding: 0.15rem 0; }
 .bvr-legend i { flex: none; display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
-.bvr-legend .ln { width: 20px; height: 0; border-top: 2px solid #dfe5ee; border-radius: 0; vertical-align: 4px; }
+.bvr-legend .ln { width: 20px; height: 0; border-top: 2px solid #dfe9e3; border-radius: 0; vertical-align: 4px; }
 .bvr button:focus-visible, .bvr summary:focus-visible { outline: 2px solid var(--sunset); outline-offset: 2px; }
 .bvr-plot { position: relative; width: 100%; }
 .bvr svg { display: block; max-width: 100%; overflow: visible; }
 .bvr svg text { font-family: var(--f-body); fill: var(--muted); font-variant-numeric: tabular-nums; }
 .bvr svg text.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
-.bvr-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+.bvr-tip { position: absolute; pointer-events: none; background: #0c2620; border: 1px solid var(--line); border-radius: 10px;
   padding: 0.55rem 0.7rem; font-size: 0.88rem; line-height: 1.4; color: var(--ink); max-width: 260px; z-index: 5;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; }
 .bvr-tip b { display: block; font-size: 0.95rem; margin-bottom: 0.2rem; }
@@ -244,32 +296,31 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 .bvr-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 </style>
 <div class="bvr">
-  <!-- page-only:start --><div class="bvr-tiles" id="bvr-tiles"></div><!-- page-only:end -->
   <div class="bvr-grid">
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="papers-vs-burden" data-dl-custom="bvr-sc-papers">
       <h3>Papers per year vs burden</h3>
       <p class="bvr-sub">2021–2025 averages. Burden in DALYs. <span class="bvr-scl">Log scales.</span> Tap a dot for details.</p>
-      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div>
+      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg1"></div>
       <div class="bvr-plot" id="bvr-sc-papers"></div>
     </div>
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="trials-vs-burden" data-dl-custom="bvr-sc-trials">
       <h3>Trials per year vs burden</h3>
       <p class="bvr-sub">Interventional trials on ClinicalTrials.gov. <span class="bvr-scl">Log scales.</span></p>
-      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div>
+      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg2"></div>
       <div class="bvr-plot" id="bvr-sc-trials"></div>
     </div>
   </div>
   <!-- more:start -->
   <div class="bvr-grid">
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v29">
       <h3>Largest papers shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg3"></div>
       <div class="bvr-plot" id="bvr-rk-papers"></div>
     </div>
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v29">
       <h3>Largest trials shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg4"></div>
@@ -294,19 +345,19 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <li>Comparator burden is from GBD 2023 (95% interval). ME/CFS and long COVID burden is from the ME/CFS Burden model v11.2, CCC criteria, year 2026 (90% range). Groups are not used to fit the trend.</li>
       <li>Papers titled only “long COVID” are not in the ME/CFS count, so the ME/CFS shortfall is slightly overstated.</li>
       <li>Shortfall ranges combine burden uncertainty (lognormal fitted to each burden interval) and trend-fit uncertainty (4,000 bootstrap resamples of the 120 comparators). Random seed 2558632273.</li>
-      <li>The linear view shows the same trend (fitted on log values), so it curves. On linear axes a few diseases with very large burden stretch the chart, and most points crowd near zero.</li>
+      <li>The linear view shows the same trend (fitted on log values), so it curves. On linear axes a few diseases with very large burden stretch the chart, and most points crowd near zero. The zoom buttons (4×, 8×) show the bottom left of the linear view; dots outside the frame are left out.</li>
       <li>Trends are refitted here from the rounded counts in the CSV. They match the file's trend columns exactly for papers and within 2% for trials.</li>
       <li>ClinicalTrials.gov only.</li>
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v18</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v29</span></div>
 </div>
 <script>
 (function(){
 const D={"ncomp":120,"fits":{"papers":{"a":0.0543,"b":0.4549,"r2":0.391},"trials":{"a":-2.4742,"b":0.603,"r2":0.384}},"sens":[["All 120 diseases",120,10.3,2,7.7,14],["Non-communicable only",61,10.6,1,9.3,2],["Non-communicable + cancer",81,13.7,1,12.4,2],["Common worldwide only",90,13.6,1,11.4,1],["Original 13",13,20.3,1,13.4,1]],"rows":[{"label":"Neonatal encephalopathy","short":"Neonatal encephalopathy","kind":"c","cat":"Maternal/neonatal","o13":false,"gh":true,"d":54951646.0,"lo":46698238.0,"hi":65202407.0,"papers":{"n":304.6,"t":3758.4,"sf":12.339,"p5":9.34,"p95":16.075,"rank":1},"trials":{"n":12.0,"t":155.9,"sf":12.993,"p5":9.331,"p95":17.888,"rank":9}},{"label":"Rheumatic heart disease","short":"Rheumatic heart disease","kind":"c","cat":"NCD","o13":false,"gh":true,"d":14474876.0,"lo":10128790.0,"hi":19881741.0,"papers":{"n":204.2,"t":2048.6,"sf":10.032,"p5":8.038,"p95":12.518,"rank":3},"trials":{"n":5.0,"t":69.8,"sf":13.95,"p5":10.574,"p95":18.429,"rank":7}},{"label":"Neonatal sepsis","short":"Neonatal sepsis","kind":"c","cat":"Maternal/neonatal","o13":false,"gh":true,"d":22682248.0,"lo":17323839.0,"hi":31511359.0,"papers":{"n":266.2,"t":2513.0,"sf":9.44,"p5":7.465,"p95":11.967,"rank":4},"trials":{"n":5.0,"t":91.4,"sf":18.289,"p5":13.741,"p95":24.522,"rank":5}},{"label":"Ascariasis","short":"Ascariasis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":803122.0,"lo":588083.0,"hi":1140944.0,"papers":{"n":63.0,"t":549.8,"sf":8.727,"p5":6.788,"p95":10.957,"rank":5},"trials":{"n":0.8,"t":12.2,"sf":15.248,"p5":10.72,"p95":21.47,"rank":6}},{"label":"Scabies","short":"Scabies","kind":"c","cat":"NTD","o13":false,"gh":true,"d":3198462.0,"lo":1835682.0,"hi":5192865.0,"papers":{"n":126.8,"t":1030.9,"sf":8.13,"p5":6.251,"p95":10.437,"rank":6},"trials":{"n":3.4,"t":28.1,"sf":8.255,"p5":5.876,"p95":11.57,"rank":13}},{"label":"Lymphatic filariasis","short":"Lymphatic filariasis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":1494521.0,"lo":834479.0,"hi":2390793.0,"papers":{"n":101.2,"t":729.3,"sf":7.207,"p5":5.478,"p95":9.304,"rank":7},"trials":{"n":0.6,"t":17.7,"sf":29.565,"p5":20.231,"p95":42.732,"rank":1}},{"label":"Onchocerciasis","short":"Onchocerciasis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":871957.0,"lo":496134.0,"hi":1291947.0,"papers":{"n":80.4,"t":570.8,"sf":7.099,"p5":5.334,"p95":9.151,"rank":8},"trials":{"n":2.8,"t":12.8,"sf":4.578,"p5":3.111,"p95":6.654,"rank":18}},{"label":"Typhoid & paratyphoid","short":"Typhoid & paratyphoid","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":6218662.0,"lo":3271859.0,"hi":10051253.0,"papers":{"n":197.2,"t":1395.0,"sf":7.074,"p5":5.353,"p95":9.219,"rank":9},"trials":{"n":3.2,"t":41.9,"sf":13.096,"p5":9.241,"p95":18.415,"rank":8}},{"label":"Pertussis","short":"Pertussis","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":10130882.0,"lo":5853414.0,"hi":16503395.0,"papers":{"n":256.8,"t":1741.7,"sf":6.782,"p5":5.193,"p95":8.782,"rank":10},"trials":{"n":6.6,"t":56.2,"sf":8.522,"p5":6.11,"p95":12.012,"rank":12}},{"label":"Measles","short":"Measles","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":12478559.0,"lo":5084821.0,"hi":22175728.0,"papers":{"n":363.4,"t":1914.9,"sf":5.269,"p5":3.772,"p95":7.403,"rank":11},"trials":{"n":2.6,"t":63.8,"sf":24.531,"p5":16.061,"p95":37.655,"rank":3}},{"label":"Peptic ulcer disease","short":"Peptic ulcer disease","kind":"c","cat":"NCD","o13":false,"gh":false,"d":5982149.0,"lo":4745368.0,"hi":7859336.0,"papers":{"n":287.8,"t":1370.6,"sf":4.762,"p5":3.953,"p95":5.71,"rank":12},"trials":{"n":9.0,"t":40.9,"sf":4.549,"p5":3.584,"p95":5.774,"rank":19}},{"label":"Hookworm","short":"Hookworm","kind":"c","cat":"NTD","o13":false,"gh":true,"d":455013.0,"lo":274624.0,"hi":746776.0,"papers":{"n":99.2,"t":424.6,"sf":4.28,"p5":3.119,"p95":5.772,"rank":13},"trials":{"n":2.2,"t":8.7,"sf":3.936,"p5":2.528,"p95":5.959,"rank":21}},{"label":"Anxiety disorders","short":"Anxiety disorders","kind":"c","cat":"NCD","o13":false,"gh":false,"d":55368911.0,"lo":36379869.0,"hi":81274021.0,"papers":{"n":889.4,"t":3771.3,"sf":4.24,"p5":3.133,"p95":5.766,"rank":14},"trials":{"n":121.2,"t":156.6,"sf":1.292,"p5":0.884,"p95":1.888,"rank":45}},{"label":"Trachoma","short":"Trachoma","kind":"c","cat":"NTD","o13":false,"gh":true,"d":145473.0,"lo":90973.0,"hi":224007.0,"papers":{"n":62.4,"t":252.8,"sf":4.051,"p5":2.806,"p95":5.712,"rank":15},"trials":{"n":1.2,"t":4.4,"sf":3.628,"p5":2.196,"p95":5.999,"rank":24}},{"label":"Cysticercosis","short":"Cysticercosis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":1182776.0,"lo":770126.0,"hi":1710672.0,"papers":{"n":165.4,"t":655.7,"sf":3.964,"p5":3.098,"p95":4.947,"rank":16},"trials":{"n":0.6,"t":15.4,"sf":25.676,"p5":18.292,"p95":35.706,"rank":2}},{"label":"Neural tube defects","short":"Neural tube defects","kind":"c","cat":"NCD","o13":false,"gh":false,"d":4016901.0,"lo":2504134.0,"hi":6473828.0,"papers":{"n":302.0,"t":1143.5,"sf":3.786,"p5":2.974,"p95":4.773,"rank":17},"trials":{"n":8.2,"t":32.2,"sf":3.927,"p5":2.871,"p95":5.38,"rank":22}},{"label":"Genital herpes","short":"Genital herpes","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":216872.0,"lo":94226.0,"hi":470082.0,"papers":{"n":83.4,"t":303.1,"sf":3.634,"p5":2.362,"p95":5.407,"rank":18},"trials":{"n":1.6,"t":5.5,"sf":3.462,"p5":1.908,"p95":6.173,"rank":25}},{"label":"Urticaria","short":"Urticaria","kind":"c","cat":"NCD","o13":false,"gh":false,"d":5031381.0,"lo":3378731.0,"hi":7181448.0,"papers":{"n":373.8,"t":1266.8,"sf":3.389,"p5":2.741,"p95":4.171,"rank":19},"trials":{"n":17.2,"t":36.9,"sf":2.144,"p5":1.613,"p95":2.843,"rank":36}},{"label":"Otitis media","short":"Otitis media","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":2504500.0,"lo":1526193.0,"hi":3989873.0,"papers":{"n":297.6,"t":922.4,"sf":3.099,"p5":2.397,"p95":3.915,"rank":20},"trials":{"n":8.2,"t":24.2,"sf":2.953,"p5":2.132,"p95":4.08,"rank":30}},{"label":"GERD","short":"GERD","kind":"c","cat":"NCD","o13":false,"gh":false,"d":6434959.0,"lo":3286970.0,"hi":11725847.0,"papers":{"n":469.8,"t":1416.8,"sf":3.016,"p5":2.235,"p95":4.015,"rank":21},"trials":{"n":37.8,"t":42.8,"sf":1.132,"p5":0.764,"p95":1.653,"rank":49}},{"label":"Alcohol use disorders","short":"Alcohol use disorders","kind":"c","cat":"NCD","o13":false,"gh":false,"d":18035984.0,"lo":14398062.0,"hi":23007088.0,"papers":{"n":764.0,"t":2264.2,"sf":2.964,"p5":2.384,"p95":3.672,"rank":22},"trials":{"n":81.0,"t":79.6,"sf":0.983,"p5":0.755,"p95":1.274,"rank":55}},{"label":"Food-borne trematodiases","short":"Food-borne trematodiases","kind":"c","cat":"NTD","o13":false,"gh":true,"d":1036240.0,"lo":586871.0,"hi":1784140.0,"papers":{"n":212.6,"t":617.4,"sf":2.904,"p5":2.142,"p95":3.789,"rank":23},"trials":{"n":0.6,"t":14.2,"sf":23.707,"p5":15.886,"p95":34.89,"rank":4}},{"label":"Yellow fever","short":"Yellow fever","kind":"c","cat":"NTD","o13":false,"gh":true,"d":310080.0,"lo":108718.0,"hi":652981.0,"papers":{"n":130.2,"t":356.6,"sf":2.739,"p5":1.731,"p95":4.103,"rank":24},"trials":{"n":4.0,"t":6.9,"sf":1.718,"p5":0.933,"p95":3.037,"rank":40}},{"label":"Meningitis","short":"Meningitis","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":17483150.0,"lo":13691000.0,"hi":23168103.0,"papers":{"n":822.2,"t":2232.4,"sf":2.715,"p5":2.169,"p95":3.36,"rank":25},"trials":{"n":8.6,"t":78.2,"sf":9.089,"p5":6.97,"p95":11.836,"rank":10}},{"label":"Maternal hemorrhage","short":"Maternal hemorrhage","kind":"c","cat":"Maternal/neonatal","o13":false,"gh":true,"d":3183698.0,"lo":2214688.0,"hi":4250033.0,"papers":{"n":393.4,"t":1028.7,"sf":2.615,"p5":2.126,"p95":3.172,"rank":26},"trials":{"n":21.2,"t":28.0,"sf":1.32,"p5":0.993,"p95":1.724,"rank":44}},{"label":"Syphilis","short":"Syphilis","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":6832011.0,"lo":2612294.0,"hi":13091829.0,"papers":{"n":570.2,"t":1456.0,"sf":2.553,"p5":1.817,"p95":3.602,"rank":27},"trials":{"n":8.6,"t":44.4,"sf":5.157,"p5":3.295,"p95":8.116,"rank":16}},{"label":"Hearing loss","short":"Hearing loss","kind":"c","cat":"NCD","o13":false,"gh":false,"d":53097868.0,"lo":37542833.0,"hi":71604920.0,"papers":{"n":1610.0,"t":3700.2,"sf":2.298,"p5":1.736,"p95":3.056,"rank":28},"trials":{"n":78.8,"t":152.7,"sf":1.938,"p5":1.373,"p95":2.744,"rank":37}},{"label":"Migraine","short":"Migraine","kind":"c","cat":"NCD","o13":false,"gh":false,"d":40880964.0,"lo":27094258.0,"hi":56901336.0,"papers":{"n":1443.8,"t":3285.2,"sf":2.275,"p5":1.722,"p95":3.01,"rank":29},"trials":{"n":84.8,"t":130.4,"sf":1.538,"p5":1.093,"p95":2.211,"rank":41}},{"label":"Gallstones & biliary disease","short":"Gallstones & biliary disease","kind":"c","cat":"NCD","o13":false,"gh":false,"d":8162091.0,"lo":6268352.0,"hi":10584068.0,"papers":{"n":697.4,"t":1578.7,"sf":2.264,"p5":1.859,"p95":2.75,"rank":30},"trials":{"n":28.0,"t":49.4,"sf":1.763,"p5":1.386,"p95":2.254,"rank":39}},{"label":"Benign prostatic hyperplasia","short":"Benign prostatic hyperplasia","kind":"c","cat":"NCD","o13":false,"gh":false,"d":2371576.0,"lo":1516002.0,"hi":3612736.0,"papers":{"n":429.6,"t":899.8,"sf":2.094,"p5":1.638,"p95":2.61,"rank":31},"trials":{"n":32.4,"t":23.4,"sf":0.723,"p5":0.524,"p95":0.978,"rank":62}},{"label":"Opioid use disorders","short":"Opioid use disorders","kind":"c","cat":"NCD","o13":false,"gh":false,"d":12785780.0,"lo":10598987.0,"hi":14934404.0,"papers":{"n":1006.2,"t":1936.2,"sf":1.924,"p5":1.58,"p95":2.322,"rank":32},"trials":{"n":62.6,"t":64.7,"sf":1.034,"p5":0.819,"p95":1.304,"rank":54}},{"label":"Rabies","short":"Rabies","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":870910.0,"lo":348434.0,"hi":1588481.0,"papers":{"n":321.4,"t":570.5,"sf":1.775,"p5":1.239,"p95":2.47,"rank":33},"trials":{"n":4.4,"t":12.8,"sf":2.911,"p5":1.777,"p95":4.659,"rank":31}},{"label":"African trypanosomiasis","short":"African trypanosomiasis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":85101.0,"lo":40940.0,"hi":148923.0,"papers":{"n":124.6,"t":198.1,"sf":1.59,"p5":1.015,"p95":2.366,"rank":34},"trials":{"n":1.0,"t":3.2,"sf":3.151,"p5":1.72,"p95":5.674,"rank":28}},{"label":"Encephalitis","short":"Encephalitis","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":4279514.0,"lo":3135016.0,"hi":6410780.0,"papers":{"n":770.8,"t":1176.9,"sf":1.527,"p5":1.238,"p95":1.855,"rank":35},"trials":{"n":7.2,"t":33.5,"sf":4.646,"p5":3.523,"p95":6.095,"rank":17}},{"label":"Testicular cancer","short":"Testicular cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":587946.0,"lo":470192.0,"hi":730976.0,"papers":{"n":314.4,"t":477.1,"sf":1.518,"p5":1.187,"p95":1.892,"rank":36},"trials":{"n":9.2,"t":10.1,"sf":1.099,"p5":0.773,"p95":1.551,"rank":51}},{"label":"Lower respiratory infections","short":"Lower respiratory infections","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":98711140.0,"lo":87747293.0,"hi":112022593.0,"papers":{"n":3317.2,"t":4905.8,"sf":1.479,"p5":1.086,"p95":2.0,"rank":38},"trials":{"n":125.6,"t":222.0,"sf":1.767,"p5":1.217,"p95":2.536,"rank":38}},{"label":"Diarrheal diseases","short":"Diarrheal diseases","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":56473749.0,"lo":43816673.0,"hi":72726096.0,"papers":{"n":2563.8,"t":3805.4,"sf":1.484,"p5":1.118,"p95":1.953,"rank":37},"trials":{"n":50.8,"t":158.5,"sf":3.12,"p5":2.217,"p95":4.357,"rank":29}},{"label":"Schistosomiasis","short":"Schistosomiasis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":2071442.0,"lo":1281634.0,"hi":3411481.0,"papers":{"n":575.2,"t":846.1,"sf":1.471,"p5":1.137,"p95":1.88,"rank":39},"trials":{"n":3.4,"t":21.6,"sf":6.352,"p5":4.421,"p95":8.918,"rank":15}},{"label":"Gout","short":"Gout","kind":"c","cat":"NCD","o13":false,"gh":false,"d":1788635.0,"lo":1196512.0,"hi":2540479.0,"papers":{"n":549.0,"t":791.4,"sf":1.442,"p5":1.147,"p95":1.775,"rank":40},"trials":{"n":22.4,"t":19.8,"sf":0.883,"p5":0.64,"p95":1.208,"rank":57}},{"label":"COPD","short":"COPD","kind":"c","cat":"NCD","o13":false,"gh":false,"d":74835520.0,"lo":66134371.0,"hi":86801686.0,"papers":{"n":3154.8,"t":4325.2,"sf":1.371,"p5":1.025,"p95":1.819,"rank":41},"trials":{"n":179.0,"t":187.8,"sf":1.049,"p5":0.74,"p95":1.464,"rank":53}},{"label":"Down syndrome","short":"Down syndrome","kind":"c","cat":"NCD","o13":false,"gh":false,"d":2432961.0,"lo":1486238.0,"hi":3690187.0,"papers":{"n":666.8,"t":910.3,"sf":1.365,"p5":1.074,"p95":1.722,"rank":42},"trials":{"n":25.0,"t":23.8,"sf":0.952,"p5":0.685,"p95":1.304,"rank":56}},{"label":"Cataract","short":"Cataract","kind":"c","cat":"NCD","o13":false,"gh":false,"d":7119953.0,"lo":5246687.0,"hi":9667012.0,"papers":{"n":1108.4,"t":1483.5,"sf":1.338,"p5":1.095,"p95":1.625,"rank":43},"trials":{"n":67.2,"t":45.5,"sf":0.677,"p5":0.522,"p95":0.869,"rank":65}},{"label":"Preterm birth complications","short":"Preterm birth complications","kind":"c","cat":"Maternal/neonatal","o13":false,"gh":false,"d":70218511.0,"lo":60636451.0,"hi":81370220.0,"papers":{"n":3148.4,"t":4201.8,"sf":1.335,"p5":1.001,"p95":1.77,"rank":44},"trials":{"n":127.6,"t":180.8,"sf":1.417,"p5":1.001,"p95":1.98,"rank":42}},{"label":"Malaria","short":"Malaria","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":51578854.0,"lo":21356119.0,"hi":94376279.0,"papers":{"n":2766.4,"t":3651.6,"sf":1.32,"p5":0.912,"p95":1.967,"rank":45},"trials":{"n":45.0,"t":150.1,"sf":3.335,"p5":2.101,"p95":5.546,"rank":26}},{"label":"Bipolar disorder","short":"Bipolar disorder","kind":"c","cat":"NCD","o13":true,"gh":false,"d":7627278.0,"lo":4862681.0,"hi":10896651.0,"papers":{"n":1170.6,"t":1530.7,"sf":1.308,"p5":1.042,"p95":1.64,"rank":46},"trials":{"n":61.4,"t":47.4,"sf":0.772,"p5":0.583,"p95":1.022,"rank":59}},{"label":"Congenital heart disease","short":"Congenital heart disease","kind":"c","cat":"NCD","o13":false,"gh":false,"d":26502676.0,"lo":20600907.0,"hi":34324884.0,"papers":{"n":2146.6,"t":2697.4,"sf":1.257,"p5":0.989,"p95":1.596,"rank":47},"trials":{"n":37.2,"t":100.4,"sf":2.7,"p5":2.024,"p95":3.613,"rank":33}},{"label":"Hepatitis C","short":"Hepatitis C","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":11326662.0,"lo":9214539.0,"hi":13769784.0,"papers":{"n":1543.0,"t":1832.4,"sf":1.188,"p5":0.976,"p95":1.444,"rank":48},"trials":{"n":18.2,"t":60.2,"sf":3.306,"p5":2.589,"p95":4.192,"rank":27}},{"label":"Acne","short":"Acne","kind":"c","cat":"NCD","o13":false,"gh":false,"d":1171717.0,"lo":732418.0,"hi":1905536.0,"papers":{"n":553.2,"t":652.9,"sf":1.18,"p5":0.896,"p95":1.514,"rank":49},"trials":{"n":46.4,"t":15.3,"sf":0.33,"p5":0.226,"p95":0.472,"rank":92}},{"label":"Abdominal hernia","short":"Abdominal hernia","kind":"c","cat":"NCD","o13":false,"gh":false,"d":2401675.0,"lo":1847014.0,"hi":2961485.0,"papers":{"n":786.6,"t":904.9,"sf":1.15,"p5":0.953,"p95":1.374,"rank":50},"trials":{"n":37.6,"t":23.6,"sf":0.628,"p5":0.484,"p95":0.821,"rank":68}},{"label":"Appendicitis","short":"Appendicitis","kind":"c","cat":"NCD","o13":false,"gh":false,"d":1454967.0,"lo":1093178.0,"hi":1951152.0,"papers":{"n":658.6,"t":720.5,"sf":1.094,"p5":0.88,"p95":1.337,"rank":51},"trials":{"n":13.8,"t":17.5,"sf":1.265,"p5":0.941,"p95":1.694,"rank":46}},{"label":"Atopic dermatitis","short":"Atopic dermatitis","kind":"c","cat":"NCD","o13":false,"gh":false,"d":11063906.0,"lo":5533741.0,"hi":19516783.0,"papers":{"n":1696.8,"t":1812.9,"sf":1.068,"p5":0.791,"p95":1.434,"rank":52},"trials":{"n":94.8,"t":59.3,"sf":0.626,"p5":0.43,"p95":0.924,"rank":69}},{"label":"Sickle cell disease","short":"Sickle cell disease","kind":"c","cat":"NCD","o13":false,"gh":true,"d":4300997.0,"lo":2423404.0,"hi":8241512.0,"papers":{"n":1114.0,"t":1179.6,"sf":1.059,"p5":0.799,"p95":1.396,"rank":53},"trials":{"n":44.6,"t":33.6,"sf":0.752,"p5":0.518,"p95":1.087,"rank":60}},{"label":"Mesothelioma","short":"Mesothelioma","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":624396.0,"lo":552562.0,"hi":695276.0,"papers":{"n":493.8,"t":490.3,"sf":0.993,"p5":0.788,"p95":1.222,"rank":54},"trials":{"n":25.6,"t":10.5,"sf":0.409,"p5":0.296,"p95":0.571,"rank":85}},{"label":"Ischemic heart disease","short":"Ischemic heart disease","kind":"c","cat":"NCD","o13":false,"gh":false,"d":192410103.0,"lo":175556519.0,"hi":208817076.0,"papers":{"n":6940.4,"t":6646.0,"sf":0.958,"p5":0.673,"p95":1.358,"rank":55},"trials":{"n":298.2,"t":331.9,"sf":1.113,"p5":0.726,"p95":1.683,"rank":50}},{"label":"Thalassemia","short":"Thalassemia","kind":"c","cat":"NCD","o13":false,"gh":true,"d":1001789.0,"lo":668882.0,"hi":1458953.0,"papers":{"n":637.2,"t":608.0,"sf":0.954,"p5":0.74,"p95":1.205,"rank":56},"trials":{"n":18.8,"t":13.9,"sf":0.741,"p5":0.524,"p95":1.042,"rank":61}},{"label":"Peripheral arterial disease","short":"Peripheral arterial disease","kind":"c","cat":"NCD","o13":false,"gh":false,"d":1861821.0,"lo":1435532.0,"hi":2469351.0,"papers":{"n":856.8,"t":806.0,"sf":0.941,"p5":0.767,"p95":1.136,"rank":57},"trials":{"n":61.4,"t":20.3,"sf":0.33,"p5":0.248,"p95":0.434,"rank":92}},{"label":"Esophageal cancer","short":"Esophageal cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":14029973.0,"lo":12561341.0,"hi":15819354.0,"papers":{"n":2216.4,"t":2019.7,"sf":0.911,"p5":0.752,"p95":1.094,"rank":58},"trials":{"n":95.2,"t":68.4,"sf":0.719,"p5":0.573,"p95":0.903,"rank":63}},{"label":"Endocarditis","short":"Endocarditis","kind":"c","cat":"NCD","o13":false,"gh":false,"d":2336792.0,"lo":1955304.0,"hi":2872362.0,"papers":{"n":1007.4,"t":893.7,"sf":0.887,"p5":0.736,"p95":1.051,"rank":59},"trials":{"n":6.4,"t":23.2,"sf":3.629,"p5":2.844,"p95":4.651,"rank":23}},{"label":"Hepatitis B","short":"Hepatitis B","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":15618747.0,"lo":12334237.0,"hi":19108310.0,"papers":{"n":2392.6,"t":2120.7,"sf":0.886,"p5":0.719,"p95":1.084,"rank":60},"trials":{"n":53.4,"t":73.0,"sf":1.367,"p5":1.057,"p95":1.754,"rank":43}},{"label":"Uterine fibroids","short":"Uterine fibroids","kind":"c","cat":"NCD","o13":false,"gh":false,"d":224670.0,"lo":136520.0,"hi":370157.0,"papers":{"n":348.2,"t":308.0,"sf":0.885,"p5":0.61,"p95":1.223,"rank":61},"trials":{"n":15.0,"t":5.7,"sf":0.377,"p5":0.233,"p95":0.616,"rank":88}},{"label":"Dengue","short":"Dengue","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":3015760.0,"lo":1559247.0,"hi":5909208.0,"papers":{"n":1170.0,"t":1003.7,"sf":0.858,"p5":0.636,"p95":1.15,"rank":62},"trials":{"n":10.6,"t":27.1,"sf":2.556,"p5":1.695,"p95":3.762,"rank":34}},{"label":"Varicella & herpes zoster","short":"Varicella & herpes zoster","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":827469.0,"lo":708235.0,"hi":969013.0,"papers":{"n":671.4,"t":557.3,"sf":0.83,"p5":0.664,"p95":1.012,"rank":63},"trials":{"n":20.6,"t":12.4,"sf":0.603,"p5":0.445,"p95":0.822,"rank":70}},{"label":"Eating disorders","short":"Eating disorders","kind":"c","cat":"NCD","o13":false,"gh":false,"d":3827878.0,"lo":2227945.0,"hi":5691417.0,"papers":{"n":1368.0,"t":1118.7,"sf":0.818,"p5":0.64,"p95":1.027,"rank":64},"trials":{"n":55.4,"t":31.3,"sf":0.565,"p5":0.408,"p95":0.772,"rank":73}},{"label":"Pulmonary arterial hypertension","short":"Pulmonary arterial hypertension","kind":"c","cat":"NCD","o13":false,"gh":false,"d":700657.0,"lo":514404.0,"hi":998915.0,"papers":{"n":645.0,"t":516.7,"sf":0.801,"p5":0.62,"p95":1.011,"rank":65},"trials":{"n":21.6,"t":11.2,"sf":0.52,"p5":0.365,"p95":0.745,"rank":77}},{"label":"Kidney stones","short":"Kidney stones","kind":"c","cat":"NCD","o13":false,"gh":false,"d":989570.0,"lo":832592.0,"hi":1173230.0,"papers":{"n":793.0,"t":604.6,"sf":0.762,"p5":0.617,"p95":0.923,"rank":66},"trials":{"n":51.2,"t":13.8,"sf":0.27,"p5":0.203,"p95":0.362,"rank":100}},{"label":"Schizophrenia","short":"Schizophrenia","kind":"c","cat":"NCD","o13":true,"gh":false,"d":16952603.0,"lo":12417026.0,"hi":21371834.0,"papers":{"n":2919.2,"t":2201.3,"sf":0.754,"p5":0.607,"p95":0.937,"rank":67},"trials":{"n":119.8,"t":76.7,"sf":0.64,"p5":0.49,"p95":0.837,"rank":67}},{"label":"Alopecia areata","short":"Alopecia areata","kind":"c","cat":"NCD","o13":false,"gh":false,"d":115808.0,"lo":75580.0,"hi":160541.0,"papers":{"n":315.4,"t":227.9,"sf":0.722,"p5":0.498,"p95":1.018,"rank":68},"trials":{"n":16.4,"t":3.8,"sf":0.231,"p5":0.139,"p95":0.385,"rank":105}},{"label":"Cervical cancer","short":"Cervical cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":13261257.0,"lo":10118489.0,"hi":17360953.0,"papers":{"n":2739.0,"t":1968.6,"sf":0.719,"p5":0.585,"p95":0.888,"rank":69},"trials":{"n":126.0,"t":66.2,"sf":0.525,"p5":0.405,"p95":0.679,"rank":76}},{"label":"Asthma","short":"Asthma","kind":"c","cat":"NCD","o13":false,"gh":false,"d":25846781.0,"lo":19670237.0,"hi":33889675.0,"papers":{"n":3789.6,"t":2666.8,"sf":0.704,"p5":0.553,"p95":0.892,"rank":70},"trials":{"n":147.6,"t":98.9,"sf":0.67,"p5":0.504,"p95":0.895,"rank":66}},{"label":"Pancreatitis","short":"Pancreatitis","kind":"c","cat":"NCD","o13":false,"gh":false,"d":4201484.0,"lo":3562091.0,"hi":5089957.0,"papers":{"n":1670.4,"t":1167.1,"sf":0.699,"p5":0.587,"p95":0.825,"rank":71},"trials":{"n":28.6,"t":33.1,"sf":1.157,"p5":0.922,"p95":1.445,"rank":48}},{"label":"Pre-eclampsia & hypertensive disorders of pregnancy","short":"Pre-eclampsia & hypertensive disorders of pregnancy","kind":"c","cat":"Maternal/neonatal","o13":false,"gh":false,"d":3084662.0,"lo":2428597.0,"hi":3799209.0,"papers":{"n":1472.0,"t":1014.1,"sf":0.689,"p5":0.572,"p95":0.817,"rank":72},"trials":{"n":39.4,"t":27.5,"sf":0.697,"p5":0.545,"p95":0.885,"rank":64}},{"label":"Osteoarthritis","short":"Osteoarthritis","kind":"c","cat":"NCD","o13":false,"gh":false,"d":22357934.0,"lo":10657089.0,"hi":48153656.0,"papers":{"n":3725.8,"t":2496.6,"sf":0.67,"p5":0.473,"p95":0.966,"rank":73},"trials":{"n":292.4,"t":90.7,"sf":0.31,"p5":0.198,"p95":0.491,"rank":96}},{"label":"ADHD","short":"ADHD","kind":"c","cat":"NCD","o13":false,"gh":false,"d":3727550.0,"lo":2167331.0,"hi":5599160.0,"papers":{"n":1677.2,"t":1105.2,"sf":0.659,"p5":0.513,"p95":0.832,"rank":74},"trials":{"n":74.4,"t":30.8,"sf":0.414,"p5":0.302,"p95":0.569,"rank":84}},{"label":"Chagas disease","short":"Chagas disease","kind":"c","cat":"NTD","o13":false,"gh":true,"d":285361.0,"lo":247986.0,"hi":334720.0,"papers":{"n":527.4,"t":343.4,"sf":0.651,"p5":0.488,"p95":0.841,"rank":75},"trials":{"n":1.6,"t":6.5,"sf":4.085,"p5":2.766,"p95":6.118,"rank":20}},{"label":"Type 2 diabetes","short":"Type 2 diabetes","kind":"c","cat":"NCD","o13":false,"gh":false,"d":87039754.0,"lo":72374911.0,"hi":103890491.0,"papers":{"n":7235.6,"t":4632.9,"sf":0.64,"p5":0.472,"p95":0.86,"rank":76},"trials":{"n":419.4,"t":205.7,"sf":0.491,"p5":0.339,"p95":0.701,"rank":80}},{"label":"Endometriosis","short":"Endometriosis","kind":"c","cat":"NCD","o13":true,"gh":false,"d":1907359.0,"lo":1144582.0,"hi":2991727.0,"papers":{"n":1392.8,"t":814.9,"sf":0.585,"p5":0.449,"p95":0.749,"rank":77},"trials":{"n":41.4,"t":20.5,"sf":0.496,"p5":0.356,"p95":0.693,"rank":79}},{"label":"Stomach cancer","short":"Stomach cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":22493976.0,"lo":19214112.0,"hi":25988698.0,"papers":{"n":4338.4,"t":2503.5,"sf":0.577,"p5":0.464,"p95":0.714,"rank":78},"trials":{"n":179.4,"t":91.0,"sf":0.507,"p5":0.39,"p95":0.652,"rank":78}},{"label":"Tuberculosis","short":"Tuberculosis","kind":"c","cat":"Infectious","o13":false,"gh":true,"d":43613775.0,"lo":35284817.0,"hi":53603469.0,"papers":{"n":5869.6,"t":3383.4,"sf":0.576,"p5":0.443,"p95":0.746,"rank":79},"trials":{"n":54.6,"t":135.6,"sf":2.484,"p5":1.816,"p95":3.384,"rank":35}},{"label":"Leishmaniasis","short":"Leishmaniasis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":1086881.0,"lo":781525.0,"hi":1555902.0,"papers":{"n":1097.0,"t":630.9,"sf":0.575,"p5":0.45,"p95":0.715,"rank":80},"trials":{"n":5.4,"t":14.6,"sf":2.711,"p5":1.953,"p95":3.771,"rank":32}},{"label":"Gonorrhea","short":"Gonorrhea","kind":"c","cat":"Infectious","o13":false,"gh":false,"d":78223.0,"lo":55538.0,"hi":112224.0,"papers":{"n":343.6,"t":190.6,"sf":0.555,"p5":0.37,"p95":0.795,"rank":81},"trials":{"n":7.8,"t":3.0,"sf":0.384,"p5":0.226,"p95":0.676,"rank":86}},{"label":"Aortic aneurysm","short":"Aortic aneurysm","kind":"c","cat":"NCD","o13":false,"gh":false,"d":3418214.0,"lo":3027028.0,"hi":3839920.0,"papers":{"n":1995.6,"t":1062.5,"sf":0.532,"p5":0.451,"p95":0.622,"rank":82},"trials":{"n":27.4,"t":29.2,"sf":1.066,"p5":0.85,"p95":1.323,"rank":52}},{"label":"Cardiomyopathy & myocarditis","short":"Cardiomyopathy & myocarditis","kind":"c","cat":"NCD","o13":false,"gh":false,"d":11992296.0,"lo":9798309.0,"hi":14404856.0,"papers":{"n":3554.8,"t":1880.6,"sf":0.529,"p5":0.435,"p95":0.637,"rank":83},"trials":{"n":52.6,"t":62.3,"sf":1.184,"p5":0.934,"p95":1.496,"rank":47}},{"label":"Stroke","short":"Stroke","kind":"c","cat":"NCD","o13":false,"gh":false,"d":156408612.0,"lo":140965641.0,"hi":172100978.0,"papers":{"n":11910.4,"t":6048.4,"sf":0.508,"p5":0.36,"p95":0.71,"rank":84},"trials":{"n":612.4,"t":293.0,"sf":0.478,"p5":0.317,"p95":0.719,"rank":82}},{"label":"Pancreatic cancer","short":"Pancreatic cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":12276311.0,"lo":11405619.0,"hi":13086303.0,"papers":{"n":3802.4,"t":1900.7,"sf":0.5,"p5":0.415,"p95":0.596,"rank":85},"trials":{"n":212.8,"t":63.2,"sf":0.297,"p5":0.238,"p95":0.368,"rank":98}},{"label":"Cystic echinococcosis","short":"Cystic echinococcosis","kind":"c","cat":"NTD","o13":false,"gh":true,"d":97006.0,"lo":71967.0,"hi":123504.0,"papers":{"n":425.0,"t":210.2,"sf":0.495,"p5":0.339,"p95":0.689,"rank":86},"trials":{"n":0.4,"t":3.4,"sf":8.525,"p5":5.133,"p95":14.287,"rank":11}},{"label":"ALS / motor neuron disease","short":"ALS / motor neuron disease","kind":"c","cat":"NCD","o13":true,"gh":false,"d":1218518.0,"lo":1104835.0,"hi":1407815.0,"papers":{"n":1399.0,"t":664.6,"sf":0.475,"p5":0.39,"p95":0.567,"rank":87},"trials":{"n":47.8,"t":15.7,"sf":0.328,"p5":0.248,"p95":0.433,"rank":94}},{"label":"Ovarian cancer","short":"Ovarian cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":6477936.0,"lo":5461475.0,"hi":7650192.0,"papers":{"n":3012.0,"t":1421.1,"sf":0.472,"p5":0.395,"p95":0.557,"rank":88},"trials":{"n":160.0,"t":43.0,"sf":0.268,"p5":0.216,"p95":0.335,"rank":102}},{"label":"Chronic kidney disease","short":"Chronic kidney disease","kind":"c","cat":"NCD","o13":false,"gh":false,"d":46150545.0,"lo":41369511.0,"hi":52002923.0,"papers":{"n":7488.0,"t":3471.5,"sf":0.464,"p5":0.357,"p95":0.597,"rank":89},"trials":{"n":245.0,"t":140.3,"sf":0.573,"p5":0.419,"p95":0.772,"rank":71}},{"label":"Kidney cancer","short":"Kidney cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":4061416.0,"lo":3600611.0,"hi":4509619.0,"papers":{"n":2506.4,"t":1149.2,"sf":0.459,"p5":0.388,"p95":0.535,"rank":90},"trials":{"n":97.2,"t":32.4,"sf":0.333,"p5":0.268,"p95":0.414,"rank":90}},{"label":"Type 1 diabetes","short":"Type 1 diabetes","kind":"c","cat":"NCD","o13":true,"gh":false,"d":3140267.0,"lo":2503234.0,"hi":3871948.0,"papers":{"n":2261.0,"t":1022.3,"sf":0.452,"p5":0.378,"p95":0.537,"rank":91},"trials":{"n":141.6,"t":27.8,"sf":0.196,"p5":0.154,"p95":0.249,"rank":111}},{"label":"Interstitial lung disease & sarcoidosis","short":"Interstitial lung disease & sarcoidosis","kind":"c","cat":"NCD","o13":false,"gh":false,"d":4460942.0,"lo":3738209.0,"hi":5645430.0,"papers":{"n":2741.2,"t":1199.3,"sf":0.438,"p5":0.365,"p95":0.518,"rank":94},"trials":{"n":64.8,"t":34.3,"sf":0.529,"p5":0.417,"p95":0.668,"rank":75}},{"label":"Macular degeneration","short":"Macular degeneration","kind":"c","cat":"NCD","o13":false,"gh":false,"d":517213.0,"lo":350068.0,"hi":729346.0,"papers":{"n":1020.6,"t":450.1,"sf":0.441,"p5":0.332,"p95":0.572,"rank":93},"trials":{"n":58.6,"t":9.4,"sf":0.16,"p5":0.108,"p95":0.235,"rank":115}},{"label":"Multiple myeloma","short":"Multiple myeloma","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":2812822.0,"lo":2536965.0,"hi":3134842.0,"papers":{"n":2194.8,"t":972.4,"sf":0.443,"p5":0.374,"p95":0.519,"rank":92},"trials":{"n":160.4,"t":26.0,"sf":0.162,"p5":0.129,"p95":0.202,"rank":114}},{"label":"Ulcerative colitis","short":"Ulcerative colitis","kind":"c","cat":"NCD","o13":true,"gh":false,"d":1207116.0,"lo":998837.0,"hi":1412048.0,"papers":{"n":1548.8,"t":661.8,"sf":0.427,"p5":0.348,"p95":0.514,"rank":97},"trials":{"n":66.0,"t":15.6,"sf":0.236,"p5":0.179,"p95":0.314,"rank":104}},{"label":"Autism","short":"Autism","kind":"c","cat":"NCD","o13":false,"gh":false,"d":9831262.0,"lo":4852827.0,"hi":18449854.0,"papers":{"n":3951.8,"t":1718.1,"sf":0.435,"p5":0.321,"p95":0.592,"rank":95},"trials":{"n":144.8,"t":55.2,"sf":0.381,"p5":0.257,"p95":0.558,"rank":87}},{"label":"Bladder cancer","short":"Bladder cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":4625901.0,"lo":4221552.0,"hi":5130276.0,"papers":{"n":2818.8,"t":1219.3,"sf":0.433,"p5":0.368,"p95":0.504,"rank":96},"trials":{"n":130.0,"t":35.1,"sf":0.27,"p5":0.218,"p95":0.332,"rank":100}},{"label":"Atrial fibrillation","short":"Atrial fibrillation","kind":"c","cat":"NCD","o13":false,"gh":false,"d":9265726.0,"lo":7517780.0,"hi":11662665.0,"papers":{"n":4077.6,"t":1672.4,"sf":0.41,"p5":0.339,"p95":0.492,"rank":98},"trials":{"n":160.4,"t":53.3,"sf":0.332,"p5":0.264,"p95":0.417,"rank":91}},{"label":"HIV/AIDS","short":"HIV/AIDS","kind":"c","cat":"Infectious","o13":true,"gh":false,"d":45100836.0,"lo":39831393.0,"hi":51045481.0,"papers":{"n":8911.2,"t":3435.4,"sf":0.386,"p5":0.298,"p95":0.494,"rank":99},"trials":{"n":248.8,"t":138.4,"sf":0.556,"p5":0.409,"p95":0.746,"rank":74}},{"label":"Polycystic ovary syndrome","short":"Polycystic ovary syndrome","kind":"c","cat":"NCD","o13":false,"gh":false,"d":652802.0,"lo":287346.0,"hi":1431443.0,"papers":{"n":1350.6,"t":500.4,"sf":0.37,"p5":0.25,"p95":0.524,"rank":100},"trials":{"n":47.2,"t":10.8,"sf":0.228,"p5":0.133,"p95":0.377,"rank":108}},{"label":"Epilepsy","short":"Epilepsy","kind":"c","cat":"NCD","o13":true,"gh":false,"d":15422825.0,"lo":12030231.0,"hi":20213140.0,"papers":{"n":5780.6,"t":2108.6,"sf":0.365,"p5":0.295,"p95":0.449,"rank":101},"trials":{"n":90.4,"t":72.5,"sf":0.802,"p5":0.615,"p95":1.039,"rank":58}},{"label":"Rheumatoid arthritis","short":"Rheumatoid arthritis","kind":"c","cat":"NCD","o13":true,"gh":false,"d":3337270.0,"lo":2500044.0,"hi":4210842.0,"papers":{"n":2977.6,"t":1051.0,"sf":0.353,"p5":0.294,"p95":0.422,"rank":103},"trials":{"n":78.6,"t":28.8,"sf":0.366,"p5":0.285,"p95":0.471,"rank":89}},{"label":"Psoriasis","short":"Psoriasis","kind":"c","cat":"NCD","o13":true,"gh":false,"d":2648548.0,"lo":1921881.0,"hi":3489329.0,"papers":{"n":2670.4,"t":946.1,"sf":0.354,"p5":0.289,"p95":0.427,"rank":102},"trials":{"n":91.0,"t":25.0,"sf":0.275,"p5":0.209,"p95":0.358,"rank":99}},{"label":"Leukemia","short":"Leukemia","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":12185735.0,"lo":10797882.0,"hi":13921084.0,"papers":{"n":5805.0,"t":1894.3,"sf":0.326,"p5":0.271,"p95":0.389,"rank":104},"trials":{"n":347.4,"t":62.9,"sf":0.181,"p5":0.144,"p95":0.225,"rank":112}},{"label":"Depressive disorders","short":"Depressive disorders","kind":"c","cat":"NCD","o13":false,"gh":false,"d":56027521.0,"lo":38183738.0,"hi":80255687.0,"papers":{"n":11851.2,"t":3791.7,"sf":0.32,"p5":0.237,"p95":0.432,"rank":105},"trials":{"n":639.0,"t":157.8,"sf":0.247,"p5":0.171,"p95":0.356,"rank":103}},{"label":"Thyroid cancer","short":"Thyroid cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":1560050.0,"lo":1307673.0,"hi":1867653.0,"papers":{"n":2325.8,"t":743.7,"sf":0.32,"p5":0.264,"p95":0.381,"rank":105},"trials":{"n":38.0,"t":18.2,"sf":0.479,"p5":0.366,"p95":0.627,"rank":81}},{"label":"Leprosy","short":"Leprosy","kind":"c","cat":"NTD","o13":false,"gh":true,"d":18572.0,"lo":11866.0,"hi":27433.0,"papers":{"n":313.6,"t":99.1,"sf":0.316,"p5":0.186,"p95":0.509,"rank":107},"trials":{"n":2.2,"t":1.3,"sf":0.572,"p5":0.285,"p95":1.157,"rank":72}},{"label":"Non-Hodgkin lymphoma","short":"Non-Hodgkin lymphoma","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":8314845.0,"lo":7113886.0,"hi":9679608.0,"papers":{"n":5092.0,"t":1592.0,"sf":0.313,"p5":0.26,"p95":0.372,"rank":108},"trials":{"n":374.8,"t":49.9,"sf":0.133,"p5":0.107,"p95":0.165,"rank":119}},{"label":"Crohn's disease","short":"Crohn's disease","kind":"c","cat":"NCD","o13":true,"gh":false,"d":413485.0,"lo":328231.0,"hi":514996.0,"papers":{"n":1354.8,"t":406.5,"sf":0.3,"p5":0.23,"p95":0.382,"rank":109},"trials":{"n":70.2,"t":8.2,"sf":0.116,"p5":0.08,"p95":0.17,"rank":120}},{"label":"Alzheimer's & other dementias","short":"Alzheimer's & other dementias","kind":"c","cat":"NCD","o13":false,"gh":false,"d":39743859.0,"lo":17931759.0,"hi":80899199.0,"papers":{"n":10955.8,"t":3243.4,"sf":0.296,"p5":0.206,"p95":0.436,"rank":110},"trials":{"n":277.0,"t":128.2,"sf":0.463,"p5":0.287,"p95":0.769,"rank":83}},{"label":"Parkinson's disease","short":"Parkinson's disease","kind":"c","cat":"NCD","o13":true,"gh":false,"d":7974574.0,"lo":7292394.0,"hi":8810682.0,"papers":{"n":5498.6,"t":1562.1,"sf":0.284,"p5":0.239,"p95":0.334,"rank":111},"trials":{"n":234.8,"t":48.7,"sf":0.207,"p5":0.168,"p95":0.255,"rank":110}},{"label":"Lung cancer","short":"Lung cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":46642797.0,"lo":42501192.0,"hi":50848094.0,"papers":{"n":12277.4,"t":3488.3,"sf":0.284,"p5":0.219,"p95":0.364,"rank":111},"trials":{"n":613.4,"t":141.2,"sf":0.23,"p5":0.17,"p95":0.31,"rank":106}},{"label":"Prostate cancer","short":"Prostate cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":8907360.0,"lo":7865979.0,"hi":10012512.0,"papers":{"n":5954.0,"t":1642.7,"sf":0.276,"p5":0.231,"p95":0.327,"rank":113},"trials":{"n":304.2,"t":52.0,"sf":0.171,"p5":0.137,"p95":0.213,"rank":113}},{"label":"Glaucoma","short":"Glaucoma","kind":"c","cat":"NCD","o13":false,"gh":false,"d":684211.0,"lo":464634.0,"hi":925390.0,"papers":{"n":1928.6,"t":511.2,"sf":0.265,"p5":0.205,"p95":0.335,"rank":114},"trials":{"n":72.8,"t":11.1,"sf":0.152,"p5":0.106,"p95":0.217,"rank":116}},{"label":"Colorectal cancer","short":"Colorectal cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":26154109.0,"lo":23780881.0,"hi":28616528.0,"papers":{"n":10269.8,"t":2681.2,"sf":0.261,"p5":0.209,"p95":0.323,"rank":115},"trials":{"n":434.2,"t":99.6,"sf":0.229,"p5":0.176,"p95":0.297,"rank":107}},{"label":"Liver cancer","short":"Liver cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":13923251.0,"lo":12066552.0,"hi":16110947.0,"papers":{"n":8142.6,"t":2012.7,"sf":0.247,"p5":0.204,"p95":0.299,"rank":116},"trials":{"n":211.0,"t":68.1,"sf":0.323,"p5":0.253,"p95":0.407,"rank":95}},{"label":"Brain & CNS cancer","short":"Brain & CNS cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":9161085.0,"lo":8040393.0,"hi":11021880.0,"papers":{"n":6786.2,"t":1663.8,"sf":0.245,"p5":0.205,"p95":0.291,"rank":117},"trials":{"n":176.8,"t":52.9,"sf":0.299,"p5":0.239,"p95":0.373,"rank":97}},{"label":"Melanoma","short":"Melanoma","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":1824765.0,"lo":1608283.0,"hi":2146683.0,"papers":{"n":3601.8,"t":798.6,"sf":0.222,"p5":0.184,"p95":0.262,"rank":118},"trials":{"n":135.2,"t":20.0,"sf":0.148,"p5":0.115,"p95":0.191,"rank":117}},{"label":"Fatty liver disease (NAFLD/MASLD)","short":"Fatty liver disease (NAFLD/MASLD)","kind":"c","cat":"NCD","o13":false,"gh":false,"d":2527266.0,"lo":1761948.0,"hi":3377459.0,"papers":{"n":4381.8,"t":926.2,"sf":0.211,"p5":0.173,"p95":0.257,"rank":119},"trials":{"n":108.8,"t":24.4,"sf":0.224,"p5":0.17,"p95":0.294,"rank":109}},{"label":"Multiple sclerosis","short":"Multiple sclerosis","kind":"c","cat":"NCD","o13":true,"gh":false,"d":1068346.0,"lo":917323.0,"hi":1238170.0,"papers":{"n":3287.0,"t":626.0,"sf":0.19,"p5":0.154,"p95":0.229,"rank":120},"trials":{"n":146.8,"t":14.5,"sf":0.099,"p5":0.074,"p95":0.132,"rank":121}},{"label":"Breast cancer","short":"Breast cancer","kind":"c","cat":"Cancer","o13":false,"gh":false,"d":24615156.0,"lo":21693075.0,"hi":28103517.0,"papers":{"n":15141.0,"t":2608.3,"sf":0.172,"p5":0.138,"p95":0.213,"rank":121},"trials":{"n":698.8,"t":96.1,"sf":0.137,"p5":0.106,"p95":0.178,"rank":118}},{"label":"Non-COVID (classic) ME/CFS","short":"Classic ME/CFS","kind":"g_","cat":"ME/CFS or long COVID","o13":false,"gh":false,"d":7700000.0,"lo":3200000.0,"hi":18700000.0,"papers":{"n":186.8,"t":1537.4,"sf":8.23,"p5":5.331,"p95":12.65,"rank":5},"trials":{"n":6.4,"t":47.7,"sf":7.449,"p5":4.159,"p95":13.329,"rank":14}},{"label":"All ME/CFS (classic + post-COVID)","short":"All ME/CFS","kind":"g_","cat":"ME/CFS or long COVID","o13":false,"gh":false,"d":17500000.0,"lo":9900000.0,"hi":31700000.0,"papers":{"n":216.8,"t":2233.3,"sf":10.301,"p5":7.485,"p95":14.53,"rank":2},"trials":{"n":10.2,"t":78.2,"sf":7.667,"p5":5.08,"p95":11.838,"rank":14}},{"label":"Long COVID, incl. post-COVID ME","short":"Long COVID","kind":"g_","cat":"ME/CFS or long COVID","o13":false,"gh":false,"d":19800000.0,"lo":12400000.0,"hi":31700000.0,"papers":{"n":1348.6,"t":2362.4,"sf":1.752,"p5":1.313,"p95":2.349,"rank":33},"trials":{"n":107.2,"t":84.3,"sf":0.786,"p5":0.541,"p95":1.136,"rank":58}},{"label":"Long COVID + non-COVID ME/CFS","short":"Long COVID + classic ME/CFS","kind":"g_","cat":"ME/CFS or long COVID","o13":false,"gh":false,"d":28300000.0,"lo":18300000.0,"hi":44700000.0,"papers":{"n":1535.4,"t":2779.1,"sf":1.81,"p5":1.345,"p95":2.434,"rank":32},"trials":{"n":113.6,"t":104.5,"sf":0.92,"p5":0.633,"p95":1.323,"rank":56}}]};
 // House colours: ocean and sunset, with a soft teal and gold for the two extra groups.
-const C={blue:'#7fb3d5',teal:'#8fd0bf',coral:'#f4a582',gold:'#e9c983',ink:'#eef1f6',ink2:'#a3acba',muted:'#6f7a8c',grid:'#262f3d',bg:'#1a2230',trend:'#dfe5ee'};
+const C={blue:'#9fd8b5',teal:'#7fb2f0',coral:'#f2b880',gold:'#b48cf0',ink:'#e9efe9',ink2:'#a7bdb2',muted:'#7e978b',grid:'#24463b',bg:'#133329',trend:'#dfe9e3'};
 const ROOT=document.querySelector('.bvr');
 const $=id=>document.getElementById(id);
 const KIND={'Classic ME/CFS':'m','All ME/CFS':'m','Long COVID':'l','Long COVID + classic ME/CFS':'l'};
@@ -324,17 +375,11 @@ const fmtX=v=>(v>=10?v.toFixed(0):String(+v.toPrecision(2)))+'×';
 const ord=n=>n+(n%100>=11&&n%100<=13?'th':['th','st','nd','rd'][n%10]||'th');
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
-// ---------- tiles
-if($('bvr-tiles'))$('bvr-tiles').innerHTML=['papers','trials'].map(m=>{
-  const d=all[m];
-  return `<div class="tile"><div class="k">All ME/CFS: ${m}</div>
-  <div class="v" style="color:${C.coral}">${fmtX(d.sf).replace('×','')}×<span>shortfall</span></div>
-  <div class="d">${ord(d.rank)} largest of ${D.ncomp+1}</div>
-  <div class="r">90% range ${+d.p5.toPrecision(2)}–${+d.p95.toPrecision(2)}×</div></div>`;}).join('');
-
 const CATS=[['c',C.blue,'Common worldwide'],['g',C.teal,'Mainly low-income regions'],['m',C.coral,'ME/CFS'],['l',C.gold,'Long COVID (+ ME)']];
 const HIDE=new Set();
-let SCALE='log';
+let SCALE='log',ZOOM=0;
+// Linear view zoom levels into the bottom left: x (DALYs) and y maxima. All keep ME/CFS and long COVID in view.
+const ZX=[2e8,5e7,2.5e7],ZY={papers:[16000,4000,2000],trials:[750,200,120]};
 const shown=r=>!HIDE.has(r.kind);
 function legend(id,r2){
   const h=$(id);if(!h)return;
@@ -343,9 +388,15 @@ function legend(id,r2){
   h.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;HIDE.has(k)?HIDE.delete(k):HIDE.add(k);syncLegends();redrawAll();}));
 }
 function syncLegends(){ROOT.querySelectorAll('.bvr-legend button').forEach(b=>{const off=HIDE.has(b.dataset.k);b.classList.toggle('off',off);b.setAttribute('aria-pressed',String(!off));});}
-function syncScale(){ROOT.querySelectorAll('.bvr-seg button').forEach(b=>{const on=b.dataset.s===SCALE;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+function syncScale(){ROOT.querySelectorAll('.bvr-seg button[data-s]').forEach(b=>{const on=b.dataset.s===SCALE;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  ROOT.querySelectorAll('.bvr-zoom').forEach(z=>z.hidden=SCALE!=='lin');
+  ROOT.querySelectorAll('.bvr-seg button[data-z]').forEach(b=>{const on=+b.dataset.z===ZOOM;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
   ROOT.querySelectorAll('.bvr-scl').forEach(e=>e.textContent=SCALE==='log'?'Log scales.':'Linear scales.');}
-ROOT.querySelectorAll('.bvr-seg button').forEach(b=>b.addEventListener('click',()=>{SCALE=b.dataset.s;syncScale();redrawAll();}));
+ROOT.querySelectorAll('.bvr-seg button[data-s]').forEach(b=>b.addEventListener('click',()=>{SCALE=b.dataset.s;syncScale();redrawAll();}));
+ROOT.querySelectorAll('.bvr-seg button[data-z]').forEach(b=>b.addEventListener('click',()=>{ZOOM=+b.dataset.z;syncScale();redrawAll();}));
+function linTicks(max){const raw=max/4,p=Math.pow(10,Math.floor(Math.log10(raw))),n=raw/p,st=(n<1.5?1:n<3.5?2:5)*p,out=[];
+  for(let v=0;v<=max*1.0001;v+=st)out.push(v);return out;}
+const fmtTick=v=>v===0?'0':v>=1e6?(+(v/1e6).toPrecision(3))+'M':v>=1000?(+(v/1000).toPrecision(3))+'k':String(+v.toPrecision(3));
 syncScale();
 legend('bvr-lg1',D.fits.papers.r2.toFixed(2));legend('bvr-lg2',D.fits.trials.r2.toFixed(2));legend('bvr-lg3');legend('bvr-lg4');
 
@@ -370,28 +421,33 @@ function tipHtml(r,m){
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-hit]'))ROOT.querySelectorAll('.bvr-tip').forEach(t=>t.style.display='none');});
 
 // ---------- scatter
-function scatter(id,m){
-  const host=$(id);host.innerHTML='';
-  const W=host.clientWidth,H=Math.round(Math.max(420,Math.min(560,W*1.1)));
-  const M={l:50,r:14,t:12,b:46},fs=W<520?13:14,narrow=W<520;
+function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into another element (square download)
+  const host=opt?opt.host:$(id);host.innerHTML='';
+  const W=opt?opt.W:host.clientWidth,H=opt?opt.H:(W>=700?Math.round(W*0.62):Math.round(Math.max(420,Math.min(560,W*1.1))));  // landscape on desktop
+  const M={l:50,r:14,t:12,b:46},fs=opt?15:(W<520?13:14),narrow=W<520;  // a little larger in the square download
   const svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${m} per year against disease burden`},host);
   const LOG=SCALE==='log';
   const vis=R.filter(shown),xmin=vis.length?Math.min(...vis.map(r=>r.dalys)):1e4;
-  const xd=LOG?[Math.max(1e4,xmin/1.6),3e8]:[0,2e8],yd=LOG?(m==='papers'?[30,40000]:[0.3,1500]):(m==='papers'?[0,16000]:[0,750]);
+  const xd=LOG?[Math.max(1e4,xmin/1.6),3e8]:[0,ZX[ZOOM]],yd=LOG?(m==='papers'?[30,40000]:[0.3,1500]):[0,ZY[m][ZOOM]];
   const fx=v=>LOG?Math.log10(v):v,fy=v=>LOG?Math.log10(Math.max(v,1e-9)):v;
+  // y numbers start at the left edge (in line with the title); the plot starts just after the widest one
+  const yTicks=LOG?(m==='papers'?[100,1000,10000]:[1,10,100,1000]):linTicks(yd[1]),yLab=v=>LOG?(v>=1000?(v/1000)+'k':String(v)):fmtTick(v);
+  {const mc=document.createElement('canvas').getContext('2d');mc.font=fs+'px '+getComputedStyle(host).fontFamily;
+   M.l=Math.ceil(Math.max(...yTicks.map(v=>mc.measureText(yLab(v)).width)))+10;}
   const lx=v=>M.l+(fx(v)-fx(xd[0]))/(fx(xd[1])-fx(xd[0]))*(W-M.l-M.r);
   const ly=v=>H-M.b-(fy(v)-fy(yd[0]))/(fy(yd[1])-fy(yd[0]))*(H-M.t-M.b);
   // x positions to sample the trend and band: dense near zero, even across the range
   const xs=[];for(let i=0;i<=80;i++)xs.push(Math.pow(10,4+i/80*(Math.log10(3e8)-4)));
-  if(!LOG)for(let i=1;i<=80;i++)xs.push(i/80*2e8);
+  if(!LOG)for(let i=1;i<=80;i++)xs.push(i/80*xd[1]);
   xs.sort((a,b)=>a-b);
-  const clip=el('clipPath',{id:'cp-'+id},el('defs',{},svg));el('rect',{x:M.l,y:M.t,width:W-M.l-M.r,height:H-M.t-M.b},clip);
-  (LOG?[[1e4,'10k'],[1e5,'100k'],[1e6,'1M'],[1e7,'10M'],[1e8,'100M']].filter(([v])=>v>=xd[0]*0.999):[[0,'0'],[5e7,'50M'],[1e8,'100M'],[1.5e8,'150M'],[2e8,'200M']]).forEach(([v,t])=>{
+  const cid=(opt?'x':'')+'cp-'+id;
+  const clip=el('clipPath',{id:cid},el('defs',{},svg));el('rect',{x:M.l,y:M.t,width:W-M.l-M.r,height:H-M.t-M.b},clip);
+  (LOG?[[1e4,'10k'],[1e5,'100k'],[1e6,'1M'],[1e7,'10M'],[1e8,'100M']].filter(([v])=>v>=xd[0]*0.999):linTicks(xd[1]).map(v=>[v,fmtTick(v)])).forEach(([v,t])=>{
     el('line',{x1:lx(v),x2:lx(v),y1:M.t,y2:H-M.b,stroke:C.grid},svg);
     el('text',{x:lx(v),y:H-M.b+18,'text-anchor':'middle','font-size':fs,fill:C.muted},svg).textContent=t;});
-  (LOG?(m==='papers'?[100,1000,10000]:[1,10,100,1000]):(m==='papers'?[0,5000,10000,15000]:[0,250,500,750])).forEach(v=>{
+  yTicks.forEach(v=>{
     el('line',{x1:M.l,x2:W-M.r,y1:ly(v),y2:ly(v),stroke:C.grid},svg);
-    el('text',{x:M.l-7,y:ly(v)+4.5,'text-anchor':'end','font-size':fs,fill:C.muted},svg).textContent=v>=1000?(v/1000)+'k':v;});
+    el('text',{x:0,y:ly(v)+4.5,'font-size':fs,fill:C.muted},svg).textContent=yLab(v);});
   el('text',{x:(M.l+W-M.r)/2,y:H-6,'text-anchor':'middle','font-size':fs,fill:C.ink2},svg).textContent='DALYs per year';
   // fit, 90% confidence band and 90% prediction range
   const X=comps.map(r=>Math.log10(r.dalys)),Y=comps.map(r=>Math.log10(r[m].n)),n=X.length;
@@ -399,7 +455,7 @@ function scatter(id,m){
   const sxx=X.reduce((a,v)=>a+(v-mx)*(v-mx),0),b=X.reduce((a,v,i)=>a+(v-mx)*(Y[i]-my),0)/sxx,a0=my-b*mx;
   const s2=X.reduce((a,v,i)=>a+Math.pow(Y[i]-a0-b*v,2),0)/(n-2),T=1.6576; // t(0.95, 122 df)
   const tr=v=>Math.pow(10,a0+b*Math.log10(v));
-  const g=el('g',{'clip-path':`url(#cp-${id})`},svg);
+  const g=el('g',{'clip-path':`url(#${cid})`},svg);
   const up=[],dn=[],pu=[],pd=[];
   for(const xv of xs){const x0=Math.log10(xv);
     const se=Math.sqrt(s2*(1/n+(x0-mx)*(x0-mx)/sxx)),sp=Math.sqrt(s2*(1+1/n+(x0-mx)*(x0-mx)/sxx)),f=a0+b*x0,px=lx(Math.pow(10,x0));
@@ -409,10 +465,11 @@ function scatter(id,m){
   el('polyline',{points:xs.map(v=>lx(v)+','+ly(tr(v))).join(' '),fill:'none',stroke:C.trend,'stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'},g);
   // highlight: drop line from All ME/CFS to trend
   const hx=lx(all.dalys),hy=ly(all[m].n),hty=ly(all[m].trend);
-  const showAll=shown(all);
+  const showAll=shown(all)&&(LOG||(all.dalys<=xd[1]&&all[m].n<=yd[1]));
   if(showAll)el('line',{x1:hx,x2:hx,y1:hy-9,y2:hty+3,stroke:C.coral,'stroke-width':1.5,'stroke-dasharray':'4 4'},svg);
   // points
-  const pts=R.filter(shown).map(r=>({r,x:lx(r.dalys),y:ly(r[m].n),rad:r===all?7.5:(isComp(r)?4:5.5)}));
+  const inView=r=>LOG||(r.dalys<=xd[1]&&r[m].n<=yd[1]); // zoomed linear view: drop dots outside the frame
+  const pts=R.filter(r=>shown(r)&&inView(r)).map(r=>({r,x:lx(r.dalys),y:ly(r[m].n),rad:r===all?7.5:(isComp(r)?4:5.5)}));
   const boxes=[showAll?{x:hx-3,y:hty,w:6,h:hy-hty}:{x:-99,y:-99,w:0,h:0}];
   pts.forEach(p=>boxes.push({x:p.x-p.rad-1,y:p.y-p.rad-1,w:2*p.rad+2,h:2*p.rad+2}));
   const ptBoxes=boxes.slice(1);
@@ -482,12 +539,15 @@ function scatter(id,m){
 // ---------- ranking: top 20 of comparators + All ME/CFS, then the other groups
 function rank(id,m){
   const host=$(id);host.innerHTML='';
-  const W=host.clientWidth,narrow=W<520,fs=narrow?14:14.5;
-  const top=comps.concat([all]).filter(shown).sort((a,b)=>b[m].sf-a[m].sf).slice(0,20);
+  const W=host.clientWidth,narrow=W<520,fs=host.closest('.dl-sq')?16.5:(narrow?14:14.5);  // larger in the square download
   const others=R.filter(r=>!isComp(r)&&r!==all&&shown(r)).sort((a,b)=>b[m].sf-a[m].sf);
+  // the square download (class dl-sq on the card) keeps it to 15 rows in all
+  const card=host.closest('.bvr-card'),sq=!!(card&&card.classList.contains('dl-sq')),nTop=sq?Math.max(5,15-others.length):20;
+  const sub=card&&card.querySelector('.bvr-sub');if(sub){if(!sub.dataset.full)sub.dataset.full=sub.textContent;sub.textContent=sub.dataset.full.replace('Top 20','Top '+nTop);}
+  const top=comps.concat([all]).filter(shown).sort((a,b)=>b[m].sf-a[m].sf).slice(0,nTop);
   const list=top.map(r=>({r})).concat(others.length?[{sep:'Other groups'}]:[],others.map(r=>({r})));
   if(!list.length){host.innerHTML='<p class="bvr-sub">All categories are hidden.</p>';return;}
-  const svg=el('svg',{width:W,height:10,viewBox:`0 0 ${W} 10`,role:'img','aria-label':`${m} shortfall, largest 20`},host);
+  const svg=el('svg',{width:W,height:10,viewBox:`0 0 ${W} 10`,role:'img','aria-label':`${m} shortfall, largest ${nTop}`},host);
   const name=r=>r.short;
   const meas=el('text',{'font-size':fs,'font-weight':650},svg);
   const tw=t=>{meas.textContent=t;return meas.getComputedTextLength();};
@@ -549,12 +609,81 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
  '<tr><th>Disease or group</th><th>Group</th><th>DALYs</th><th>Papers/yr</th><th>Shortfall</th><th>Rank</th><th>Trials/yr</th><th>Shortfall</th><th>Rank</th></tr>'+
  R.slice().sort((a,b)=>b.papers.sf-a.papers.sf).map(r=>`<tr><td>${esc(r.label)}</td><td style="text-align:left">${esc(r.cat)}${r.kind==='g'?' (mainly low-income regions)':''}</td><td>${fmtD(r.dalys)}</td><td>${fmtN(r.papers.n)}</td><td>${fmtX(r.papers.sf)}</td><td>${r.papers.rank}</td><td>${fmtN(r.trials.n)}</td><td>${fmtX(r.trials.sf)}</td><td>${r.trials.rank}</td></tr>`).join('');
 
+// ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
+// Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v29',side:640};
+// the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
+function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
+  const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
+  x.fillStyle=g;x.fillRect(-1,-1,2,2);x.restore();}
+function svgUrl(svg){
+  const W=+svg.getAttribute('width'),H=+svg.getAttribute('height');
+  // copy the computed text styles into the SVG, since a standalone SVG image does not see the page's CSS
+  const cl=svg.cloneNode(true),src=svg.querySelectorAll('*'),dst=cl.querySelectorAll('*');
+  src.forEach((o,i)=>{const d=dst[i];if(o.getAttribute('data-hit')){d.remove();return;}
+    if(o.tagName==='text'||o.tagName==='tspan'){const cs=getComputedStyle(o);
+      d.setAttribute('fill',cs.fill);d.setAttribute('font-family',EXP.font);d.setAttribute('font-weight',cs.fontWeight);
+      if(o.tagName==='text')d.setAttribute('font-size',cs.fontSize);
+      if(o.classList.contains('halo')){d.setAttribute('stroke',EXP.halo);d.setAttribute('stroke-width','4');d.setAttribute('paint-order','stroke');d.setAttribute('stroke-linejoin','round');}}});
+  cl.setAttribute('xmlns',NS);
+  if(EXP.css){const st=document.createElementNS(NS,'style');st.textContent=EXP.css;cl.insertBefore(st,cl.firstChild);}  // Inter, embedded
+  // 8px spare on the left: fallback fonts in the saved image can run a little wider than on the page
+  cl.setAttribute('viewBox',`-8 0 ${W+8} ${H}`);cl.setAttribute('width',W+8);
+  return URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(cl)],{type:'image/svg+xml'}));
+}
+function exportPng(pid,square){
+  if(EXP.css==null&&window.dlFonts)return window.dlFonts().then(css=>{EXP.css=css||'';return exportPng(pid,square);});
+  const host=$(pid);if(!host||!host.querySelector('svg'))return;
+  const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
+  const S=square?2.5:3,pad=square?28:22,x0=document.createElement('canvas').getContext('2d');
+  const note=sc?(m==='papers'?'Papers a year, 2021–2025, vs global burden (DALYs, GBD 2023)':'Interventional trials a year, 2021–2025, vs global burden (DALYs, GBD 2023)')
+               :'Top 20 of 121. Shortfall = trend ÷ actual. Bars: 90% range.';
+  const items=CATS.filter(([k])=>!HIDE.has(k)).map(([,c,t])=>({c,t}));if(sc)items.push({c:null,t:'Trend, 90% band (R² '+D.fits[m].r2.toFixed(2)+')'});
+  const cwid=square?EXP.side-2*pad:+host.querySelector('svg').getAttribute('width')+8;
+  // wrap the note to the width, then lay out the legend in rows
+  const TS=square?28:24,NS=15,NL=20,LS=15,LR=24;  // type sizes in the saved image (title, note, legend)
+  x0.font='400 '+NS+'px '+EXP.font;const lines=[];{let cur='';note.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x0.measureText(tr).width>cwid&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);}
+  x0.font='500 '+LS+'px '+EXP.font;const rows=[[]];let lw=0;
+  items.forEach(it=>{const w=x0.measureText(it.t).width+32;if(lw+w>cwid&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
+  const top=pad+TS+10+lines.length*NL+8+rows.length*LR+10,foot=72;
+  let svg=host.querySelector('svg'),tmp=null;
+  if(square&&sc){ // redraw off screen so chart + header + footer make a square
+    tmp=document.createElement('div');tmp.className='bvr-plot';tmp.style.cssText='position:absolute;left:-10000px;top:0;width:'+(cwid-8)+'px';
+    card.appendChild(tmp);scatter(pid,m,{host:tmp,W:cwid-8,H:EXP.side-top-foot});svg=tmp.querySelector('svg');}
+  const W=+svg.getAttribute('width'),H=+svg.getAttribute('height'),url=svgUrl(svg);if(tmp)tmp.remove();
+  const img=new Image();
+  img.onload=()=>{
+    const cw=W+8+2*pad,ch=top+H+foot,cv=document.createElement('canvas'),x=cv.getContext('2d');
+    cv.width=cw*S;cv.height=ch*S;x.scale(S,S);paintBg(x,cw,ch);
+    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 '+TS+'px '+EXP.font;x.fillText(title,pad,pad+TS-4);
+    x.font='400 '+NS+'px '+EXP.font;x.fillStyle=C.ink2;lines.forEach((t,i)=>x.fillText(t,pad,pad+TS+10+NL*(i+1)-5));
+    let y=pad+TS+10+lines.length*NL+8+LR-6;x.font='500 '+LS+'px '+EXP.font;
+    rows.forEach(r=>{let cx=pad;r.forEach(it=>{
+      if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+6,y-5,6,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-6,16,2.2);}
+      x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?18:22),y);cx+=x.measureText(it.t).width+32+(it.c?0:4);});y+=LR;});
+    x.drawImage(img,pad-8,top,W+8,H);URL.revokeObjectURL(url);  // the SVG has 8px spare on its left: line its edge up with the title
+    // footer: source and version, then the credit
+    x.font='400 12.5px '+EXP.font;x.fillStyle=C.muted;
+    x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-50);
+    x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-40);x.lineTo(cw-pad,ch-40);x.stroke();
+    x.font='600 15px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-15);
+    const nw=x.measureText(nm).width;x.font='500 15px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-15);
+    const hid=CATS.some(([k])=>HIDE.has(k));
+    cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
+      a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid?'some-hidden':'',square?'square':''].filter(Boolean).join('-')+'.png';
+      document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},'image/png');
+  };
+  img.src=url;
+}
+// the page's Download button (see tools/build_catalog.py) calls these for the two scatter plots
+window.DL_CUSTOM=Object.assign(window.DL_CUSTOM||{},{'bvr-sc-papers':f=>exportPng('bvr-sc-papers',f==='square'),'bvr-sc-trials':f=>exportPng('bvr-sc-trials',f==='square')});
+
 const JOBS=[['bvr-sc-papers',()=>scatter('bvr-sc-papers','papers')],['bvr-sc-trials',()=>scatter('bvr-sc-trials','trials')],
   ['bvr-rk-papers',()=>rank('bvr-rk-papers','papers')],['bvr-rk-trials',()=>rank('bvr-rk-trials','trials')]].filter(([id])=>$(id));
 const drawnW={};
 function redrawAll(){for(const k in drawnW)delete drawnW[k];draw();}
-function draw(){JOBS.forEach(([id,f])=>{const w=$(id).clientWidth;
-  if(w<240||drawnW[id]===w)return;drawnW[id]=w;f();});}
+function draw(){JOBS.forEach(([id,f])=>{const w=$(id).clientWidth,k=w+($(id).closest('.dl-sq')?'s':'');
+  if(w<240||drawnW[id]===k)return;drawnW[id]=k;f();});}
 draw();
 let to;const later=()=>{clearTimeout(to);to=setTimeout(draw,80);};
 if(window.ResizeObserver){const ro=new ResizeObserver(later);JOBS.forEach(([id])=>ro.observe($(id)));}
@@ -592,7 +721,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/expanded/counts_2026-11-11.csv" target="_blank" rel="noopener">counts_2026-11-11.csv</a><span class="folder">expanded/</span></div>
             <p>Raw papers and trials per year, 2021–2025, for the 111 fetched causes.</p>
-            <div class="meta">111 rows · 10 KB · updated 11 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
+            <div class="meta">111 rows · 10 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/counts_2026-11-11.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/counts_2026-11-11.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -600,7 +729,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
           <div class="data-main">
             <div class="data-name"><a class="fname" href="https://github.com/ebise-wq/pais-data/blob/main/expanded/queries_2026-11-11.csv" target="_blank" rel="noopener">queries_2026-11-11.csv</a><span class="folder">expanded/</span></div>
             <p>The exact PubMed and ClinicalTrials.gov search for each cause.</p>
-            <div class="meta">111 rows · 29 KB · updated 11 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
+            <div class="meta">111 rows · 29 KB · updated 20 Nov 2026 · made by <a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/fetch.py" target="_blank" rel="noopener">expanded/fetch.py</a></div>
           </div>
           <div class="actions"><a href="https://github.com/ebise-wq/pais-data/blob/main/expanded/queries_2026-11-11.csv" target="_blank" rel="noopener">View</a><a href="https://raw.githubusercontent.com/ebise-wq/pais-data/main/expanded/queries_2026-11-11.csv" target="_blank" rel="noopener">Download</a></div>
         </li>
@@ -679,39 +808,53 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
   </section>
 </main>
 <footer class="wrap">
-  <div class="licence" id="licence">
-    <p><b>Using these charts.</b> Charts, text and tables here are <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. You can share,
-    copy and adapt them, also commercially: in an article, a talk, or a company's fundraising deck. Two conditions:
-    credit &ldquo;Siebe Rozendal • How to Solve A Disease?&rdquo; with a link to <a href="https://ebise-wq.github.io/pais-data/" target="_blank" rel="noopener">this site</a>, and say if you
-    changed anything. Leaving the credit line on the image is enough. Removing it, or presenting the work as your
-    own, is not allowed.</p>
-    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
-    so commercial users should check <a href="https://www.healthdata.org/node/822" target="_blank" rel="noopener">IHME&rsquo;s</a>
-    and <a href="https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database" target="_blank" rel="noopener">WHO ICTRP&rsquo;s</a> terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit.
-    Code is GPL-3.0.</p>
-  </div>
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v20 · built 2026-11-27</span>
+  <span class="ver">v41 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
-  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
+</div>
 <script>
-document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
-  var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
-  var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
-  var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
-  srcs.slice(1).forEach(function (u) { new Image().src = u; });
-  fig.querySelectorAll(".toggle button").forEach(function (b) {
+// Charts: switches pick one of the chart's images (key = chosen option of each switch, e.g. "1,0"). Charts with
+// data-wide also have landscape copies, shown on desktop; links and the full-size view follow the shape on screen.
+var WIDE = window.matchMedia ? window.matchMedia("(min-width: 800px)") : { matches: false };
+document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(function (fig) {
+  var d = fig.dataset, sp = function (k) { return d[k] ? d[k].split("|") : []; };
+  var keys = d.keys ? d.keys.split("|") : ["0"], srcs = d.views ? sp("views") : [fig.querySelector(".chart-img img").getAttribute("src")],
+      paths = sp("paths"), raws = sp("raws"), solids = sp("solids"), wides = sp("wide"), wraws = sp("wraws"), wsolids = sp("wsolids");
+  var img = fig.querySelector(".chart-img img"), source = fig.querySelector("picture source"), open = fig.querySelector(".chart-img");
+  var path = fig.querySelector(".path"), full = fig.querySelector("a.full"), solid = fig.querySelector("a.solid");
+  if (!raws.length && full) raws = [full.href];
+  if (!solids.length && solid) solids = [solid.href];
+  var st = keys[0].split(",").map(Number), btns = fig.querySelectorAll("[data-sw]");
+  (WIDE.matches && wides.length ? wides : srcs).slice(1).forEach(function (u) { new Image().src = u; });
+  function show() {
+    var i = keys.indexOf(st.join(","));
+    if (i < 0) return;
+    var w = WIDE.matches && wides.length;
+    img.src = srcs[i]; if (source) source.srcset = wides[i];
+    open.dataset.full = w ? wides[i] : srcs[i];
+    var so = w && wsolids.length ? wsolids[i] : solids[i];
+    if (so) open.dataset.solid = so;
+    if (path && paths[i]) path.textContent = paths[i];
+    if (full && raws[i]) full.href = w && wraws.length ? wraws[i] : raws[i];
+    if (solid && so) solid.href = so;
+    btns.forEach(function (b) {
+      var k = +b.dataset.sw, on = b.hasAttribute("data-v") ? st[k] === +b.dataset.v : st[k] === 1;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+  btns.forEach(function (b) {
     b.addEventListener("click", function () {
-      var i = +b.dataset.view;
-      img.src = srcs[i]; open.dataset.full = srcs[i];
-      if (path) path.textContent = paths[i];
-      if (full) full.href = raws[i];
-      fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      var k = +b.dataset.sw;
+      st[k] = b.hasAttribute("data-v") ? +b.dataset.v : 1 - st[k];
+      show();
     });
   });
+  if (WIDE.addEventListener) WIDE.addEventListener("change", show);
+  show();
 });
 (function () {
   // Contents bar: collapsed list of sections; names the section in view.
@@ -725,6 +868,7 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") setOpen(false); });
   document.addEventListener("click", function (ev) { if (!bar.contains(ev.target)) setOpen(false); });
   var secs = [].slice.call(document.querySelectorAll("main.overview > section"));
+  if (!secs.length) return;  // topic page: the bar already names the page
   function spy() {
     var y = bar.getBoundingClientRect().bottom + 48, id = "";
     secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= y) id = sec.id; });
@@ -741,13 +885,145 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   window.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; spy(); }); }, { passive: true });
   spy();
 })();
+// ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
+// The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
+// green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// The page's web fonts (latin subset) as @font-face rules with the font files inlined, so saved images
+// render in Inter instead of the device's fallback font. Loaded once, on the first download.
+window.dlFonts = function () {
+  if (window.dlFonts.p) return window.dlFonts.p;
+  var link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  var asData = function (u) {
+    return fetch(u).then(function (r) { return r.blob(); }).then(function (b) {
+      return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok(fr.result); }; fr.readAsDataURL(b); });
+    });
+  };
+  window.dlFonts.p = !link ? Promise.resolve("") : fetch(link.href).then(function (r) { return r.text(); }).then(function (css) {
+    var blocks = css.split("/* ").filter(function (b) { return b.indexOf("latin */") === 0; }).map(function (b) { return b.slice(9); });
+    var urls = {}; blocks.forEach(function (b) { (b.match(/url\((https:[^)]+)\)/g) || []).forEach(function (m) { urls[m.slice(4, -1)] = 1; }); });
+    return Promise.all(Object.keys(urls).map(function (u) { return asData(u).then(function (d) { urls[u] = d; }); })).then(function () {
+      return blocks.join(" ").replace(/url\((https:[^)]+)\)/g, function (m, u) { return "url(" + urls[u] + ")"; });
+    });
+  }).catch(function () { return ""; });
+  return window.dlFonts.p;
+};
+// Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
+window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
+(function () {
+  var roots = document.querySelectorAll("[data-dl]");
+  if (!roots.length) return;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null;
+  var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
+  function load() {
+    if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
+    return lib;
+  }
+  function glow(x, w, h) {  // CSS radial-gradient(120% 80% at 10% 0%, ...) of the page
+    x.fillStyle = "#0b231c"; x.fillRect(0, 0, w, h); x.save(); x.translate(0.1 * w, 0); x.scale(1.2 * w, 0.8 * h);
+    var g = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+    [[0, "#1f4d3e"], [0.38, "#12342a"], [0.62, "#0e2a22"], [1, "#0b231c"]].forEach(function (s) { g.addColorStop(s[0], s[1]); });
+    x.fillStyle = g; x.fillRect(-1, -1, 2, 2); x.restore();
+  }
+  function txt(sel) { var n = sel && document.querySelector(sel); return n ? n.textContent.trim() : ""; }
+  function save(cv, name) {
+    cv.toBlob(function (b) {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name + ".png";
+      document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    }, "image/png");
+  }
+  function generic(root, fmt) {
+    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
+    var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
+      filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var PAD = 24, HEAD = (title ? 36 : 0) + (sub ? 22 : 0) + (title || sub ? 8 : 0);
+    function srcWrap(width) {  // the footer's source line, wrapped to the chart's width
+      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", out = [];
+      if (!src) return out;
+      var m = document.createElement("canvas").getContext("2d"); m.font = "400 12.5px " + FONT; var cur = "";
+      src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > width && cur) { out.push(cur); cur = wd; } else cur = t; });
+      out.push(cur); return out;
+    }
+    var cover = document.createElement("div"); cover.className = "dl-cover"; cover.textContent = "Preparing image…";
+    return load().then(function (h2i) {
+      // Square: lay the chart out at a fixed width first (the charts redraw on resize), so it fills the square
+      // whatever the screen size. The card's own background and border would frame the chart: make them
+      // transparent while capturing. A cover hides the brief change.
+      var go = function () {
+        var css = root.getAttribute("style") || "";
+        document.body.appendChild(cover);
+        root.classList.add("dl-capturing");
+        // left-out parts are hidden on the page too, so the image is sized without them
+        var gone = Array.prototype.slice.call(root.querySelectorAll(skip));
+        gone.forEach(function (n) { n.classList.add("dl-hidden"); });
+        var un = function (v) { root.classList.remove("dl-capturing", "dl-sq"); root.setAttribute("style", css); cover.remove();
+          gone.forEach(function (n) { n.classList.remove("dl-hidden"); });
+          window.dispatchEvent(new Event("resize")); return v; };
+        var ready = wait(60);
+        if (fmt === "square") {  // data-dl-square-width: another layout width; class dl-sq lets CSS change the layout
+          var swn = +(d.dlSquareWidth || 560), sw = swn + "px"; root.classList.add("dl-sq");
+          root.style.width = sw; root.style.maxWidth = "none"; root.style.minWidth = sw; root.style.boxSizing = "content-box";
+          window.dispatchEvent(new Event("resize"));
+          // second pass: charts that read --dl-extra grow by the height left over in the square
+          ready = wait(450).then(function () {
+            var side = root.offsetWidth + 2 * PAD, spare = side - PAD - HEAD - (52 + srcWrap(root.offsetWidth).length * 16) - root.offsetHeight - PAD / 2;
+            if (spare > 24) { root.style.setProperty("--dl-extra", Math.round(spare) + "px"); window.dispatchEvent(new Event("resize")); return wait(450); }
+          });
+        }
+        return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
+      };
+      return window.dlFonts().then(function (css) { if (css) opt.fontEmbedCSS = css; else opt.skipFonts = true; return go(); });
+    }).then(function (shot) {
+      var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 52 + srcLines.length * 16;
+      var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
+      if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
+      var cv = document.createElement("canvas"), x = cv.getContext("2d");
+      cv.width = Math.round(w * S); cv.height = Math.round(h * S); x.scale(S, S); glow(x, w, h);
+      var tx = fmt === "square" ? ox : pad, ty = (fmt === "square" ? oy - head : pad);
+      x.textBaseline = "alphabetic";
+      if (title) { x.fillStyle = "#e9efe9"; x.font = "700 27px " + FONT; x.fillText(title, tx, ty + 25); ty += 36; }
+      if (sub) { x.fillStyle = "#a7bdb2"; x.font = "400 15px " + FONT; x.fillText(sub, tx, ty + 16); }
+      x.drawImage(shot, ox, oy, cw, chh);
+      var fy = (fmt === "square" ? oy + chh + foot : h);
+      x.font = "400 12.5px " + FONT; x.fillStyle = "#7e978b";
+      srcLines.forEach(function (l, i) { x.fillText(l, tx, fy - 50 - (srcLines.length - 1 - i) * 16); });
+      x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 40); x.lineTo(tx + cw, fy - 40); x.stroke();
+      x.font = "600 15px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 15);
+      var nw = x.measureText("Siebe Rozendal").width; x.font = "500 15px " + FONT; x.fillStyle = "#9fd8b5";
+      x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 15);
+      save(cv, d.dl + (fmt === "square" ? "-square" : ""));
+    });
+  }
+  roots.forEach(function (root) {
+    var box = document.createElement("div"); box.className = "dl";
+    box.innerHTML = '<button type="button" class="dl-btn" aria-expanded="false" aria-haspopup="true">Download</button>' +
+      '<div class="dl-menu" role="menu" hidden><button type="button" role="menuitem" data-fmt="square">Square image</button>' +
+      '<button type="button" role="menuitem" data-fmt="screen">As on screen</button></div>';
+    root.appendChild(box);
+    var btn = box.querySelector(".dl-btn"), menu = box.querySelector(".dl-menu");
+    function open(o) { menu.hidden = !o; btn.setAttribute("aria-expanded", o ? "true" : "false"); }
+    btn.addEventListener("click", function (ev) { ev.stopPropagation(); open(menu.hidden); });
+    document.addEventListener("click", function (ev) { if (!box.contains(ev.target)) open(false); });
+    menu.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        open(false); var fmt = b.dataset.fmt, c = root.dataset.dlCustom;
+        btn.disabled = true; btn.textContent = "Preparing…";
+        var done = function () { btn.disabled = false; btn.textContent = "Download"; };
+        Promise.resolve(c && window.DL_CUSTOM && window.DL_CUSTOM[c] ? window.DL_CUSTOM[c](fmt) : generic(root, fmt))
+          .then(done, function (e) { done(); alert("Sorry, the image could not be made in this browser."); console.error(e); });
+      });
+    });
+  });
+})();
 (function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;
-  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title");
+  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title"), sol = dlg.querySelector(".lb-solid");
   document.querySelectorAll(".chart-img").forEach(function (b) {
     b.addEventListener("click", function () {
       img.src = b.dataset.full; img.alt = b.dataset.title; title.textContent = b.dataset.title;
+      sol.hidden = !b.dataset.solid; if (b.dataset.solid) sol.href = b.dataset.solid;
       dlg.showModal();
     });
   });

@@ -34,7 +34,7 @@ Including them made ME/CFS look closer to the bottom of the ranking than it is.
 - `papers_vs_dalys_expanded.png`, `trials_vs_dalys_expanded.png`: static charts, now replaced on the
   catalog site by the interactive charts below.
 - `burden_interactive.html` + `burden_interactive_2021-2025.json`: interactive charts (scatterplots with
-  log/linear switch, shortfall rankings with 90% ranges, comparator-set table) shown on the catalog site
+  log/linear switch, with Full / 4× / 8× zoom into the bottom left in the linear view, download buttons on each chart that save it as set up on screen (PNG on the page's green glow; square by default for the scatter plots), shortfall rankings with 90% ranges, comparator-set table) shown on the catalog site
   (https://ebise-wq.github.io/pais-data/burden-120.html). The JSON was computed in a separate claude.ai
   session from this table and `../analysis/plot_data_2021-2025.csv`: per-disease shortfall ranges
   (burden uncertainty plus 4,000 bootstrap resamples of the trend, seed 2558632273), ranks, a

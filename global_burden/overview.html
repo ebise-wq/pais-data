@@ -5,7 +5,7 @@
      The bars are drawn the same way as drawHist() in burden_interactive.html (no reference diseases).
      Ids and classes start with gmo-. -->
 <style>
-.gmo { display: grid; gap: 10px; --azure: #8fc6ff; }
+.gmo { display: grid; gap: 10px; --azure: #9fd8b5; }
 @media (min-width: 640px) { .gmo { grid-template-columns: 1fr 1fr; } }
 .gmo-panel { border: 1px solid var(--line); border-radius: 12px; background: var(--surface); padding: 12px 14px 10px; min-width: 0; }
 .gmo-lab { font-size: 0.8rem; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
@@ -14,7 +14,6 @@
 .gmo-big .u { font-size: 1rem; }
 .gmo-range { font-family: var(--f-mono); font-size: 0.85rem; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
 .gmo svg { display: block; width: 100%; margin-top: 8px; }
-.gmo-foot { grid-column: 1 / -1; font: 400 0.78rem var(--f-mono); color: var(--faint); text-align: right; }
 </style>
 <div class="gmo" id="gmo-root">
   <div class="gmo-panel">
@@ -29,7 +28,6 @@
     <div class="gmo-range" id="gmo-dalyR"></div>
     <svg id="gmo-hDaly" role="img" aria-label="Distribution of disability-adjusted life years"></svg>
   </div>
-  <div class="gmo-foot">__CREDIT__ · v11.4</div>
 </div>
 <script>
 (function () {

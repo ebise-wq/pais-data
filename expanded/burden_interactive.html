@@ -4,32 +4,26 @@
      more:end, and between page-only:start and page-only:end, are shown on the topic page only. Colours and fonts come from the page's tokens. -->
 <style>
 .bvr { display: grid; gap: 1.25rem; min-width: 0; font-family: var(--f-body); }
-.bvr-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0.75rem; }
-.bvr-tiles .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 0.8rem; }
-.bvr-tiles .k { font-size: 0.9rem; color: var(--muted); }
-.bvr-tiles .v { font: 600 2.7rem/1.05 var(--f-display); margin: 0.25rem 0 0.1rem; letter-spacing: -0.01em; }
-.bvr-tiles .v span { display: block; font: 500 1rem var(--f-body); color: var(--muted); margin-top: 0.15rem; }
-.bvr-tiles .d { font-size: 0.92rem; color: var(--ink); }
-.bvr-tiles .r { font-size: 0.85rem; color: var(--faint); margin-top: 0.2rem; font-variant-numeric: tabular-nums; }
 .bvr-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); align-items: start; }
 .bvr-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 0.75rem 0.75rem; position: relative; min-width: 0; }
 .bvr-card h3 { font: 600 1.15rem/1.3 var(--f-display); margin: 0 0.35rem 0.15rem; }
 .bvr-sub { font-size: 0.92rem; color: var(--muted); margin: 0 0.35rem 0.6rem; }
 .bvr-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; margin: 0 0.35rem 0.6rem; background: var(--bg); }
 .bvr-seg button { font: 500 0.88rem var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px; padding: 0.25rem 0.85rem; cursor: pointer; }
+.bvr-zoom[hidden] { display: none; }
 .bvr-seg button.on { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
 .bvr-legend { display: flex; flex-wrap: wrap; gap: 0.3rem 1rem; margin: 0 0.35rem 0.4rem; font-size: 0.88rem; color: var(--muted); }
 .bvr-legend button { all: unset; cursor: pointer; display: inline-flex; align-items: center; padding: 0.15rem 0.1rem; border-radius: 6px; color: var(--muted); font-size: 0.88rem; -webkit-tap-highlight-color: transparent; }
 .bvr-legend button.off { opacity: 0.38; text-decoration: line-through; }
 .bvr-legend .hint { color: var(--faint); font-size: 0.82rem; padding: 0.15rem 0; }
 .bvr-legend i { flex: none; display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 6px; vertical-align: -1px; }
-.bvr-legend .ln { width: 20px; height: 0; border-top: 2px solid #dfe5ee; border-radius: 0; vertical-align: 4px; }
+.bvr-legend .ln { width: 20px; height: 0; border-top: 2px solid #dfe9e3; border-radius: 0; vertical-align: 4px; }
 .bvr button:focus-visible, .bvr summary:focus-visible { outline: 2px solid var(--sunset); outline-offset: 2px; }
 .bvr-plot { position: relative; width: 100%; }
 .bvr svg { display: block; max-width: 100%; overflow: visible; }
 .bvr svg text { font-family: var(--f-body); fill: var(--muted); font-variant-numeric: tabular-nums; }
 .bvr svg text.halo { paint-order: stroke; stroke: var(--surface); stroke-width: 4px; stroke-linejoin: round; }
-.bvr-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+.bvr-tip { position: absolute; pointer-events: none; background: #0c2620; border: 1px solid var(--line); border-radius: 10px;
   padding: 0.55rem 0.7rem; font-size: 0.88rem; line-height: 1.4; color: var(--ink); max-width: 260px; z-index: 5;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; }
 .bvr-tip b { display: block; font-size: 0.95rem; margin-bottom: 0.2rem; }
@@ -51,32 +45,31 @@
 .bvr-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 </style>
 <div class="bvr">
-  <!-- page-only:start --><div class="bvr-tiles" id="bvr-tiles"></div><!-- page-only:end -->
   <div class="bvr-grid">
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="papers-vs-burden" data-dl-custom="bvr-sc-papers">
       <h3>Papers per year vs burden</h3>
       <p class="bvr-sub">2021–2025 averages. Burden in DALYs. <span class="bvr-scl">Log scales.</span> Tap a dot for details.</p>
-      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div>
+      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg1"></div>
       <div class="bvr-plot" id="bvr-sc-papers"></div>
     </div>
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="trials-vs-burden" data-dl-custom="bvr-sc-trials">
       <h3>Trials per year vs burden</h3>
       <p class="bvr-sub">Interventional trials on ClinicalTrials.gov. <span class="bvr-scl">Log scales.</span></p>
-      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div>
+      <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg2"></div>
       <div class="bvr-plot" id="bvr-sc-trials"></div>
     </div>
   </div>
   <!-- more:start -->
   <div class="bvr-grid">
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v29">
       <h3>Largest papers shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg3"></div>
       <div class="bvr-plot" id="bvr-rk-papers"></div>
     </div>
-    <div class="bvr-card">
+    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-square-width="700" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v29">
       <h3>Largest trials shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg4"></div>
@@ -101,19 +94,19 @@
       <li>Comparator burden is from GBD 2023 (95% interval). ME/CFS and long COVID burden is from the ME/CFS Burden model v11.2, CCC criteria, year 2026 (90% range). Groups are not used to fit the trend.</li>
       <li>Papers titled only “long COVID” are not in the ME/CFS count, so the ME/CFS shortfall is slightly overstated.</li>
       <li>Shortfall ranges combine burden uncertainty (lognormal fitted to each burden interval) and trend-fit uncertainty (4,000 bootstrap resamples of the 120 comparators). Random seed 2558632273.</li>
-      <li>The linear view shows the same trend (fitted on log values), so it curves. On linear axes a few diseases with very large burden stretch the chart, and most points crowd near zero.</li>
+      <li>The linear view shows the same trend (fitted on log values), so it curves. On linear axes a few diseases with very large burden stretch the chart, and most points crowd near zero. The zoom buttons (4×, 8×) show the bottom left of the linear view; dots outside the frame are left out.</li>
       <li>Trends are refitted here from the rounded counts in the CSV. They match the file's trend columns exactly for papers and within 2% for trials.</li>
       <li>ClinicalTrials.gov only.</li>
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>__CREDIT__ · v18</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v29</span></div>
 </div>
 <script>
 (function(){
 const D=__BVR_DATA__;
 // House colours: ocean and sunset, with a soft teal and gold for the two extra groups.
-const C={blue:'#7fb3d5',teal:'#8fd0bf',coral:'#f4a582',gold:'#e9c983',ink:'#eef1f6',ink2:'#a3acba',muted:'#6f7a8c',grid:'#262f3d',bg:'#1a2230',trend:'#dfe5ee'};
+const C={blue:'#9fd8b5',teal:'#7fb2f0',coral:'#f2b880',gold:'#b48cf0',ink:'#e9efe9',ink2:'#a7bdb2',muted:'#7e978b',grid:'#24463b',bg:'#133329',trend:'#dfe9e3'};
 const ROOT=document.querySelector('.bvr');
 const $=id=>document.getElementById(id);
 const KIND={'Classic ME/CFS':'m','All ME/CFS':'m','Long COVID':'l','Long COVID + classic ME/CFS':'l'};
@@ -131,17 +124,11 @@ const fmtX=v=>(v>=10?v.toFixed(0):String(+v.toPrecision(2)))+'×';
 const ord=n=>n+(n%100>=11&&n%100<=13?'th':['th','st','nd','rd'][n%10]||'th');
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
 
-// ---------- tiles
-if($('bvr-tiles'))$('bvr-tiles').innerHTML=['papers','trials'].map(m=>{
-  const d=all[m];
-  return `<div class="tile"><div class="k">All ME/CFS: ${m}</div>
-  <div class="v" style="color:${C.coral}">${fmtX(d.sf).replace('×','')}×<span>shortfall</span></div>
-  <div class="d">${ord(d.rank)} largest of ${D.ncomp+1}</div>
-  <div class="r">90% range ${+d.p5.toPrecision(2)}–${+d.p95.toPrecision(2)}×</div></div>`;}).join('');
-
 const CATS=[['c',C.blue,'Common worldwide'],['g',C.teal,'Mainly low-income regions'],['m',C.coral,'ME/CFS'],['l',C.gold,'Long COVID (+ ME)']];
 const HIDE=new Set();
-let SCALE='log';
+let SCALE='log',ZOOM=0;
+// Linear view zoom levels into the bottom left: x (DALYs) and y maxima. All keep ME/CFS and long COVID in view.
+const ZX=[2e8,5e7,2.5e7],ZY={papers:[16000,4000,2000],trials:[750,200,120]};
 const shown=r=>!HIDE.has(r.kind);
 function legend(id,r2){
   const h=$(id);if(!h)return;
@@ -150,9 +137,15 @@ function legend(id,r2){
   h.querySelectorAll('button').forEach(b=>b.addEventListener('click',()=>{const k=b.dataset.k;HIDE.has(k)?HIDE.delete(k):HIDE.add(k);syncLegends();redrawAll();}));
 }
 function syncLegends(){ROOT.querySelectorAll('.bvr-legend button').forEach(b=>{const off=HIDE.has(b.dataset.k);b.classList.toggle('off',off);b.setAttribute('aria-pressed',String(!off));});}
-function syncScale(){ROOT.querySelectorAll('.bvr-seg button').forEach(b=>{const on=b.dataset.s===SCALE;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+function syncScale(){ROOT.querySelectorAll('.bvr-seg button[data-s]').forEach(b=>{const on=b.dataset.s===SCALE;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
+  ROOT.querySelectorAll('.bvr-zoom').forEach(z=>z.hidden=SCALE!=='lin');
+  ROOT.querySelectorAll('.bvr-seg button[data-z]').forEach(b=>{const on=+b.dataset.z===ZOOM;b.classList.toggle('on',on);b.setAttribute('aria-pressed',String(on));});
   ROOT.querySelectorAll('.bvr-scl').forEach(e=>e.textContent=SCALE==='log'?'Log scales.':'Linear scales.');}
-ROOT.querySelectorAll('.bvr-seg button').forEach(b=>b.addEventListener('click',()=>{SCALE=b.dataset.s;syncScale();redrawAll();}));
+ROOT.querySelectorAll('.bvr-seg button[data-s]').forEach(b=>b.addEventListener('click',()=>{SCALE=b.dataset.s;syncScale();redrawAll();}));
+ROOT.querySelectorAll('.bvr-seg button[data-z]').forEach(b=>b.addEventListener('click',()=>{ZOOM=+b.dataset.z;syncScale();redrawAll();}));
+function linTicks(max){const raw=max/4,p=Math.pow(10,Math.floor(Math.log10(raw))),n=raw/p,st=(n<1.5?1:n<3.5?2:5)*p,out=[];
+  for(let v=0;v<=max*1.0001;v+=st)out.push(v);return out;}
+const fmtTick=v=>v===0?'0':v>=1e6?(+(v/1e6).toPrecision(3))+'M':v>=1000?(+(v/1000).toPrecision(3))+'k':String(+v.toPrecision(3));
 syncScale();
 legend('bvr-lg1',D.fits.papers.r2.toFixed(2));legend('bvr-lg2',D.fits.trials.r2.toFixed(2));legend('bvr-lg3');legend('bvr-lg4');
 
@@ -177,28 +170,33 @@ function tipHtml(r,m){
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-hit]'))ROOT.querySelectorAll('.bvr-tip').forEach(t=>t.style.display='none');});
 
 // ---------- scatter
-function scatter(id,m){
-  const host=$(id);host.innerHTML='';
-  const W=host.clientWidth,H=Math.round(Math.max(420,Math.min(560,W*1.1)));
-  const M={l:50,r:14,t:12,b:46},fs=W<520?13:14,narrow=W<520;
+function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into another element (square download)
+  const host=opt?opt.host:$(id);host.innerHTML='';
+  const W=opt?opt.W:host.clientWidth,H=opt?opt.H:(W>=700?Math.round(W*0.62):Math.round(Math.max(420,Math.min(560,W*1.1))));  // landscape on desktop
+  const M={l:50,r:14,t:12,b:46},fs=opt?15:(W<520?13:14),narrow=W<520;  // a little larger in the square download
   const svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${m} per year against disease burden`},host);
   const LOG=SCALE==='log';
   const vis=R.filter(shown),xmin=vis.length?Math.min(...vis.map(r=>r.dalys)):1e4;
-  const xd=LOG?[Math.max(1e4,xmin/1.6),3e8]:[0,2e8],yd=LOG?(m==='papers'?[30,40000]:[0.3,1500]):(m==='papers'?[0,16000]:[0,750]);
+  const xd=LOG?[Math.max(1e4,xmin/1.6),3e8]:[0,ZX[ZOOM]],yd=LOG?(m==='papers'?[30,40000]:[0.3,1500]):[0,ZY[m][ZOOM]];
   const fx=v=>LOG?Math.log10(v):v,fy=v=>LOG?Math.log10(Math.max(v,1e-9)):v;
+  // y numbers start at the left edge (in line with the title); the plot starts just after the widest one
+  const yTicks=LOG?(m==='papers'?[100,1000,10000]:[1,10,100,1000]):linTicks(yd[1]),yLab=v=>LOG?(v>=1000?(v/1000)+'k':String(v)):fmtTick(v);
+  {const mc=document.createElement('canvas').getContext('2d');mc.font=fs+'px '+getComputedStyle(host).fontFamily;
+   M.l=Math.ceil(Math.max(...yTicks.map(v=>mc.measureText(yLab(v)).width)))+10;}
   const lx=v=>M.l+(fx(v)-fx(xd[0]))/(fx(xd[1])-fx(xd[0]))*(W-M.l-M.r);
   const ly=v=>H-M.b-(fy(v)-fy(yd[0]))/(fy(yd[1])-fy(yd[0]))*(H-M.t-M.b);
   // x positions to sample the trend and band: dense near zero, even across the range
   const xs=[];for(let i=0;i<=80;i++)xs.push(Math.pow(10,4+i/80*(Math.log10(3e8)-4)));
-  if(!LOG)for(let i=1;i<=80;i++)xs.push(i/80*2e8);
+  if(!LOG)for(let i=1;i<=80;i++)xs.push(i/80*xd[1]);
   xs.sort((a,b)=>a-b);
-  const clip=el('clipPath',{id:'cp-'+id},el('defs',{},svg));el('rect',{x:M.l,y:M.t,width:W-M.l-M.r,height:H-M.t-M.b},clip);
-  (LOG?[[1e4,'10k'],[1e5,'100k'],[1e6,'1M'],[1e7,'10M'],[1e8,'100M']].filter(([v])=>v>=xd[0]*0.999):[[0,'0'],[5e7,'50M'],[1e8,'100M'],[1.5e8,'150M'],[2e8,'200M']]).forEach(([v,t])=>{
+  const cid=(opt?'x':'')+'cp-'+id;
+  const clip=el('clipPath',{id:cid},el('defs',{},svg));el('rect',{x:M.l,y:M.t,width:W-M.l-M.r,height:H-M.t-M.b},clip);
+  (LOG?[[1e4,'10k'],[1e5,'100k'],[1e6,'1M'],[1e7,'10M'],[1e8,'100M']].filter(([v])=>v>=xd[0]*0.999):linTicks(xd[1]).map(v=>[v,fmtTick(v)])).forEach(([v,t])=>{
     el('line',{x1:lx(v),x2:lx(v),y1:M.t,y2:H-M.b,stroke:C.grid},svg);
     el('text',{x:lx(v),y:H-M.b+18,'text-anchor':'middle','font-size':fs,fill:C.muted},svg).textContent=t;});
-  (LOG?(m==='papers'?[100,1000,10000]:[1,10,100,1000]):(m==='papers'?[0,5000,10000,15000]:[0,250,500,750])).forEach(v=>{
+  yTicks.forEach(v=>{
     el('line',{x1:M.l,x2:W-M.r,y1:ly(v),y2:ly(v),stroke:C.grid},svg);
-    el('text',{x:M.l-7,y:ly(v)+4.5,'text-anchor':'end','font-size':fs,fill:C.muted},svg).textContent=v>=1000?(v/1000)+'k':v;});
+    el('text',{x:0,y:ly(v)+4.5,'font-size':fs,fill:C.muted},svg).textContent=yLab(v);});
   el('text',{x:(M.l+W-M.r)/2,y:H-6,'text-anchor':'middle','font-size':fs,fill:C.ink2},svg).textContent='DALYs per year';
   // fit, 90% confidence band and 90% prediction range
   const X=comps.map(r=>Math.log10(r.dalys)),Y=comps.map(r=>Math.log10(r[m].n)),n=X.length;
@@ -206,7 +204,7 @@ function scatter(id,m){
   const sxx=X.reduce((a,v)=>a+(v-mx)*(v-mx),0),b=X.reduce((a,v,i)=>a+(v-mx)*(Y[i]-my),0)/sxx,a0=my-b*mx;
   const s2=X.reduce((a,v,i)=>a+Math.pow(Y[i]-a0-b*v,2),0)/(n-2),T=1.6576; // t(0.95, 122 df)
   const tr=v=>Math.pow(10,a0+b*Math.log10(v));
-  const g=el('g',{'clip-path':`url(#cp-${id})`},svg);
+  const g=el('g',{'clip-path':`url(#${cid})`},svg);
   const up=[],dn=[],pu=[],pd=[];
   for(const xv of xs){const x0=Math.log10(xv);
     const se=Math.sqrt(s2*(1/n+(x0-mx)*(x0-mx)/sxx)),sp=Math.sqrt(s2*(1+1/n+(x0-mx)*(x0-mx)/sxx)),f=a0+b*x0,px=lx(Math.pow(10,x0));
@@ -216,10 +214,11 @@ function scatter(id,m){
   el('polyline',{points:xs.map(v=>lx(v)+','+ly(tr(v))).join(' '),fill:'none',stroke:C.trend,'stroke-width':2,'stroke-linecap':'round','stroke-linejoin':'round'},g);
   // highlight: drop line from All ME/CFS to trend
   const hx=lx(all.dalys),hy=ly(all[m].n),hty=ly(all[m].trend);
-  const showAll=shown(all);
+  const showAll=shown(all)&&(LOG||(all.dalys<=xd[1]&&all[m].n<=yd[1]));
   if(showAll)el('line',{x1:hx,x2:hx,y1:hy-9,y2:hty+3,stroke:C.coral,'stroke-width':1.5,'stroke-dasharray':'4 4'},svg);
   // points
-  const pts=R.filter(shown).map(r=>({r,x:lx(r.dalys),y:ly(r[m].n),rad:r===all?7.5:(isComp(r)?4:5.5)}));
+  const inView=r=>LOG||(r.dalys<=xd[1]&&r[m].n<=yd[1]); // zoomed linear view: drop dots outside the frame
+  const pts=R.filter(r=>shown(r)&&inView(r)).map(r=>({r,x:lx(r.dalys),y:ly(r[m].n),rad:r===all?7.5:(isComp(r)?4:5.5)}));
   const boxes=[showAll?{x:hx-3,y:hty,w:6,h:hy-hty}:{x:-99,y:-99,w:0,h:0}];
   pts.forEach(p=>boxes.push({x:p.x-p.rad-1,y:p.y-p.rad-1,w:2*p.rad+2,h:2*p.rad+2}));
   const ptBoxes=boxes.slice(1);
@@ -289,12 +288,15 @@ function scatter(id,m){
 // ---------- ranking: top 20 of comparators + All ME/CFS, then the other groups
 function rank(id,m){
   const host=$(id);host.innerHTML='';
-  const W=host.clientWidth,narrow=W<520,fs=narrow?14:14.5;
-  const top=comps.concat([all]).filter(shown).sort((a,b)=>b[m].sf-a[m].sf).slice(0,20);
+  const W=host.clientWidth,narrow=W<520,fs=host.closest('.dl-sq')?16.5:(narrow?14:14.5);  // larger in the square download
   const others=R.filter(r=>!isComp(r)&&r!==all&&shown(r)).sort((a,b)=>b[m].sf-a[m].sf);
+  // the square download (class dl-sq on the card) keeps it to 15 rows in all
+  const card=host.closest('.bvr-card'),sq=!!(card&&card.classList.contains('dl-sq')),nTop=sq?Math.max(5,15-others.length):20;
+  const sub=card&&card.querySelector('.bvr-sub');if(sub){if(!sub.dataset.full)sub.dataset.full=sub.textContent;sub.textContent=sub.dataset.full.replace('Top 20','Top '+nTop);}
+  const top=comps.concat([all]).filter(shown).sort((a,b)=>b[m].sf-a[m].sf).slice(0,nTop);
   const list=top.map(r=>({r})).concat(others.length?[{sep:'Other groups'}]:[],others.map(r=>({r})));
   if(!list.length){host.innerHTML='<p class="bvr-sub">All categories are hidden.</p>';return;}
-  const svg=el('svg',{width:W,height:10,viewBox:`0 0 ${W} 10`,role:'img','aria-label':`${m} shortfall, largest 20`},host);
+  const svg=el('svg',{width:W,height:10,viewBox:`0 0 ${W} 10`,role:'img','aria-label':`${m} shortfall, largest ${nTop}`},host);
   const name=r=>r.short;
   const meas=el('text',{'font-size':fs,'font-weight':650},svg);
   const tw=t=>{meas.textContent=t;return meas.getComputedTextLength();};
@@ -356,12 +358,81 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
  '<tr><th>Disease or group</th><th>Group</th><th>DALYs</th><th>Papers/yr</th><th>Shortfall</th><th>Rank</th><th>Trials/yr</th><th>Shortfall</th><th>Rank</th></tr>'+
  R.slice().sort((a,b)=>b.papers.sf-a.papers.sf).map(r=>`<tr><td>${esc(r.label)}</td><td style="text-align:left">${esc(r.cat)}${r.kind==='g'?' (mainly low-income regions)':''}</td><td>${fmtD(r.dalys)}</td><td>${fmtN(r.papers.n)}</td><td>${fmtX(r.papers.sf)}</td><td>${r.papers.rank}</td><td>${fmtN(r.trials.n)}</td><td>${fmtX(r.trials.sf)}</td><td>${r.trials.rank}</td></tr>`).join('');
 
+// ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
+// Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v29',side:640};
+// the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
+function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
+  const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
+  x.fillStyle=g;x.fillRect(-1,-1,2,2);x.restore();}
+function svgUrl(svg){
+  const W=+svg.getAttribute('width'),H=+svg.getAttribute('height');
+  // copy the computed text styles into the SVG, since a standalone SVG image does not see the page's CSS
+  const cl=svg.cloneNode(true),src=svg.querySelectorAll('*'),dst=cl.querySelectorAll('*');
+  src.forEach((o,i)=>{const d=dst[i];if(o.getAttribute('data-hit')){d.remove();return;}
+    if(o.tagName==='text'||o.tagName==='tspan'){const cs=getComputedStyle(o);
+      d.setAttribute('fill',cs.fill);d.setAttribute('font-family',EXP.font);d.setAttribute('font-weight',cs.fontWeight);
+      if(o.tagName==='text')d.setAttribute('font-size',cs.fontSize);
+      if(o.classList.contains('halo')){d.setAttribute('stroke',EXP.halo);d.setAttribute('stroke-width','4');d.setAttribute('paint-order','stroke');d.setAttribute('stroke-linejoin','round');}}});
+  cl.setAttribute('xmlns',NS);
+  if(EXP.css){const st=document.createElementNS(NS,'style');st.textContent=EXP.css;cl.insertBefore(st,cl.firstChild);}  // Inter, embedded
+  // 8px spare on the left: fallback fonts in the saved image can run a little wider than on the page
+  cl.setAttribute('viewBox',`-8 0 ${W+8} ${H}`);cl.setAttribute('width',W+8);
+  return URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(cl)],{type:'image/svg+xml'}));
+}
+function exportPng(pid,square){
+  if(EXP.css==null&&window.dlFonts)return window.dlFonts().then(css=>{EXP.css=css||'';return exportPng(pid,square);});
+  const host=$(pid);if(!host||!host.querySelector('svg'))return;
+  const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
+  const S=square?2.5:3,pad=square?28:22,x0=document.createElement('canvas').getContext('2d');
+  const note=sc?(m==='papers'?'Papers a year, 2021–2025, vs global burden (DALYs, GBD 2023)':'Interventional trials a year, 2021–2025, vs global burden (DALYs, GBD 2023)')
+               :'Top 20 of 121. Shortfall = trend ÷ actual. Bars: 90% range.';
+  const items=CATS.filter(([k])=>!HIDE.has(k)).map(([,c,t])=>({c,t}));if(sc)items.push({c:null,t:'Trend, 90% band (R² '+D.fits[m].r2.toFixed(2)+')'});
+  const cwid=square?EXP.side-2*pad:+host.querySelector('svg').getAttribute('width')+8;
+  // wrap the note to the width, then lay out the legend in rows
+  const TS=square?28:24,NS=15,NL=20,LS=15,LR=24;  // type sizes in the saved image (title, note, legend)
+  x0.font='400 '+NS+'px '+EXP.font;const lines=[];{let cur='';note.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x0.measureText(tr).width>cwid&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);}
+  x0.font='500 '+LS+'px '+EXP.font;const rows=[[]];let lw=0;
+  items.forEach(it=>{const w=x0.measureText(it.t).width+32;if(lw+w>cwid&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
+  const top=pad+TS+10+lines.length*NL+8+rows.length*LR+10,foot=72;
+  let svg=host.querySelector('svg'),tmp=null;
+  if(square&&sc){ // redraw off screen so chart + header + footer make a square
+    tmp=document.createElement('div');tmp.className='bvr-plot';tmp.style.cssText='position:absolute;left:-10000px;top:0;width:'+(cwid-8)+'px';
+    card.appendChild(tmp);scatter(pid,m,{host:tmp,W:cwid-8,H:EXP.side-top-foot});svg=tmp.querySelector('svg');}
+  const W=+svg.getAttribute('width'),H=+svg.getAttribute('height'),url=svgUrl(svg);if(tmp)tmp.remove();
+  const img=new Image();
+  img.onload=()=>{
+    const cw=W+8+2*pad,ch=top+H+foot,cv=document.createElement('canvas'),x=cv.getContext('2d');
+    cv.width=cw*S;cv.height=ch*S;x.scale(S,S);paintBg(x,cw,ch);
+    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 '+TS+'px '+EXP.font;x.fillText(title,pad,pad+TS-4);
+    x.font='400 '+NS+'px '+EXP.font;x.fillStyle=C.ink2;lines.forEach((t,i)=>x.fillText(t,pad,pad+TS+10+NL*(i+1)-5));
+    let y=pad+TS+10+lines.length*NL+8+LR-6;x.font='500 '+LS+'px '+EXP.font;
+    rows.forEach(r=>{let cx=pad;r.forEach(it=>{
+      if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+6,y-5,6,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-6,16,2.2);}
+      x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?18:22),y);cx+=x.measureText(it.t).width+32+(it.c?0:4);});y+=LR;});
+    x.drawImage(img,pad-8,top,W+8,H);URL.revokeObjectURL(url);  // the SVG has 8px spare on its left: line its edge up with the title
+    // footer: source and version, then the credit
+    x.font='400 12.5px '+EXP.font;x.fillStyle=C.muted;
+    x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-50);
+    x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-40);x.lineTo(cw-pad,ch-40);x.stroke();
+    x.font='600 15px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-15);
+    const nw=x.measureText(nm).width;x.font='500 15px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-15);
+    const hid=CATS.some(([k])=>HIDE.has(k));
+    cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
+      a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid?'some-hidden':'',square?'square':''].filter(Boolean).join('-')+'.png';
+      document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},'image/png');
+  };
+  img.src=url;
+}
+// the page's Download button (see tools/build_catalog.py) calls these for the two scatter plots
+window.DL_CUSTOM=Object.assign(window.DL_CUSTOM||{},{'bvr-sc-papers':f=>exportPng('bvr-sc-papers',f==='square'),'bvr-sc-trials':f=>exportPng('bvr-sc-trials',f==='square')});
+
 const JOBS=[['bvr-sc-papers',()=>scatter('bvr-sc-papers','papers')],['bvr-sc-trials',()=>scatter('bvr-sc-trials','trials')],
   ['bvr-rk-papers',()=>rank('bvr-rk-papers','papers')],['bvr-rk-trials',()=>rank('bvr-rk-trials','trials')]].filter(([id])=>$(id));
 const drawnW={};
 function redrawAll(){for(const k in drawnW)delete drawnW[k];draw();}
-function draw(){JOBS.forEach(([id,f])=>{const w=$(id).clientWidth;
-  if(w<240||drawnW[id]===w)return;drawnW[id]=w;f();});}
+function draw(){JOBS.forEach(([id,f])=>{const w=$(id).clientWidth,k=w+($(id).closest('.dl-sq')?'s':'');
+  if(w<240||drawnW[id]===k)return;drawnW[id]=k;f();});}
 draw();
 let to;const later=()=>{clearTimeout(to);to=setTimeout(draw,80);};
 if(window.ResizeObserver){const ro=new ResizeObserver(later);JOBS.forEach(([id])=>ro.observe($(id)));}

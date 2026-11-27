@@ -87,9 +87,51 @@ def tracked_outputs():
             and not f.startswith(NOT_OUTPUT_DIRS)}
 
 
-def toggles(c):
+def view_label(c, key):
+    """Label of one view of a chart with "switches": the chosen option of each switch, joined."""
+    parts = []
+    for labels, i in zip(c["switches"], map(int, key.split(","))):
+        if len(labels) > 1:
+            parts.append(labels[i])
+        elif i:
+            parts.append(labels[0])
+    return ", ".join(parts)
+
+
+def views_of(c):
+    """All images of a chart as (key, file, label), the default first. A chart can have one "toggle" (one
+    row of buttons) or several "switches" with a "views" map {"i,j": file}; a switch with one label is on/off."""
+    if c.get("switches"):
+        k0 = ",".join("0" for _ in c["switches"])
+        return [(k0, c["file"], view_label(c, k0))] + [(k, f, view_label(c, k)) for k, f in c["views"].items()]
     t = c.get("toggle")
-    return [] if not t else (t if isinstance(t, list) else [t])
+    t = [] if not t else (t if isinstance(t, list) else [t])
+    return [("0", c["file"], c.get("label", "All"))] + [(str(i + 1), x["file"], x["label"]) for i, x in enumerate(t)]
+
+
+def switch_specs(c):
+    if c.get("switches"):
+        return c["switches"]
+    v = views_of(c)
+    return [[lab for _, _, lab in v]] if len(v) > 1 else []
+
+
+def toggles(c):
+    """The other images of a chart (not the default), as {"file", "label"}."""
+    return [{"file": f, "label": lab} for _, f, lab in views_of(c)[1:]]
+
+
+def wide_of(f):
+    """A chart's landscape copy for desktop topic pages: <folder>/wide/<name>."""
+    return os.path.join(os.path.dirname(f), "wide", os.path.basename(f))
+
+
+WIDE_MQ = "(min-width: 800px)"
+
+
+def solid_of(f):
+    """A chart's copy on solid green, for sharing on white pages: <folder>/solid/<name>."""
+    return os.path.join(os.path.dirname(f), "solid", os.path.basename(f))
 
 
 # ---------- gather ----------
@@ -113,6 +155,13 @@ for s in (u for sec in sections for u in units(sec)):
         catalogued.update(item["files"])
         for t in toggles(item):
             catalogued.update(expand(t)["files"])
+        for _, f, _ in views_of(item):
+            extra = ([solid_of(f)] if item.get("solid") else []) + \
+                    ([wide_of(f)] + ([solid_of(wide_of(f))] if item.get("solid") else []) if item.get("wide") else [])
+            for x in extra:
+                if not os.path.exists(x):
+                    sys.exit(f"Missing chart copy: {x}")
+                catalogued.add(x)
     if s.get("interactive"):
         ov = s["interactive"].get("overview")
         for f in [s["interactive"]["html"], *data_paths(s["interactive"]),
@@ -149,35 +198,6 @@ def nice_date(iso):
 
 e = html.escape
 
-# The credit line under every interactive chart (placeholder __CREDIT__ in the fragments). The chart
-# PNGs carry the same text, drawn by tools/chart_credit.py. "CC BY 4.0" links to the licence note in
-# the page footer.
-CREDIT = CAT["author"]["credit"]
-CREDIT_HTML = " • ".join(f'<span class="credit-part">{e(x)}</span>' for x in CREDIT.split(" • ")).replace(
-    "CC BY 4.0", '<a class="credit-lic" href="#licence">CC BY 4.0</a>')
-
-
-def fill_credit(frag):
-    """Put the credit in place of __CREDIT__. The version that follows it (" · v18") is joined with
-    no-break spaces, so on a phone the line breaks only between the credit's parts."""
-    return frag.replace("__CREDIT__ · ", CREDIT_HTML + "\u00a0·\u00a0").replace("__CREDIT__", CREDIT_HTML)
-CC_BY = "https://creativecommons.org/licenses/by/4.0/"
-
-
-def licence_html():
-    """Plain-English note on what the licence allows, at the bottom of every page."""
-    return f"""<div class="licence" id="licence">
-    <p><b>Using these charts.</b> Charts, text and tables here are {link(CC_BY, "CC BY 4.0")}. You can share,
-    copy and adapt them, also commercially: in an article, a talk, or a company's fundraising deck. Two conditions:
-    credit &ldquo;{e(CREDIT.rsplit(" • ", 1)[0])}&rdquo; with a link to {link(CAT["site"], "this site")}, and say if you
-    changed anything. Leaving the credit line on the image is enough. Removing it, or presenting the work as your
-    own, is not allowed.</p>
-    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
-    so commercial users should check {link("https://www.healthdata.org/node/822", "IHME&rsquo;s")}
-    and {link("https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database", "WHO ICTRP&rsquo;s")} terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit.
-    Code is GPL-3.0.</p>
-  </div>"""
-
 
 # ---------- HTML ----------
 def link(href, text, cls=""):
@@ -200,24 +220,39 @@ def page_link(sid, text, cls=""):
 
 
 def chart_card(c, bare=False):
-    """A chart with its title, caption and links; bare=True (overview) shows the image and toggle only."""
+    """A chart with its title, caption and links; bare=True (overview) shows the image and switches only."""
     f = c["file"]
     script = link(BLOB + c["script"], "Script") if c.get("script") else ""
+    solid = c.get("solid")
+    wide = c.get("wide") and not bare   # landscape copies on desktop topic pages
+    solid_link = link(RAW + solid_of(f), "Solid background", "solid") if solid else ""
     toggle, views = "", ""
-    if toggles(c):
-        # Images with the same layout; the buttons swap which one shows.
-        opts = [(f, c.get("label", "All"))] + [(t["file"], t["label"]) for t in toggles(c)]
-        views = (f' data-views="{e("|".join(IMG_BASE + o for o, _ in opts))}"'
-                 f' data-paths="{e("|".join(o for o, _ in opts))}" data-raws="{e("|".join(RAW + o for o, _ in opts))}"')
-        buttons = "".join(f'\n          <button type="button" aria-pressed="{"true" if i == 0 else "false"}" data-view="{i}">{e(lab)}</button>'
-                          for i, (_, lab) in enumerate(opts))
-        toggle = f"""
-        <div class="toggle" role="group" aria-label="Chart view">{buttons}
-        </div>"""
+    v = views_of(c)
+    wide_attrs = ""
+    if wide:
+        col = lambda fn: e("|".join(fn(x) for _, x, _ in v))
+        wide_attrs = (f' data-wide="{col(lambda x: IMG_BASE + wide_of(x))}" data-wraws="{col(lambda x: RAW + wide_of(x))}"'
+                      + (f' data-wsolids="{col(lambda x: RAW + solid_of(wide_of(x)))}"' if solid else ""))
+    if len(v) > 1:
+        # Images with the same layout; the switches pick which one shows.
+        col = lambda fn: e("|".join(fn(x) for _, x, _ in v))
+        views = (f' data-keys="{e("|".join(k for k, _, _ in v))}" data-views="{col(lambda x: IMG_BASE + x)}"'
+                 f' data-paths="{col(lambda x: x)}" data-raws="{col(lambda x: RAW + x)}"'
+                 + (f' data-solids="{col(lambda x: RAW + solid_of(x))}"' if solid else ""))
+        groups = []
+        for i, labels in enumerate(switch_specs(c)):
+            if len(labels) > 1:
+                b = "".join(f'<button type="button" data-sw="{i}" data-v="{j}" aria-pressed="{"true" if j == 0 else "false"}">{e(l)}</button>'
+                            for j, l in enumerate(labels))
+                groups.append(f'<div class="toggle" role="group" aria-label="Chart view">{b}</div>')
+            else:
+                groups.append(f'<button type="button" class="pill" data-sw="{i}" aria-pressed="false"><i></i>{e(labels[0])}</button>')
+        toggle = '\n        <div class="switches">' + "".join(groups) + "</div>"
+    solid_attr = f' data-solid="{e(RAW + solid_of(f))}"' if solid else ""
     return f"""
-      <figure class="chart"{views}>{toggle}
-        <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}" data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
-          <img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">
+      <figure class="chart"{views}{wide_attrs}>{toggle}
+        <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}"{solid_attr} data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
+          {f'<picture><source media="{WIDE_MQ}" srcset="{e(IMG_BASE + wide_of(f))}">' if wide else ""}<img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">{"</picture>" if wide else ""}
         </button>{"" if bare else f"""
         <figcaption>
           <h3>{e(c['title'])}</h3>
@@ -225,7 +260,7 @@ def chart_card(c, bare=False):
           <div class="links">
             <span class="path">{e(f)}</span>
             <span class="sep"></span>
-            {link(RAW + f, "Full size", "full")}{script}
+            {link(RAW + f, "Full size", "full")}{solid_link}{script}
           </div>
         </figcaption>"""}
       </figure>"""
@@ -275,7 +310,7 @@ def load_data(path):
 
 def interactive_html(s, full):
     spec = s["interactive"]
-    frag = fill_credit(open(spec["html"]).read())
+    frag = open(spec["html"]).read()
     if spec.get("data"):  # optional: some fragments hold their own numbers
         d = spec["data"]
         d = {k: load_data(v) for k, v in d.items()} if isinstance(d, dict) else load_data(d)
@@ -299,8 +334,7 @@ def snapshot_html(s):
             v = v[k]
         return v
     data = json.dumps({k: walk(v) for k, v in ov["pick"].items()}, separators=(",", ":"), ensure_ascii=False)
-    frag = fill_credit(open(ov["html"]).read())
-    return frag.replace("__DATA__", data.replace("</", "<\\/"))
+    return open(ov["html"]).read().replace("__DATA__", data.replace("</", "<\\/"))
 
 
 def readme_links(s):
@@ -395,37 +429,65 @@ def short_title(t):
     return t.split(",")[0].split(" (")[0]
 
 
-def toc_items():
-    """Overview contents: one link per section, with the part after the first comma set small."""
+def toc_html(current=None):
+    """Contents bar, collapsed by default: one link per section, with the part after the first comma set small.
+    On the overview (current=None) the links jump to the sections and the bar is sticky; on a topic page they
+    open the other topic pages, the bar names the current one and does not stick."""
     items = []
     for s in sections:
         main, _, rest = s["title"].partition(", ")
         sub = f' <span class="tsub">{e(rest)}</span>' if rest else ""
-        items.append(f'<li><a href="#{e(s["id"])}" data-toc="{e(s["id"])}">{e(main)}{sub}</a></li>')
-    return "".join(items)
-
-
-toc = toc_items()
+        href = f"#{s['id']}" if current is None else page_href(s["id"])
+        ext = ' target="_blank" rel="noopener"' if current is not None and PAGE_BASE else ""
+        here = ' aria-current="true"' if s is current else ""
+        items.append(f'<li><a href="{e(href)}"{ext} data-toc="{e(s["id"])}"{here}>{e(main)}{sub}</a></li>')
+    cur = e(short_title(current["title"])) if current else ""
+    return f"""<nav class="toc{' toc-static' if current else ''}" id="toc" aria-label="Contents">
+  <div class="wrap">
+    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
+      <span class="lab">Contents</span><span class="cur">{cur}</span><span class="chev" aria-hidden="true"></span>
+    </button>
+    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list">{"".join(items)}</ol></div>
+  </div>
+</nav>"""
 
 def head(title):
-    return HEAD.replace(f"<title>{e(CAT['title'])}</title>", f"<title>{e(title)}</title>", 1)
+    full = e(CAT['title'] + ' · ' + CAT['subtitle'])
+    og = OG_TITLE if title == FULL_TITLE else title.replace(" · " + CAT["subtitle"], "")  # topic pages: "<section> · Data & Graphs"
+    return (HEAD.replace(f"<title>{full}</title>", f"<title>{e(title)}</title>", 1)
+            .replace(f'<meta property="og:title" content="{e(OG_TITLE)}">', f'<meta property="og:title" content="{e(og)}">', 1))
 
 
-HEAD = f"""<title>{e(CAT['title'])}</title>
+# Link-preview title. Signal shows at most two title lines beside the image and the description below it, so
+# the Substack name is joined with no-break spaces: the line breaks after "Data & Graphs ·", not inside it.
+OG_TITLE = CAT["title"] + " · " + CAT["subtitle"].replace(" ", "\u00a0")
+
+HEAD = f"""<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="{e(CAT['tagline'])}">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="{e(CAT['title'])}">
+<meta property="og:title" content="{e(OG_TITLE)}">
+<meta property="og:description" content="{e('by ' + CAT['author']['name'])}">
+<meta property="og:image" content="{e(SITE)}preview.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Scatter plot of papers per year against disease burden for 120 diseases, with ME/CFS and long COVID marked.">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">"""
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">"""
 
 STYLE = """<style>
 /* Layout: one reading column. Header, topic chips, then one section per analysis:
    key finding, chart grid, then the data files in a collapsed block. Colours match the charts themselves. */
 :root {
-  --bg: #141a24; --surface: #1a2230; --raise: #212a3a; --line: #2a3446;
-  --ink: #eef1f6; --muted: #a3acba; --faint: #6f7a8c;
-  --ocean: #7fb3d5; --sunset: #f4a582;
-  --f-display: "Space Grotesk", "Inter", system-ui, sans-serif;
+  /* Forest glass (v21): deep green with soft light from the top left; cards and charts are see-through.
+     --ocean and --sunset keep their names but are now mint and peach. */
+  --bg: #0e2a22; --surface: rgba(255, 255, 255, 0.045); --raise: rgba(255, 255, 255, 0.09); --line: rgba(255, 255, 255, 0.11);
+  --ink: #e9efe9; --muted: #a7bdb2; --faint: #7e978b;
+  --ocean: #9fd8b5; --sunset: #f2b880;
+  --f-display: "Inter Tight", "Inter", system-ui, sans-serif;
   --f-body: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
   --f-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
   color-scheme: dark;
@@ -433,7 +495,8 @@ STYLE = """<style>
 * { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 4.5rem; }
 @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.55 var(--f-body);
+html { background: #0b231c; }
+body { margin: 0; background: radial-gradient(120% 80% at 10% 0%, #1f4d3e 0%, #12342a 38%, #0e2a22 62%, #0b231c 100%) fixed; color: var(--ink); font: 400 17px/1.55 var(--f-body);
   -webkit-font-smoothing: antialiased; }
 body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
   z-index: 10; background: var(--bg); }
@@ -444,10 +507,13 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 .top { padding-block: 2.75rem 0; }
-.top h1 { font: 600 clamp(2.1rem, 6vw, 3.1rem)/1.05 var(--f-display); margin: 0; letter-spacing: -0.01em; text-wrap: balance; }
+.top h1 { font: 700 clamp(3rem, 14vw, 5.2rem)/1 var(--f-display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
+.top .kicker { margin: 0.5rem 0 0; font: 600 clamp(1.3rem, 5vw, 1.7rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: -0.005em; }
+.top .kicker span, .top-sm .kicker-sm span { color: var(--sunset); }
+.top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
 .byline .upd { display: block; margin-top: 0.15rem; color: var(--faint); font-size: 0.88rem; }
@@ -457,6 +523,38 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px);
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .toc .wrap { position: relative; }
+.toc-static { position: relative; top: auto; margin-top: 0.6rem; }
+/* Topic pages: one reading column, one chart at a time (also on desktop), at the user's request. */
+.topic .wrap { max-width: 52rem; }
+.topic .charts, .topic .bvr-grid, .topic .fnd-grid2, .topic .pme-panels { grid-template-columns: minmax(0, 1fr) !important; }
+/* Portrait charts without a landscape copy: no taller than the screen on desktop. */
+@media (min-width: 800px) { .topic .chart:not([data-wide]) .chart-img img { width: auto; max-width: 100%; max-height: 82vh; margin: 0 auto; } }
+.topic .gme .dists, .topic .gme .eulers { display: flex !important; flex-direction: column; }
+.overview .dl { display: none; }
+.dl { position: relative; display: flex; justify-content: flex-end; margin: 0.5rem 0 0; }
+.dl-btn { font: 500 0.88rem var(--f-body); color: var(--ocean); background: none; border: 1px solid var(--line);
+  border-radius: 999px; padding: 0.3rem 0.85rem; cursor: pointer; }
+.dl-btn::before { content: "↓ "; }
+.dl-btn[aria-expanded="true"] { border-color: var(--ocean); }
+.dl-menu { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 30; display: grid; min-width: 11rem;
+  background: #10302a; border: 1px solid var(--line); border-radius: 10px; padding: 4px; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
+.dl-menu[hidden] { display: none; }
+.dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
+  color: var(--ink); font: 500 1rem var(--f-body); }
+.dl-hidden { display: none !important; }
+/* Downloads: titles, labels and the lines under them larger than on the page (readable for older eyes) */
+.dl-capturing .fnd-bars { --lab: 9.5rem !important; }
+.dl-capturing .fnd-lab { font-size: 1.05rem !important; }
+.dl-capturing .fnd-v { font-size: 1rem !important; }
+.dl-capturing h3 { font-size: 1.65rem !important; line-height: 1.2 !important; }
+.dl-capturing .bvr-sub, .dl-capturing .py-sub, .dl-capturing .fnd-sub, .dl-capturing .pme-lede { font-size: 1.05rem !important; }
+.dl-capturing .bvr-legend, .dl-capturing .fnd-legend, .dl-capturing .plabel { font-size: 1rem !important; }
+.topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
+.dl-capturing { padding-left: 0 !important; padding-right: 0 !important; background: transparent !important; border-color: transparent !important; box-shadow: none !important;
+  backdrop-filter: none !important; }
+.dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
+  padding: 0.5rem 0.7rem; text-align: left; cursor: pointer; }
+.dl-menu button:hover { background: var(--raise); }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -466,7 +564,7 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   border-bottom: 1.5px solid var(--muted); transform: rotate(45deg); transition: transform 0.15s; }
 .toc-btn[aria-expanded="true"] .chev { transform: rotate(225deg); margin-bottom: -0.1rem; }
 .toc-drop { position: absolute; left: 0; right: 0; top: 100%; margin-top: 1px; padding: 0.2rem max(16px, env(safe-area-inset-left, 0px)) 0.5rem;
-  background: var(--bg); border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
+  background: #10302a; border-bottom: 1px solid var(--line); box-shadow: 0 12px 24px rgba(0, 0, 0, 0.35);
   max-height: calc(100vh - 60px); overflow-y: auto; }
 .toc-list { list-style: none; margin: 0; padding: 0; }
 .toc-list a { display: block; padding: 0.5rem 0; color: var(--ink); font: 400 0.95rem/1.35 var(--f-body); }
@@ -517,7 +615,7 @@ section:first-child .sec-head { border-top: 0; padding-top: 0; }
 .charts { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 420px), 1fr)); align-items: start; }
 .chart { margin: 0; background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden;
   display: flex; flex-direction: column; min-width: 0; }
-.chart-img { display: block; width: 100%; padding: 0; border: 0; background: var(--bg); cursor: zoom-in; }
+.chart-img { display: block; width: 100%; padding: 0; border: 0; background: transparent; cursor: zoom-in; }
 .chart-img img { display: block; width: 100%; height: auto; max-width: 100%; }
 .chart figcaption { padding: 0.9rem 1rem 1rem; display: grid; gap: 0.35rem; border-top: 1px solid var(--line); flex: 1; align-content: start; }
 .chart h3 { margin: 0; font: 600 1.05rem/1.3 var(--f-body); }
@@ -560,8 +658,16 @@ a.fname:hover { color: var(--sunset); }
 .toggle button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0;
   border-radius: 999px; padding: 0.35rem 0.9rem; cursor: pointer; }
 .toggle button[aria-pressed="true"] { background: var(--raise); color: var(--ink); box-shadow: inset 0 0 0 1px var(--line); }
-.chart[data-views] { background: var(--bg); }
-.chart[data-views] figcaption { background: var(--surface); }
+.chart[data-views] { background: var(--surface); }
+.switches { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 1rem 0; align-items: center; }
+.switches .toggle { margin: 0; }
+.pill { display: inline-flex; align-items: center; gap: 0.45rem; font: 500 0.92rem var(--f-body); color: var(--muted);
+  background: transparent; border: 1px solid var(--line); border-radius: 999px; padding: 0.4rem 0.85rem; cursor: pointer; }
+.pill i { width: 0.7rem; height: 0.7rem; border-radius: 2px; border: 1.5px solid var(--sunset); }
+.pill[aria-pressed="true"] { color: var(--ink); border-color: var(--sunset); background: rgba(242, 184, 128, 0.14); }
+.pill[aria-pressed="true"] i { background: var(--sunset); }
+dialog.lb .lb-solid { margin-left: auto; font-size: 0.92rem; white-space: nowrap; }
+.chart[data-views] figcaption { background: transparent; }
 .older { border: 1px dashed var(--line); border-radius: 12px; padding: 0.8rem 1rem; }
 .older summary { cursor: pointer; color: var(--muted); font-size: 0.95rem; }
 .older[open] summary { margin-bottom: 1rem; }
@@ -572,35 +678,54 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
-footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
-footer .licence p + p { margin-top: 0.6rem; }
-footer .licence b { color: var(--ink); font-weight: 600; }
-.credit-part { white-space: nowrap; }
-a.credit-lic { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px; }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
-dialog.lb::backdrop { background: rgba(8, 11, 17, 0.88); }
-dialog.lb img { display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
+dialog.lb::backdrop { background: rgba(8, 30, 24, 0.97); }
+dialog.lb img { background: var(--bg); display: block; max-width: 100%; max-height: 88vh; width: auto; height: auto; border-radius: 8px; }
 dialog.lb .lb-bar { display: flex; justify-content: space-between; gap: 1rem; align-items: center; padding: 0.5rem 0.1rem; color: var(--ink); }
 dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); background: var(--raise); border: 1px solid var(--line);
   border-radius: 8px; padding: 0.35rem 0.8rem; cursor: pointer; }
 </style>"""
 
 SCRIPT = """<script>
-document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
-  var srcs = fig.dataset.views.split("|"), paths = fig.dataset.paths.split("|"), raws = fig.dataset.raws.split("|");
-  var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
-  var path = fig.querySelector(".path"), full = fig.querySelector("a.full");
-  srcs.slice(1).forEach(function (u) { new Image().src = u; });
-  fig.querySelectorAll(".toggle button").forEach(function (b) {
+// Charts: switches pick one of the chart's images (key = chosen option of each switch, e.g. "1,0"). Charts with
+// data-wide also have landscape copies, shown on desktop; links and the full-size view follow the shape on screen.
+var WIDE = window.matchMedia ? window.matchMedia("(min-width: 800px)") : { matches: false };
+document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(function (fig) {
+  var d = fig.dataset, sp = function (k) { return d[k] ? d[k].split("|") : []; };
+  var keys = d.keys ? d.keys.split("|") : ["0"], srcs = d.views ? sp("views") : [fig.querySelector(".chart-img img").getAttribute("src")],
+      paths = sp("paths"), raws = sp("raws"), solids = sp("solids"), wides = sp("wide"), wraws = sp("wraws"), wsolids = sp("wsolids");
+  var img = fig.querySelector(".chart-img img"), source = fig.querySelector("picture source"), open = fig.querySelector(".chart-img");
+  var path = fig.querySelector(".path"), full = fig.querySelector("a.full"), solid = fig.querySelector("a.solid");
+  if (!raws.length && full) raws = [full.href];
+  if (!solids.length && solid) solids = [solid.href];
+  var st = keys[0].split(",").map(Number), btns = fig.querySelectorAll("[data-sw]");
+  (WIDE.matches && wides.length ? wides : srcs).slice(1).forEach(function (u) { new Image().src = u; });
+  function show() {
+    var i = keys.indexOf(st.join(","));
+    if (i < 0) return;
+    var w = WIDE.matches && wides.length;
+    img.src = srcs[i]; if (source) source.srcset = wides[i];
+    open.dataset.full = w ? wides[i] : srcs[i];
+    var so = w && wsolids.length ? wsolids[i] : solids[i];
+    if (so) open.dataset.solid = so;
+    if (path && paths[i]) path.textContent = paths[i];
+    if (full && raws[i]) full.href = w && wraws.length ? wraws[i] : raws[i];
+    if (solid && so) solid.href = so;
+    btns.forEach(function (b) {
+      var k = +b.dataset.sw, on = b.hasAttribute("data-v") ? st[k] === +b.dataset.v : st[k] === 1;
+      b.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+  btns.forEach(function (b) {
     b.addEventListener("click", function () {
-      var i = +b.dataset.view;
-      img.src = srcs[i]; open.dataset.full = srcs[i];
-      if (path) path.textContent = paths[i];
-      if (full) full.href = raws[i];
-      fig.querySelectorAll(".toggle button").forEach(function (o) { o.setAttribute("aria-pressed", o === b ? "true" : "false"); });
+      var k = +b.dataset.sw;
+      st[k] = b.hasAttribute("data-v") ? +b.dataset.v : 1 - st[k];
+      show();
     });
   });
+  if (WIDE.addEventListener) WIDE.addEventListener("change", show);
+  show();
 });
 (function () {
   // Contents bar: collapsed list of sections; names the section in view.
@@ -614,6 +739,7 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") setOpen(false); });
   document.addEventListener("click", function (ev) { if (!bar.contains(ev.target)) setOpen(false); });
   var secs = [].slice.call(document.querySelectorAll("main.overview > section"));
+  if (!secs.length) return;  // topic page: the bar already names the page
   function spy() {
     var y = bar.getBoundingClientRect().bottom + 48, id = "";
     secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= y) id = sec.id; });
@@ -630,13 +756,145 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   window.addEventListener("scroll", function () { if (!raf) raf = requestAnimationFrame(function () { raf = 0; spy(); }); }, { passive: true });
   spy();
 })();
+// ---------- Download: one button per chart (elements with data-dl), with a small menu of formats.
+// The chart is rendered by the browser itself (html-to-image, loaded on first use), then placed on the page's
+// green glow with a footer. Charts with data-dl-custom call their own exporter in window.DL_CUSTOM instead.
+// The page's web fonts (latin subset) as @font-face rules with the font files inlined, so saved images
+// render in Inter instead of the device's fallback font. Loaded once, on the first download.
+window.dlFonts = function () {
+  if (window.dlFonts.p) return window.dlFonts.p;
+  var link = document.querySelector('link[href*="fonts.googleapis.com/css2"]');
+  var asData = function (u) {
+    return fetch(u).then(function (r) { return r.blob(); }).then(function (b) {
+      return new Promise(function (ok) { var fr = new FileReader(); fr.onload = function () { ok(fr.result); }; fr.readAsDataURL(b); });
+    });
+  };
+  window.dlFonts.p = !link ? Promise.resolve("") : fetch(link.href).then(function (r) { return r.text(); }).then(function (css) {
+    var blocks = css.split("/* ").filter(function (b) { return b.indexOf("latin */") === 0; }).map(function (b) { return b.slice(9); });
+    var urls = {}; blocks.forEach(function (b) { (b.match(/url\\((https:[^)]+)\\)/g) || []).forEach(function (m) { urls[m.slice(4, -1)] = 1; }); });
+    return Promise.all(Object.keys(urls).map(function (u) { return asData(u).then(function (d) { urls[u] = d; }); })).then(function () {
+      return blocks.join(" ").replace(/url\\((https:[^)]+)\\)/g, function (m, u) { return "url(" + urls[u] + ")"; });
+    });
+  }).catch(function () { return ""; });
+  return window.dlFonts.p;
+};
+// Extra height a chart should add while the square download lays it out (0 otherwise); charts call this.
+window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? (parseFloat(getComputedStyle(c).getPropertyValue("--dl-extra")) || 0) : 0; };
+(function () {
+  var roots = document.querySelectorAll("[data-dl]");
+  if (!roots.length) return;
+  var LIB = "https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js", lib = null;
+  var FONT = 'Inter, "Helvetica Neue", Arial, sans-serif';
+  function load() {
+    if (!lib) lib = new Promise(function (ok, no) { var sc = document.createElement("script"); sc.src = LIB; sc.onload = function () { ok(window.htmlToImage); }; sc.onerror = no; document.head.appendChild(sc); });
+    return lib;
+  }
+  function glow(x, w, h) {  // CSS radial-gradient(120% 80% at 10% 0%, ...) of the page
+    x.fillStyle = "#0b231c"; x.fillRect(0, 0, w, h); x.save(); x.translate(0.1 * w, 0); x.scale(1.2 * w, 0.8 * h);
+    var g = x.createRadialGradient(0, 0, 0, 0, 0, 1);
+    [[0, "#1f4d3e"], [0.38, "#12342a"], [0.62, "#0e2a22"], [1, "#0b231c"]].forEach(function (s) { g.addColorStop(s[0], s[1]); });
+    x.fillStyle = g; x.fillRect(-1, -1, 2, 2); x.restore();
+  }
+  function txt(sel) { var n = sel && document.querySelector(sel); return n ? n.textContent.trim() : ""; }
+  function save(cv, name) {
+    cv.toBlob(function (b) {
+      var a = document.createElement("a"); a.href = URL.createObjectURL(b); a.download = name + ".png";
+      document.body.appendChild(a); a.click(); setTimeout(function () { URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+    }, "image/png");
+  }
+  function generic(root, fmt) {
+    var d = root.dataset, skip = ".dl" + (d.dlSkip ? "," + d.dlSkip : "");
+    var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
+    var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
+      filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var PAD = 24, HEAD = (title ? 36 : 0) + (sub ? 22 : 0) + (title || sub ? 8 : 0);
+    function srcWrap(width) {  // the footer's source line, wrapped to the chart's width
+      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", out = [];
+      if (!src) return out;
+      var m = document.createElement("canvas").getContext("2d"); m.font = "400 12.5px " + FONT; var cur = "";
+      src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > width && cur) { out.push(cur); cur = wd; } else cur = t; });
+      out.push(cur); return out;
+    }
+    var cover = document.createElement("div"); cover.className = "dl-cover"; cover.textContent = "Preparing image…";
+    return load().then(function (h2i) {
+      // Square: lay the chart out at a fixed width first (the charts redraw on resize), so it fills the square
+      // whatever the screen size. The card's own background and border would frame the chart: make them
+      // transparent while capturing. A cover hides the brief change.
+      var go = function () {
+        var css = root.getAttribute("style") || "";
+        document.body.appendChild(cover);
+        root.classList.add("dl-capturing");
+        // left-out parts are hidden on the page too, so the image is sized without them
+        var gone = Array.prototype.slice.call(root.querySelectorAll(skip));
+        gone.forEach(function (n) { n.classList.add("dl-hidden"); });
+        var un = function (v) { root.classList.remove("dl-capturing", "dl-sq"); root.setAttribute("style", css); cover.remove();
+          gone.forEach(function (n) { n.classList.remove("dl-hidden"); });
+          window.dispatchEvent(new Event("resize")); return v; };
+        var ready = wait(60);
+        if (fmt === "square") {  // data-dl-square-width: another layout width; class dl-sq lets CSS change the layout
+          var swn = +(d.dlSquareWidth || 560), sw = swn + "px"; root.classList.add("dl-sq");
+          root.style.width = sw; root.style.maxWidth = "none"; root.style.minWidth = sw; root.style.boxSizing = "content-box";
+          window.dispatchEvent(new Event("resize"));
+          // second pass: charts that read --dl-extra grow by the height left over in the square
+          ready = wait(450).then(function () {
+            var side = root.offsetWidth + 2 * PAD, spare = side - PAD - HEAD - (52 + srcWrap(root.offsetWidth).length * 16) - root.offsetHeight - PAD / 2;
+            if (spare > 24) { root.style.setProperty("--dl-extra", Math.round(spare) + "px"); window.dispatchEvent(new Event("resize")); return wait(450); }
+          });
+        }
+        return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
+      };
+      return window.dlFonts().then(function (css) { if (css) opt.fontEmbedCSS = css; else opt.skipFonts = true; return go(); });
+    }).then(function (shot) {
+      var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 52 + srcLines.length * 16;
+      var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
+      if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
+      var cv = document.createElement("canvas"), x = cv.getContext("2d");
+      cv.width = Math.round(w * S); cv.height = Math.round(h * S); x.scale(S, S); glow(x, w, h);
+      var tx = fmt === "square" ? ox : pad, ty = (fmt === "square" ? oy - head : pad);
+      x.textBaseline = "alphabetic";
+      if (title) { x.fillStyle = "#e9efe9"; x.font = "700 27px " + FONT; x.fillText(title, tx, ty + 25); ty += 36; }
+      if (sub) { x.fillStyle = "#a7bdb2"; x.font = "400 15px " + FONT; x.fillText(sub, tx, ty + 16); }
+      x.drawImage(shot, ox, oy, cw, chh);
+      var fy = (fmt === "square" ? oy + chh + foot : h);
+      x.font = "400 12.5px " + FONT; x.fillStyle = "#7e978b";
+      srcLines.forEach(function (l, i) { x.fillText(l, tx, fy - 50 - (srcLines.length - 1 - i) * 16); });
+      x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 40); x.lineTo(tx + cw, fy - 40); x.stroke();
+      x.font = "600 15px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 15);
+      var nw = x.measureText("Siebe Rozendal").width; x.font = "500 15px " + FONT; x.fillStyle = "#9fd8b5";
+      x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 15);
+      save(cv, d.dl + (fmt === "square" ? "-square" : ""));
+    });
+  }
+  roots.forEach(function (root) {
+    var box = document.createElement("div"); box.className = "dl";
+    box.innerHTML = '<button type="button" class="dl-btn" aria-expanded="false" aria-haspopup="true">Download</button>' +
+      '<div class="dl-menu" role="menu" hidden><button type="button" role="menuitem" data-fmt="square">Square image</button>' +
+      '<button type="button" role="menuitem" data-fmt="screen">As on screen</button></div>';
+    root.appendChild(box);
+    var btn = box.querySelector(".dl-btn"), menu = box.querySelector(".dl-menu");
+    function open(o) { menu.hidden = !o; btn.setAttribute("aria-expanded", o ? "true" : "false"); }
+    btn.addEventListener("click", function (ev) { ev.stopPropagation(); open(menu.hidden); });
+    document.addEventListener("click", function (ev) { if (!box.contains(ev.target)) open(false); });
+    menu.querySelectorAll("button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        open(false); var fmt = b.dataset.fmt, c = root.dataset.dlCustom;
+        btn.disabled = true; btn.textContent = "Preparing…";
+        var done = function () { btn.disabled = false; btn.textContent = "Download"; };
+        Promise.resolve(c && window.DL_CUSTOM && window.DL_CUSTOM[c] ? window.DL_CUSTOM[c](fmt) : generic(root, fmt))
+          .then(done, function (e) { done(); alert("Sorry, the image could not be made in this browser."); console.error(e); });
+      });
+    });
+  });
+})();
 (function () {
   var dlg = document.getElementById("lb");
   if (!dlg || typeof dlg.showModal !== "function") return;
-  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title");
+  var img = dlg.querySelector("img"), title = dlg.querySelector(".lb-title"), sol = dlg.querySelector(".lb-solid");
   document.querySelectorAll(".chart-img").forEach(function (b) {
     b.addEventListener("click", function () {
       img.src = b.dataset.full; img.alt = b.dataset.title; title.textContent = b.dataset.title;
+      sol.hidden = !b.dataset.solid; if (b.dataset.solid) sol.href = b.dataset.solid;
       dlg.showModal();
     });
   });
@@ -644,57 +902,53 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
 })();
 </script>"""
 
-title_html = e(CAT["title"]).replace("PAIS", "<span>PAIS</span>", 1)
+# Brand: the Substack's name, with "Data & Graphs" under it. The question mark takes the accent colour.
+# Title "Data & Graphs", very large; under it the Substack's name, whose question mark takes the accent colour.
+title_html = e(CAT["title"])
+sub_html = e(CAT["subtitle"]).replace("?", "<span>?</span>", 1)
+FULL_TITLE = f"{CAT['title']} · {CAT['subtitle']}"
 def body():
     return f"""<div class="wrap top">
   <h1>{title_html}</h1>
+  <p class="kicker">{sub_html}</p>
   <p class="tagline">{e(CAT['tagline'])}</p>
   <p class="byline">By {e(CAT['author']['name'])} · {" · ".join(link(l["url"], e(l["label"])) for l in CAT['author']['links'])}
     <span class="upd">Last updated {nice_date(built)}</span></p>
 </div>
-<nav class="toc" id="toc" aria-label="Contents">
-  <div class="wrap">
-    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
-      <span class="lab">Contents</span><span class="cur"></span><span class="chev" aria-hidden="true"></span>
-    </button>
-    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list">{toc}</ol></div>
-  </div>
-</nav>
+{toc_html()}
 <main class="wrap overview">
 {"".join(section_html(s) for s in sections)}
 </main>
 <footer class="wrap">
-  {licence_html()}
   <span class="stats">{n_charts} charts · {n_data} data files · {link(TREE, "code and data on GitHub")}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
-  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
 {SCRIPT}"""
 
 
 def topic_body(s):
-    chips = "".join(f'<a href="{e(page_href(t["id"]))}"{" aria-current=\"page\"" if t is s else ""}>'
-                    f'{e(short_title(t["title"]))}</a>' for t in sections)
-    return f"""<div class="wrap top top-sm">
+    return f"""<div class="topic">
+<div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
-  <p class="site">{title_html}</p>
+  <p class="site">{title_html} <span class="kicker-sm">{sub_html}</span></p>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap">{chips}</div></nav>
+{toc_html(s)}
 <main class="wrap">
 {section_html(s, page=True)}
 </main>
 <footer class="wrap">
-  {licence_html()}
   <span>{link(TREE, "Code and data on GitHub")}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
-  <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>
+  <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
+</div>
 {SCRIPT}"""
 
 
@@ -716,10 +970,10 @@ def document(title, inner):
 
 IMG_BASE, PAGE_BASE = RAW, ""
 os.makedirs("docs", exist_ok=True)
-open("docs/index.html", "w").write(document(CAT["title"], body()))
+open("docs/index.html", "w").write(document(FULL_TITLE, body()))
 pages = {"index.html"}
 for s in sections:
-    open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {CAT['title']}", topic_body(s)))
+    open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {FULL_TITLE}", topic_body(s)))
     pages.add(f"{s['id']}.html")
     for sub in s.get("subsections", []):  # old topic pages of what is now a subsection
         target = f"{s['id']}.html#{sub['id']}"

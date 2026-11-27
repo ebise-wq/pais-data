@@ -13,12 +13,25 @@ Scripts: `clinicaltrials/sponsor_class.py` (fetch, one row per trial) → `analy
 - `large_pharma_led`: commercial trials whose lead sponsor matches one of the ~20 largest drug companies
   (name regex in `sponsor_summary.py`; approximate).
 
-Files: `clinicaltrials/sponsor_trials_2026-11-25.csv`, `sponsor_by_disease_2021-2025.csv`,
-`sponsor_by_year_2020-2026.csv`, `drug_trials_per_year.png`, `sponsor_per_year.png`, `sponsor_comparison.png`.
-`drug_trials_per_year.png` and `sponsor_per_year.png` are the same chart with the same layout, without and
-with the sponsor split. `all_trials_per_year.png` uses the same layout for all interventional trials
-(from `clinicaltrials/trials_per_year_2026-11-08.csv`), so the catalog page can switch between all three. Their long COVID and ME/CFS
-counts for 2020–2026 match the earlier separate pull of 11 Nov 2026 year by year.
+Files: `clinicaltrials/sponsor_trials_2026-11-25.csv`, `clinicaltrials/sponsor_all_types_2026-11-26.csv`,
+`sponsor_by_disease_2021-2025.csv`, `sponsor_by_year_2020-2026.csv`, the four per-year charts and
+`sponsor_comparison.png`.
+
+The four per-year charts share one layout, so the catalog page switches between them with two switches:
+drug trials or all trial types, and commercial sponsors shown or not.
+
+| | All sponsors | Commercial sponsor shown |
+|---|---|---|
+| Drug or biologic trials | `drug_trials_per_year.png` | `sponsor_per_year.png` |
+| All interventional trials | `all_trials_per_year.png` | `all_trials_sponsor_per_year.png` |
+
+The drug views use `sponsor_by_year_2020-2026.csv`. Both all-types views use
+`clinicaltrials/sponsor_all_types_2026-11-26.csv` (from `clinicaltrials/sponsor_all_types.py`, pulled
+26 Nov 2026: the same NCT IDs, re-fetched with their lead sponsor). Its drug trials match the 25 Nov pull
+exactly; its yearly totals of all types match `clinicaltrials/trials_per_year_2026-11-08.csv` to within one
+trial a year (a few start dates were changed in the registry since).
+
+Every chart is also saved on solid green in `analysis/solid/`, for pasting on white backgrounds.
 
 ## Results, 2021–2025
 
@@ -39,6 +52,11 @@ counts for 2020–2026 match the earlier separate pull of 11 Nov 2026 year by ye
 - Trend: the long COVID commercial share fell from 37% (17/46) in 2021–22 to 16% (15/95) in 2023–25
   (Fisher p = 0.009, but the split was chosen after looking at the data). Commercial counts fell from
   8–9 a year to 3–4. Pooled comparators stayed at 34–39% each year.
+
+All trial types, 2021–2025 (from the 26 Nov pull): long COVID 536 trials, 52 with a commercial lead
+sponsor (10%); ME/CFS 51 trials, 4 commercial (8%). Most non-drug trials are behavioural, device, "other" or
+supplement studies. The 3 commercial non-drug ME/CFS trials are 2 supplement studies (Vitae Health
+Innovation; Laboratorios Viñas) and 1 "other" (Terra Biological).
 
 ## Caveats
 

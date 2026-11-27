@@ -6,7 +6,7 @@
      page's tokens. -->
 <style>
 .pme { display: grid; gap: 1rem; min-width: 0; max-width: 900px; font: 400 15px/1.5 var(--f-body); color: var(--ink);
-  --me: #f4a582; --lc: #7fb3d5; }
+  --me: #f2b880; --lc: #9fd8b5; }
 .pme [hidden] { display: none !important; }
 .pme-seg { display: inline-flex; justify-self: start; border: 1px solid var(--line); border-radius: 999px; padding: 3px; background: var(--bg); }
 .pme-seg button { font: 500 0.92rem var(--f-body); color: var(--muted); background: transparent; border: 0; border-radius: 999px;
@@ -62,7 +62,7 @@
     <button type="button" id="pme-tab2" aria-pressed="false">Dysautonomia and MCAS</button>
   </div>
 
-  <div class="pme-poster" id="pme-p1">
+  <div class="pme-poster" id="pme-p1" data-dl="pais-burden" data-dl-square-width="860" data-dl-skip=".pme-foot" data-dl-source="illustrative model; prevalence based on Dutch estimates; severity: GBD, EQ-5D (Denmark, Australia)" data-dl-ver="v12">
     <h3 id="pme-ttl">ME is about half of PAIS patients, but most of the PAIS disease burden</h3>
     <p class="pme-lede">Post-Acute Infection Syndromes</p>
     <div class="pme-panels">
@@ -71,10 +71,10 @@
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
         <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
     </div>
-    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>__CREDIT__ · v10</span></div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v12</span></div>
   </div>
 
-  <div class="pme-poster" id="pme-p2" hidden>
+  <div class="pme-poster" id="pme-p2" hidden data-dl="pais-overlap" data-dl-square-width="860" data-dl-skip=".pme-foot" data-dl-source="rough estimate; dysautonomia = OI/POTS; MCAS = mast cell activation syndrome; overlaps approximate" data-dl-ver="v12">
     <h3>How Long COVID, ME, dysautonomia and MCAS may overlap</h3>
     <p class="pme-lede">Rough estimate.</p>
     <div class="pme-panels">
@@ -83,7 +83,7 @@
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
         <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
     </div>
-    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>__CREDIT__ · v10</span></div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v12</span></div>
   </div>
 
   <label class="pme-tog"><input type="checkbox" id="pme-hide" checked> Hide numbers</label>
@@ -138,9 +138,9 @@ const root=document.getElementById("pme");
 if(!root)return;
 const $=id=>document.getElementById("pme-"+id);
 // House colours: ocean for Long COVID and the other triggers, sunset for ME.
-const INK="#eef1f6",MUTED="#a3acba",HALO="#1a2230";
-const TR={LC:{n:"Long COVID",c:"#7fb3d5"},ME:{n:"ME",c:"#f4a582"},PV:{n:"Post-vax",c:"#c6e1f1"},LY:{n:"Post-Lyme",c:"#9fcbe6"},
-  Q:{n:"Post-Q fever",c:"#b3dbd6"},PL:{n:"Post-Legionella",c:"#dde9f3"},S:{n:"Post-sepsis",sub:"(excl. post-ICU)",c:"#6c9fc6"}};
+const INK="#e9efe9",MUTED="#a7bdb2",HALO="#133329";
+const TR={LC:{n:"Long COVID",c:"#9fd8b5"},ME:{n:"ME",c:"#f2b880"},PV:{n:"Post-vax",c:"#c6e8d4"},LY:{n:"Post-Lyme",c:"#a8dcc0"},
+  Q:{n:"Post-Q fever",c:"#e6d9a8"},PL:{n:"Post-Legionella",c:"#dcefe3"},S:{n:"Post-sepsis",sub:"(excl. post-ICU)",c:"#5fae85"}};
 const SMALL=["PV","LY","Q","PL","S"];
 const R=[
   {id:"lcH",t:"LC",l:"Long COVID, house/bedbound",n:0.167,me:90,w:0.40,mw:"H"},
@@ -214,7 +214,7 @@ function euler(svgId,T,key){
   const X=x=>ox+x*sc,Y=y=>oy+y*sc;
   let h=`<circle cx="${X(-dLC)}" cy="${Y(0)}" r="${rLC*sc}" fill="${TR.LC.c}" fill-opacity=".38" stroke="${TR.LC.c}" stroke-width="1.5"/>`;
   h+=`<circle cx="${X(0)}" cy="${Y(0)}" r="${rME*sc}" fill="${TR.ME.c}" fill-opacity=".55" stroke="${TR.ME.c}" stroke-width="1.5"/>`;
-  h+=`<circle cx="${X(-dLC)}" cy="${Y(0)}" r="${rLC*sc}" fill="none" stroke="#a9cde6" stroke-width="1.5" stroke-opacity=".9"/>`;
+  h+=`<circle cx="${X(-dLC)}" cy="${Y(0)}" r="${rLC*sc}" fill="none" stroke="#a8dcc0" stroke-width="1.5" stroke-opacity=".9"/>`;
   small.forEach(s=>{const c=TR[s.t].c;h+=`<circle cx="${X(s.x)}" cy="${Y(s.y)}" r="${Math.max(2,s.r*sc)}" fill="${c}" fill-opacity=".6" stroke="${c}" stroke-width="1.3"/>`});
   const lcL=X(-dLC-rLC),meL=X(-rME),lcR=X(-dLC+rLC),meR=X(rME);
   const zones=[
@@ -280,7 +280,7 @@ function euler4(svgId,S,tgt,unit){
   const mem=(x,y)=>C.map((_,i)=>inside(i,x,y));
   const edge=(x,y)=>Math.min(...C.map(c=>Math.abs(Math.hypot(x-c.x,y-c.y)-c.r)));
   const wants=[[m=>m[0]&&!m[1]&&!m[2]&&!m[3]],[m=>m[1]&&!m[0]&&!m[2]&&!m[3],m=>m[1]&&!m[0]],[m=>m[2]&&!m[3]],[m=>m[3]&&!m[2]]];
-  const tint=["#b9d7ec","#f8c9ae","#bfe6df","#f1c6d6"];
+  const tint=["#b8e2cb","#f8c9ae","#c4dcf7","#f1c6d6"];
   const placed=[];
   S.forEach((s,i)=>{
     const lines=[s.n,...sub(s)],tw=Math.max(...lines.map((l,k)=>l.length*(k?6.4:7.6)))+6,th=lines.length*15+2;
@@ -317,7 +317,7 @@ function render2(T){
     const sum=f=>cells.filter(f).reduce((a,c)=>a+c[key],0);
     const A={PC:sum(c=>c.pc),ME:sum(c=>c.me),D:sum(c=>c.D),M:sum(c=>c.M)};
     const S=[{k:"PC",n:"Long COVID",A:A.PC,c:TR.LC.c,me:sum(c=>c.pc&&c.me)/(A.PC||1)},{k:"ME",n:"ME",A:A.ME,c:TR.ME.c,me:null},
-      {k:"D",n:"Dysautonomia",A:A.D,c:"#8fd3c9",me:sum(c=>c.D&&c.me)/(A.D||1)},{k:"M",n:"MCAS",A:A.M,c:"#e6a6c0",dash:1,me:sum(c=>c.M&&c.me)/(A.M||1)}];
+      {k:"D",n:"Dysautonomia",A:A.D,c:"#7fb2f0",me:sum(c=>c.D&&c.me)/(A.D||1)},{k:"M",n:"MCAS",A:A.M,c:"#e6a6c0",dash:1,me:sum(c=>c.M&&c.me)/(A.M||1)}];
     const tgt={"PC|ME":sum(c=>c.pc&&c.me),"PC|D":sum(c=>c.pc&&c.D),"ME|D":sum(c=>c.me&&c.D),"PC|M":sum(c=>c.pc&&c.M),"ME|M":sum(c=>c.me&&c.M),"D|M":sum(c=>c.D&&c.M)};
     return{S,tgt};
   };

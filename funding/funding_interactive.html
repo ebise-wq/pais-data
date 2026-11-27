@@ -43,7 +43,7 @@
 .fnd-b { position: absolute; left: 0; top: 50%; height: 0.95rem; transform: translateY(-50%); border-radius: 0 4px 4px 0; display: flex; gap: 2px; overflow: hidden; }
 .fnd-b.rep { background: var(--ocean); }
 .fnd-b.est { background: repeating-linear-gradient(135deg, var(--ocean) 0 3px, color-mix(in srgb, var(--ocean) 35%, var(--surface)) 3px 6px); }
-.fnd-b.eu { background: repeating-linear-gradient(135deg, #8a93a3 0 3px, color-mix(in srgb, #8a93a3 35%, var(--surface)) 3px 6px); }
+.fnd-b.eu { background: repeating-linear-gradient(135deg, #8fa69a 0 3px, color-mix(in srgb, #8fa69a 35%, var(--surface)) 3px 6px); }
 .fnd-b.cn { background: repeating-linear-gradient(135deg, color-mix(in srgb, var(--sunset) 55%, transparent) 0 3px, transparent 3px 6px);
   outline: 1.5px dashed var(--sunset); outline-offset: -1.5px; }
 .fnd-b.split { background: none; }
@@ -64,7 +64,7 @@
 .fnd-flag span { font: 400 var(--fz)/1 "Apple Color Emoji", "Noto Color Emoji", "Segoe UI Emoji", sans-serif; transform: scale(1.8); }
 .fnd-flag.est { --fc: var(--ocean); }
 .fnd-flag.cn { --fc: var(--sunset); }
-.fnd-tip { position: absolute; pointer-events: none; background: #10151e; border: 1px solid var(--line); border-radius: 10px;
+.fnd-tip { position: absolute; pointer-events: none; background: #0c2620; border: 1px solid var(--line); border-radius: 10px;
   padding: 0.55rem 0.7rem; font-size: 0.88rem; line-height: 1.4; color: var(--ink); max-width: 280px; z-index: 5;
   box-shadow: 0 6px 20px rgba(0, 0, 0, 0.45); display: none; }
 .fnd-tip b { display: block; font-size: 0.95rem; margin-bottom: 0.15rem; }
@@ -87,7 +87,7 @@
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-square-width="720" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v10">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -98,7 +98,7 @@
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v10">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -127,7 +127,7 @@
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>__CREDIT__ · v4</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v10</span></div>
 </div>
 <script>
 (function () {
@@ -137,7 +137,7 @@ if (!root) return;
 const q = (s) => root.querySelector(s);
 const SHORT = { "United States": "US", "United Kingdom": "UK" };
 const short = (n) => SHORT[n] || n;
-const GREY = "#8a93a3";
+const GREY = "#8fa69a";
 const kind = (r) => r.iso2 === "CN" ? "cn" : r.iso2 === "EU" ? "eu" : r.budget_status === "estimated" ? "est" : "rep";
 const budgetRows = RAW.filter((r) => r.budget_mio_pps != null);
 const outRows = budgetRows.filter((r) => r.med_docs_2024 != null && r.iso2 !== "IE");
@@ -207,6 +207,9 @@ const hideTip = (tip) => { tip.style.display = "none"; };
 
 // ---------- bars ----------
 function bars(items, fmt, axisTitle) {
+  // the square download (class dl-sq on the card) keeps it to the 15 largest
+  const total = items.length, cut = C.el.classList.contains("dl-sq") && total > 15;
+  if (cut) items = items.slice(0, 15);
   const ends = items.map((d) => Math.max(d.v || 0, d.hi || 0));
   const maxEnd = Math.max(...ends);
   const dom = maxEnd * 1.17;
@@ -231,7 +234,8 @@ function bars(items, fmt, axisTitle) {
   }).join("");
   const plot = cq(".fnd-plot");
   plot.innerHTML = `<div class="fnd-bars"><div class="fnd-grid">${g}</div>${rows}</div>` +
-    `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div><div class="fnd-tip"></div>`;
+    `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div>` +
+    (cut ? `<div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem">Largest 15 of ${total} shown.</div>` : "") + `<div class="fnd-tip"></div>`;
   const tip = plot.querySelector(".fnd-tip");
   plot.querySelectorAll(".fnd-row").forEach((row) => {
     const d = items[+row.dataset.i];
@@ -272,7 +276,7 @@ function drawBudget() {
     .map((r) => {
       const k = kind(r);
       const d = { name: r.country, k, v: r.budget_mio_pps, lo: r.budget_lo_mio_pps, hi: r.budget_hi_mio_pps, tip: budgetTip(r) };
-      if (k === "cn") d.label = bn(r.budget_mio_pps) + "?";
+      if (k === "cn") d.label = bn(r.budget_mio_pps) + "B?";
       if (S.split && r.nabs07_directed_mio_pps != null) {
         d.segs = [[r.nabs07_directed_mio_pps, "var(--ocean)"], [r.nabs123_univ_funds_mio_pps || 0, "var(--sunset)"], [r.nabs133_other_mio_pps || 0, GREY]];
         const sh = (x) => Math.round(100 * (x || 0) / r.budget_mio_pps) + "%";
@@ -280,7 +284,7 @@ function drawBudget() {
       }
       return d;
     });
-  bars(items, (v) => bn(v), "Billion PPS");
+  bars(items, (v, ax) => ax ? bn(v) : bn(v) + "B", "Billion PPS");  // value labels end in B (billions); axis ticks plain
 }
 
 function drawRatio() {
@@ -312,7 +316,8 @@ function drawScatter() {
   const rows = outRows.filter((r) => !(S.hideUS && r.iso2 === "US") && !(S.hideCN && r.iso2 === "CN"));
   const F = fit(rows, key); lastFit = F;
   const plot = cq(".fnd-plot"), word = outWord();
-  const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72)));
+  const W = plot.clientWidth || 600, H = Math.round(Math.min(480, Math.max(320, W * 0.72))) + (window.dlExtra ? window.dlExtra(plot) : 0);  // taller in the square download
+  const sq = !!plot.closest(".dl-sq"), AF = sq ? 14 : 12;  // larger text in the square download
   const M = { l: 50, r: 14, t: 10, b: 42 };
   const xs = rows.flatMap((r) => [r.budget_lo_mio_pps || r.budget_mio_pps, r.budget_hi_mio_pps || r.budget_mio_pps]);
   const ys = rows.map((r) => r[key]);
@@ -325,10 +330,14 @@ function drawScatter() {
   const logTicks = (lo, hi) => { const o = []; for (let k = Math.floor(L(lo)); k <= Math.ceil(L(hi)); k++) for (const m of [1, 2, 5]) { const v = m * 10 ** k; if (v >= lo && v <= hi) o.push(v); } return o; };
   const linTicks = (hi) => { const st = niceStep(hi, 4), o = []; for (let v = 0; v <= hi; v += st) o.push(v); return o; };
   const xt = S.log ? logTicks(x0, x1) : linTicks(x1), yt = S.log ? logTicks(y0, y1) : linTicks(y1);
+  // y numbers start at the left edge (in line with the title); the plot starts just after the widest one
+  const mc = (drawScatter.mc = drawScatter.mc || document.createElement("canvas").getContext("2d"));
+  mc.font = AF + "px " + getComputedStyle(plot).fontFamily;
+  M.l = Math.ceil(Math.max(...yt.map((t) => mc.measureText(big(t)).width))) + 10;
   let s = `<svg width="${W}" height="${H}" viewBox="0 0 ${W} ${H}" role="img" aria-label="${word} against budget, one dot per country">`;
-  xt.forEach((t) => { s += `<line x1="${X(t)}" x2="${X(t)}" y1="${M.t}" y2="${H - M.b}" stroke="var(--line)"/><text x="${X(t)}" y="${H - M.b + 17}" text-anchor="middle" font-size="12">${bn(t)}</text>`; });
-  yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="${M.l - 7}" y="${Y(t) + 4}" text-anchor="end" font-size="12">${big(t)}</text>`; });
-  s += `<text x="${(M.l + W - M.r) / 2}" y="${H - 6}" text-anchor="middle" font-size="12.5">Public biomedical R&amp;D, billion PPS${S.log ? " (log)" : ""}</text>`;
+  xt.forEach((t) => { s += `<line x1="${X(t)}" x2="${X(t)}" y1="${M.t}" y2="${H - M.b}" stroke="var(--line)"/><text x="${X(t)}" y="${H - M.b + 17}" text-anchor="middle" font-size="${AF}">${bn(t)}</text>`; });
+  yt.forEach((t) => { s += `<line x1="${M.l}" x2="${W - M.r}" y1="${Y(t)}" y2="${Y(t)}" stroke="var(--line)"/><text x="0" y="${Y(t) + 4}" font-size="${AF}">${big(t)}</text>`; });
+  s += `<text x="${(M.l + W - M.r) / 2}" y="${H - 6}" text-anchor="middle" font-size="${AF + 0.5}">Public biomedical R&amp;D, billion PPS${S.log ? " (log)" : ""}</text>`;
   // fit line, sampled so it is right on linear axes too
   const pts = [];
   const a = S.log ? x0 * 1.02 : Math.max(x1 / 300, 1), b = x1 * 0.98;
@@ -349,9 +358,9 @@ function drawScatter() {
   // flags sit in an HTML layer over the svg (emoji render more reliably there)
   const flags = P.map((p) => `<div class="fnd-flag ${p.k}" style="left:${p.x}px;top:${p.y}px"><span>${flag(p.r.iso2)}</span></div>`).join("");
   // labels: try right, left, above, below, diagonals; skip if all collide
-  const FZ = W < 480 ? 16 : 20, R = FZ / 2 + 2;
+  const FZ = sq ? 22 : (W < 480 ? 16 : 20), R = FZ / 2 + 2;
   const placed = P.map((p) => ({ x0: p.x - R, x1: p.x + R, y0: p.y - R, y1: p.y + R }));
-  const fs = W < 480 ? 11.5 : 12.5, cw = fs * 0.56;
+  const fs = sq ? 15 : (W < 480 ? 11.5 : 12.5), cw = fs * 0.56;
   yt.forEach((t) => placed.push({ x0: 0, x1: M.l - 4, y0: Y(t) - 8, y1: Y(t) + 8 }));  // tick labels
   const hit = (b) => placed.some((o) => b.x0 < o.x1 && b.x1 > o.x0 && b.y0 < o.y1 && b.y1 > o.y0) || b.x0 < 2 || b.x1 > W - 2 || b.y0 < 0 || b.y1 > H - M.b;
   let labels = "";
@@ -459,6 +468,11 @@ const scatPlot = CARDS.scat.el.querySelector(".fnd-plot");
 new ResizeObserver(() => { const w = scatPlot.clientWidth; if (Math.abs(w - lastW) > 4) { lastW = w; use("scat"); drawScatter(); } }).observe(scatPlot);
 render("bars");
 render("scat");
+// re-draw the bars when the page's download adds or removes its square layout (it fires a resize)
+let barsSq = false;
+addEventListener("resize", () => { const sq = CARDS.bars.el.classList.contains("dl-sq"); if (sq !== barsSq) { barsSq = sq; render("bars"); } });
+let scatX = 0;  // and the scatter when the square download changes its extra height
+addEventListener("resize", () => { const x = window.dlExtra ? window.dlExtra(scatPlot) : 0; if (x !== scatX) { scatX = x; use("scat"); drawScatter(); } });
 
 // data table (topic page only)
 const tb = q("#fnd-table");
