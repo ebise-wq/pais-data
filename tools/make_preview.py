@@ -1,7 +1,8 @@
 """Link preview image (Open Graph / X card) for the site: docs/preview.png, 1200 x 630.
 
-Title and Substack name on the left; on the right the 120-disease scatter (papers per year against
-disease burden), with ME/CFS in peach and long COVID in violet. Run: python3 -I tools/make_preview.py
+Title, Substack name and tagline in the middle square (small previews crop to it); behind them the
+120-disease scatter (papers per year against disease burden), with ME/CFS in peach and long COVID in
+violet at the right edge. Run: python3 -I tools/make_preview.py
 """
 import json
 
@@ -11,7 +12,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from matplotlib import font_manager, patheffects
 
-VERSION = 1
+VERSION = 2
 W, H = 1200, 630
 INK, MUTED, FAINT = "#e9efe9", "#a7bdb2", "#7e978b"
 MINT, PEACH, VIOLET = "#9fd8b5", "#f2b880", "#b48cf0"
@@ -34,39 +35,44 @@ u, v = np.meshgrid(np.linspace(0, 1, 600), np.linspace(0, 1, 315))
 d = np.clip(np.hypot((u - 0.1) / 1.2, v / 0.8), 0, 1)
 cols = np.array([matplotlib.colors.to_rgb(c) for c in ("#1f4d3e", "#12342a", "#0e2a22", "#0b231c")])
 img = np.stack([np.interp(d, [0, 0.38, 0.62, 1], cols[:, k]) for k in range(3)], axis=-1)
-bg = fig.add_axes([0, 0, 1, 1]); bg.set_axis_off()
+bg = fig.add_axes([0, 0, 1, 1], zorder=-10); bg.set_axis_off()
 bg.imshow(img, extent=[0, 1, 0, 1], aspect="auto", origin="upper")
 
-# Text, left.
-x0 = 64 / W
-fig.text(x0, 1 - 150 / H, cat["title"], color=INK, fontsize=64, fontweight="bold", va="baseline")
+# Small link previews (Signal, WhatsApp, iMessage) crop the middle 630 x 630 square out of the image,
+# so all text sits in that square (x 285-915) and the edges only hold the scatter.
+CX = 0.5
+fig.text(CX, 1 - 262 / H, cat["title"].replace(" & ", " &\n"), color=INK, fontsize=84, fontweight="bold",
+         ha="center", va="baseline", linespacing=0.98)
 sub = cat["subtitle"]
-t = fig.text(x0, 1 - 215 / H, sub[:-1], color=MUTED, fontsize=32, fontweight="medium", va="baseline")
+t = fig.text(CX, 1 - 345 / H, sub, color=MUTED, fontsize=34, fontweight="medium", ha="center", va="baseline")
 fig.canvas.draw()
 bb = t.get_window_extent()
-fig.text(bb.x1 / W, 1 - 215 / H, "?", color=PEACH, fontsize=32, fontweight="medium", va="baseline")
-fig.text(x0, 1 - 330 / H, "Papers, trials and disease burden\nfor ME/CFS, long COVID\nand 120 other diseases.",
-         color=INK, fontsize=25, linespacing=1.45, va="top", alpha=0.92)
-fig.text(x0, 64 / H, cat["author"]["name"] + "  ·  " + cat["site"].split("//")[1].rstrip("/"),
-         color=FAINT, fontsize=19, va="baseline")
+t.set_text(sub[:-1]); t.set_ha("left"); t.set_x(bb.x0 / W)  # same spot, question mark in peach
+fig.canvas.draw()
+fig.text(t.get_window_extent().x1 / W, 1 - 345 / H, "?", color=PEACH, fontsize=34, fontweight="medium", va="baseline")
+fig.text(CX, 1 - 410 / H, "Papers, trials and disease burden\nfor ME/CFS, long COVID and 120 others",
+         color=INK, fontsize=21, linespacing=1.4, ha="center", va="top", alpha=0.85)
+fig.text(CX, 46 / H, cat["author"]["name"], color=FAINT, fontsize=18, ha="center", va="baseline")
 fig.text(1 - 22 / W, 18 / H, f"v{VERSION}", color=FAINT, fontsize=11, ha="right", va="baseline", alpha=0.7)
 
-# Scatter, right.
-ax = fig.add_axes([735 / W, 110 / H, 405 / W, 400 / H])
+# Scatter over the whole width, dimmed behind the text; ME/CFS and long COVID at the right edge.
+L, R, B, T = 40, 1160, 50, 590
+ax = fig.add_axes([L / W, B / H, (R - L) / W, (T - B) / H], zorder=-1)
 ax.patch.set_alpha(0)
-for s in ax.spines.values():
-    s.set_visible(False)
+ax.set_axis_off()
 ax.set_xscale("log"); ax.set_yscale("log")
-ax.tick_params(which="both", length=0, labelbottom=False, labelleft=False)
-ax.grid(True, color="#ffffff", alpha=0.10, lw=1)
-ax.scatter([r["d"] for r in dis], [r["papers"]["n"] for r in dis], s=70, color=MINT, alpha=0.55, lw=0)
-for r, c, name, dx, dy, ha in [(me, PEACH, "ME/CFS", 0, -20, "center"), (lc, VIOLET, "Long COVID", 0, 16, "center")]:
-    ax.scatter([r["d"]], [r["papers"]["n"]], s=260, color=c, lw=0, zorder=5)
-    ax.annotate(name, (r["d"], r["papers"]["n"]), xytext=(dx, dy), textcoords="offset points",
-                color=c, fontsize=21, fontweight="semibold", ha=ha, va="top" if dy < 0 else "bottom", zorder=6,
+x = np.log10([r["d"] for r in dis]); y = np.log10([r["papers"]["n"] for r in dis])
+x0, xme = x.min() - 0.05, np.log10(me["d"])
+x1 = x0 + (xme - x0) / ((1045 - L) / (R - L))  # ME/CFS lands at x = 1045 px
+ax.set_xlim(10 ** x0, 10 ** x1); ax.set_ylim(10 ** (y.min() - 0.15), 10 ** (y.max() + 0.15))
+px = L + (x - x0) / (x1 - x0) * (R - L)
+alpha = np.interp(np.abs(px - W / 2), [0, 300, 380], [0.10, 0.12, 0.55])
+ax.scatter(10 ** x, 10 ** y, s=80, color=MINT, alpha=alpha, lw=0, clip_on=False)
+for r, c, name, dy in [(me, PEACH, "ME/CFS", -20), (lc, VIOLET, "Long COVID", 18)]:
+    ax.scatter([r["d"]], [r["papers"]["n"]], s=300, color=c, lw=0, zorder=5)
+    ax.annotate(name, (r["d"], r["papers"]["n"]), xytext=(0, dy), textcoords="offset points",
+                color=c, fontsize=22, fontweight="semibold", ha="center", va="top" if dy < 0 else "bottom", zorder=6,
                 path_effects=[patheffects.withStroke(linewidth=5, foreground="#0e2a22")])
-ax.text(0, 1.03, "Papers per year ↑", transform=ax.transAxes, color=MUTED, fontsize=17, va="bottom")
-ax.text(1, -0.04, "Disease burden →", transform=ax.transAxes, color=MUTED, fontsize=17, ha="right", va="top")
 
 fig.savefig("docs/preview.png", dpi=100)
 print("wrote docs/preview.png")

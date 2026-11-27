@@ -106,7 +106,9 @@
 - Keep the number of files low: add columns or rows to an existing table rather than a new small file,
   put short tables and search strings in the folder README, and never save the same data in two shapes.
 - Link preview (v38): every page has Open Graph and X card tags pointing at `docs/preview.png` (1200 × 630:
-  title, Substack name and tagline on the left, the 120-disease papers-vs-burden scatter on the right).
+  title, Substack name, tagline and name in the middle 630 × 630 square, because small previews in Signal,
+  WhatsApp and iMessage crop to it; the 120-disease papers-vs-burden scatter fills the width behind, dimmed
+  under the text, with ME/CFS and long COVID labelled at the right edge, outside that square).
   Remake it with `python3 -I tools/make_preview.py` if the title, tagline or data change. It works only once
   merged into `main`, since the tags use the Pages URL.
 - Bump `page_version` in `catalog.json` whenever the page changes, so the user can tell which
