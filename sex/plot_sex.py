@@ -81,6 +81,7 @@ def glow(fig):
 
 def save(fig, path):
     """Transparent PNG for the page, plus a copy on solid green in sex/solid/ for sharing on white pages, with the page's glow."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     fig.savefig(path, dpi=300, transparent=True)
     solid = os.path.join(os.path.dirname(path), "solid", os.path.basename(path))
     os.makedirs(os.path.dirname(solid), exist_ok=True)
@@ -89,49 +90,75 @@ def save(fig, path):
     bg.remove()
 
 
-def scatter(version):
-    fig = plt.figure(figsize=(6, 9.2), facecolor="none")
-    header(fig, "Research vs burden, by sex", "Each dot is a disease. Compared with what its burden predicts.",
-           [("Mostly women", SUNSET), ("Balanced", NEUTRAL), ("Mostly men", OCEAN)])
-    panels = [("Papers", "papers", 0.48), ("Trials", "trials", 0.118)]
-    labels = {"papers": ["Breast cancer", "Multiple sclerosis", "Rheumatic heart disease", "Prostate cancer"],
-              "trials": ["Breast cancer", "Multiple sclerosis", "Rheumatic heart disease", "Prostate cancer"]}
-    for name, m, bottom in panels:
-        ax = fig.add_axes([0.25, bottom, 0.70, 0.335])
-        y = d[f"{m}_resid_fold"]
-        for s in ("b", "m", "f"):
-            k = d["side"] == s
-            ax.scatter(d.loc[k, "female_share"] * 100, y[k], s=34, color=COL[s], lw=0.8, edgecolor=BG, zorder=3)
-        ns = ~d["sex_class"].str.endswith("specific")
-        b, a = np.polyfit(d.loc[ns, "female_share"] * 100, np.log10(y[ns]), 1)
-        xs = np.array([d.loc[ns, "female_share"].min(), d.loc[ns, "female_share"].max()]) * 100
-        ax.plot(xs, 10 ** (a + b * xs), color=INK, lw=2, zorder=4, solid_capstyle="round")
-        ax.axhline(1, color=MUTED, lw=1.2, ls=(0, (3, 3)), zorder=1)
-        me_dot(ax, ME_SHARE * 100, ME[m], "right", s=34, lw=0.8, edgecolor=BG)
-        ax.set_yscale("log"); ax.set_ylim(0.025, 16)
-        ax.yaxis.set_major_locator(FixedLocator(YT)); ax.set_yticklabels(YL)
-        ax.yaxis.set_minor_locator(NullLocator())
-        ax.set_xlim(-6, 106); ax.xaxis.set_major_locator(FixedLocator([0, 25, 50, 75, 100]))
-        ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"] if m == "trials" else [])
-        ax.grid(True, axis="y", color=GRID, lw=1, zorder=0)
-        style(ax)
-        ax.text(-4, 13, name, fontsize=15, fontweight="bold", color=INK, va="top")
-        for lab in labels[m]:
-            r = d[d["label"] == lab].iloc[0]
-            x, yy = r["female_share"] * 100, r[f"{m}_resid_fold"]
-            ha, dx = ("right", -7) if (x > 80 or lab == "Multiple sclerosis") else ("left", 7)
-            if lab == "Rheumatic heart disease" and m == "papers":  # next to ME/CFS: label below the dot
-                ax.annotate(SHORT[lab], (x, yy), xytext=(0, -9), textcoords="offset points",
-                            ha="center", va="top", fontsize=10.5, color=MUTED)
-                continue
-            ax.annotate(SHORT.get(lab, lab), (x, yy), xytext=(dx, 0), textcoords="offset points",
-                        ha=ha, va="center", fontsize=10.5, color=MUTED)
-    fig.text(0.6, 0.062, "Share of patients who are women", fontsize=12.5, color=INK, ha="center", va="baseline")
-    fig.text(M, 0.845, "White line: trend (one-sex diseases left out). It is flat.", fontsize=11.5, color=MUTED, va="baseline")
-    fig.text(M, 0.034, ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(M, 0.016, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.016, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
-    save(fig, os.path.join(HERE, "sex_scatter.png"))
+def scatter_panel(ax, name, m, xlabels=True, ylabels=True):
+    """One panel of the scatter: research relative to the burden trend, by share of patients who are women."""
+    labels = ["Breast cancer", "Multiple sclerosis", "Rheumatic heart disease", "Prostate cancer"]
+    y = d[f"{m}_resid_fold"]
+    for s in ("b", "m", "f"):
+        k = d["side"] == s
+        ax.scatter(d.loc[k, "female_share"] * 100, y[k], s=34, color=COL[s], lw=0.8, edgecolor=BG, zorder=3)
+    ns = ~d["sex_class"].str.endswith("specific")
+    b, a = np.polyfit(d.loc[ns, "female_share"] * 100, np.log10(y[ns]), 1)
+    xs = np.array([d.loc[ns, "female_share"].min(), d.loc[ns, "female_share"].max()]) * 100
+    ax.plot(xs, 10 ** (a + b * xs), color=INK, lw=2, zorder=4, solid_capstyle="round")
+    ax.axhline(1, color=MUTED, lw=1.2, ls=(0, (3, 3)), zorder=1)
+    me_dot(ax, ME_SHARE * 100, ME[m], "right", s=34, lw=0.8, edgecolor=BG)
+    ax.set_yscale("log"); ax.set_ylim(0.025, 16)
+    ax.yaxis.set_major_locator(FixedLocator(YT)); ax.set_yticklabels(YL if ylabels else [])
+    ax.yaxis.set_minor_locator(NullLocator())
+    ax.set_xlim(-6, 106); ax.xaxis.set_major_locator(FixedLocator([0, 25, 50, 75, 100]))
+    ax.set_xticklabels(["0%", "25%", "50%", "75%", "100%"] if xlabels else [])
+    ax.grid(True, axis="y", color=GRID, lw=1, zorder=0)
+    style(ax)
+    ax.text(-4, 13, name, fontsize=15, fontweight="bold", color=INK, va="top")
+    for lab in labels:
+        r = d[d["label"] == lab].iloc[0]
+        x, yy = r["female_share"] * 100, r[f"{m}_resid_fold"]
+        ha, dx = ("right", -7) if (x > 80 or lab == "Multiple sclerosis") else ("left", 7)
+        if lab == "Rheumatic heart disease" and m == "papers":  # next to ME/CFS: label below the dot
+            ax.annotate(SHORT[lab], (x, yy), xytext=(0, -9), textcoords="offset points",
+                        ha="center", va="top", fontsize=10.5, color=MUTED)
+            continue
+        ax.annotate(SHORT.get(lab, lab), (x, yy), xytext=(dx, 0), textcoords="offset points",
+                    ha=ha, va="center", fontsize=10.5, color=MUTED)
+
+
+def scatter(version, wide=False):
+    """Portrait (phones): papers above trials. Wide (desktop topic pages): side by side."""
+    title, sub = "Research vs burden, by sex", "Each dot is a disease. Compared with what its burden predicts."
+    leg = [("Mostly women", SUNSET), ("Balanced", NEUTRAL), ("Mostly men", OCEAN)]
+    note = "White line: trend (one-sex diseases left out). It is flat."
+    if not wide:
+        fig = plt.figure(figsize=(6, 9.2), facecolor="none")
+        header(fig, title, sub, leg)
+        for name, m, bottom in [("Papers", "papers", 0.48), ("Trials", "trials", 0.118)]:
+            scatter_panel(fig.add_axes([0.25, bottom, 0.70, 0.335]), name, m, xlabels=m == "trials")
+        fig.text(0.6, 0.062, "Share of patients who are women", fontsize=12.5, color=INK, ha="center", va="baseline")
+        fig.text(M, 0.845, note, fontsize=11.5, color=MUTED, va="baseline")
+        fig.text(M, 0.034, ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
+        fig.text(M, 0.016, FOOT, fontsize=9.5, color=MUTED, va="baseline")
+        fig.text(1 - M, 0.016, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+        save(fig, os.path.join(HERE, "sex_scatter.png"))
+        return
+    W, H = 10, 6.2
+    fig = plt.figure(figsize=(W, H), facecolor="none")
+    X, Yt, Yb = (lambda i: i / W), (lambda i: 1 - i / H), (lambda i: i / H)  # inches to figure fractions
+    fig.text(X(0.33), Yt(0.42), title, fontsize=20, fontweight="bold", color=INK, va="baseline")
+    fig.text(X(0.33), Yt(0.76), sub, fontsize=12.5, color=MUTED, va="baseline")
+    for (lab, col), xi in zip(leg, (0.33, 2.1, 3.4)):
+        fig.text(X(xi), Yt(1.08), "● " + lab, fontsize=12.5, color=col, va="baseline")
+    fig.text(X(5.0), Yt(1.08), note, fontsize=11.5, color=MUTED, va="baseline")
+    left, gap, right, bot, top = 1.35, 0.4, 0.3, 1.2, 1.45
+    pw = (W - left - right - gap) / 2
+    for k, (name, m) in enumerate([("Papers", "papers"), ("Trials", "trials")]):
+        ax = fig.add_axes([X(left + k * (pw + gap)), Yb(bot), X(pw), (H - top - bot) / H])
+        scatter_panel(ax, name, m, ylabels=k == 0)
+        fig.text(X(left + k * (pw + gap) + pw / 2), Yb(0.6), "Share of patients who are women", fontsize=12.5,
+                 color=INK, ha="center", va="baseline")
+    fig.text(X(0.33), Yb(0.3), ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
+    fig.text(X(0.33), Yb(0.14), FOOT, fontsize=9.5, color=MUTED, va="baseline")
+    fig.text(1 - X(0.33), Yb(0.14), version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    save(fig, os.path.join(HERE, "wide", "sex_scatter.png"))
 
 
 def groups(version):
@@ -176,5 +203,6 @@ def groups(version):
     save(fig, os.path.join(HERE, "sex_groups.png"))
 
 
-scatter("v10")
+scatter("v11")
+scatter("v11", wide=True)
 groups("v8")

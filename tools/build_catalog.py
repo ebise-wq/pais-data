@@ -121,6 +121,14 @@ def toggles(c):
     return [{"file": f, "label": lab} for _, f, lab in views_of(c)[1:]]
 
 
+def wide_of(f):
+    """A chart's landscape copy for desktop topic pages: <folder>/wide/<name>."""
+    return os.path.join(os.path.dirname(f), "wide", os.path.basename(f))
+
+
+WIDE_MQ = "(min-width: 800px)"
+
+
 def solid_of(f):
     """A chart's copy on solid green, for sharing on white pages: <folder>/solid/<name>."""
     return os.path.join(os.path.dirname(f), "solid", os.path.basename(f))
@@ -147,11 +155,13 @@ for s in (u for sec in sections for u in units(sec)):
         catalogued.update(item["files"])
         for t in toggles(item):
             catalogued.update(expand(t)["files"])
-        if item.get("solid"):
-            for _, f, _ in views_of(item):
-                if not os.path.exists(solid_of(f)):
-                    sys.exit(f"Missing solid copy: {solid_of(f)}")
-                catalogued.add(solid_of(f))
+        for _, f, _ in views_of(item):
+            extra = ([solid_of(f)] if item.get("solid") else []) + \
+                    ([wide_of(f)] + ([solid_of(wide_of(f))] if item.get("solid") else []) if item.get("wide") else [])
+            for x in extra:
+                if not os.path.exists(x):
+                    sys.exit(f"Missing chart copy: {x}")
+                catalogued.add(x)
     if s.get("interactive"):
         ov = s["interactive"].get("overview")
         for f in [s["interactive"]["html"], *data_paths(s["interactive"]),
@@ -214,9 +224,15 @@ def chart_card(c, bare=False):
     f = c["file"]
     script = link(BLOB + c["script"], "Script") if c.get("script") else ""
     solid = c.get("solid")
+    wide = c.get("wide") and not bare   # landscape copies on desktop topic pages
     solid_link = link(RAW + solid_of(f), "Solid background", "solid") if solid else ""
     toggle, views = "", ""
     v = views_of(c)
+    wide_attrs = ""
+    if wide:
+        col = lambda fn: e("|".join(fn(x) for _, x, _ in v))
+        wide_attrs = (f' data-wide="{col(lambda x: IMG_BASE + wide_of(x))}" data-wraws="{col(lambda x: RAW + wide_of(x))}"'
+                      + (f' data-wsolids="{col(lambda x: RAW + solid_of(wide_of(x)))}"' if solid else ""))
     if len(v) > 1:
         # Images with the same layout; the switches pick which one shows.
         col = lambda fn: e("|".join(fn(x) for _, x, _ in v))
@@ -234,9 +250,9 @@ def chart_card(c, bare=False):
         toggle = '\n        <div class="switches">' + "".join(groups) + "</div>"
     solid_attr = f' data-solid="{e(RAW + solid_of(f))}"' if solid else ""
     return f"""
-      <figure class="chart"{views}>{toggle}
+      <figure class="chart"{views}{wide_attrs}>{toggle}
         <button class="chart-img" type="button" data-full="{e(IMG_BASE + f)}"{solid_attr} data-title="{e(c['title'])}" aria-label="Open {e(c['title'])} full size">
-          <img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">
+          {f'<picture><source media="{WIDE_MQ}" srcset="{e(IMG_BASE + wide_of(f))}">' if wide else ""}<img src="{e(IMG_BASE + f)}" alt="{e(c['title'])}" loading="lazy" decoding="async">{"</picture>" if wide else ""}
         </button>{"" if bare else f"""
         <figcaption>
           <h3>{e(c['title'])}</h3>
@@ -492,6 +508,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .toc .wrap { position: relative; }
 .toc-static { position: relative; top: auto; margin-top: 0.6rem; }
+/* Topic pages: one reading column, one chart at a time (also on desktop), at the user's request. */
+.topic .wrap { max-width: 52rem; }
+.topic .charts, .topic .bvr-grid, .topic .fnd-grid2, .topic .pme-panels { grid-template-columns: minmax(0, 1fr) !important; }
+/* Portrait charts without a landscape copy: no taller than the screen on desktop. */
+@media (min-width: 800px) { .topic .chart:not([data-wide]) .chart-img img { width: auto; max-width: 100%; max-height: 82vh; margin: 0 auto; } }
+.topic .gme .dists, .topic .gme .eulers { display: flex !important; flex-direction: column; }
 .overview .bvr-dl { display: none; }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
@@ -626,22 +648,30 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 </style>"""
 
 SCRIPT = """<script>
-document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
-  // Switches pick one of the chart's images; the key is the chosen option of each switch, e.g. "1,0".
-  var d = fig.dataset, keys = d.keys.split("|"), srcs = d.views.split("|"), paths = d.paths.split("|"),
-      raws = d.raws.split("|"), solids = d.solids ? d.solids.split("|") : [];
-  var img = fig.querySelector(".chart-img img"), open = fig.querySelector(".chart-img");
+// Charts: switches pick one of the chart's images (key = chosen option of each switch, e.g. "1,0"). Charts with
+// data-wide also have landscape copies, shown on desktop; links and the full-size view follow the shape on screen.
+var WIDE = window.matchMedia ? window.matchMedia("(min-width: 800px)") : { matches: false };
+document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(function (fig) {
+  var d = fig.dataset, sp = function (k) { return d[k] ? d[k].split("|") : []; };
+  var keys = d.keys ? d.keys.split("|") : ["0"], srcs = d.views ? sp("views") : [fig.querySelector(".chart-img img").getAttribute("src")],
+      paths = sp("paths"), raws = sp("raws"), solids = sp("solids"), wides = sp("wide"), wraws = sp("wraws"), wsolids = sp("wsolids");
+  var img = fig.querySelector(".chart-img img"), source = fig.querySelector("picture source"), open = fig.querySelector(".chart-img");
   var path = fig.querySelector(".path"), full = fig.querySelector("a.full"), solid = fig.querySelector("a.solid");
+  if (!raws.length && full) raws = [full.href];
+  if (!solids.length && solid) solids = [solid.href];
   var st = keys[0].split(",").map(Number), btns = fig.querySelectorAll("[data-sw]");
-  srcs.slice(1).forEach(function (u) { new Image().src = u; });
+  (WIDE.matches && wides.length ? wides : srcs).slice(1).forEach(function (u) { new Image().src = u; });
   function show() {
     var i = keys.indexOf(st.join(","));
     if (i < 0) return;
-    img.src = srcs[i]; open.dataset.full = srcs[i];
-    if (solids[i]) open.dataset.solid = solids[i];
-    if (path) path.textContent = paths[i];
-    if (full) full.href = raws[i];
-    if (solid && solids[i]) solid.href = solids[i];
+    var w = WIDE.matches && wides.length;
+    img.src = srcs[i]; if (source) source.srcset = wides[i];
+    open.dataset.full = w ? wides[i] : srcs[i];
+    var so = w && wsolids.length ? wsolids[i] : solids[i];
+    if (so) open.dataset.solid = so;
+    if (path && paths[i]) path.textContent = paths[i];
+    if (full && raws[i]) full.href = w && wraws.length ? wraws[i] : raws[i];
+    if (solid && so) solid.href = so;
     btns.forEach(function (b) {
       var k = +b.dataset.sw, on = b.hasAttribute("data-v") ? st[k] === +b.dataset.v : st[k] === 1;
       b.setAttribute("aria-pressed", on ? "true" : "false");
@@ -654,6 +684,8 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
       show();
     });
   });
+  if (WIDE.addEventListener) WIDE.addEventListener("change", show);
+  show();
 });
 (function () {
   // Contents bar: collapsed list of sections; names the section in view.
@@ -728,7 +760,8 @@ def body():
 
 
 def topic_body(s):
-    return f"""<div class="wrap top top-sm">
+    return f"""<div class="topic">
+<div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
   <p class="site">{title_html} <span class="kicker-sm">{sub_html}</span></p>
 </div>
@@ -744,6 +777,7 @@ def topic_body(s):
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
   <img alt="">
 </dialog>
+</div>
 {SCRIPT}"""
 
 

@@ -2,7 +2,7 @@
   "title": "Data & Graphs",
   "subtitle": "How To Solve A Disease?",
   "tagline": "Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.",
-  "page_version": 27,
+  "page_version": 28,
   "repo": "ebise-wq/pais-data",
   "branch": "main",
   "site": "https://ebise-wq.github.io/pais-data/",
@@ -146,7 +146,8 @@
           "title": "Long COVID and ME/CFS trials per year",
           "caption": "By start year, 2020–2026. Switch between drug and all trial types, and show commercial sponsors.",
           "script": "analysis/sponsor_charts.py",
-          "solid": true
+          "solid": true,
+          "wide": true
         },
         {
           "file": "analysis/sponsor_comparison.png",
@@ -198,7 +199,8 @@
           "title": "Research vs burden, by sex",
           "caption": "Each dot a disease: share of patients who are women vs research relative to trend.",
           "script": "sex/plot_sex.py",
-          "solid": true
+          "solid": true,
+          "wide": true
         },
         {
           "file": "sex/sex_groups.png",

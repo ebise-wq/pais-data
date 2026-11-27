@@ -50,6 +50,7 @@ def glow(fig):
 
 def save(fig, path):
     """Transparent PNG for the page, plus a copy on solid green in <folder>/solid/ for sharing on white pages, with the page's glow."""
+    os.makedirs(os.path.dirname(path), exist_ok=True)
     fig.savefig(path, dpi=300, transparent=True)
     solid = os.path.join(os.path.dirname(path), "solid", os.path.basename(path))
     os.makedirs(os.path.dirname(solid), exist_ok=True)
@@ -62,10 +63,10 @@ def save(fig, path):
 ALL_TYPES = "clinicaltrials/sponsor_all_types_2026-11-26.csv"
 
 
-def per_year(version, kind, split):
+def per_year(version, kind, split, wide=False):
     """kind: "drug" (drug or biologic trials) or "all" (all interventional trials); split: commercial sponsors
     in their own colour. The four views share one layout, so the page can switch between them; only the y
-    scale differs between drug and all."""
+    scale differs between drug and all. wide=True: a landscape copy in analysis/wide/ for desktop topic pages."""
     if kind == "all":
         rows = list(csv.DictReader(open(ALL_TYPES)))
         def get(d):
@@ -87,11 +88,14 @@ def per_year(version, kind, split):
                 out.append((int(r["year"]), c if split else 0, n - c if split else n))
             return out
         lc_max, me_max, step = 50, 15, 10
-    fig = plt.figure(figsize=(6, 7.2), facecolor="none")
-    unit = 0.525 / lc_max          # figure height per trial, same in both panels
-    panels = [("Long COVID", lc_max, 0.30), ("ME/CFS", me_max, 0.115)]
+    W, H = (10, 5.8) if wide else (6, 7.2)
+    fig = plt.figure(figsize=(W, H), facecolor="none")
+    X, Yt, Yb = (lambda i: i / W), (lambda i: 1 - i / H), (lambda i: i / H)  # inches to figure fractions
+    me_bot, gap, lc_top = 0.828, 0.198, 1.26     # inches; same in both shapes
+    h_lc = (H - lc_top - me_bot - gap) / (1 + me_max / lc_max)   # same height per trial in both panels
+    panels = [("Long COVID", lc_max, me_bot + gap + h_lc * me_max / lc_max), ("ME/CFS", me_max, me_bot)]
     for name, ymax, bottom in panels:
-        ax = fig.add_axes([0.11, bottom, 0.845, ymax * unit])
+        ax = fig.add_axes([X(0.66), Yb(bottom), X(W - 0.93), Yb(h_lc * ymax / lc_max)])
         data = get(name)
         for y, c, o in data:
             part = y == 2026
@@ -108,22 +112,24 @@ def per_year(version, kind, split):
         style(ax)
         ax.text(2019.55, ymax * 0.95, name, fontsize=15, fontweight="bold", color=INK, va="top")
     title = "Long COVID and ME/CFS trials" if kind == "all" else "Long COVID and ME/CFS drug trials"
-    fig.text(M, 0.945, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
+    L = X(0.33)
+    fig.text(L, Yt(0.396), title, fontsize=20, fontweight="bold", color=INK, va="baseline")
     what = "All interventional trials by start year" if kind == "all" else "Drug or biologic trials by start year"
-    fig.text(M, 0.905, what, fontsize=12, color=MUTED, va="baseline")
+    fig.text(L, Yt(0.684), what, fontsize=12, color=MUTED, va="baseline")
     if split:
-        fig.text(M, 0.865, "■ Commercial sponsor", fontsize=13, color=SUNSET, va="baseline")
-        fig.text(M + 0.45, 0.865, "■ Other sponsor", fontsize=13, color=OCEAN, va="baseline")
+        fig.text(L, Yt(0.972), "■ Commercial sponsor", fontsize=13, color=SUNSET, va="baseline")
+        fig.text(X(3.03), Yt(0.972), "■ Other sponsor", fontsize=13, color=OCEAN, va="baseline")
     else:
-        fig.text(M, 0.865, "■ All sponsors", fontsize=13, color=OCEAN, va="baseline")
+        fig.text(L, Yt(0.972), "■ All sponsors", fontsize=13, color=OCEAN, va="baseline")
     foot = "ClinicalTrials.gov" + (" lead sponsor class" if split else "") + ". 2026 to " + \
            ("26 Nov." if kind == "all" else "8 Nov.") + (" Trials naming both count in both." if kind == "all" else "")
     foot = foot.replace(" lead sponsor class. ", ", lead sponsor. ") if kind == "all" and split else foot
-    fig.text(M, 0.035, foot, fontsize=10.5 if len(foot) < 70 else 9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.035, version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
+    fig.text(L, Yb(0.252), foot, fontsize=10.5 if (wide or len(foot) < 70) else 9.5, color=MUTED, va="baseline")
+    fig.text(1 - L, Yb(0.252), version, fontsize=9, color=MUTED, alpha=0.6, ha="right", va="baseline")
     out = {("drug", False): "analysis/drug_trials_per_year.png", ("drug", True): "analysis/sponsor_per_year.png",
            ("all", False): "analysis/all_trials_per_year.png", ("all", True): "analysis/all_trials_sponsor_per_year.png"}
-    save(fig, out[(kind, split)])
+    path = out[(kind, split)]
+    save(fig, os.path.join(os.path.dirname(path), "wide", os.path.basename(path)) if wide else path)
 
 
 def comparison(version):
@@ -174,8 +180,9 @@ def comparison(version):
     save(fig, "analysis/sponsor_comparison.png")
 
 
-per_year("v5", "drug", False)
-per_year("v6", "drug", True)
-per_year("v4", "all", False)
-per_year("v3", "all", True)
+for wide in (False, True):
+    per_year("v6", "drug", False, wide)
+    per_year("v7", "drug", True, wide)
+    per_year("v5", "all", False, wide)
+    per_year("v4", "all", True, wide)
 comparison("v4")

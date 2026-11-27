@@ -30,6 +30,13 @@
   (charts on the page are transparent). The page links it as "Solid background" under the chart and in the
   full-size view. Chart scripts write both with a `save(fig, path)` helper.
 - The build writes `docs/index.html` (overview) and one page per section (`docs/<section id>.html`).
+- Topic pages (v28) are one reading column (52rem) with one chart per row, also on desktop, at the
+  user's request; side-by-side grids inside fragments are forced to one column there. Charts on desktop
+  should be landscape: `"wide": true` on a chart means each of its PNGs (and solid copy) has a landscape
+  copy at `<folder>/wide/<name>` (solid: `<folder>/wide/solid/<name>`), shown on topic pages at
+  ≥800px via `<picture>`; switches, "Full size", "Solid background" and the full-size view follow the shape
+  on screen. The trials chart (all four views) and the sex scatter have wide copies; portrait charts
+  without one are capped at 82vh on desktop. Interactive charts draw landscape at ≥700px wide.
 - The overview is kept clean at the user's request (v16): each section shows only its title (a link to
   the topic page, with "Open page →" on the same line) and its charts. No findings, chart captions,
   README links, data files, earlier versions or subsection links; those are on the topic pages. PNG
