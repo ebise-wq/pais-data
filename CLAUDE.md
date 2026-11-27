@@ -26,7 +26,7 @@
   labels, and a switch with one label is an on/off pill) and `"views"`, a map from the chosen option of each
   switch ("1,0") to its PNG; the default (all zeros) is `"file"`. The trials chart uses this: drug trials /
   all trial types, and a "Commercial sponsor" pill.
-- `"solid": true` on a chart means each of its PNGs has a copy on solid green at `<folder>/solid/<name>`
+- `"solid": true` on a chart means each of its PNGs has a copy on the page's green glow at `<folder>/solid/<name>`
   (charts on the page are transparent). The page links it as "Solid background" under the chart and in the
   full-size view. Chart scripts write both with a `save(fig, path)` helper.
 - The build writes `docs/index.html` (overview) and one page per section (`docs/<section id>.html`).
@@ -53,7 +53,9 @@
   (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
   show on the topic page only. The headline-number boxes were removed at the user's request (v25).
   Each chart card there has a "Download image" button (topic page only) that saves the chart as shown
-  (scale, zoom, hidden groups) as a PNG on solid green, with title, legend, notes and the user's name.
+  (scale, zoom, hidden groups) as a PNG on the page's green glow, with title, legend, notes and the user's name.
+  Solid copies and downloads both paint the same glow as the page (light from the top left; `glow()` in
+  the chart scripts, `paintBg()` in the fragment).
 - An interactive with `"overview": false` shows on its topic page only; the overview gets a link line
   (text from `"more"`). With `"overview": {"html": ..., "pick": {"name": "a/b/c", ...}}` the overview
   shows that small fragment instead, given only the picked parts of the data (slash paths into the JSON).

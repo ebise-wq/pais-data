@@ -11,6 +11,7 @@ Also writes analysis/sponsor_comparison.png. Every chart is saved twice: transpa
 solid green in analysis/solid/ (for sharing on white backgrounds).
 """
 import csv, os
+import numpy as np
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
@@ -32,12 +33,29 @@ def style(ax):
     ax.tick_params(length=6, width=1.2, color=MUTED, pad=5)
 
 
+def glow(fig):
+    """The page's background as an image behind the figure: light from the top left, as in the CSS
+    radial-gradient(120% 80% at 10% 0%, #1f4d3e 0%, #12342a 38%, #0e2a22 62%, #0b231c 100%)."""
+    w, h = fig.get_size_inches()
+    ny = 400; nx = max(2, int(ny * w / h))
+    u, v = np.meshgrid(np.linspace(0, 1, nx), np.linspace(0, 1, ny))
+    d = np.clip(np.hypot((u - 0.1) / 1.2, v / 0.8), 0, 1)
+    stops = [0, 0.38, 0.62, 1]
+    cols = np.array([matplotlib.colors.to_rgb(c) for c in ("#1f4d3e", "#12342a", "#0e2a22", "#0b231c")])
+    img = np.stack([np.interp(d, stops, cols[:, k]) for k in range(3)], axis=-1)
+    ax = fig.add_axes([0, 0, 1, 1], zorder=-100); ax.set_axis_off()
+    ax.imshow(img, extent=[0, 1, 0, 1], aspect="auto", origin="upper")
+    return ax
+
+
 def save(fig, path):
-    """Transparent PNG for the page, plus a copy on solid green in <folder>/solid/ for sharing on white pages."""
+    """Transparent PNG for the page, plus a copy on solid green in <folder>/solid/ for sharing on white pages, with the page's glow."""
     fig.savefig(path, dpi=300, transparent=True)
     solid = os.path.join(os.path.dirname(path), "solid", os.path.basename(path))
     os.makedirs(os.path.dirname(solid), exist_ok=True)
+    bg = glow(fig)
     fig.savefig(solid, dpi=300, facecolor=BG)
+    bg.remove()
     plt.close(fig)
 
 
@@ -156,8 +174,8 @@ def comparison(version):
     save(fig, "analysis/sponsor_comparison.png")
 
 
-per_year("v4", "drug", False)
-per_year("v5", "drug", True)
-per_year("v3", "all", False)
-per_year("v2", "all", True)
-comparison("v3")
+per_year("v5", "drug", False)
+per_year("v6", "drug", True)
+per_year("v4", "all", False)
+per_year("v3", "all", True)
+comparison("v4")

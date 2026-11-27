@@ -107,7 +107,7 @@
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v21</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v22</span></div>
 </div>
 <script>
 (function(){
@@ -358,7 +358,11 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
  R.slice().sort((a,b)=>b.papers.sf-a.papers.sf).map(r=>`<tr><td>${esc(r.label)}</td><td style="text-align:left">${esc(r.cat)}${r.kind==='g'?' (mainly low-income regions)':''}</td><td>${fmtD(r.dalys)}</td><td>${fmtN(r.papers.n)}</td><td>${fmtX(r.papers.sf)}</td><td>${r.papers.rank}</td><td>${fmtN(r.trials.n)}</td><td>${fmtX(r.trials.sf)}</td><td>${r.trials.rank}</td></tr>`).join('');
 
 // ---------- download: the chart as shown (scale, zoom, hidden groups) as a PNG on solid green
-const EXP={bg:'#0e2a22',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v21'};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v22'};
+// the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
+function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
+  const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
+  x.fillStyle=g;x.fillRect(-1,-1,2,2);x.restore();}
 function exportPng(pid){
   const host=$(pid),svg=host&&host.querySelector('svg');if(!svg)return;
   const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
@@ -369,7 +373,7 @@ function exportPng(pid){
     if(o.tagName==='text'||o.tagName==='tspan'){const cs=getComputedStyle(o);
       d.setAttribute('fill',cs.fill);d.setAttribute('font-family',EXP.font);d.setAttribute('font-weight',cs.fontWeight);
       if(o.tagName==='text')d.setAttribute('font-size',cs.fontSize);
-      if(o.classList.contains('halo')){d.setAttribute('stroke',EXP.bg);d.setAttribute('stroke-width','4');d.setAttribute('paint-order','stroke');d.setAttribute('stroke-linejoin','round');}}});
+      if(o.classList.contains('halo')){d.setAttribute('stroke',EXP.halo);d.setAttribute('stroke-width','4');d.setAttribute('paint-order','stroke');d.setAttribute('stroke-linejoin','round');}}});
   cl.setAttribute('xmlns',NS);
   // 8px spare on the left: fallback fonts in the saved image can run a little wider than on the page
   cl.setAttribute('viewBox',`-8 0 ${W+8} ${H}`);cl.setAttribute('width',W+8);
@@ -391,7 +395,7 @@ function exportPng(pid){
     items.forEach(it=>{const w=x.measureText(it.t).width+28;if(lw+w>W&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
     const top=pad+24+notes.length*18+8+rows.length*20+10,ch=top+H+62;
     cv.width=cw*S;cv.height=ch*S;x.scale(S,S);
-    x.fillStyle=EXP.bg;x.fillRect(0,0,cw,ch);
+    paintBg(x,cw,ch);
     x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 20px '+EXP.font;x.fillText(title,pad,pad+18);
     x.font='400 13px '+EXP.font;x.fillStyle=C.ink2;notes.forEach((t,i)=>x.fillText(t,pad,pad+24+16+i*18));
     let y=pad+24+notes.length*18+8+14;x.font='500 13px '+EXP.font;
