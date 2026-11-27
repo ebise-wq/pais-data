@@ -105,8 +105,10 @@
   contents already appear in another table (e.g. `sex/sex_labels.csv`, `expanded/cleaned_counts_*.csv`).
 - Keep the number of files low: add columns or rows to an existing table rather than a new small file,
   put short tables and search strings in the folder README, and never save the same data in two shapes.
-- Link preview (v39, user's choice): every page has Open Graph and X card tags. The card text is
-  "Data & Graphs" (topic pages: "<section> · Data & Graphs") and "‘How To Solve A Disease?’ by Siebe Rozendal".
+- Link preview (v40, user's choice): every page has Open Graph and X card tags. The card title is
+  "Data & Graphs · ‘How To Solve A Disease?’" (the Substack name joined with no-break spaces, so Signal's
+  two title lines beside the image break after "·"; topic pages: "<section> · Data & Graphs"), and the
+  description, shown under the image, is "by Siebe Rozendal".
   The image, `docs/preview.png` (1200 × 630), is only the 120-disease papers-vs-burden scatter with ME/CFS and
   long COVID labelled, no title text. Small previews in Signal, WhatsApp and iMessage crop the middle
   630 × 630 square, so labels and axis names stay inside it; only dots reach past it.

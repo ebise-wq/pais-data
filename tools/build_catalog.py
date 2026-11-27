@@ -453,18 +453,22 @@ def toc_html(current=None):
 
 def head(title):
     full = e(CAT['title'] + ' · ' + CAT['subtitle'])
-    og = title.replace(" · " + CAT["subtitle"], "")  # topic pages: "<section> · Data & Graphs"
+    og = OG_TITLE if title == FULL_TITLE else title.replace(" · " + CAT["subtitle"], "")  # topic pages: "<section> · Data & Graphs"
     return (HEAD.replace(f"<title>{full}</title>", f"<title>{e(title)}</title>", 1)
-            .replace(f'<meta property="og:title" content="{e(CAT["title"])}">', f'<meta property="og:title" content="{e(og)}">', 1))
+            .replace(f'<meta property="og:title" content="{e(OG_TITLE)}">', f'<meta property="og:title" content="{e(og)}">', 1))
 
+
+# Link-preview title. Signal shows at most two title lines beside the image and the description below it, so
+# the Substack name is joined with no-break spaces: the line breaks after "Data & Graphs ·", not inside it.
+OG_TITLE = CAT["title"] + " · " + ("‘" + CAT["subtitle"] + "’").replace(" ", "\u00a0")
 
 HEAD = f"""<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <meta name="description" content="{e(CAT['tagline'])}">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="{e(CAT['title'])}">
-<meta property="og:title" content="{e(CAT['title'])}">
-<meta property="og:description" content="{e('‘' + CAT['subtitle'] + '’ by ' + CAT['author']['name'])}">
+<meta property="og:title" content="{e(OG_TITLE)}">
+<meta property="og:description" content="{e('by ' + CAT['author']['name'])}">
 <meta property="og:image" content="{e(SITE)}preview.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
