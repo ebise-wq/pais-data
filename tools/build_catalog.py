@@ -465,11 +465,12 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   padding-right: max(16px, env(safe-area-inset-right, 0px)); }
 
 .top { padding-block: 2.75rem 0; }
-.top h1 { font: 700 clamp(1.85rem, 7.2vw, 3.1rem)/1.08 var(--f-display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
+.top h1 { font: 700 clamp(3rem, 14vw, 5.2rem)/1 var(--f-display); margin: 0; letter-spacing: -0.02em; text-wrap: balance; }
 .top h1 span { color: var(--sunset); }
 .top .tagline { color: var(--muted); font-size: 1.15rem; margin: 0.7rem 0 0; max-width: 40ch; text-wrap: balance; }
 .top .tagline { font-size: 1.05rem; }
-.top .kicker { margin: 0.35rem 0 0; font: 500 clamp(1.15rem, 3.6vw, 1.45rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: 0.01em; }
+.top .kicker { margin: 0.5rem 0 0; font: 600 clamp(1.3rem, 5vw, 1.7rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: -0.005em; }
+.top .kicker span, .top-sm .kicker-sm span { color: var(--sunset); }
 .top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
@@ -686,12 +687,14 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
 </script>"""
 
 # Brand: the Substack's name, with "Data & Graphs" under it. The question mark takes the accent colour.
-title_html = e(CAT["title"]).replace("?", "<span>?</span>", 1)
+# Title "Data & Graphs", very large; under it the Substack's name, whose question mark takes the accent colour.
+title_html = e(CAT["title"])
+sub_html = e(CAT["subtitle"]).replace("?", "<span>?</span>", 1)
 FULL_TITLE = f"{CAT['title']} · {CAT['subtitle']}"
 def body():
     return f"""<div class="wrap top">
   <h1>{title_html}</h1>
-  <p class="kicker">{e(CAT['subtitle'])}</p>
+  <p class="kicker">{sub_html}</p>
   <p class="tagline">{e(CAT['tagline'])}</p>
   <p class="byline">By {e(CAT['author']['name'])} · {" · ".join(link(l["url"], e(l["label"])) for l in CAT['author']['links'])}
     <span class="upd">Last updated {nice_date(built)}</span></p>
@@ -723,7 +726,7 @@ def topic_body(s):
                     f'{e(short_title(t["title"]))}</a>' for t in sections)
     return f"""<div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
-  <p class="site">{title_html} <span class="kicker-sm">{e(CAT['subtitle'])}</span></p>
+  <p class="site">{title_html} <span class="kicker-sm">{sub_html}</span></p>
 </div>
 <nav class="nav" aria-label="Topics"><div class="wrap">{chips}</div></nav>
 <main class="wrap">

@@ -92,7 +92,7 @@ def per_year(version, kind, split):
     title = "Long COVID and ME/CFS trials" if kind == "all" else "Long COVID and ME/CFS drug trials"
     fig.text(M, 0.945, title, fontsize=20, fontweight="bold", color=INK, va="baseline")
     what = "All interventional trials by start year" if kind == "all" else "Drug or biologic trials by start year"
-    fig.text(M, 0.905, what + (". Label: commercial / all" if split else ""), fontsize=12, color=MUTED, va="baseline")
+    fig.text(M, 0.905, what, fontsize=12, color=MUTED, va="baseline")
     if split:
         fig.text(M, 0.865, "■ Commercial sponsor", fontsize=13, color=SUNSET, va="baseline")
         fig.text(M + 0.45, 0.865, "■ Other sponsor", fontsize=13, color=OCEAN, va="baseline")
@@ -157,7 +157,7 @@ def comparison(version):
 
 
 per_year("v4", "drug", False)
-per_year("v4", "drug", True)
+per_year("v5", "drug", True)
 per_year("v3", "all", False)
-per_year("v1", "all", True)
+per_year("v2", "all", True)
 comparison("v3")

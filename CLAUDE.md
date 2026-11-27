@@ -35,8 +35,9 @@
   README links, data files, earlier versions or subsection links; those are on the topic pages. PNG
   charts show without their caption card, and the explanation lines inside interactive fragments
   (`bvr-sub`, `fnd-sub`, `fnd-note`, `py-sub`, `pme-lede`, `hint`) are hidden by CSS under `.overview`.
-- Brand: the site is titled after the user's Substack, "How To Solve A Disease?" (`"title"` in
-  `catalog.json`), with "Data & Graphs" (`"subtitle"`) under it; the question mark takes the accent colour.
+- Brand (v24): the overview's title is "Data & Graphs" (`"title"` in `catalog.json`), very large, with the
+  user's Substack name "How To Solve A Disease?" (`"subtitle"`) under it; its question mark takes the
+  accent colour.
 - Under the overview header: "By Siebe Rozendal" with links to Substack, X and LinkedIn (from `"author"`
   in `catalog.json`) and "Last updated" (the build date).
 - Contents (v19): one slim bar under the header, sticky while scrolling and collapsed by default, in
