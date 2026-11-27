@@ -87,7 +87,7 @@
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v5">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -98,7 +98,7 @@
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v5">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -127,7 +127,7 @@
     <div class="fnd-tw"><table id="fnd-table"></table></div>
   </details>
   <!-- more:end -->
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v5</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v6</span></div>
 </div>
 <script>
 (function () {
@@ -207,6 +207,9 @@ const hideTip = (tip) => { tip.style.display = "none"; };
 
 // ---------- bars ----------
 function bars(items, fmt, axisTitle) {
+  // the square download (class dl-sq on the card) keeps it to the 15 largest
+  const total = items.length, cut = C.el.classList.contains("dl-sq") && total > 15;
+  if (cut) items = items.slice(0, 15);
   const ends = items.map((d) => Math.max(d.v || 0, d.hi || 0));
   const maxEnd = Math.max(...ends);
   const dom = maxEnd * 1.17;
@@ -231,7 +234,8 @@ function bars(items, fmt, axisTitle) {
   }).join("");
   const plot = cq(".fnd-plot");
   plot.innerHTML = `<div class="fnd-bars"><div class="fnd-grid">${g}</div>${rows}</div>` +
-    `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div><div class="fnd-tip"></div>`;
+    `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div>` +
+    (cut ? `<div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem">Largest 15 of ${total} shown.</div>` : "") + `<div class="fnd-tip"></div>`;
   const tip = plot.querySelector(".fnd-tip");
   plot.querySelectorAll(".fnd-row").forEach((row) => {
     const d = items[+row.dataset.i];
@@ -459,6 +463,9 @@ const scatPlot = CARDS.scat.el.querySelector(".fnd-plot");
 new ResizeObserver(() => { const w = scatPlot.clientWidth; if (Math.abs(w - lastW) > 4) { lastW = w; use("scat"); drawScatter(); } }).observe(scatPlot);
 render("bars");
 render("scat");
+// re-draw the bars when the page's download adds or removes its square layout (it fires a resize)
+let barsSq = false;
+addEventListener("resize", () => { const sq = CARDS.bars.el.classList.contains("dl-sq"); if (sq !== barsSq) { barsSq = sq; render("bars"); } });
 
 // data table (topic page only)
 const tb = q("#fnd-table");

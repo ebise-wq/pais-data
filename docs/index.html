@@ -298,7 +298,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </div>
   </div>
   
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v25</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v26</span></div>
 </div>
 <script>
 (function(){
@@ -483,11 +483,14 @@ function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into anothe
 function rank(id,m){
   const host=$(id);host.innerHTML='';
   const W=host.clientWidth,narrow=W<520,fs=narrow?14:14.5;
-  const top=comps.concat([all]).filter(shown).sort((a,b)=>b[m].sf-a[m].sf).slice(0,20);
   const others=R.filter(r=>!isComp(r)&&r!==all&&shown(r)).sort((a,b)=>b[m].sf-a[m].sf);
+  // the square download (class dl-sq on the card) keeps it to 15 rows in all
+  const card=host.closest('.bvr-card'),sq=!!(card&&card.classList.contains('dl-sq')),nTop=sq?Math.max(5,15-others.length):20;
+  const sub=card&&card.querySelector('.bvr-sub');if(sub){if(!sub.dataset.full)sub.dataset.full=sub.textContent;sub.textContent=sub.dataset.full.replace('Top 20','Top '+nTop);}
+  const top=comps.concat([all]).filter(shown).sort((a,b)=>b[m].sf-a[m].sf).slice(0,nTop);
   const list=top.map(r=>({r})).concat(others.length?[{sep:'Other groups'}]:[],others.map(r=>({r})));
   if(!list.length){host.innerHTML='<p class="bvr-sub">All categories are hidden.</p>';return;}
-  const svg=el('svg',{width:W,height:10,viewBox:`0 0 ${W} 10`,role:'img','aria-label':`${m} shortfall, largest 20`},host);
+  const svg=el('svg',{width:W,height:10,viewBox:`0 0 ${W} 10`,role:'img','aria-label':`${m} shortfall, largest ${nTop}`},host);
   const name=r=>r.short;
   const meas=el('text',{'font-size':fs,'font-weight':650},svg);
   const tw=t=>{meas.textContent=t;return meas.getComputedTextLength();};
@@ -551,7 +554,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v25',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v26',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -619,8 +622,8 @@ const JOBS=[['bvr-sc-papers',()=>scatter('bvr-sc-papers','papers')],['bvr-sc-tri
   ['bvr-rk-papers',()=>rank('bvr-rk-papers','papers')],['bvr-rk-trials',()=>rank('bvr-rk-trials','trials')]].filter(([id])=>$(id));
 const drawnW={};
 function redrawAll(){for(const k in drawnW)delete drawnW[k];draw();}
-function draw(){JOBS.forEach(([id,f])=>{const w=$(id).clientWidth;
-  if(w<240||drawnW[id]===w)return;drawnW[id]=w;f();});}
+function draw(){JOBS.forEach(([id,f])=>{const w=$(id).clientWidth,k=w+($(id).closest('.dl-sq')?'s':'');
+  if(w<240||drawnW[id]===k)return;drawnW[id]=k;f();});}
 draw();
 let to;const later=()=>{clearTimeout(to);to=setTimeout(draw,80);};
 if(window.ResizeObserver){const ro=new ResizeObserver(later);JOBS.forEach(([id])=>ro.observe($(id)));}
@@ -760,7 +763,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
 </style>
 <div class="fnd" id="fnd">
   <div class="fnd-grid2">
-    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v5">
+    <div class="fnd-card" data-card="bars" data-dl="funding-bars" data-dl-skip=".fnd-view,.fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
       <div class="fnd-seg fnd-view" role="group" aria-label="View">
         <button type="button" data-v="budget">Budget</button><button type="button" data-v="ratio">Output per budget</button>
       </div>
@@ -771,7 +774,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
       <div class="fnd-plot"></div>
       <p class="fnd-note"></p>
     </div>
-    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v5">
+    <div class="fnd-card" data-card="scat" data-dl="funding-output-vs-budget" data-dl-skip=".fnd-opts,.fnd-tip" data-dl-source="budgets: Eurostat GBARD and national sources; papers and citations: SCImago (Scopus)" data-dl-ver="v6">
       <h3 class="fnd-title"></h3>
       <p class="fnd-sub"></p>
       <div class="fnd-bar-row fnd-opts"></div>
@@ -781,7 +784,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
     </div>
   </div>
   
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v5</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v6</span></div>
 </div>
 <script>
 (function () {
@@ -861,6 +864,9 @@ const hideTip = (tip) => { tip.style.display = "none"; };
 
 // ---------- bars ----------
 function bars(items, fmt, axisTitle) {
+  // the square download (class dl-sq on the card) keeps it to the 15 largest
+  const total = items.length, cut = C.el.classList.contains("dl-sq") && total > 15;
+  if (cut) items = items.slice(0, 15);
   const ends = items.map((d) => Math.max(d.v || 0, d.hi || 0));
   const maxEnd = Math.max(...ends);
   const dom = maxEnd * 1.17;
@@ -885,7 +891,8 @@ function bars(items, fmt, axisTitle) {
   }).join("");
   const plot = cq(".fnd-plot");
   plot.innerHTML = `<div class="fnd-bars"><div class="fnd-grid">${g}</div>${rows}</div>` +
-    `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div><div class="fnd-tip"></div>`;
+    `<div style="text-align:center;font-size:0.85rem;color:var(--muted);margin-top:0.2rem">${axisTitle}</div>` +
+    (cut ? `<div style="font-size:0.85rem;color:var(--muted);margin-top:0.3rem">Largest 15 of ${total} shown.</div>` : "") + `<div class="fnd-tip"></div>`;
   const tip = plot.querySelector(".fnd-tip");
   plot.querySelectorAll(".fnd-row").forEach((row) => {
     const d = items[+row.dataset.i];
@@ -1113,6 +1120,9 @@ const scatPlot = CARDS.scat.el.querySelector(".fnd-plot");
 new ResizeObserver(() => { const w = scatPlot.clientWidth; if (Math.abs(w - lastW) > 4) { lastW = w; use("scat"); drawScatter(); } }).observe(scatPlot);
 render("bars");
 render("scat");
+// re-draw the bars when the page's download adds or removes its square layout (it fires a resize)
+let barsSq = false;
+addEventListener("resize", () => { const sq = CARDS.bars.el.classList.contains("dl-sq"); if (sq !== barsSq) { barsSq = sq; render("bars"); } });
 
 // data table (topic page only)
 const tb = q("#fnd-table");
@@ -1752,7 +1762,7 @@ render();
 </main>
 <footer class="wrap">
   <span class="stats">20 charts · 29 data files · <a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">code and data on GitHub</a></span>
-  <span class="ver">v30 · built 2026-11-27</span>
+  <span class="ver">v31 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
