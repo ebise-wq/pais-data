@@ -63,13 +63,13 @@
   </div>
   <!-- more:start -->
   <div class="bvr-grid">
-    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v26">
+    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v27">
       <h3>Largest papers shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg3"></div>
       <div class="bvr-plot" id="bvr-rk-papers"></div>
     </div>
-    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v26">
+    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v27">
       <h3>Largest trials shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg4"></div>
@@ -100,7 +100,7 @@
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v26</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v27</span></div>
 </div>
 <script>
 (function(){
@@ -173,7 +173,7 @@ document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-hit]'))R
 function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into another element (square download)
   const host=opt?opt.host:$(id);host.innerHTML='';
   const W=opt?opt.W:host.clientWidth,H=opt?opt.H:(W>=700?Math.round(W*0.62):Math.round(Math.max(420,Math.min(560,W*1.1))));  // landscape on desktop
-  const M={l:50,r:14,t:12,b:46},fs=W<520?13:14,narrow=W<520;
+  const M={l:50,r:14,t:12,b:46},fs=opt?15:(W<520?13:14),narrow=W<520;  // a little larger in the square download
   const svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${m} per year against disease burden`},host);
   const LOG=SCALE==='log';
   const vis=R.filter(shown),xmin=vis.length?Math.min(...vis.map(r=>r.dalys)):1e4;
@@ -356,7 +356,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v26',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v27',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -384,10 +384,11 @@ function exportPng(pid,square){
   const items=CATS.filter(([k])=>!HIDE.has(k)).map(([,c,t])=>({c,t}));if(sc)items.push({c:null,t:'Trend, 90% band (R² '+D.fits[m].r2.toFixed(2)+')'});
   const cwid=square?EXP.side-2*pad:+host.querySelector('svg').getAttribute('width')+8;
   // wrap the note to the width, then lay out the legend in rows
-  x0.font='400 13px '+EXP.font;const lines=[];{let cur='';note.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x0.measureText(tr).width>cwid&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);}
-  x0.font='500 13px '+EXP.font;const rows=[[]];let lw=0;
-  items.forEach(it=>{const w=x0.measureText(it.t).width+28;if(lw+w>cwid&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
-  const top=pad+24+lines.length*18+8+rows.length*20+10,foot=62;
+  const TS=square?28:24,NS=15,NL=20,LS=15,LR=24;  // type sizes in the saved image (title, note, legend)
+  x0.font='400 '+NS+'px '+EXP.font;const lines=[];{let cur='';note.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x0.measureText(tr).width>cwid&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);}
+  x0.font='500 '+LS+'px '+EXP.font;const rows=[[]];let lw=0;
+  items.forEach(it=>{const w=x0.measureText(it.t).width+32;if(lw+w>cwid&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
+  const top=pad+TS+10+lines.length*NL+8+rows.length*LR+10,foot=72;
   let svg=host.querySelector('svg'),tmp=null;
   if(square&&sc){ // redraw off screen so chart + header + footer make a square
     tmp=document.createElement('div');tmp.className='bvr-plot';tmp.style.cssText='position:absolute;left:-10000px;top:0;width:'+(cwid-8)+'px';
@@ -397,19 +398,19 @@ function exportPng(pid,square){
   img.onload=()=>{
     const cw=W+8+2*pad,ch=top+H+foot,cv=document.createElement('canvas'),x=cv.getContext('2d');
     cv.width=cw*S;cv.height=ch*S;x.scale(S,S);paintBg(x,cw,ch);
-    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 '+(square?22:20)+'px '+EXP.font;x.fillText(title,pad,pad+18);
-    x.font='400 13px '+EXP.font;x.fillStyle=C.ink2;lines.forEach((t,i)=>x.fillText(t,pad,pad+24+16+i*18));
-    let y=pad+24+lines.length*18+8+14;x.font='500 13px '+EXP.font;
+    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 '+TS+'px '+EXP.font;x.fillText(title,pad,pad+TS-4);
+    x.font='400 '+NS+'px '+EXP.font;x.fillStyle=C.ink2;lines.forEach((t,i)=>x.fillText(t,pad,pad+TS+10+NL*(i+1)-5));
+    let y=pad+TS+10+lines.length*NL+8+LR-6;x.font='500 '+LS+'px '+EXP.font;
     rows.forEach(r=>{let cx=pad;r.forEach(it=>{
-      if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+5,y-4.5,5,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-5.5,14,2);}
-      x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?16:20),y);cx+=x.measureText(it.t).width+28+(it.c?0:4);});y+=20;});
+      if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+6,y-5,6,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-6,16,2.2);}
+      x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?18:22),y);cx+=x.measureText(it.t).width+32+(it.c?0:4);});y+=LR;});
     x.drawImage(img,pad,top,W+8,H);URL.revokeObjectURL(url);
     // footer: source and version, then the credit
-    x.font='400 11px '+EXP.font;x.fillStyle=C.muted;
-    x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-42);
-    x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-34);x.lineTo(cw-pad,ch-34);x.stroke();
-    x.font='600 13px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-14);
-    const nw=x.measureText(nm).width;x.font='500 13px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-14);
+    x.font='400 12.5px '+EXP.font;x.fillStyle=C.muted;
+    x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-50);
+    x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-40);x.lineTo(cw-pad,ch-40);x.stroke();
+    x.font='600 15px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-15);
+    const nw=x.measureText(nm).width;x.font='500 15px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-15);
     const hid=CATS.some(([k])=>HIDE.has(k));
     cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
       a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid?'some-hidden':'',square?'square':''].filter(Boolean).join('-')+'.png';

@@ -73,6 +73,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
   color: var(--ink); font: 500 1rem var(--f-body); }
 .dl-hidden { display: none !important; }
+/* Downloads: titles and the lines under them a bit larger than on the page */
+.dl-capturing h3 { font-size: 1.65rem !important; line-height: 1.2 !important; }
+.dl-capturing .bvr-sub, .dl-capturing .py-sub, .dl-capturing .fnd-sub, .dl-capturing .pme-lede { font-size: 1.05rem !important; }
+.dl-capturing .bvr-legend, .dl-capturing .fnd-legend, .dl-capturing .plabel { font-size: 1rem !important; }
 .topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
 .dl-capturing { background: transparent !important; border-color: transparent !important; box-shadow: none !important;
   backdrop-filter: none !important; }
@@ -298,13 +302,13 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   </div>
   <!-- more:start -->
   <div class="bvr-grid">
-    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v26">
+    <div class="bvr-card" data-dl="papers-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v27">
       <h3>Largest papers shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg3"></div>
       <div class="bvr-plot" id="bvr-rk-papers"></div>
     </div>
-    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v26">
+    <div class="bvr-card" data-dl="trials-shortfalls" data-dl-skip=".hint,.bvr-tip" data-dl-source="PubMed, ClinicalTrials.gov, GBD 2023" data-dl-ver="v27">
       <h3>Largest trials shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg4"></div>
@@ -335,7 +339,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v26</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v27</span></div>
 </div>
 <script>
 (function(){
@@ -408,7 +412,7 @@ document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-hit]'))R
 function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into another element (square download)
   const host=opt?opt.host:$(id);host.innerHTML='';
   const W=opt?opt.W:host.clientWidth,H=opt?opt.H:(W>=700?Math.round(W*0.62):Math.round(Math.max(420,Math.min(560,W*1.1))));  // landscape on desktop
-  const M={l:50,r:14,t:12,b:46},fs=W<520?13:14,narrow=W<520;
+  const M={l:50,r:14,t:12,b:46},fs=opt?15:(W<520?13:14),narrow=W<520;  // a little larger in the square download
   const svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${m} per year against disease burden`},host);
   const LOG=SCALE==='log';
   const vis=R.filter(shown),xmin=vis.length?Math.min(...vis.map(r=>r.dalys)):1e4;
@@ -591,7 +595,7 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
 
 // ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
 // Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v26',side:640};
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v27',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
@@ -619,10 +623,11 @@ function exportPng(pid,square){
   const items=CATS.filter(([k])=>!HIDE.has(k)).map(([,c,t])=>({c,t}));if(sc)items.push({c:null,t:'Trend, 90% band (R² '+D.fits[m].r2.toFixed(2)+')'});
   const cwid=square?EXP.side-2*pad:+host.querySelector('svg').getAttribute('width')+8;
   // wrap the note to the width, then lay out the legend in rows
-  x0.font='400 13px '+EXP.font;const lines=[];{let cur='';note.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x0.measureText(tr).width>cwid&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);}
-  x0.font='500 13px '+EXP.font;const rows=[[]];let lw=0;
-  items.forEach(it=>{const w=x0.measureText(it.t).width+28;if(lw+w>cwid&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
-  const top=pad+24+lines.length*18+8+rows.length*20+10,foot=62;
+  const TS=square?28:24,NS=15,NL=20,LS=15,LR=24;  // type sizes in the saved image (title, note, legend)
+  x0.font='400 '+NS+'px '+EXP.font;const lines=[];{let cur='';note.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x0.measureText(tr).width>cwid&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);}
+  x0.font='500 '+LS+'px '+EXP.font;const rows=[[]];let lw=0;
+  items.forEach(it=>{const w=x0.measureText(it.t).width+32;if(lw+w>cwid&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
+  const top=pad+TS+10+lines.length*NL+8+rows.length*LR+10,foot=72;
   let svg=host.querySelector('svg'),tmp=null;
   if(square&&sc){ // redraw off screen so chart + header + footer make a square
     tmp=document.createElement('div');tmp.className='bvr-plot';tmp.style.cssText='position:absolute;left:-10000px;top:0;width:'+(cwid-8)+'px';
@@ -632,19 +637,19 @@ function exportPng(pid,square){
   img.onload=()=>{
     const cw=W+8+2*pad,ch=top+H+foot,cv=document.createElement('canvas'),x=cv.getContext('2d');
     cv.width=cw*S;cv.height=ch*S;x.scale(S,S);paintBg(x,cw,ch);
-    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 '+(square?22:20)+'px '+EXP.font;x.fillText(title,pad,pad+18);
-    x.font='400 13px '+EXP.font;x.fillStyle=C.ink2;lines.forEach((t,i)=>x.fillText(t,pad,pad+24+16+i*18));
-    let y=pad+24+lines.length*18+8+14;x.font='500 13px '+EXP.font;
+    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 '+TS+'px '+EXP.font;x.fillText(title,pad,pad+TS-4);
+    x.font='400 '+NS+'px '+EXP.font;x.fillStyle=C.ink2;lines.forEach((t,i)=>x.fillText(t,pad,pad+TS+10+NL*(i+1)-5));
+    let y=pad+TS+10+lines.length*NL+8+LR-6;x.font='500 '+LS+'px '+EXP.font;
     rows.forEach(r=>{let cx=pad;r.forEach(it=>{
-      if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+5,y-4.5,5,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-5.5,14,2);}
-      x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?16:20),y);cx+=x.measureText(it.t).width+28+(it.c?0:4);});y+=20;});
+      if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+6,y-5,6,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-6,16,2.2);}
+      x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?18:22),y);cx+=x.measureText(it.t).width+32+(it.c?0:4);});y+=LR;});
     x.drawImage(img,pad,top,W+8,H);URL.revokeObjectURL(url);
     // footer: source and version, then the credit
-    x.font='400 11px '+EXP.font;x.fillStyle=C.muted;
-    x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-42);
-    x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-34);x.lineTo(cw-pad,ch-34);x.stroke();
-    x.font='600 13px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-14);
-    const nw=x.measureText(nm).width;x.font='500 13px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-14);
+    x.font='400 12.5px '+EXP.font;x.fillStyle=C.muted;
+    x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-50);
+    x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-40);x.lineTo(cw-pad,ch-40);x.stroke();
+    x.font='600 15px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-15);
+    const nw=x.measureText(nm).width;x.font='500 15px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-15);
     const hid=CATS.some(([k])=>HIDE.has(k));
     cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
       a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid?'some-hidden':'',square?'square':''].filter(Boolean).join('-')+'.png';
@@ -786,7 +791,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v32 · built 2026-11-27</span>
+  <span class="ver">v33 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -895,11 +900,11 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
     var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
       filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
     var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
-    var PAD = 24, HEAD = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0);
+    var PAD = 24, HEAD = (title ? 36 : 0) + (sub ? 22 : 0) + (title || sub ? 8 : 0);
     function srcWrap(width) {  // the footer's source line, wrapped to the chart's width
       var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", out = [];
       if (!src) return out;
-      var m = document.createElement("canvas").getContext("2d"); m.font = "400 11px " + FONT; var cur = "";
+      var m = document.createElement("canvas").getContext("2d"); m.font = "400 12.5px " + FONT; var cur = "";
       src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > width && cur) { out.push(cur); cur = wd; } else cur = t; });
       out.push(cur); return out;
     }
@@ -920,12 +925,12 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
           window.dispatchEvent(new Event("resize")); return v; };
         var ready = wait(60);
         if (fmt === "square") {  // data-dl-square-width: another layout width; class dl-sq lets CSS change the layout
-          var swn = +(d.dlSquareWidth || 640), sw = swn + "px"; root.classList.add("dl-sq");
+          var swn = +(d.dlSquareWidth || 560), sw = swn + "px"; root.classList.add("dl-sq");
           root.style.width = sw; root.style.maxWidth = "none"; root.style.minWidth = sw; root.style.boxSizing = "content-box";
           window.dispatchEvent(new Event("resize"));
           // second pass: charts that read --dl-extra grow by the height left over in the square
           ready = wait(450).then(function () {
-            var side = root.offsetWidth + 2 * PAD, spare = side - PAD - HEAD - (44 + srcWrap(root.offsetWidth).length * 14) - root.offsetHeight - PAD / 2;
+            var side = root.offsetWidth + 2 * PAD, spare = side - PAD - HEAD - (52 + srcWrap(root.offsetWidth).length * 16) - root.offsetHeight - PAD / 2;
             if (spare > 24) { root.style.setProperty("--dl-extra", Math.round(spare) + "px"); window.dispatchEvent(new Event("resize")); return wait(450); }
           });
         }
@@ -935,23 +940,23 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
       if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
       return go();
     }).then(function (shot) {
-      var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 44 + srcLines.length * 14;
+      var cw = shot.width / 3, chh = shot.height / 3, pad = PAD, head = HEAD, srcLines = srcWrap(cw), foot = 52 + srcLines.length * 16;
       var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
       if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
       var cv = document.createElement("canvas"), x = cv.getContext("2d");
       cv.width = Math.round(w * S); cv.height = Math.round(h * S); x.scale(S, S); glow(x, w, h);
       var tx = fmt === "square" ? ox : pad, ty = (fmt === "square" ? oy - head : pad);
       x.textBaseline = "alphabetic";
-      if (title) { x.fillStyle = "#e9efe9"; x.font = "700 21px " + FONT; x.fillText(title, tx, ty + 20); ty += 30; }
-      if (sub) { x.fillStyle = "#a7bdb2"; x.font = "400 13px " + FONT; x.fillText(sub, tx, ty + 14); }
+      if (title) { x.fillStyle = "#e9efe9"; x.font = "700 27px " + FONT; x.fillText(title, tx, ty + 25); ty += 36; }
+      if (sub) { x.fillStyle = "#a7bdb2"; x.font = "400 15px " + FONT; x.fillText(sub, tx, ty + 16); }
       x.drawImage(shot, ox, oy, cw, chh);
       var fy = (fmt === "square" ? oy + chh + foot : h);
-      x.font = "400 11px " + FONT; x.fillStyle = "#7e978b";
-      srcLines.forEach(function (l, i) { x.fillText(l, tx, fy - 42 - (srcLines.length - 1 - i) * 14); });
-      x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 34); x.lineTo(tx + cw, fy - 34); x.stroke();
-      x.font = "600 13px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 14);
-      var nw = x.measureText("Siebe Rozendal").width; x.font = "500 13px " + FONT; x.fillStyle = "#9fd8b5";
-      x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 14);
+      x.font = "400 12.5px " + FONT; x.fillStyle = "#7e978b";
+      srcLines.forEach(function (l, i) { x.fillText(l, tx, fy - 50 - (srcLines.length - 1 - i) * 16); });
+      x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 40); x.lineTo(tx + cw, fy - 40); x.stroke();
+      x.font = "600 15px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 15);
+      var nw = x.measureText("Siebe Rozendal").width; x.font = "500 15px " + FONT; x.fillStyle = "#9fd8b5";
+      x.fillText("  ·  How To Solve A Disease?", tx + nw, fy - 15);
       save(cv, d.dl + (fmt === "square" ? "-square" : ""));
     });
   }
