@@ -70,6 +70,10 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .dl-menu { position: absolute; right: 0; bottom: calc(100% + 6px); z-index: 30; display: grid; min-width: 11rem;
   background: #10302a; border: 1px solid var(--line); border-radius: 10px; padding: 4px; box-shadow: 0 10px 24px rgba(0,0,0,0.35); }
 .dl-menu[hidden] { display: none; }
+.dl-cover { position: fixed; inset: 0; z-index: 60; display: grid; place-items: center; background: rgba(8, 30, 24, 0.92);
+  color: var(--ink); font: 500 1rem var(--f-body); }
+.dl-hidden { display: none !important; }
+.topic .pme-poster.dl-sq .pme-panels { grid-template-columns: 1fr 1fr !important; gap: 18px; }
 .dl-capturing { background: transparent !important; border-color: transparent !important; box-shadow: none !important;
   backdrop-filter: none !important; }
 .dl-menu button { font: 500 0.92rem var(--f-body); color: var(--ink); background: none; border: 0; border-radius: 7px;
@@ -725,7 +729,7 @@ if (tb) {
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v29 · built 2026-11-27</span>
+  <span class="ver">v30 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -831,18 +835,41 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
     var title = d.dlTitle || txt(d.dlTitleFrom), sub = txt(d.dlSubFrom);
     var opt = { pixelRatio: 3, backgroundColor: "transparent", cacheBust: false,
       filter: function (n) { return !(n.nodeType === 1 && n.matches && n.matches(skip)); } };
+    var wait = function (ms) { return new Promise(function (r) { setTimeout(r, ms); }); };
+    var cover = document.createElement("div"); cover.className = "dl-cover"; cover.textContent = "Preparing image…";
     return load().then(function (h2i) {
-      // the card's own background and border would frame the chart: make them transparent while capturing
+      // Square: lay the chart out at a fixed width first (the charts redraw on resize), so it fills the square
+      // whatever the screen size. The card's own background and border would frame the chart: make them
+      // transparent while capturing. A cover hides the brief change.
       var go = function () {
+        var css = root.getAttribute("style") || "";
+        document.body.appendChild(cover);
         root.classList.add("dl-capturing");
-        var un = function (v) { root.classList.remove("dl-capturing"); return v; };
-        return h2i.toCanvas(root, opt).then(un, function (e) { un(); throw e; });
+        // left-out parts are hidden on the page too, so the image is sized without them
+        var gone = Array.prototype.slice.call(root.querySelectorAll(skip));
+        gone.forEach(function (n) { n.classList.add("dl-hidden"); });
+        var un = function (v) { root.classList.remove("dl-capturing", "dl-sq"); root.setAttribute("style", css); cover.remove();
+          gone.forEach(function (n) { n.classList.remove("dl-hidden"); });
+          window.dispatchEvent(new Event("resize")); return v; };
+        var ready = wait(60);
+        if (fmt === "square") {  // data-dl-square-width: another layout width; class dl-sq lets CSS change the layout
+          var sw = (d.dlSquareWidth || 640) + "px"; root.classList.add("dl-sq");
+          root.style.width = sw; root.style.maxWidth = "none"; root.style.minWidth = sw; root.style.boxSizing = "content-box";
+          window.dispatchEvent(new Event("resize")); ready = wait(500);
+        }
+        return ready.then(function () { return h2i.toCanvas(root, opt); }).then(un, function (e) { un(); throw e; });
       };
       if (fontCss === null) return h2i.getFontEmbedCSS(root).then(function (c) { fontCss = c; opt.fontEmbedCSS = c; return go(); }, function () { fontCss = ""; opt.skipFonts = true; return go(); });
       if (fontCss) opt.fontEmbedCSS = fontCss; else opt.skipFonts = true;
       return go();
     }).then(function (shot) {
-      var cw = shot.width / 3, chh = shot.height / 3, pad = 24, head = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0), foot = 62;
+      var cw = shot.width / 3, chh = shot.height / 3, pad = 24, head = (title ? 30 : 0) + (sub ? 20 : 0) + (title || sub ? 8 : 0);
+      // footer: the source line wraps to the chart's width
+      var src = d.dlSource ? "Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : "") : "", srcLines = [];
+      if (src) { var m = document.createElement("canvas").getContext("2d"); m.font = "400 11px " + FONT; var cur = "";
+        src.split(" ").forEach(function (wd) { var t = cur ? cur + " " + wd : wd; if (m.measureText(t).width > cw && cur) { srcLines.push(cur); cur = wd; } else cur = t; });
+        srcLines.push(cur); }
+      var foot = 44 + srcLines.length * 14;
       var w = cw + 2 * pad, h = pad + head + chh + foot, ox = pad, oy = pad + head, S = 3;
       if (fmt === "square") { var side = Math.max(w, h); ox += (side - w) / 2; oy += (side - h) / 2; w = h = side; S = 1600 / side; }
       var cv = document.createElement("canvas"), x = cv.getContext("2d");
@@ -854,7 +881,7 @@ document.querySelectorAll(".chart[data-views], .chart[data-wide]").forEach(funct
       x.drawImage(shot, ox, oy, cw, chh);
       var fy = (fmt === "square" ? oy + chh + foot : h);
       x.font = "400 11px " + FONT; x.fillStyle = "#7e978b";
-      if (d.dlSource) x.fillText("Data: " + d.dlSource + (d.dlVer ? " · " + d.dlVer : ""), tx, fy - 42);
+      srcLines.forEach(function (l, i) { x.fillText(l, tx, fy - 42 - (srcLines.length - 1 - i) * 14); });
       x.strokeStyle = "rgba(255,255,255,0.12)"; x.beginPath(); x.moveTo(tx, fy - 34); x.lineTo(tx + cw, fy - 34); x.stroke();
       x.font = "600 13px " + FONT; x.fillStyle = "#e9efe9"; x.fillText("Siebe Rozendal", tx, fy - 14);
       var nw = x.measureText("Siebe Rozendal").width; x.font = "500 13px " + FONT; x.fillStyle = "#9fd8b5";
