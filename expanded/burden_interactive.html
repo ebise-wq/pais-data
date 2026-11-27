@@ -42,6 +42,8 @@
 .bvr-notes { font-size: 0.92rem; color: var(--muted); margin: 0.6rem 0 0; padding-left: 1.1rem; max-width: 72ch; }
 .bvr-notes li { margin-bottom: 0.3rem; }
 .bvr-more { font-size: 0.95rem; color: var(--muted); margin: 0; }
+.bvr-dls { display: flex; justify-content: flex-end; gap: 0.4rem; flex-wrap: wrap; margin: 0.4rem 0.35rem 0; }
+.bvr-dls .bvr-dl { margin: 0; }
 .bvr-dl { display: block; margin: 0.4rem 0.35rem 0 auto; font: 500 0.88rem var(--f-body); color: var(--ocean); background: none;
   border: 1px solid var(--line); border-radius: 999px; padding: 0.3rem 0.8rem; cursor: pointer; }
 .bvr-dl::before { content: "↓ "; }
@@ -55,7 +57,7 @@
       <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg1"></div>
       <div class="bvr-plot" id="bvr-sc-papers"></div>
-      <button type="button" class="bvr-dl" data-plot="bvr-sc-papers">Download image</button>
+      <div class="bvr-dls"><button type="button" class="bvr-dl" data-plot="bvr-sc-papers" data-square="1">Square image</button><button type="button" class="bvr-dl" data-plot="bvr-sc-papers">As on screen</button></div>
     </div>
     <div class="bvr-card">
       <h3>Trials per year vs burden</h3>
@@ -63,7 +65,7 @@
       <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg2"></div>
       <div class="bvr-plot" id="bvr-sc-trials"></div>
-      <button type="button" class="bvr-dl" data-plot="bvr-sc-trials">Download image</button>
+      <div class="bvr-dls"><button type="button" class="bvr-dl" data-plot="bvr-sc-trials" data-square="1">Square image</button><button type="button" class="bvr-dl" data-plot="bvr-sc-trials">As on screen</button></div>
     </div>
   </div>
   <!-- more:start -->
@@ -107,7 +109,7 @@
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v22</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v23</span></div>
 </div>
 <script>
 (function(){
@@ -177,9 +179,9 @@ function tipHtml(r,m){
 document.addEventListener('pointerdown',e=>{if(!e.target.closest('[data-hit]'))ROOT.querySelectorAll('.bvr-tip').forEach(t=>t.style.display='none');});
 
 // ---------- scatter
-function scatter(id,m){
-  const host=$(id);host.innerHTML='';
-  const W=host.clientWidth,H=Math.round(Math.max(420,Math.min(560,W*1.1)));
+function scatter(id,m,opt){  // opt {host, W, H}: draw at a set size into another element (square download)
+  const host=opt?opt.host:$(id);host.innerHTML='';
+  const W=opt?opt.W:host.clientWidth,H=opt?opt.H:Math.round(Math.max(420,Math.min(560,W*1.1)));
   const M={l:50,r:14,t:12,b:46},fs=W<520?13:14,narrow=W<520;
   const svg=el('svg',{width:W,height:H,viewBox:`0 0 ${W} ${H}`,role:'img','aria-label':`${m} per year against disease burden`},host);
   const LOG=SCALE==='log';
@@ -192,7 +194,8 @@ function scatter(id,m){
   const xs=[];for(let i=0;i<=80;i++)xs.push(Math.pow(10,4+i/80*(Math.log10(3e8)-4)));
   if(!LOG)for(let i=1;i<=80;i++)xs.push(i/80*xd[1]);
   xs.sort((a,b)=>a-b);
-  const clip=el('clipPath',{id:'cp-'+id},el('defs',{},svg));el('rect',{x:M.l,y:M.t,width:W-M.l-M.r,height:H-M.t-M.b},clip);
+  const cid=(opt?'x':'')+'cp-'+id;
+  const clip=el('clipPath',{id:cid},el('defs',{},svg));el('rect',{x:M.l,y:M.t,width:W-M.l-M.r,height:H-M.t-M.b},clip);
   (LOG?[[1e4,'10k'],[1e5,'100k'],[1e6,'1M'],[1e7,'10M'],[1e8,'100M']].filter(([v])=>v>=xd[0]*0.999):linTicks(xd[1]).map(v=>[v,fmtTick(v)])).forEach(([v,t])=>{
     el('line',{x1:lx(v),x2:lx(v),y1:M.t,y2:H-M.b,stroke:C.grid},svg);
     el('text',{x:lx(v),y:H-M.b+18,'text-anchor':'middle','font-size':fs,fill:C.muted},svg).textContent=t;});
@@ -206,7 +209,7 @@ function scatter(id,m){
   const sxx=X.reduce((a,v)=>a+(v-mx)*(v-mx),0),b=X.reduce((a,v,i)=>a+(v-mx)*(Y[i]-my),0)/sxx,a0=my-b*mx;
   const s2=X.reduce((a,v,i)=>a+Math.pow(Y[i]-a0-b*v,2),0)/(n-2),T=1.6576; // t(0.95, 122 df)
   const tr=v=>Math.pow(10,a0+b*Math.log10(v));
-  const g=el('g',{'clip-path':`url(#cp-${id})`},svg);
+  const g=el('g',{'clip-path':`url(#${cid})`},svg);
   const up=[],dn=[],pu=[],pd=[];
   for(const xv of xs){const x0=Math.log10(xv);
     const se=Math.sqrt(s2*(1/n+(x0-mx)*(x0-mx)/sxx)),sp=Math.sqrt(s2*(1+1/n+(x0-mx)*(x0-mx)/sxx)),f=a0+b*x0,px=lx(Math.pow(10,x0));
@@ -357,15 +360,14 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
  '<tr><th>Disease or group</th><th>Group</th><th>DALYs</th><th>Papers/yr</th><th>Shortfall</th><th>Rank</th><th>Trials/yr</th><th>Shortfall</th><th>Rank</th></tr>'+
  R.slice().sort((a,b)=>b.papers.sf-a.papers.sf).map(r=>`<tr><td>${esc(r.label)}</td><td style="text-align:left">${esc(r.cat)}${r.kind==='g'?' (mainly low-income regions)':''}</td><td>${fmtD(r.dalys)}</td><td>${fmtN(r.papers.n)}</td><td>${fmtX(r.papers.sf)}</td><td>${r.papers.rank}</td><td>${fmtN(r.trials.n)}</td><td>${fmtX(r.trials.sf)}</td><td>${r.trials.rank}</td></tr>`).join('');
 
-// ---------- download: the chart as shown (scale, zoom, hidden groups) as a PNG on solid green
-const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v22'};
+// ---------- download: the chart as set up on screen (scale, zoom, hidden groups) as a PNG on the page's glow.
+// Square (the default for the scatter plots) redraws the chart at a size that makes the whole image square.
+const EXP={bg:'#0e2a22',halo:'#11302a',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v23',side:640};
 // the page's background: an ellipse of light from the top left (CSS radial-gradient(120% 80% at 10% 0%, ...))
 function paintBg(x,w,h){x.fillStyle='#0b231c';x.fillRect(0,0,w,h);x.save();x.translate(0.1*w,0);x.scale(1.2*w,0.8*h);
   const g=x.createRadialGradient(0,0,0,0,0,1);[[0,'#1f4d3e'],[0.38,'#12342a'],[0.62,'#0e2a22'],[1,'#0b231c']].forEach(([o,c])=>g.addColorStop(o,c));
   x.fillStyle=g;x.fillRect(-1,-1,2,2);x.restore();}
-function exportPng(pid){
-  const host=$(pid),svg=host&&host.querySelector('svg');if(!svg)return;
-  const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
+function svgUrl(svg){
   const W=+svg.getAttribute('width'),H=+svg.getAttribute('height');
   // copy the computed text styles into the SVG, since a standalone SVG image does not see the page's CSS
   const cl=svg.cloneNode(true),src=svg.querySelectorAll('*'),dst=cl.querySelectorAll('*');
@@ -377,28 +379,33 @@ function exportPng(pid){
   cl.setAttribute('xmlns',NS);
   // 8px spare on the left: fallback fonts in the saved image can run a little wider than on the page
   cl.setAttribute('viewBox',`-8 0 ${W+8} ${H}`);cl.setAttribute('width',W+8);
-  const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(cl)],{type:'image/svg+xml'}));
+  return URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(cl)],{type:'image/svg+xml'}));
+}
+function exportPng(pid,square){
+  const host=$(pid);if(!host||!host.querySelector('svg'))return;
+  const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
+  const S=square?2.5:3,pad=square?28:22,x0=document.createElement('canvas').getContext('2d');
+  const note=sc?(m==='papers'?'Papers a year, 2021–2025, vs global burden (DALYs, GBD 2023)':'Interventional trials a year, 2021–2025, vs global burden (DALYs, GBD 2023)')
+               :'Top 20 of 121. Shortfall = trend ÷ actual. Bars: 90% range.';
+  const items=CATS.filter(([k])=>!HIDE.has(k)).map(([,c,t])=>({c,t}));if(sc)items.push({c:null,t:'Trend, 90% band (R² '+D.fits[m].r2.toFixed(2)+')'});
+  const cwid=square?EXP.side-2*pad:+host.querySelector('svg').getAttribute('width')+8;
+  // wrap the note to the width, then lay out the legend in rows
+  x0.font='400 13px '+EXP.font;const lines=[];{let cur='';note.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x0.measureText(tr).width>cwid&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);}
+  x0.font='500 13px '+EXP.font;const rows=[[]];let lw=0;
+  items.forEach(it=>{const w=x0.measureText(it.t).width+28;if(lw+w>cwid&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
+  const top=pad+24+lines.length*18+8+rows.length*20+10,foot=62;
+  let svg=host.querySelector('svg'),tmp=null;
+  if(square&&sc){ // redraw off screen so chart + header + footer make a square
+    tmp=document.createElement('div');tmp.className='bvr-plot';tmp.style.cssText='position:absolute;left:-10000px;top:0;width:'+(cwid-8)+'px';
+    card.appendChild(tmp);scatter(pid,m,{host:tmp,W:cwid-8,H:EXP.side-top-foot});svg=tmp.querySelector('svg');}
+  const W=+svg.getAttribute('width'),H=+svg.getAttribute('height'),url=svgUrl(svg);if(tmp)tmp.remove();
   const img=new Image();
   img.onload=()=>{
-    const S=3,pad=22,cw=W+8+2*pad,cv=document.createElement('canvas'),x=cv.getContext('2d');
-    const notes=[];
-    if(sc)notes.push(m==='papers'?'Papers a year, 2021–2025, vs global burden (DALYs, GBD 2023)':'Interventional trials a year, 2021–2025, vs global burden (DALYs, GBD 2023)');
-    else notes.push('Top 20 of 121. Shortfall = trend ÷ actual. Bars: 90% range.');
-    if(sc)notes.push(SCALE==='log'?'Log scales':'Linear scales'+(ZOOM?', zoomed '+['','4×','8×'][ZOOM]+' into the bottom left':''));
-    const hid=CATS.filter(([k])=>HIDE.has(k)).map(c=>c[2]);if(hid.length)notes.push('Hidden: '+hid.join(', '));
-    const items=CATS.filter(([k])=>!HIDE.has(k)).map(([,c,t])=>({c,t}));if(sc)items.push({c:null,t:'Trend, 90% band (R² '+D.fits[m].r2.toFixed(2)+')'});
-    // wrap the notes to the chart width, then lay out the legend in rows
-    x.font='400 13px '+EXP.font;
-    const lines=[];notes.forEach(t=>{let cur='';t.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x.measureText(tr).width>W&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);});
-    notes.length=0;notes.push(...lines);
-    x.font='500 13px '+EXP.font;const rows=[[]];let lw=0;
-    items.forEach(it=>{const w=x.measureText(it.t).width+28;if(lw+w>W&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
-    const top=pad+24+notes.length*18+8+rows.length*20+10,ch=top+H+62;
-    cv.width=cw*S;cv.height=ch*S;x.scale(S,S);
-    paintBg(x,cw,ch);
-    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 20px '+EXP.font;x.fillText(title,pad,pad+18);
-    x.font='400 13px '+EXP.font;x.fillStyle=C.ink2;notes.forEach((t,i)=>x.fillText(t,pad,pad+24+16+i*18));
-    let y=pad+24+notes.length*18+8+14;x.font='500 13px '+EXP.font;
+    const cw=W+8+2*pad,ch=top+H+foot,cv=document.createElement('canvas'),x=cv.getContext('2d');
+    cv.width=cw*S;cv.height=ch*S;x.scale(S,S);paintBg(x,cw,ch);
+    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 '+(square?22:20)+'px '+EXP.font;x.fillText(title,pad,pad+18);
+    x.font='400 13px '+EXP.font;x.fillStyle=C.ink2;lines.forEach((t,i)=>x.fillText(t,pad,pad+24+16+i*18));
+    let y=pad+24+lines.length*18+8+14;x.font='500 13px '+EXP.font;
     rows.forEach(r=>{let cx=pad;r.forEach(it=>{
       if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+5,y-4.5,5,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-5.5,14,2);}
       x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?16:20),y);cx+=x.measureText(it.t).width+28+(it.c?0:4);});y+=20;});
@@ -409,13 +416,14 @@ function exportPng(pid){
     x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-34);x.lineTo(cw-pad,ch-34);x.stroke();
     x.font='600 13px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-14);
     const nw=x.measureText(nm).width;x.font='500 13px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-14);
+    const hid=CATS.some(([k])=>HIDE.has(k));
     cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
-      a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid.length?'some-hidden':''].filter(Boolean).join('-')+'.png';
+      a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid?'some-hidden':'',square?'square':''].filter(Boolean).join('-')+'.png';
       document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},'image/png');
   };
   img.src=url;
 }
-ROOT.querySelectorAll('.bvr-dl').forEach(b=>b.addEventListener('click',()=>exportPng(b.dataset.plot)));
+ROOT.querySelectorAll('.bvr-dl').forEach(b=>b.addEventListener('click',()=>exportPng(b.dataset.plot,!!b.dataset.square)));
 
 const JOBS=[['bvr-sc-papers',()=>scatter('bvr-sc-papers','papers')],['bvr-sc-trials',()=>scatter('bvr-sc-trials','trials')],
   ['bvr-rk-papers',()=>rank('bvr-rk-papers','papers')],['bvr-rk-trials',()=>rank('bvr-rk-trials','trials')]].filter(([id])=>$(id));

@@ -52,8 +52,11 @@
   they don't clash with the page. The parts between `<!-- more:start -->` and `<!-- more:end -->`
   (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
   show on the topic page only. The headline-number boxes were removed at the user's request (v25).
-  Each chart card there has a "Download image" button (topic page only) that saves the chart as shown
-  (scale, zoom, hidden groups) as a PNG on the page's green glow, with title, legend, notes and the user's name.
+  Each chart card there has download buttons (topic page only) that save the chart as set up on screen
+  (scale, zoom, hidden groups) as a PNG on the page's green glow, with title, one data line, the visible
+  legend and the user's name. No line about the scale or what is hidden (the reader can see it). The
+  scatter plots offer "Square image" (default, 1600 × 1600; the chart is redrawn off screen to fit) and
+  "As on screen"; the rankings only "Download image".
   Solid copies and downloads both paint the same glow as the page (light from the top left; `glow()` in
   the chart scripts, `paintBg()` in the fragment).
 - An interactive with `"overview": false` shows on its topic page only; the overview gets a link line
