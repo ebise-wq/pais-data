@@ -43,13 +43,17 @@
 - Contents (v19): one slim bar under the header, sticky while scrolling and collapsed by default, in
   plain regular-weight text. It names the section in view; tapping it opens the list of sections over
   the page. (A headline number per section, v16-17, and an open list at the top, v18, were dropped at the
-  user's request.) The user may later want search, tags and filters here; keep it simple until asked.
+  user's request.) Topic pages have the same bar at the top (v25), not sticky, naming the current page; its
+  links open the other topic pages. The user may later want search, tags and filters here; keep it simple
+  until asked.
 - In titles, the part after the first comma ("120 diseases", "2024") is shown small.
 - A section can carry `"interactive"` (an HTML fragment plus its JSON data), e.g. the 120-disease
   burden charts in `expanded/burden_interactive.html`. Its CSS classes and ids start with `bvr-` so
   they don't clash with the page. The parts between `<!-- more:start -->` and `<!-- more:end -->`
   (replaced by a link) and between `<!-- page-only:start -->` and `<!-- page-only:end -->` (dropped)
-  show on the topic page only. The headline-number boxes are page-only at the user's request.
+  show on the topic page only. The headline-number boxes were removed at the user's request (v25).
+  Each chart card there has a "Download image" button (topic page only) that saves the chart as shown
+  (scale, zoom, hidden groups) as a PNG on solid green, with title, legend, notes and the user's name.
 - An interactive with `"overview": false` shows on its topic page only; the overview gets a link line
   (text from `"more"`). With `"overview": {"html": ..., "pick": {"name": "a/b/c", ...}}` the overview
   shows that small fragment instead, given only the picked parts of the data (slash paths into the JSON).

@@ -54,6 +54,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px);
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .toc .wrap { position: relative; }
+.toc-static { position: relative; top: auto; margin-top: 0.6rem; }
+.overview .bvr-dl { display: none; }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -191,7 +193,14 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   <a class="back" href="index.html">← All topics</a>
   <p class="site">Data &amp; Graphs <span class="kicker-sm">How To Solve A Disease<span>?</span></span></p>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="burden-120.html" aria-current="page">Research vs disease burden</a><a href="trials.html">Long COVID and ME/CFS trials</a><a href="sex.html">Research by which sex a disease mostly affects</a><a href="funding.html">Public biomedical R&amp;D funding and output</a><a href="pais-burden.html">PAIS burden and ME</a><a href="global-burden.html">Global ME/CFS burden</a><a href="sources.html">Papers and trials per year</a></div></nav>
+<nav class="toc toc-static" id="toc" aria-label="Contents">
+  <div class="wrap">
+    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
+      <span class="lab">Contents</span><span class="cur">Research vs disease burden</span><span class="chev" aria-hidden="true"></span>
+    </button>
+    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list"><li><a href="burden-120.html" data-toc="burden-120" aria-current="true">Research vs disease burden <span class="tsub">120 diseases</span></a></li><li><a href="trials.html" data-toc="trials">Long COVID and ME/CFS trials</a></li><li><a href="sex.html" data-toc="sex">Research by which sex a disease mostly affects</a></li><li><a href="funding.html" data-toc="funding">Public biomedical R&amp;D funding and output <span class="tsub">2024</span></a></li><li><a href="pais-burden.html" data-toc="pais-burden">PAIS burden and ME</a></li><li><a href="global-burden.html" data-toc="global-burden">Global ME/CFS burden</a></li><li><a href="sources.html" data-toc="sources">Papers and trials per year <span class="tsub">131 diseases</span></a></li></ol></div>
+  </div>
+</nav>
 <main class="wrap">
 
   <section id="burden-120">
@@ -206,13 +215,6 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
      more:end, and between page-only:start and page-only:end, are shown on the topic page only. Colours and fonts come from the page's tokens. -->
 <style>
 .bvr { display: grid; gap: 1.25rem; min-width: 0; font-family: var(--f-body); }
-.bvr-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 230px), 1fr)); gap: 0.75rem; }
-.bvr-tiles .tile { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 0.9rem 1rem 0.8rem; }
-.bvr-tiles .k { font-size: 0.9rem; color: var(--muted); }
-.bvr-tiles .v { font: 600 2.7rem/1.05 var(--f-display); margin: 0.25rem 0 0.1rem; letter-spacing: -0.01em; }
-.bvr-tiles .v span { display: block; font: 500 1rem var(--f-body); color: var(--muted); margin-top: 0.15rem; }
-.bvr-tiles .d { font-size: 0.92rem; color: var(--ink); }
-.bvr-tiles .r { font-size: 0.85rem; color: var(--faint); margin-top: 0.2rem; font-variant-numeric: tabular-nums; }
 .bvr-grid { display: grid; gap: 1.25rem; grid-template-columns: repeat(auto-fill, minmax(min(100%, 440px), 1fr)); align-items: start; }
 .bvr-card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 1rem 0.75rem 0.75rem; position: relative; min-width: 0; }
 .bvr-card h3 { font: 600 1.15rem/1.3 var(--f-display); margin: 0 0.35rem 0.15rem; }
@@ -251,10 +253,12 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 .bvr-notes { font-size: 0.92rem; color: var(--muted); margin: 0.6rem 0 0; padding-left: 1.1rem; max-width: 72ch; }
 .bvr-notes li { margin-bottom: 0.3rem; }
 .bvr-more { font-size: 0.95rem; color: var(--muted); margin: 0; }
+.bvr-dl { display: block; margin: 0.4rem 0.35rem 0 auto; font: 500 0.88rem var(--f-body); color: var(--ocean); background: none;
+  border: 1px solid var(--line); border-radius: 999px; padding: 0.3rem 0.8rem; cursor: pointer; }
+.bvr-dl::before { content: "↓ "; }
 .bvr-foot { font: 400 0.78rem var(--f-mono); color: var(--faint); display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap; }
 </style>
 <div class="bvr">
-  <!-- page-only:start --><div class="bvr-tiles" id="bvr-tiles"></div><!-- page-only:end -->
   <div class="bvr-grid">
     <div class="bvr-card">
       <h3>Papers per year vs burden</h3>
@@ -262,6 +266,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg1"></div>
       <div class="bvr-plot" id="bvr-sc-papers"></div>
+      <button type="button" class="bvr-dl" data-plot="bvr-sc-papers">Download image</button>
     </div>
     <div class="bvr-card">
       <h3>Trials per year vs burden</h3>
@@ -269,6 +274,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <div class="bvr-seg" role="group" aria-label="Axis scale"><button type="button" data-s="log">Log</button><button type="button" data-s="lin">Linear</button></div><div class="bvr-seg bvr-zoom" role="group" aria-label="Zoom into the bottom left" hidden><button type="button" data-z="0">Full</button><button type="button" data-z="1">4×</button><button type="button" data-z="2">8×</button></div>
       <div class="bvr-legend" id="bvr-lg2"></div>
       <div class="bvr-plot" id="bvr-sc-trials"></div>
+      <button type="button" class="bvr-dl" data-plot="bvr-sc-trials">Download image</button>
     </div>
   </div>
   <!-- more:start -->
@@ -278,12 +284,14 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg3"></div>
       <div class="bvr-plot" id="bvr-rk-papers"></div>
+      <button type="button" class="bvr-dl" data-plot="bvr-rk-papers">Download image</button>
     </div>
     <div class="bvr-card">
       <h3>Largest trials shortfalls</h3>
       <p class="bvr-sub">Top 20 of 121. Trend ÷ actual. Bars: 90% range.</p>
       <div class="bvr-legend" id="bvr-lg4"></div>
       <div class="bvr-plot" id="bvr-rk-trials"></div>
+      <button type="button" class="bvr-dl" data-plot="bvr-rk-trials">Download image</button>
     </div>
   </div>
   <div class="bvr-card">
@@ -310,7 +318,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </ul>
   </details>
   <!-- more:end -->
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v20</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v21</span></div>
 </div>
 <script>
 (function(){
@@ -333,14 +341,6 @@ const fmtN=v=>v>=100?Math.round(v).toLocaleString('en-US'):String(+v.toPrecision
 const fmtX=v=>(v>=10?v.toFixed(0):String(+v.toPrecision(2)))+'×';
 const ord=n=>n+(n%100>=11&&n%100<=13?'th':['th','st','nd','rd'][n%10]||'th');
 const esc=s=>String(s).replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));
-
-// ---------- tiles
-if($('bvr-tiles'))$('bvr-tiles').innerHTML=['papers','trials'].map(m=>{
-  const d=all[m];
-  return `<div class="tile"><div class="k">All ME/CFS: ${m}</div>
-  <div class="v" style="color:${C.coral}">${fmtX(d.sf).replace('×','')}×<span>shortfall</span></div>
-  <div class="d">${ord(d.rank)} largest of ${D.ncomp+1}</div>
-  <div class="r">90% range ${+d.p5.toPrecision(2)}–${+d.p95.toPrecision(2)}×</div></div>`;}).join('');
 
 const CATS=[['c',C.blue,'Common worldwide'],['g',C.teal,'Mainly low-income regions'],['m',C.coral,'ME/CFS'],['l',C.gold,'Long COVID (+ ME)']];
 const HIDE=new Set();
@@ -568,6 +568,62 @@ if($('bvr-tbl'))$('bvr-tbl').innerHTML=
  '<tr><th>Disease or group</th><th>Group</th><th>DALYs</th><th>Papers/yr</th><th>Shortfall</th><th>Rank</th><th>Trials/yr</th><th>Shortfall</th><th>Rank</th></tr>'+
  R.slice().sort((a,b)=>b.papers.sf-a.papers.sf).map(r=>`<tr><td>${esc(r.label)}</td><td style="text-align:left">${esc(r.cat)}${r.kind==='g'?' (mainly low-income regions)':''}</td><td>${fmtD(r.dalys)}</td><td>${fmtN(r.papers.n)}</td><td>${fmtX(r.papers.sf)}</td><td>${r.papers.rank}</td><td>${fmtN(r.trials.n)}</td><td>${fmtX(r.trials.sf)}</td><td>${r.trials.rank}</td></tr>`).join('');
 
+// ---------- download: the chart as shown (scale, zoom, hidden groups) as a PNG on solid green
+const EXP={bg:'#0e2a22',font:'Inter, "Helvetica Neue", Arial, sans-serif',ver:'v21'};
+function exportPng(pid){
+  const host=$(pid),svg=host&&host.querySelector('svg');if(!svg)return;
+  const card=host.closest('.bvr-card'),title=card.querySelector('h3').textContent,sc=pid.startsWith('bvr-sc'),m=pid.endsWith('papers')?'papers':'trials';
+  const W=+svg.getAttribute('width'),H=+svg.getAttribute('height');
+  // copy the computed text styles into the SVG, since a standalone SVG image does not see the page's CSS
+  const cl=svg.cloneNode(true),src=svg.querySelectorAll('*'),dst=cl.querySelectorAll('*');
+  src.forEach((o,i)=>{const d=dst[i];if(o.getAttribute('data-hit')){d.remove();return;}
+    if(o.tagName==='text'||o.tagName==='tspan'){const cs=getComputedStyle(o);
+      d.setAttribute('fill',cs.fill);d.setAttribute('font-family',EXP.font);d.setAttribute('font-weight',cs.fontWeight);
+      if(o.tagName==='text')d.setAttribute('font-size',cs.fontSize);
+      if(o.classList.contains('halo')){d.setAttribute('stroke',EXP.bg);d.setAttribute('stroke-width','4');d.setAttribute('paint-order','stroke');d.setAttribute('stroke-linejoin','round');}}});
+  cl.setAttribute('xmlns',NS);
+  // 8px spare on the left: fallback fonts in the saved image can run a little wider than on the page
+  cl.setAttribute('viewBox',`-8 0 ${W+8} ${H}`);cl.setAttribute('width',W+8);
+  const url=URL.createObjectURL(new Blob([new XMLSerializer().serializeToString(cl)],{type:'image/svg+xml'}));
+  const img=new Image();
+  img.onload=()=>{
+    const S=3,pad=22,cw=W+8+2*pad,cv=document.createElement('canvas'),x=cv.getContext('2d');
+    const notes=[];
+    if(sc)notes.push(m==='papers'?'Papers a year, 2021–2025, vs global burden (DALYs, GBD 2023)':'Interventional trials a year, 2021–2025, vs global burden (DALYs, GBD 2023)');
+    else notes.push('Top 20 of 121. Shortfall = trend ÷ actual. Bars: 90% range.');
+    if(sc)notes.push(SCALE==='log'?'Log scales':'Linear scales'+(ZOOM?', zoomed '+['','4×','8×'][ZOOM]+' into the bottom left':''));
+    const hid=CATS.filter(([k])=>HIDE.has(k)).map(c=>c[2]);if(hid.length)notes.push('Hidden: '+hid.join(', '));
+    const items=CATS.filter(([k])=>!HIDE.has(k)).map(([,c,t])=>({c,t}));if(sc)items.push({c:null,t:'Trend, 90% band (R² '+D.fits[m].r2.toFixed(2)+')'});
+    // wrap the notes to the chart width, then lay out the legend in rows
+    x.font='400 13px '+EXP.font;
+    const lines=[];notes.forEach(t=>{let cur='';t.split(' ').forEach(wd=>{const tr=cur?cur+' '+wd:wd;if(x.measureText(tr).width>W&&cur){lines.push(cur);cur=wd;}else cur=tr;});lines.push(cur);});
+    notes.length=0;notes.push(...lines);
+    x.font='500 13px '+EXP.font;const rows=[[]];let lw=0;
+    items.forEach(it=>{const w=x.measureText(it.t).width+28;if(lw+w>W&&rows[rows.length-1].length){rows.push([]);lw=0;}rows[rows.length-1].push(it);lw+=w;});
+    const top=pad+24+notes.length*18+8+rows.length*20+10,ch=top+H+62;
+    cv.width=cw*S;cv.height=ch*S;x.scale(S,S);
+    x.fillStyle=EXP.bg;x.fillRect(0,0,cw,ch);
+    x.textBaseline='alphabetic';x.fillStyle=C.ink;x.font='700 20px '+EXP.font;x.fillText(title,pad,pad+18);
+    x.font='400 13px '+EXP.font;x.fillStyle=C.ink2;notes.forEach((t,i)=>x.fillText(t,pad,pad+24+16+i*18));
+    let y=pad+24+notes.length*18+8+14;x.font='500 13px '+EXP.font;
+    rows.forEach(r=>{let cx=pad;r.forEach(it=>{
+      if(it.c){x.fillStyle=it.c;x.beginPath();x.arc(cx+5,y-4.5,5,0,7);x.fill();}else{x.fillStyle=C.trend;x.fillRect(cx,y-5.5,14,2);}
+      x.fillStyle=C.ink;x.fillText(it.t,cx+(it.c?16:20),y);cx+=x.measureText(it.t).width+28+(it.c?0:4);});y+=20;});
+    x.drawImage(img,pad,top,W+8,H);URL.revokeObjectURL(url);
+    // footer: source and version, then the credit
+    x.font='400 11px '+EXP.font;x.fillStyle=C.muted;
+    x.fillText('Data: PubMed, ClinicalTrials.gov, GBD 2023 · '+EXP.ver,pad,ch-42);
+    x.strokeStyle='rgba(255,255,255,0.12)';x.beginPath();x.moveTo(pad,ch-34);x.lineTo(cw-pad,ch-34);x.stroke();
+    x.font='600 13px '+EXP.font;x.fillStyle=C.ink;const nm='Siebe Rozendal';x.fillText(nm,pad,ch-14);
+    const nw=x.measureText(nm).width;x.font='500 13px '+EXP.font;x.fillStyle=C.blue;x.fillText('  ·  How To Solve A Disease?',pad+nw,ch-14);
+    cv.toBlob(b=>{const a=document.createElement('a');a.href=URL.createObjectURL(b);
+      a.download=[m,sc?'vs-burden':'shortfalls',sc?(SCALE==='log'?'log':'linear'+(ZOOM?'-'+['','4x','8x'][ZOOM]:'')):'',hid.length?'some-hidden':''].filter(Boolean).join('-')+'.png';
+      document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},1000);},'image/png');
+  };
+  img.src=url;
+}
+ROOT.querySelectorAll('.bvr-dl').forEach(b=>b.addEventListener('click',()=>exportPng(b.dataset.plot)));
+
 const JOBS=[['bvr-sc-papers',()=>scatter('bvr-sc-papers','papers')],['bvr-sc-trials',()=>scatter('bvr-sc-trials','trials')],
   ['bvr-rk-papers',()=>rank('bvr-rk-papers','papers')],['bvr-rk-trials',()=>rank('bvr-rk-trials','trials')]].filter(([id])=>$(id));
 const drawnW={};
@@ -699,7 +755,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v24 · built 2026-11-27</span>
+  <span class="ver">v25 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -747,6 +803,7 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") setOpen(false); });
   document.addEventListener("click", function (ev) { if (!bar.contains(ev.target)) setOpen(false); });
   var secs = [].slice.call(document.querySelectorAll("main.overview > section"));
+  if (!secs.length) return;  // topic page: the bar already names the page
   function spy() {
     var y = bar.getBoundingClientRect().bottom + 48, id = "";
     secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= y) id = sec.id; });

@@ -54,6 +54,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px);
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .toc .wrap { position: relative; }
+.toc-static { position: relative; top: auto; margin-top: 0.6rem; }
+.overview .bvr-dl { display: none; }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -191,7 +193,14 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   <a class="back" href="index.html">← All topics</a>
   <p class="site">Data &amp; Graphs <span class="kicker-sm">How To Solve A Disease<span>?</span></span></p>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap"><a href="burden-120.html">Research vs disease burden</a><a href="trials.html">Long COVID and ME/CFS trials</a><a href="sex.html" aria-current="page">Research by which sex a disease mostly affects</a><a href="funding.html">Public biomedical R&amp;D funding and output</a><a href="pais-burden.html">PAIS burden and ME</a><a href="global-burden.html">Global ME/CFS burden</a><a href="sources.html">Papers and trials per year</a></div></nav>
+<nav class="toc toc-static" id="toc" aria-label="Contents">
+  <div class="wrap">
+    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
+      <span class="lab">Contents</span><span class="cur">Research by which sex a disease mostly affects</span><span class="chev" aria-hidden="true"></span>
+    </button>
+    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list"><li><a href="burden-120.html" data-toc="burden-120">Research vs disease burden <span class="tsub">120 diseases</span></a></li><li><a href="trials.html" data-toc="trials">Long COVID and ME/CFS trials</a></li><li><a href="sex.html" data-toc="sex" aria-current="true">Research by which sex a disease mostly affects</a></li><li><a href="funding.html" data-toc="funding">Public biomedical R&amp;D funding and output <span class="tsub">2024</span></a></li><li><a href="pais-burden.html" data-toc="pais-burden">PAIS burden and ME</a></li><li><a href="global-burden.html" data-toc="global-burden">Global ME/CFS burden</a></li><li><a href="sources.html" data-toc="sources">Papers and trials per year <span class="tsub">131 diseases</span></a></li></ol></div>
+  </div>
+</nav>
 <main class="wrap">
 
   <section id="sex">
@@ -253,7 +262,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 </main>
 <footer class="wrap">
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v24 · built 2026-11-27</span>
+  <span class="ver">v25 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
@@ -301,6 +310,7 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") setOpen(false); });
   document.addEventListener("click", function (ev) { if (!bar.contains(ev.target)) setOpen(false); });
   var secs = [].slice.call(document.querySelectorAll("main.overview > section"));
+  if (!secs.length) return;  // topic page: the bar already names the page
   function spy() {
     var y = bar.getBoundingClientRect().bottom + 48, id = "";
     secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= y) id = sec.id; });

@@ -413,17 +413,27 @@ def short_title(t):
     return t.split(",")[0].split(" (")[0]
 
 
-def toc_items():
-    """Overview contents: one link per section, with the part after the first comma set small."""
+def toc_html(current=None):
+    """Contents bar, collapsed by default: one link per section, with the part after the first comma set small.
+    On the overview (current=None) the links jump to the sections and the bar is sticky; on a topic page they
+    open the other topic pages, the bar names the current one and does not stick."""
     items = []
     for s in sections:
         main, _, rest = s["title"].partition(", ")
         sub = f' <span class="tsub">{e(rest)}</span>' if rest else ""
-        items.append(f'<li><a href="#{e(s["id"])}" data-toc="{e(s["id"])}">{e(main)}{sub}</a></li>')
-    return "".join(items)
-
-
-toc = toc_items()
+        href = f"#{s['id']}" if current is None else page_href(s["id"])
+        ext = ' target="_blank" rel="noopener"' if current is not None and PAGE_BASE else ""
+        here = ' aria-current="true"' if s is current else ""
+        items.append(f'<li><a href="{e(href)}"{ext} data-toc="{e(s["id"])}"{here}>{e(main)}{sub}</a></li>')
+    cur = e(short_title(current["title"])) if current else ""
+    return f"""<nav class="toc{' toc-static' if current else ''}" id="toc" aria-label="Contents">
+  <div class="wrap">
+    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
+      <span class="lab">Contents</span><span class="cur">{cur}</span><span class="chev" aria-hidden="true"></span>
+    </button>
+    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list">{"".join(items)}</ol></div>
+  </div>
+</nav>"""
 
 def head(title):
     return HEAD.replace(f"<title>{e(CAT['title'] + ' · ' + CAT['subtitle'])}</title>", f"<title>{e(title)}</title>", 1)
@@ -481,6 +491,8 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
   background: color-mix(in srgb, var(--bg) 94%, transparent); backdrop-filter: blur(8px);
   border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
 .toc .wrap { position: relative; }
+.toc-static { position: relative; top: auto; margin-top: 0.6rem; }
+.overview .bvr-dl { display: none; }
 .toc-btn { display: flex; align-items: center; gap: 0.6rem; width: 100%; min-height: 44px; padding: 0; border: 0; background: none;
   color: var(--muted); font: 400 0.95rem/1.3 var(--f-body); cursor: pointer; text-align: left; }
 .toc-btn .lab { flex: none; color: var(--ink); }
@@ -655,6 +667,7 @@ document.querySelectorAll(".chart[data-views]").forEach(function (fig) {
   document.addEventListener("keydown", function (ev) { if (ev.key === "Escape") setOpen(false); });
   document.addEventListener("click", function (ev) { if (!bar.contains(ev.target)) setOpen(false); });
   var secs = [].slice.call(document.querySelectorAll("main.overview > section"));
+  if (!secs.length) return;  // topic page: the bar already names the page
   function spy() {
     var y = bar.getBoundingClientRect().bottom + 48, id = "";
     secs.forEach(function (sec) { if (sec.getBoundingClientRect().top <= y) id = sec.id; });
@@ -699,14 +712,7 @@ def body():
   <p class="byline">By {e(CAT['author']['name'])} · {" · ".join(link(l["url"], e(l["label"])) for l in CAT['author']['links'])}
     <span class="upd">Last updated {nice_date(built)}</span></p>
 </div>
-<nav class="toc" id="toc" aria-label="Contents">
-  <div class="wrap">
-    <button class="toc-btn" type="button" aria-expanded="false" aria-controls="toc-drop">
-      <span class="lab">Contents</span><span class="cur"></span><span class="chev" aria-hidden="true"></span>
-    </button>
-    <div class="toc-drop" id="toc-drop" hidden><ol class="toc-list">{toc}</ol></div>
-  </div>
-</nav>
+{toc_html()}
 <main class="wrap overview">
 {"".join(section_html(s) for s in sections)}
 </main>
@@ -722,13 +728,11 @@ def body():
 
 
 def topic_body(s):
-    chips = "".join(f'<a href="{e(page_href(t["id"]))}"{" aria-current=\"page\"" if t is s else ""}>'
-                    f'{e(short_title(t["title"]))}</a>' for t in sections)
     return f"""<div class="wrap top top-sm">
   <a class="back" href="index.html">← All topics</a>
   <p class="site">{title_html} <span class="kicker-sm">{sub_html}</span></p>
 </div>
-<nav class="nav" aria-label="Topics"><div class="wrap">{chips}</div></nav>
+{toc_html(s)}
 <main class="wrap">
 {section_html(s, page=True)}
 </main>
