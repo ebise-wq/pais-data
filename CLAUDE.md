@@ -45,8 +45,15 @@
 - Brand (v24): the overview's title is "Data & Graphs" (`"title"` in `catalog.json`), very large, with the
   user's Substack name "How To Solve A Disease?" (`"subtitle"`) under it; its question mark takes the
   accent colour.
-- Under the overview header: "By Siebe Rozendal" with links to Substack, X and LinkedIn (from `"author"`
-  in `catalog.json`) and "Last updated" (the build date).
+- Blog links (v43): the blog is the Substack at `"blog"` in `catalog.json` (https://viralpersistence.substack.com/;
+  siebepersists.substack.com is only the user's profile). "How To Solve A Disease?" under the title links to it, and a
+  mint "Read the blog →" button sits under the tagline. Topic pages have "Blog →" at the right of the "← All topics"
+  row and the small Substack name links there too; every footer has "Blog: How To Solve A Disease?". Blog links open
+  in the same tab (one site with the blog), except in the artifact copy. The user plans to move to their own domain
+  (blog at www.howtosolveadisease.org on Substack, this site at a subdomain on Vercel); then change `"site"` and
+  `"blog"` in `catalog.json` and remake the preview.
+- Under the overview header: "By Siebe Rozendal" with links to X and LinkedIn (from `"author"` in `catalog.json`)
+  and "Last updated" (the build date).
 - Contents (v19): one slim bar under the header, sticky while scrolling and collapsed by default, in
   plain regular-weight text. It names the section in view; tapping it opens the list of sections over
   the page. (A headline number per section, v16-17, and an open list at the top, v18, were dropped at the
@@ -114,6 +121,11 @@
   630 × 630 square, so labels and axis names stay inside it; only dots reach past it.
   Remake it with `python3 -I tools/make_preview.py` if the title, tagline or data change. It works only once
   merged into `main`, since the tags use the Pages URL.
+- Search engines (v43): every page has a canonical URL and og:url (from `"site"`), topic pages a description cut
+  from their finding (155 characters), and JSON-LD: the overview a WebSite (author a Person whose `sameAs` lists
+  the blog, X and LinkedIn), topic pages with data files a Dataset with each CSV as a DataDownload (for Google
+  Dataset Search), others a WebPage. The build writes `docs/sitemap.xml` and `docs/robots.txt`; robots.txt only
+  counts at a domain's root, so it starts to matter on the user's own domain.
 - Bump `page_version` in `catalog.json` whenever the page changes, so the user can tell which
   version is showing.
 - The page is also published as a private claude.ai artifact:

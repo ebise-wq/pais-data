@@ -479,11 +479,52 @@ def toc_html(current=None):
   </div>
 </nav>"""
 
-def head(title):
+def head(title, path="", desc=None, ld=None):
+    """<head> tags for one page. path is the page's file name ("" for the overview). For search engines:
+    a canonical URL, a description of the page itself and schema.org data (JSON-LD)."""
     full = e(CAT['title'] + ' · ' + CAT['subtitle'])
     og = OG_TITLE if title == FULL_TITLE else title.replace(" · " + CAT["subtitle"], "")  # topic pages: "<section> · Data & Graphs"
-    return (HEAD.replace(f"<title>{full}</title>", f"<title>{e(title)}</title>", 1)
-            .replace(f'<meta property="og:title" content="{e(OG_TITLE)}">', f'<meta property="og:title" content="{e(og)}">', 1))
+    url = SITE + path
+    out = (HEAD.replace(f"<title>{full}</title>", f"<title>{e(title)}</title>", 1)
+           .replace(f'<meta property="og:title" content="{e(OG_TITLE)}">', f'<meta property="og:title" content="{e(og)}">', 1))
+    if desc:
+        out = out.replace(f'<meta name="description" content="{e(CAT["tagline"])}">',
+                          f'<meta name="description" content="{e(desc)}">', 1)
+    out += f'\n<link rel="canonical" href="{e(url)}">\n<meta property="og:url" content="{e(url)}">'
+    if ld:
+        out += f'\n<script type="application/ld+json">{json_ld(ld)}</script>'
+    return out
+
+
+def json_ld(obj):
+    return json.dumps({"@context": "https://schema.org", **obj}, ensure_ascii=False).replace("</", "<\\/")
+
+
+def short_desc(text, n=155):
+    """A search-result description: the first n characters, cut at a word."""
+    text = " ".join(text.split())
+    return text if len(text) <= n else text[:n].rsplit(" ", 1)[0].rstrip(",;:") + "…"
+
+
+PERSON = {"@type": "Person", "name": CAT["author"]["name"], "url": CAT["blog"],
+          "sameAs": [CAT["blog"]] + [l["url"] for l in CAT["author"]["links"]]}
+SITE_LD = {"@type": "WebSite", "name": CAT["title"] + " · " + CAT["subtitle"], "url": SITE,
+           "description": CAT["tagline"], "author": PERSON, "license": "https://creativecommons.org/licenses/by/4.0/",
+           "isPartOf": {"@type": "Blog", "name": CAT["subtitle"], "url": CAT["blog"]}}
+
+
+def topic_ld(s):
+    """A topic page with data files is a schema.org Dataset (Google Dataset Search reads these); without, a WebPage."""
+    files = [f for u in units(s) for d in u.get("data", []) if not d.get("old") and not d.get("hidden") for f in d["files"]]
+    base = {"name": s["title"], "description": s["finding"], "url": SITE + f"{s['id']}.html", "author": PERSON,
+            "isPartOf": {"@type": "WebSite", "name": CAT["title"] + " · " + CAT["subtitle"], "url": SITE}}
+    if not files:
+        return {"@type": "WebPage", **base}
+    fmt = {".csv": "text/csv", ".json": "application/json", ".tsv": "text/tab-separated-values"}
+    return {"@type": "Dataset", **base, "creator": PERSON, "license": "https://creativecommons.org/licenses/by/4.0/",
+            "isAccessibleForFree": True, "dateModified": built,
+            "distribution": [{"@type": "DataDownload", "name": os.path.basename(f), "contentUrl": RAW + f,
+                              "encodingFormat": fmt.get(os.path.splitext(f)[1], "application/octet-stream")} for f in files]}
 
 
 # Link-preview title. Signal shows at most two title lines beside the image and the description below it, so
@@ -541,6 +582,19 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .top .tagline { font-size: 1.05rem; }
 .top .kicker { margin: 0.5rem 0 0; font: 600 clamp(1.3rem, 5vw, 1.7rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: -0.005em; }
 .top .kicker span, .top-sm .kicker-sm span { color: var(--sunset); }
+/* The Substack's name links to the blog; a mint button under the tagline says so plainly. */
+.top .kicker a { color: inherit; text-decoration: none; border-bottom: 2px solid rgba(159, 216, 181, 0.35); transition: border-color 0.15s; }
+.top .kicker a:hover { border-bottom-color: var(--ocean); }
+.blog-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.1rem; padding: 0.7rem 1.2rem 0.72rem;
+  border-radius: 999px; background: var(--ocean); color: #0e2a22; font: 600 1.05rem/1 var(--f-body); text-decoration: none;
+  box-shadow: 0 4px 18px rgba(159, 216, 181, 0.16); transition: background 0.15s; }
+.blog-btn:hover { background: #b6e4c7; }
+.blog-btn span { transition: transform 0.15s; }
+.blog-btn:hover span { transform: translateX(3px); }
+.top-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.blog-link { font-size: 0.95rem; font-weight: 600; color: var(--ocean); text-decoration: none; }
+.top-sm .site a.kicker-sm { text-decoration: none; border-bottom: 1px solid rgba(167, 189, 178, 0.4); }
+.top-sm .site a.kicker-sm:hover { color: var(--ocean); border-bottom-color: var(--ocean); }
 .top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
@@ -949,11 +1003,22 @@ window.dlExtra = function (el) { var c = el && el.closest(".dl-sq"); return c ? 
 title_html = e(CAT["title"])
 sub_html = e(CAT["subtitle"]).replace("?", "<span>?</span>", 1)
 FULL_TITLE = f"{CAT['title']} · {CAT['subtitle']}"
+
+
+def blog_a(text, cls=""):
+    """A link to the Substack. Same tab on the site (it is one site with the blog); a new tab in the
+    claude.ai artifact copy, whose viewer blocks leaving the page."""
+    c = f' class="{cls}"' if cls else ""
+    tab = ' target="_blank" rel="noopener"' if PAGE_BASE else ""
+    return f'<a{c} href="{e(CAT["blog"])}"{tab}>{text}</a>'
+
+
 def body():
     return f"""<div class="wrap top">
   <h1>{title_html}</h1>
-  <p class="kicker">{sub_html}</p>
+  <p class="kicker">{blog_a(sub_html)}</p>
   <p class="tagline">{e(CAT['tagline'])}</p>
+  {blog_a('Read the blog <span aria-hidden="true">→</span>', "blog-btn")}
   <p class="byline">By {e(CAT['author']['name'])} · {" · ".join(link(l["url"], e(l["label"])) for l in CAT['author']['links'])}
     <span class="upd">Last updated {nice_date(built)}</span></p>
 </div>
@@ -964,6 +1029,7 @@ def body():
 <footer class="wrap">
   {licence_html()}
   <span class="stats">{n_charts} charts · {n_data} data files · {link(TREE, "code and data on GitHub")}</span>
+  <span>Blog: {blog_a(e(CAT["subtitle"]))}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
@@ -976,8 +1042,8 @@ def body():
 def topic_body(s):
     return f"""<div class="topic">
 <div class="wrap top top-sm">
-  <a class="back" href="index.html">← All topics</a>
-  <p class="site">{title_html} <span class="kicker-sm">{sub_html}</span></p>
+  <div class="top-row"><a class="back" href="index.html">← All topics</a>{blog_a('Blog <span aria-hidden="true">→</span>', "blog-link")}</div>
+  <p class="site">{title_html} {blog_a(sub_html, "kicker-sm")}</p>
 </div>
 {toc_html(s)}
 <main class="wrap">
@@ -986,6 +1052,7 @@ def topic_body(s):
 <footer class="wrap">
   {licence_html()}
   <span>{link(TREE, "Code and data on GitHub")}</span>
+  <span>Blog: {blog_a(e(CAT["subtitle"]))}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
@@ -996,13 +1063,13 @@ def topic_body(s):
 {SCRIPT}"""
 
 
-def document(title, inner):
+def document(title, inner, path="", desc=None, ld=None):
     return f"""<!doctype html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-{head(title)}
+{head(title, path, desc, ld)}
 {STYLE}
 </head>
 <body>
@@ -1014,10 +1081,11 @@ def document(title, inner):
 
 IMG_BASE, PAGE_BASE = RAW, ""
 os.makedirs("docs", exist_ok=True)
-open("docs/index.html", "w").write(document(FULL_TITLE, body()))
+open("docs/index.html", "w").write(document(FULL_TITLE, body(), "", None, SITE_LD))
 pages = {"index.html"}
 for s in sections:
-    open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {FULL_TITLE}", topic_body(s)))
+    open(f"docs/{s['id']}.html", "w").write(document(f"{s['title']} · {FULL_TITLE}", topic_body(s), f"{s['id']}.html",
+                                                    short_desc(s["finding"]), topic_ld(s)))
     pages.add(f"{s['id']}.html")
     for sub in s.get("subsections", []):  # old topic pages of what is now a subsection
         target = f"{s['id']}.html#{sub['id']}"
@@ -1030,6 +1098,13 @@ for old in glob.glob("docs/*.html"):  # pages of removed or hidden sections
     if os.path.basename(old) not in pages:
         os.remove(old)
 open("docs/.nojekyll", "w").close()
+# For search engines: the overview and topic pages (not the redirect stubs). robots.txt only counts at the root
+# of a domain, so it starts to matter once the site has its own domain; the sitemap can be sent to Search Console now.
+urls = [SITE] + [SITE + f"{s['id']}.html" for s in sections]
+open("docs/sitemap.xml", "w").write('<?xml version="1.0" encoding="UTF-8"?>\n'
+    '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'
+    + "".join(f"  <url><loc>{e(u)}</loc><lastmod>{built}</lastmod></url>\n" for u in urls) + "</urlset>\n")
+open("docs/robots.txt", "w").write(f"User-agent: *\nAllow: /\nSitemap: {SITE}sitemap.xml\n")
 if "--fragment" in sys.argv:
     IMG_BASE, PAGE_BASE = "", SITE
     out = sys.argv[sys.argv.index("--fragment") + 1]

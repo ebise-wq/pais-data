@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Research by which sex a disease mostly affects · Data &amp; Graphs · How To Solve A Disease?</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.">
+<meta name="description" content="After adjusting for burden, the share of patients who are women shows no detectable link with research volume across 120 diseases: 0.94× papers per +10…">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Data &amp; Graphs">
 <meta property="og:title" content="Research by which sex a disease mostly affects · Data &amp; Graphs">
@@ -18,6 +18,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Inter+Tight:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<link rel="canonical" href="https://ebise-wq.github.io/pais-data/sex.html">
+<meta property="og:url" content="https://ebise-wq.github.io/pais-data/sex.html">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Dataset", "name": "Research by which sex a disease mostly affects", "description": "After adjusting for burden, the share of patients who are women shows no detectable link with research volume across 120 diseases: 0.94× papers per +10 percentage points female (95% CI 0.79–1.11) and 0.99× trials (0.81–1.21). The female shares are hand-coded approximations.", "url": "https://ebise-wq.github.io/pais-data/sex.html", "author": {"@type": "Person", "name": "Siebe Rozendal", "url": "https://viralpersistence.substack.com/", "sameAs": ["https://viralpersistence.substack.com/", "https://x.com/PatientPersists", "https://www.linkedin.com/in/sieberozendal/"]}, "isPartOf": {"@type": "WebSite", "name": "Data & Graphs · How To Solve A Disease?", "url": "https://ebise-wq.github.io/pais-data/"}, "creator": {"@type": "Person", "name": "Siebe Rozendal", "url": "https://viralpersistence.substack.com/", "sameAs": ["https://viralpersistence.substack.com/", "https://x.com/PatientPersists", "https://www.linkedin.com/in/sieberozendal/"]}, "license": "https://creativecommons.org/licenses/by/4.0/", "isAccessibleForFree": true, "dateModified": "2026-11-27", "distribution": [{"@type": "DataDownload", "name": "sex_by_disease_2021-2025.csv", "contentUrl": "https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_by_disease_2021-2025.csv", "encodingFormat": "text/csv"}, {"@type": "DataDownload", "name": "sex_results_2021-2025.csv", "contentUrl": "https://raw.githubusercontent.com/ebise-wq/pais-data/main/sex/sex_results_2021-2025.csv", "encodingFormat": "text/csv"}]}</script>
 <style>
 /* Layout: one reading column. Header, topic chips, then one section per analysis:
    key finding, chart grid, then the data files in a collapsed block. Colours match the charts themselves. */
@@ -53,6 +56,19 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .top .tagline { font-size: 1.05rem; }
 .top .kicker { margin: 0.5rem 0 0; font: 600 clamp(1.3rem, 5vw, 1.7rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: -0.005em; }
 .top .kicker span, .top-sm .kicker-sm span { color: var(--sunset); }
+/* The Substack's name links to the blog; a mint button under the tagline says so plainly. */
+.top .kicker a { color: inherit; text-decoration: none; border-bottom: 2px solid rgba(159, 216, 181, 0.35); transition: border-color 0.15s; }
+.top .kicker a:hover { border-bottom-color: var(--ocean); }
+.blog-btn { display: inline-flex; align-items: center; gap: 0.5rem; margin-top: 1.1rem; padding: 0.7rem 1.2rem 0.72rem;
+  border-radius: 999px; background: var(--ocean); color: #0e2a22; font: 600 1.05rem/1 var(--f-body); text-decoration: none;
+  box-shadow: 0 4px 18px rgba(159, 216, 181, 0.16); transition: background 0.15s; }
+.blog-btn:hover { background: #b6e4c7; }
+.blog-btn span { transition: transform 0.15s; }
+.blog-btn:hover span { transform: translateX(3px); }
+.top-row { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; }
+.blog-link { font-size: 0.95rem; font-weight: 600; color: var(--ocean); text-decoration: none; }
+.top-sm .site a.kicker-sm { text-decoration: none; border-bottom: 1px solid rgba(167, 189, 178, 0.4); }
+.top-sm .site a.kicker-sm:hover { color: var(--ocean); border-bottom-color: var(--ocean); }
 .top-sm .site .kicker-sm { font: 500 0.95rem var(--f-body); color: var(--muted); margin-left: 0.3rem; white-space: nowrap; }
 .byline { margin: 0.9rem 0 0; font-size: 0.95rem; color: var(--muted); }
 .byline a { color: var(--ocean); }
@@ -242,8 +258,8 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
 <body>
 <div class="topic">
 <div class="wrap top top-sm">
-  <a class="back" href="index.html">← All topics</a>
-  <p class="site">Data &amp; Graphs <span class="kicker-sm">How To Solve A Disease<span>?</span></span></p>
+  <div class="top-row"><a class="back" href="index.html">← All topics</a><a class="blog-link" href="https://viralpersistence.substack.com/">Blog <span aria-hidden="true">→</span></a></div>
+  <p class="site">Data &amp; Graphs <a class="kicker-sm" href="https://viralpersistence.substack.com/">How To Solve A Disease<span>?</span></a></p>
 </div>
 <nav class="toc toc-static" id="toc" aria-label="Contents">
   <div class="wrap">
@@ -325,7 +341,8 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit. Code is GPL-3.0.</p>
   </div>
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v42 · built 2026-11-27</span>
+  <span>Blog: <a href="https://viralpersistence.substack.com/">How To Solve A Disease?</a></span>
+  <span class="ver">v43 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
