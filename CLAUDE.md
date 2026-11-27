@@ -47,7 +47,7 @@
   accent colour.
 - Blog links (v43): the blog is the Substack at `"blog"` in `catalog.json` (https://viralpersistence.substack.com/;
   siebepersists.substack.com is only the user's profile). "How To Solve A Disease?" under the title links to it, and a
-  small mint "Read the blog →" button sits on the same line, right after it (v44, user's request; "Blog →" below 520px
+  small "Read the blog →" button with a mint outline (v45, chosen from six options) sits on the same line, right after it (v44, user's request; "Blog →" below 520px
   wide so it stays on that line on phones). Topic pages have "Blog →" at the right of the "← All topics"
   row and the small Substack name links there too; every footer has "Blog: How To Solve A Disease?". Blog links open
   in the same tab (one site with the blog), except in the artifact copy. The user plans to move to their own domain

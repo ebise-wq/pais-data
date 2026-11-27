@@ -56,14 +56,14 @@ a:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px soli
 .top .tagline { font-size: 1.05rem; }
 .top .kicker { margin: 0.5rem 0 0; font: 600 clamp(1.3rem, 5vw, 1.7rem)/1.2 var(--f-display); color: var(--ocean); letter-spacing: -0.005em; }
 .top .kicker span, .top-sm .kicker-sm span { color: var(--sunset); }
-/* The Substack's name links to the blog; a small mint button next to it says so plainly. */
-.top .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem; }
+/* The Substack's name links to the blog; a small mint outline button next to it says so plainly (v45). */
+.top .kicker { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 0.9rem; margin-top: 0.85rem; }
 .top .kicker a { color: inherit; text-decoration: none; border-bottom: 2px solid rgba(159, 216, 181, 0.35); transition: border-color 0.15s; }
 .top .kicker a:hover { border-bottom-color: var(--ocean); }
 .top .kicker .blog-btn { display: inline-flex; align-items: center; gap: 0.4rem; padding: 0.45rem 0.85rem 0.47rem; border: 0;
-  border-radius: 999px; background: var(--ocean); color: #0e2a22; font: 600 0.9rem/1 var(--f-body); letter-spacing: 0; text-decoration: none;
-  box-shadow: 0 4px 18px rgba(159, 216, 181, 0.16); transition: background 0.15s; }
-.top .kicker .blog-btn:hover { background: #b6e4c7; text-decoration: none; }
+  border-radius: 999px; background: transparent; color: var(--ocean); font: 600 0.9rem/1 var(--f-body); letter-spacing: 0; text-decoration: none;
+  box-shadow: inset 0 0 0 1.5px rgba(159, 216, 181, 0.7); transition: background 0.15s; }
+.top .kicker .blog-btn:hover { background: rgba(159, 216, 181, 0.12); text-decoration: none; }
 .blog-btn b { font-weight: inherit; }
 .blog-btn .bb-s { display: none; }
 /* Phones: "Blog →" so the button stays on the line of the blog's name */
@@ -380,7 +380,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   </div>
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
   <span>Blog: <a href="https://viralpersistence.substack.com/">How To Solve A Disease?</a></span>
-  <span class="ver">v44 · built 2026-11-27</span>
+  <span class="ver">v45 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><a class="lb-solid" target="_blank" rel="noopener" hidden>Solid background</a><button type="button" data-close>Close</button></div>
