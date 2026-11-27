@@ -62,10 +62,20 @@
   `--fragment <scratchpad>/pais-catalog.html` and republish that file to this URL with the
   Artifact tool, passing every chart PNG in `files` under its repo path.
 
+## Credit and licence
+- Charts, text and tables are CC BY 4.0; code is GPL-3.0. Every page footer has a plain-English licence note
+  (`licence_html()` in `tools/build_catalog.py`, anchor `#licence`), also noting the non-commercial terms of
+  GBD (IHME) and WHO ICTRP data.
+- Every chart carries the credit "Siebe Rozendal • How to Solve A Disease? • CC BY 4.0" (`"credit"` in
+  `catalog.json`). PNGs: call `add_credit(fig, version)` from `tools/chart_credit.py` last, before `savefig`;
+  it puts the credit one line under the lowest text, with the version number on the right. Interactive
+  fragments: write `__CREDIT__ · v<n>` in their footer; the build fills it in, with "CC BY 4.0" linking to the note.
+- Old charts (`"old": true`) and the hidden 13-disease charts were not redrawn with the credit.
+
 ## Conventions
 - Run scripts from the repo root with `python3 -I <folder>/<script>.py`.
 - Put the pull date in data file names (`counts_2026-11-08.csv`). Keep API caches in `cache/`
   folders, which are git-ignored.
 - Charts: dark background `#141a24`, ink `#eef1f6`, muted `#a3acba`, ocean `#7fb3d5`, sunset
-  `#f4a582`; Inter; sized for phone screens; a small version number in a corner.
+  `#f4a582`; Inter; sized for phone screens; a small version number in a corner, next to the credit line (see above).
 - Each folder has a README with method, choices, results and caveats. Update it with the outputs.

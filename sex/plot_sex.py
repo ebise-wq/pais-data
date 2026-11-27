@@ -5,12 +5,15 @@ Writes sex/sex_scatter.png (female share vs research) and sex/sex_groups.png (fi
 Style matches analysis/sponsor_charts.py.
 """
 import os
+import sys
 import numpy as np
 import pandas as pd
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import FixedLocator, NullLocator
+sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "tools"))
+from chart_credit import add_credit
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 BG, INK, MUTED, GRID, BAND = "#141a24", "#eef1f6", "#a3acba", "#262f3d", "#1d2533"
@@ -103,7 +106,7 @@ def scatter(version):
     fig.text(M, 0.845, "White line: trend (one-sex diseases left out). It is flat.", fontsize=11.5, color=MUTED, va="baseline")
     fig.text(M, 0.034, ME_FOOT, fontsize=9.5, color=MUTED, va="baseline")
     fig.text(M, 0.016, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.016, version, fontsize=9, color=GRID, ha="right", va="baseline")
+    add_credit(fig, version, M)
     fig.savefig(os.path.join(HERE, "sex_scatter.png"), dpi=300, facecolor=BG)
 
 
@@ -145,9 +148,9 @@ def groups(version):
     fig.text(M, 0.072, "Women-only and men-only groups include cancers, which get more research", fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.045, ME_FOOT, fontsize=10.5, color=MUTED, va="baseline")
     fig.text(M, 0.018, FOOT, fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.018, version, fontsize=9, color=GRID, ha="right", va="baseline")
+    add_credit(fig, version, M)
     fig.savefig(os.path.join(HERE, "sex_groups.png"), dpi=300, facecolor=BG)
 
 
-scatter("v7")
-groups("v5")
+scatter("v8")
+groups("v6")

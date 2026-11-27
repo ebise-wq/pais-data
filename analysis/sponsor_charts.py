@@ -9,10 +9,13 @@ split by sponsor type) and analysis/all_trials_per_year.png (all interventional 
 analysis/sponsor_comparison.png.
 """
 import csv
+import sys
 import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 from matplotlib.ticker import MultipleLocator, FixedLocator, NullLocator
+sys.path.insert(0, "tools")
+from chart_credit import add_credit
 
 PULL = "25 Nov 2026"
 BG, INK, MUTED, GRID, BAND = "#141a24", "#eef1f6", "#a3acba", "#262f3d", "#1d2533"
@@ -79,7 +82,7 @@ def per_year(version, mode):
             "drug": "ClinicalTrials.gov. 2026 to 8 Nov.",
             "all": "ClinicalTrials.gov. 2026 to 8 Nov. Trials naming both count in both."}[mode]
     fig.text(M, 0.035, foot, fontsize=10.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.035, version, fontsize=9, color=GRID, ha="right", va="baseline")
+    add_credit(fig, version, M)
     out = {"sponsor": "analysis/sponsor_per_year.png", "drug": "analysis/drug_trials_per_year.png",
            "all": "analysis/all_trials_per_year.png"}[mode]
     fig.savefig(out, dpi=300, facecolor=BG)
@@ -130,11 +133,11 @@ def comparison(version):
     fig.text(M + 0.42, 0.875, "● Other sponsor", fontsize=12.5, color=OCEAN, va="baseline")
     fig.text(M, 0.03, "ClinicalTrials.gov, Nov 2026. DALYs: GBD 2023; ME/CFS, long COVID: model.",
              fontsize=9.5, color=MUTED, va="baseline")
-    fig.text(1 - M, 0.012, version, fontsize=9, color=GRID, ha="right", va="baseline")
+    add_credit(fig, version, M)
     fig.savefig("analysis/sponsor_comparison.png", dpi=300, facecolor=BG)
 
 
-per_year("v2", "drug")
-per_year("v2", "sponsor")
-per_year("v1", "all")
-comparison("v1")
+per_year("v3", "drug")
+per_year("v3", "sponsor")
+per_year("v2", "all")
+comparison("v2")

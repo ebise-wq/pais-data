@@ -163,6 +163,11 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
+footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
+footer .licence p + p { margin-top: 0.6rem; }
+footer .licence b { color: var(--ink); font-weight: 600; }
+.credit-part { white-space: nowrap; }
+a.credit-lic { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px; }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
 dialog.lb::backdrop { background: rgba(8, 11, 17, 0.88); }
@@ -177,7 +182,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
   <h1><span>PAIS</span> Data Catalog</h1>
   <p class="tagline">Papers, trials and disease burden for ME/CFS, long COVID and 120 other diseases.</p>
   <p class="byline">By Siebe Rozendal · <a href="https://siebepersists.substack.com" target="_blank" rel="noopener">Substack</a> · <a href="https://x.com/PatientPersists" target="_blank" rel="noopener">X</a> · <a href="https://www.linkedin.com/in/sieberozendal/" target="_blank" rel="noopener">LinkedIn</a>
-    <span class="upd">Last updated 26 Nov 2026</span></p>
+    <span class="upd">Last updated 27 Nov 2026</span></p>
 </div>
 <nav class="toc" id="toc" aria-label="Contents">
   <div class="wrap">
@@ -265,7 +270,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
     </div>
   </div>
   
-  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span>v17</span></div>
+  <div class="bvr-foot"><span>Data: expanded/burden_interactive_2021-2025.json</span><span><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v18</span></div>
 </div>
 <script>
 (function(){
@@ -684,7 +689,7 @@ window.addEventListener('resize',later);window.addEventListener('load',later);
     </div>
   </div>
   
-  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span>v3</span></div>
+  <div class="fnd-foot"><span>Data: funding/biomedical_rnd_2024.csv</span><span><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v4</span></div>
 </div>
 <script>
 (function () {
@@ -1115,7 +1120,7 @@ if (tb) {
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl"><em id="pme-kB">–</em> of the PAIS disease burden is ME</span><span class="pme-t" id="pme-tB"></span></div>
         <svg id="pme-vB" viewBox="0 0 380 304" role="img" aria-label="Euler diagram of PAIS disease burden by trigger and ME"></svg></div>
     </div>
-    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span>Siebe Rozendal · v9</span></div>
+    <div class="pme-foot"><span>Illustrative model · prevalence based on Dutch estimates · severity: <a href="https://doi.org/10.1001/jama.2022.18931" target="_blank" rel="noopener">GBD</a>, EQ-5D <a href="https://pmc.ncbi.nlm.nih.gov/articles/PMC4492975" target="_blank" rel="noopener">DK</a> <a href="https://link.springer.com/article/10.1007/s11136-023-03498-8" target="_blank" rel="noopener">AU</a></span><span><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v10</span></div>
   </div>
 
   <div class="pme-poster" id="pme-p2" hidden>
@@ -1127,7 +1132,7 @@ if (tb) {
       <div class="pme-pn"><div class="pme-hd"><span class="pme-hl">Disease burden</span></div>
         <svg id="pme-vSb" viewBox="0 0 380 300" role="img" aria-label="Euler diagram of disease burden: Long COVID, ME, dysautonomia and MCAS"></svg></div>
     </div>
-    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span>Siebe Rozendal · v9</span></div>
+    <div class="pme-foot"><span>Dysautonomia = OI/POTS · MCAS = mast cell activation syndrome · overlaps approximate</span><span><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v10</span></div>
   </div>
 
   <label class="pme-tog"><input type="checkbox" id="pme-hide" checked> Hide numbers</label>
@@ -1363,6 +1368,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
 .gmo-big .u { font-size: 1rem; }
 .gmo-range { font-family: var(--f-mono); font-size: 0.85rem; color: var(--muted); margin-top: 2px; font-variant-numeric: tabular-nums; }
 .gmo svg { display: block; width: 100%; margin-top: 8px; }
+.gmo-foot { grid-column: 1 / -1; font: 400 0.78rem var(--f-mono); color: var(--faint); text-align: right; }
 </style>
 <div class="gmo" id="gmo-root">
   <div class="gmo-panel">
@@ -1377,6 +1383,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
     <div class="gmo-range" id="gmo-dalyR"></div>
     <svg id="gmo-hDaly" role="img" aria-label="Distribution of disability-adjusted life years"></svg>
   </div>
+  <div class="gmo-foot"><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v11.4</div>
 </div>
 <script>
 (function () {
@@ -1497,7 +1504,7 @@ setTab(location.hash==="#pme-symptoms"?2:1);
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v3</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v4</span></div>
   </div>
 </div>
 <script>
@@ -1654,8 +1661,19 @@ render();
   </section>
 </main>
 <footer class="wrap">
+  <div class="licence" id="licence">
+    <p><b>Using these charts.</b> Charts, text and tables here are <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. You can share,
+    copy and adapt them, also commercially: in an article, a talk, or a company's fundraising deck. Two conditions:
+    credit &ldquo;Siebe Rozendal • How to Solve A Disease?&rdquo; with a link to <a href="https://ebise-wq.github.io/pais-data/" target="_blank" rel="noopener">this site</a>, and say if you
+    changed anything. Leaving the credit line on the image is enough. Removing it, or presenting the work as your
+    own, is not allowed.</p>
+    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
+    so commercial users should check <a href="https://www.healthdata.org/node/822" target="_blank" rel="noopener">IHME&rsquo;s</a>
+    and <a href="https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database" target="_blank" rel="noopener">WHO ICTRP&rsquo;s</a> terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit.
+    Code is GPL-3.0.</p>
+  </div>
   <span class="stats">20 charts · 28 data files · <a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">code and data on GitHub</a></span>
-  <span class="ver">v19 · built 2026-11-26</span>
+  <span class="ver">v20 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>

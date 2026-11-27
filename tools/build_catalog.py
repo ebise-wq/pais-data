@@ -149,6 +149,35 @@ def nice_date(iso):
 
 e = html.escape
 
+# The credit line under every interactive chart (placeholder __CREDIT__ in the fragments). The chart
+# PNGs carry the same text, drawn by tools/chart_credit.py. "CC BY 4.0" links to the licence note in
+# the page footer.
+CREDIT = CAT["author"]["credit"]
+CREDIT_HTML = " • ".join(f'<span class="credit-part">{e(x)}</span>' for x in CREDIT.split(" • ")).replace(
+    "CC BY 4.0", '<a class="credit-lic" href="#licence">CC BY 4.0</a>')
+
+
+def fill_credit(frag):
+    """Put the credit in place of __CREDIT__. The version that follows it (" · v18") is joined with
+    no-break spaces, so on a phone the line breaks only between the credit's parts."""
+    return frag.replace("__CREDIT__ · ", CREDIT_HTML + "\u00a0·\u00a0").replace("__CREDIT__", CREDIT_HTML)
+CC_BY = "https://creativecommons.org/licenses/by/4.0/"
+
+
+def licence_html():
+    """Plain-English note on what the licence allows, at the bottom of every page."""
+    return f"""<div class="licence" id="licence">
+    <p><b>Using these charts.</b> Charts, text and tables here are {link(CC_BY, "CC BY 4.0")}. You can share,
+    copy and adapt them, also commercially: in an article, a talk, or a company's fundraising deck. Two conditions:
+    credit &ldquo;{e(CREDIT.rsplit(" • ", 1)[0])}&rdquo; with a link to {link(CAT["site"], "this site")}, and say if you
+    changed anything. Leaving the credit line on the image is enough. Removing it, or presenting the work as your
+    own, is not allowed.</p>
+    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
+    so commercial users should check {link("https://www.healthdata.org/node/822", "IHME&rsquo;s")}
+    and {link("https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database", "WHO ICTRP&rsquo;s")} terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit.
+    Code is GPL-3.0.</p>
+  </div>"""
+
 
 # ---------- HTML ----------
 def link(href, text, cls=""):
@@ -246,7 +275,7 @@ def load_data(path):
 
 def interactive_html(s, full):
     spec = s["interactive"]
-    frag = open(spec["html"]).read()
+    frag = fill_credit(open(spec["html"]).read())
     if spec.get("data"):  # optional: some fragments hold their own numbers
         d = spec["data"]
         d = {k: load_data(v) for k, v in d.items()} if isinstance(d, dict) else load_data(d)
@@ -270,7 +299,8 @@ def snapshot_html(s):
             v = v[k]
         return v
     data = json.dumps({k: walk(v) for k, v in ov["pick"].items()}, separators=(",", ":"), ensure_ascii=False)
-    return open(ov["html"]).read().replace("__DATA__", data.replace("</", "<\\/"))
+    frag = fill_credit(open(ov["html"]).read())
+    return frag.replace("__DATA__", data.replace("</", "<\\/"))
 
 
 def readme_links(s):
@@ -542,6 +572,11 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
+footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
+footer .licence p + p { margin-top: 0.6rem; }
+footer .licence b { color: var(--ink); font-weight: 600; }
+.credit-part { white-space: nowrap; }
+a.credit-lic { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px; }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
 dialog.lb::backdrop { background: rgba(8, 11, 17, 0.88); }
@@ -629,6 +664,7 @@ def body():
 {"".join(section_html(s) for s in sections)}
 </main>
 <footer class="wrap">
+  {licence_html()}
   <span class="stats">{n_charts} charts · {n_data} data files · {link(TREE, "code and data on GitHub")}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>
@@ -651,6 +687,7 @@ def topic_body(s):
 {section_html(s, page=True)}
 </main>
 <footer class="wrap">
+  {licence_html()}
   <span>{link(TREE, "Code and data on GitHub")}</span>
   <span class="ver">v{version} · built {built}</span>
 </footer>

@@ -163,6 +163,11 @@ footer { border-top: 1px solid var(--line); padding-block: 1.5rem 2.5rem; color:
   display: flex; flex-wrap: wrap; gap: 0.6rem 1.5rem; justify-content: space-between; }
 footer code { font: 400 0.85rem var(--f-mono); color: var(--ink); background: var(--surface); padding: 0.1rem 0.35rem; border-radius: 4px; }
 footer .ver { color: var(--faint); font: 400 0.78rem var(--f-mono); }
+footer .licence { flex-basis: 100%; max-width: 44rem; line-height: 1.55; scroll-margin-top: 4rem; }
+footer .licence p + p { margin-top: 0.6rem; }
+footer .licence b { color: var(--ink); font-weight: 600; }
+.credit-part { white-space: nowrap; }
+a.credit-lic { color: inherit; text-decoration: underline; text-decoration-color: var(--line); text-underline-offset: 2px; }
 
 dialog.lb { border: 0; padding: 0; background: transparent; max-width: min(96vw, 1400px); max-height: 94vh; }
 dialog.lb::backdrop { background: rgba(8, 11, 17, 0.88); }
@@ -256,7 +261,7 @@ dialog.lb button { font: 500 0.95rem var(--f-body); color: var(--ink); backgroun
       <input type="search" id="py-q" placeholder="Search, e.g. asthma" aria-label="Search diseases">
       <div class="py-list" id="py-list"></div>
     </details>
-    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span>v3</span></div>
+    <div class="py-foot"><span>ClinicalTrials.gov, PubMed · DALYs: GBD 2023; ME/CFS and long COVID from the ME/CFS model (CCC)</span><span><span class="credit-part">Siebe Rozendal</span> • <span class="credit-part">How to Solve A Disease?</span> • <span class="credit-part"><a class="credit-lic" href="#licence">CC BY 4.0</a></span> · v4</span></div>
   </div>
 </div>
 <script>
@@ -472,8 +477,19 @@ render();
   </section>
 </main>
 <footer class="wrap">
+  <div class="licence" id="licence">
+    <p><b>Using these charts.</b> Charts, text and tables here are <a href="https://creativecommons.org/licenses/by/4.0/" target="_blank" rel="noopener">CC BY 4.0</a>. You can share,
+    copy and adapt them, also commercially: in an article, a talk, or a company's fundraising deck. Two conditions:
+    credit &ldquo;Siebe Rozendal • How to Solve A Disease?&rdquo; with a link to <a href="https://ebise-wq.github.io/pais-data/" target="_blank" rel="noopener">this site</a>, and say if you
+    changed anything. Leaving the credit line on the image is enough. Removing it, or presenting the work as your
+    own, is not allowed.</p>
+    <p>Some data keep their own terms. GBD 2023 (IHME) and WHO ICTRP data are free for non-commercial use only,
+    so commercial users should check <a href="https://www.healthdata.org/node/822" target="_blank" rel="noopener">IHME&rsquo;s</a>
+    and <a href="https://www.who.int/tools/clinical-trials-registry-platform/network/who-data-set/downloading-records-from-the-ictrp-database" target="_blank" rel="noopener">WHO ICTRP&rsquo;s</a> terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit.
+    Code is GPL-3.0.</p>
+  </div>
   <span><a href="https://github.com/ebise-wq/pais-data/tree/main/" target="_blank" rel="noopener">Code and data on GitHub</a></span>
-  <span class="ver">v19 · built 2026-11-26</span>
+  <span class="ver">v20 · built 2026-11-27</span>
 </footer>
 <dialog class="lb" id="lb" aria-label="Chart full size">
   <div class="lb-bar"><span class="lb-title"></span><button type="button" data-close>Close</button></div>

@@ -39,10 +39,19 @@ committed. Data files carry the date they were pulled in their name.
    any chart or data file that is not in the catalog yet.
 4. Merge into `main`. `main` is the only long-lived branch.
 
-## Data terms
+## Licence and data terms
 
-Code is GPL-3.0 (see [`LICENSE`](LICENSE)). GBD data: cite as in [`gbd/citation.txt`](gbd/citation.txt).
-WHO ICTRP exports: attribute WHO ICTRP, no commercial use.
+Charts, text and the tables made here are [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/). You can
+share, copy and adapt them, also commercially (an article, a talk, a company's fundraising deck), if you credit
+"Siebe Rozendal • How to Solve A Disease?" with a link to https://ebise-wq.github.io/pais-data/ and say if you
+changed anything. The credit line on each chart is enough. Removing it, or presenting the work as your own, is
+not allowed.
+
+Some data keep their own terms. GBD 2023 data (IHME) is free for non-commercial use only; cite as in
+[`gbd/citation.txt`](gbd/citation.txt). WHO ICTRP exports: attribute WHO ICTRP, no commercial use. Commercial
+users should check those terms for charts built on them. PubMed and ClinicalTrials.gov counts have no such limit.
+
+Code is GPL-3.0 (see [`LICENSE`](LICENSE)).
 
 ## Catalog
 
